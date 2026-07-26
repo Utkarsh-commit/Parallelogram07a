@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Think Smarter — Mental Models That Win</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07080a;
+  --surface:#0e1014;
+  --card:#13151a;
+  --card2:#181b22;
+  --gold:#c8943a;
+  --gold2:#e8b84b;
+  --golddim:rgba(200,148,58,.14);
+  --cream:#f0e8d5;
+  --muted:#5c5f68;
+  --light:#9a9da8;
+  --border:rgba(200,148,58,.18);
+  --rust:#b84532;
+  --teal:#2c7a72;
+  --violet:#5a3fc0;
+  --white:#faf9f6;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--cream);overflow-x:hidden;line-height:1.6}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.55}
+
+#prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--violet),var(--gold),var(--gold2));width:0%;z-index:2000;transition:width .08s}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:1500;display:flex;align-items:center;justify-content:space-between;padding:14px 48px;background:rgba(7,8,10,.9);backdrop-filter:blur(20px);border-bottom:1px solid rgba(200,148,58,.1)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
+.nav-links{display:flex;gap:22px;list-style:none}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+@media(max-width:768px){.nav-links{display:none}.hero,.section,.toc-wrap,.quote-block,footer{padding-left:22px!important;padding-right:22px!important}nav{padding:14px 22px}}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px 64px 80px;position:relative;overflow:hidden;background:var(--bg)}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 80% 55% at 92% 8%,rgba(90,63,192,.12) 0%,transparent 55%),radial-gradient(ellipse 55% 70% at 5% 90%,rgba(200,148,58,.09) 0%,transparent 60%),radial-gradient(ellipse 35% 35% at 55% 50%,rgba(44,122,114,.05) 0%,transparent 70%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;opacity:.022;background-image:linear-gradient(rgba(200,148,58,1) 1px,transparent 1px),linear-gradient(90deg,rgba(200,148,58,1) 1px,transparent 1px);background-size:68px 68px}
+.hero-inner{position:relative;max-width:1100px}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:28px;display:flex;align-items:center;gap:14px;opacity:0;animation:fadeup .7s .2s forwards}
+.hero-tag::before{content:'';width:44px;height:1px;background:var(--gold);flex-shrink:0}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(90,63,192,.15);border:1px solid rgba(90,63,192,.35);padding:5px 14px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#9b87e8;margin-bottom:20px;opacity:0;animation:fadeup .7s .15s forwards}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(52px,9vw,128px);font-weight:700;line-height:.88;letter-spacing:-4px;margin-bottom:12px;opacity:0;animation:fadeup .8s .4s forwards}
+.hero h1 span{color:var(--gold);font-style:italic}
+.hero h1 .sub{display:block;color:rgba(240,232,213,.22);font-size:clamp(24px,4vw,58px);font-weight:400;font-style:italic;letter-spacing:-1px;margin-top:8px}
+.hero-desc{font-size:clamp(15px,2vw,18px);color:var(--light);max-width:580px;margin:36px 0 52px;font-weight:300;line-height:1.75;opacity:0;animation:fadeup .8s .6s forwards}
+.hero-stats{display:flex;gap:0;border:1px solid var(--border);width:fit-content;opacity:0;animation:fadeup .8s .8s forwards;flex-wrap:wrap}
+.hstat{padding:18px 34px;border-right:1px solid var(--border);text-align:center}
+.hstat:last-child{border-right:none}
+.hstat-n{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.hstat-l{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-top:4px}
+.scroll-hint{position:absolute;bottom:40px;left:64px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:10px;animation:pulse 2.5s infinite}
+.scroll-hint::before{content:'';width:1px;height:38px;background:var(--gold);opacity:.35}
+@keyframes fadeup{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+
+/* ── TOC ── */
+.toc-wrap{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:56px 64px}
+.toc-inner{max-width:1100px;margin:0 auto}
+.toc-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:36px;display:flex;align-items:center;gap:12px}
+.toc-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px}
+.toc-item{background:var(--card);padding:18px 22px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:background .2s,border-color .2s;border:1px solid transparent;text-decoration:none}
+.toc-item:hover{background:var(--card2);border-color:var(--border)}
+.toc-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);opacity:.55;flex-shrink:0;min-width:26px}
+.toc-name{font-size:13.5px;color:var(--light);font-weight:400;transition:color .2s;line-height:1.4}
+.toc-item:hover .toc-name{color:var(--cream)}
+
+/* ── SECTIONS ── */
+.section{padding:96px 64px;position:relative}
+.section-alt{background:var(--surface)}
+.s-inner{max-width:1100px;margin:0 auto}
+.s-head{display:grid;grid-template-columns:90px 1fr;gap:32px;align-items:start;margin-bottom:60px;padding-bottom:44px;border-bottom:1px solid var(--border)}
+.s-num{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;padding-top:8px}
+.s-meta{display:flex;flex-direction:column;gap:10px}
+.s-cat{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:3px;color:var(--rust);text-transform:uppercase}
+.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,60px);font-weight:700;line-height:.92;letter-spacing:-1.5px;color:var(--cream)}
+.s-title span{color:var(--gold);font-style:italic}
+.s-desc{font-size:15.5px;color:var(--light);max-width:660px;font-weight:300;line-height:1.78;margin-top:6px}
+@media(max-width:600px){.s-head{grid-template-columns:1fr;gap:14px}}
+
+/* ── CARDS ── */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:2px}
+@media(max-width:600px){.cards{grid-template-columns:1fr}}
+.card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .25s,background .25s;position:relative;overflow:hidden}
+.card:hover{border-color:var(--border);background:var(--card2)}
+.card::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:linear-gradient(180deg,var(--gold),var(--violet));transition:height .35s}
+.card:hover::before{height:100%}
+.card-num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);opacity:.45;margin-bottom:14px}
+.card-icon{font-size:26px;margin-bottom:11px;display:block}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:700;color:var(--cream);letter-spacing:-.4px;margin-bottom:11px;line-height:1.15}
+.card-sec{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin:16px 0 7px}
+.card-text{font-size:13.5px;color:var(--light);line-height:1.72;font-weight:300}
+.psych{background:rgba(200,148,58,.06);border-left:2px solid var(--gold);padding:15px 18px;margin-top:18px}
+.psych .card-sec{margin-top:0}
+.real-world{background:rgba(90,63,192,.07);border-left:2px solid rgba(90,63,192,.5);padding:15px 18px;margin-top:14px}
+.real-world .card-sec{color:#9b87e8}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;margin-top:14px}
+.badge-a{background:rgba(200,148,58,.11);color:var(--gold);border:1px solid var(--border)}
+.badge-b{background:rgba(44,122,114,.13);color:#4aaa9e;border:1px solid rgba(44,122,114,.3)}
+.badge-c{background:rgba(184,69,50,.11);color:#d46040;border:1px solid rgba(184,69,50,.28)}
+.badge-d{background:rgba(90,63,192,.12);color:#9b87e8;border:1px solid rgba(90,63,192,.28)}
+
+/* ── QUOTE ── */
+.quote-block{background:var(--surface);padding:72px 64px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center}
+.quote-text{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3.2vw,36px);font-weight:600;font-style:italic;color:var(--cream);max-width:880px;margin:0 auto;line-height:1.4}
+.quote-text em{color:var(--gold)}
+.quote-attr{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:24px}
+
+/* ── STAT ROW ── */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:2px;margin:44px 0}
+.s-stat{background:var(--card);padding:26px 22px;text-align:center;border:1px solid transparent;transition:border-color .2s}
+.s-stat:hover{border-color:var(--border)}
+.s-stat-n{font-family:'Cormorant Garamond',serif;font-size:46px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.s-stat-l{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-top:5px}
+
+/* ── TWO COL ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}}
+.col-card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .2s}
+.col-card:hover{border-color:var(--border)}
+.col-icon{font-size:30px;margin-bottom:14px;display:block}
+.col-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:11px;letter-spacing:-.4px}
+.col-text{font-size:13.5px;color:var(--light);line-height:1.75;font-weight:300}
+.col-text strong{color:var(--cream);font-weight:500}
+
+/* ── COMPARE TABLE ── */
+.cmp-wrap{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:40px 0}
+@media(max-width:650px){.cmp-wrap{grid-template-columns:1fr}}
+.cmp-side{background:var(--card);padding:28px 26px}
+.cmp-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.cmp-head.first{color:#d46040}
+.cmp-head.second{color:#4aaa9e}
+.cmp-row{display:flex;gap:12px;margin-bottom:14px;font-size:13.5px;color:var(--light);line-height:1.6;font-weight:300}
+.cmp-row::before{content:'→';color:var(--gold);flex-shrink:0;font-size:12px;margin-top:2px}
+.cmp-row strong{color:var(--cream);font-weight:500}
+
+/* ── PROCESS STEPS ── */
+.steps{display:flex;flex-direction:column;gap:2px}
+.step{display:grid;grid-template-columns:64px 1fr;gap:0;background:var(--card);border:1px solid transparent;transition:border-color .2s}
+.step:hover{border-color:var(--border)}
+.step-num{background:var(--golddim);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--gold)}
+.step-content{padding:22px 26px}
+.step-title{font-weight:600;color:var(--cream);font-size:15px;margin-bottom:6px}
+.step-text{font-size:13.5px;color:var(--light);line-height:1.65;font-weight:300}
+
+/* ── ALERT ── */
+.alert{background:rgba(184,69,50,.07);border:1px solid rgba(184,69,50,.24);padding:22px 26px;margin:28px 0}
+.alert-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:var(--rust);text-transform:uppercase;margin-bottom:9px}
+.alert-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.alert-text strong{color:var(--cream);font-weight:500}
+
+.tip{background:rgba(44,122,114,.07);border:1px solid rgba(44,122,114,.24);padding:22px 26px;margin:28px 0}
+.tip-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:#4aaa9e;text-transform:uppercase;margin-bottom:9px}
+.tip-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.tip-text strong{color:var(--cream);font-weight:500}
+
+/* ── TABLE ── */
+.table-wrap{overflow-x:auto;margin-top:40px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--card2);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);padding:13px 16px;text-align:left;border-bottom:1px solid var(--border)}
+tbody tr{border-bottom:1px solid rgba(200,148,58,.07);transition:background .15s}
+tbody tr:hover{background:var(--card)}
+tbody td{padding:13px 16px;color:var(--light);vertical-align:top;line-height:1.5}
+.num-cell{font-family:'JetBrains Mono',monospace;color:var(--gold);opacity:.55;font-size:11px}
+.name-cell{font-weight:500;color:var(--cream)}
+
+/* ── FOOTER ── */
+footer{background:var(--bg);border-top:1px solid var(--border);padding:56px 64px 72px;text-align:center}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;letter-spacing:2px;color:var(--gold);margin-bottom:10px}
+.footer-sub{font-size:13.5px;color:var(--muted);margin-bottom:6px}
+.footer-tiny{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(92,95,104,.45);text-transform:uppercase;margin-top:26px}
+
+.pg-hero-art{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:.55;z-index:0}
+.pg-hero-art svg{width:100%;height:100%;display:block}
+[class*="icon"] svg.pg-icon{width:1em;height:1em;display:inline-block;vertical-align:-0.15em}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<nav>
+  <div class="nav-logo">Mental Models</div>
+  <ul class="nav-links">
+    <li><a href="#firstprinciples">First Principles</a></li>
+    <li><a href="#inversion">Inversion</a></li>
+    <li><a href="#map">Map/Territory</a></li>
+    <li><a href="#secondorder">2nd Order</a></li>
+    <li><a href="#circle">Circle</a></li>
+    <li><a href="#razors">Razors</a></li>
+    <li><a href="#probabilistic">Probabilistic</a></li>
+    <li><a href="#cheatsheet">Cheatsheet</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero"><div class="pg-hero-art" aria-hidden="true"><svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><path d="M276.4 86.5 A190.7 190.7 0 0 1 121.3 324.6" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M452.4 139.4 A216.4 216.4 0 0 1 865.6 180.2" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><line x1="691.0" y1="211.1" x2="769.8" y2="150.0" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="691.0" y1="211.1" x2="778.6" y2="154.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="442.5" y1="32.9" x2="611.6" y2="87.0" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="442.5" y1="32.9" x2="631.9" y2="48.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="769.8" y1="150.0" x2="778.6" y2="154.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="185.6" y1="157.3" x2="171.7" y2="144.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="185.6" y1="157.3" x2="165.6" y2="126.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="172.4" y1="34.3" x2="89.3" y2="32.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="172.4" y1="34.3" x2="165.6" y2="126.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="696.5" y1="81.9" x2="631.9" y2="48.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="696.5" y1="81.9" x2="611.6" y2="87.0" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="631.9" y1="48.4" x2="611.6" y2="87.0" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="322.1" y1="241.4" x2="213.9" y2="204.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="322.1" y1="241.4" x2="233.6" y2="150.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="171.7" y1="144.3" x2="165.6" y2="126.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="233.6" y1="150.3" x2="233.6" y2="137.1" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="185.6" y1="157.3" x2="233.6" y2="150.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="185.6" y1="157.3" x2="213.9" y2="204.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="778.6" y1="154.9" x2="828.5" y2="203.2" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="185.6" y1="157.3" x2="233.6" y2="137.1" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><circle cx="691.0" cy="211.1" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="442.5" cy="32.9" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="442.5" cy="32.9" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="769.8" cy="150.0" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="769.8" cy="150.0" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="185.6" cy="157.3" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="172.4" cy="34.3" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="696.5" cy="81.9" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="696.5" cy="81.9" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="631.9" cy="48.4" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="611.6" cy="87.0" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="611.6" cy="87.0" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="322.1" cy="241.4" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="171.7" cy="144.3" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="171.7" cy="144.3" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="233.6" cy="150.3" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="233.6" cy="150.3" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="213.9" cy="204.6" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="165.6" cy="126.3" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="778.6" cy="154.9" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="778.6" cy="154.9" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="828.5" cy="203.2" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="828.5" cy="203.2" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="89.3" cy="32.9" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="233.6" cy="137.1" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="233.6" cy="137.1" r="3.2" fill="#e8b84b" opacity="0.85"/></svg></div>
+  <div class="hero-glow"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">Psychology · Decision Science</div>
+    <div class="hero-tag">The Complete Mental Models Intelligence Guide · 2025–26 Edition</div>
+    <h1>Think<br/><span>Smarter</span><span class="sub">Mental Models That Win</span></h1>
+    <p class="hero-desc">The cognitive frameworks Elon Musk, Jeff Bezos, Charlie Munger, and Howard Marks use to out-think everyone in the room. 8 research-backed models. Real examples. Zero theory fluff.</p>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-n">8</span><span class="hstat-l">Core Models</span></div>
+      <div class="hstat"><span class="hstat-n">95%</span><span class="hstat-l">of people only use first-order thinking</span></div>
+      <div class="hstat"><span class="hstat-n">10×</span><span class="hstat-l">SpaceX cost reduction via first principles</span></div>
+      <div class="hstat"><span class="hstat-n">$600</span><span class="hstat-l">→$80/kWh battery cost via Tesla first principles</span></div>
+    </div>
+  </div>
+  <div class="scroll-hint">Scroll to begin</div>
+</section>
+
+<!-- ─── TOC ─── -->
+<div class="toc-wrap">
+  <div class="toc-inner">
+    <div class="toc-label">Everything Inside This Guide</div>
+    <div class="toc-grid">
+      <a href="#firstprinciples" class="toc-item"><span class="toc-num">01</span><span class="toc-name">First-Principles Thinking — How Musk & Bezos break problems everyone else accepts</span></a>
+      <a href="#inversion" class="toc-item"><span class="toc-num">02</span><span class="toc-name">Inversion — Solve any problem by asking "what would make this fail?"</span></a>
+      <a href="#map" class="toc-item"><span class="toc-num">03</span><span class="toc-name">Map ≠ Territory — Why most bad decisions come from outdated mental models</span></a>
+      <a href="#secondorder" class="toc-item"><span class="toc-num">04</span><span class="toc-name">Second-Order Thinking — Consequences of consequences, not just immediate outcomes</span></a>
+      <a href="#circle" class="toc-item"><span class="toc-num">05</span><span class="toc-name">Circle of Competence — Warren Buffett's most underrated edge</span></a>
+      <a href="#razors" class="toc-item"><span class="toc-num">06</span><span class="toc-name">The Razors — Occam, Hanlon, and when simplicity wins</span></a>
+      <a href="#probabilistic" class="toc-item"><span class="toc-num">07</span><span class="toc-name">Probabilistic Thinking — Stop thinking in absolutes, start thinking in odds</span></a>
+      <a href="#cheatsheet" class="toc-item"><span class="toc-num">08</span><span class="toc-name">The Master Cheatsheet — All models, one table</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- ─── 01: FIRST PRINCIPLES ─── -->
+<section class="section" id="firstprinciples">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Model 01</div>
+    <div class="s-meta">
+      <div class="s-cat">The Foundation of All Innovation</div>
+      <h2 class="s-title">First-<span>Principles</span><br/>Thinking</h2>
+      <p class="s-desc">The mental model that let one man cut the cost of a rocket by 10x, reduce a battery from $600/kWh to $80, and build the most valuable car company in history — by refusing to accept how things "have always been done."</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">10×</span><span class="s-stat-l">SpaceX cost reduction via first principles thinking</span></div>
+    <div class="s-stat"><span class="s-stat-n">$80</span><span class="s-stat-l">Tesla battery cost/kWh — down from $600 via first principles</span></div>
+    <div class="s-stat"><span class="s-stat-n">2%</span><span class="s-stat-l">the cost of raw materials vs a pre-built rocket — the first principle Musk found</span></div>
+    <div class="s-stat"><span class="s-stat-n">2,350</span><span class="s-stat-l">years old — when Aristotle first defined "first principles"</span></div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">PRINCIPLE 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 3v7.5L5.5 17a2 2 0 0 0 1.8 3h9.4a2 2 0 0 0 1.8-3L15 10.5V3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 3h6M6.5 15h11" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">What It Actually Is</div>
+      <div class="card-sec">The Definition</div>
+      <p class="card-text">First-principles thinking means breaking a problem down to its most fundamental, undeniable truths — and then reasoning upward from those truths to a new conclusion. Aristotle called them "the first basis from which a thing is known." Musk calls it "a physics way of looking at the world."</p>
+      <div class="psych">
+        <div class="card-sec">🧠 The Contrast</div>
+        <p class="card-text">Most people think by analogy — "we do this because it's like what others do." First principles thinkers strip that away entirely. Musk: "The normal way is we reason by analogy. With analogy, we are doing this because it's like something else that was done." First principles asks: what do we know is actually, fundamentally true?</p>
+      </div>
+      <span class="badge badge-a">Foundation Model</span>
+    </div>
+
+    <div class="card">
+      <div class="card-num">PRINCIPLE 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 2c3 2 5 6 5 10 0 2-1 4-2 5l-3 3-3-3c-1-1-2-3-2-5 0-4 2-8 5-10z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="1.6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 17c-2 1-2 3-3 5 2-1 4-1 5-3M15 17c2 1 2 3 3 5-2-1-4-1-5-3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The SpaceX Battery Breakdown</div>
+      <div class="card-sec">Musk's Most Famous Example</div>
+      <p class="card-text">EV batteries were expensive. The industry assumed: they always will be. Musk asked a different question: What is a battery actually made of? Lithium, nickel, cobalt, graphite, a steel can. What do those raw materials cost on commodity markets? Approximately $80/kWh. What were manufacturers charging? $600/kWh. The gap was assembly — which is designable.</p>
+      <div class="real-world">
+        <div class="card-sec" style="color:#9b87e8">🏭 The Same Model → SpaceX</div>
+        <p class="card-text">Rockets cost $65M+ per launch. Why? "Because that's what rockets cost." Musk went to the components: aluminium alloys, titanium, copper, carbon fibre. Raw materials ≈ 2% of market price. He then designed rockets in-house and made them reusable — cutting launch cost by a factor of 10.</p>
+      </div>
+      <span class="badge badge-a">Real-World Case</span>
+    </div>
+
+    <div class="card">
+      <div class="card-num">PRINCIPLE 03</div>
+      <span class="card-icon">📦</span>
+      <div class="card-title">How Jeff Bezos Uses It</div>
+      <div class="card-sec">Amazon's Fundamental Truths</div>
+      <p class="card-text">Bezos resisted analogical thinking at Amazon. Instead of chasing what competitors were doing, he asked: what do customers fundamentally, permanently want? His answer: lower prices, faster delivery, more selection. These don't change. He then built infrastructure (warehouses, tech, logistics) around timeless truths — not around current trends.</p>
+      <div class="card-sec">Bezos on Proxies</div>
+      <p class="card-text">"Resist proxies. Don't mindlessly follow processes, or unquestioningly accept survey data. That is reasoning by analogy. Go out and discover fundamental truths — focus on outcomes, and real customer feedback."</p>
+      <span class="badge badge-a">Business Application</span>
+    </div>
+
+    <div class="card">
+      <div class="card-num">PRINCIPLE 04</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M14.5 6.5a4 4 0 0 1-5 5L4 17l3 3 5.5-5.5a4 4 0 0 1 5-5l-2.7 2.7-2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Socratic Method — How to Find First Principles</div>
+      <div class="card-sec">Step by Step</div>
+      <p class="card-text"><strong style="color:var(--cream)">Step 1 — Clarify:</strong> Why do I believe this? Where did this idea come from?<br/><br/><strong style="color:var(--cream)">Step 2 — Challenge assumptions:</strong> How do I know this is true? What if I believed the opposite?<br/><br/><strong style="color:var(--cream)">Step 3 — Look for evidence:</strong> Can I back this up independently?<br/><br/><strong style="color:var(--cream)">Step 4 — The test:</strong> If your "why" ends with a falsifiable fact, you've hit a first principle. If it ends with "because I said so" or "it just is" — you've hit an assumption masquerading as truth.</p>
+      <span class="badge badge-b">Your Toolkit</span>
+    </div>
+
+    <div class="card">
+      <div class="card-num">PRINCIPLE 05</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="3" y="5" width="8" height="4.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="13" y="5" width="8" height="4.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="7" y="9.5" width="8" height="4.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="14" width="8" height="4.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="13" y="14" width="8" height="4.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Reasoning by Analogy vs. First Principles</div>
+      <div class="card-sec">The Key Distinction</div>
+      <p class="card-text"><strong style="color:var(--cream)">Reasoning by analogy:</strong> "Electric cars are too expensive because batteries cost too much — they always have." This accepts the current state as the fundamental truth.<br/><br/><strong style="color:var(--cream)">First principles:</strong> "What is a battery made of? What do those materials cost? What's preventing us from reaching those material costs?" This treats current state as a variable, not a constant.</p>
+      <div class="psych">
+        <div class="card-sec">⚠️ The Trap</div>
+        <p class="card-text">Most industries operate almost entirely on analogical thinking. That's why most industries are blindsided when someone reasons from first principles. Airbnb, Uber, SpaceX — all emerged because someone refused to accept "the way things are."</p>
+      </div>
+      <span class="badge badge-c">Warning</span>
+    </div>
+
+    <div class="card">
+      <div class="card-num">PRINCIPLE 06</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 18h6M10 21h4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 3a6.5 6.5 0 0 0-3.5 12c.6.4 1 1.1 1 1.9V17h5v-.1c0-.8.4-1.5 1-1.9A6.5 6.5 0 0 0 12 3z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Apply It to Your Own Life</div>
+      <div class="card-sec">The Everyday Version</div>
+      <p class="card-text">Nutrition: instead of chasing every trend, the first principles are simple: limit processed food, eat lean protein, eat vegetables. These don't go out of style. Leadership: forget TQM, Six Sigma, 5S — the first principle is: ask the people who actually do the job what they would change. Your career: instead of copying a path, ask: what skills are fundamentally valuable? What does the market actually, always reward?</p>
+      <div class="card-sec">The Musk Test for Volume Scalability</div>
+      <p class="card-text">"If a part is still expensive when you produce a million of them per year, the reason is its design — not its manufacturing. Anything at volume can approach the cost of its raw materials." Apply this logic to any problem you face at scale.</p>
+      <span class="badge badge-b">Personal Application</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 1 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"I think it's important to reason from first principles rather than by analogy. You boil things down to the most fundamental truths and then <em>reason up from there.</em>"</p>
+  <p class="quote-attr">— Elon Musk, Tesla & SpaceX</p>
+</div>
+
+<!-- ─── 02: INVERSION ─── -->
+<section class="section section-alt" id="inversion">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Model 02</div>
+    <div class="s-meta">
+      <div class="s-cat">Charlie Munger's Favourite Weapon</div>
+      <h2 class="s-title"><span>Inversion</span> —<br/>Ask What Fails</h2>
+      <p class="s-desc">Instead of asking "How do I succeed?" ask "What would guarantee failure?" Then systematically avoid those things. The model that turned Charlie Munger into one of the greatest investors in history — not by being brilliant, but by being consistently not stupid.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">"Invert,</span><span class="s-stat-l">always invert" — Jacobi, 1800s mathematician</span></div>
+    <div class="s-stat"><span class="s-stat-n">Rule 1</span><span class="s-stat-l">Buffett: "Don't lose money." Rule 2: Don't forget Rule 1.</span></div>
+    <div class="s-stat"><span class="s-stat-n">Better</span><span class="s-stat-l">to avoid stupidity than to seek brilliance — Munger</span></div>
+    <div class="s-stat"><span class="s-stat-n">Pre-</span><span class="s-stat-l">mortem: assume failure before starting, then reverse-engineer why</span></div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">INVERSION 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M20 11a8 8 0 0 0-14.9-3.5M4 13a8 8 0 0 0 14.9 3.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 4v4h4M19 20v-4h-4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">What Inversion Actually Is</div>
+      <div class="card-sec">The Flip</div>
+      <p class="card-text">Inversion means turning a problem upside down. Instead of asking "How do I achieve X?" you ask "What would guarantee I never achieve X?" Instead of "How do I build a great team?" you ask "What would destroy a great team?" Then you avoid those things with ruthless discipline. As Munger says: "Invert, always invert."</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Psychological Reason It Works</div>
+        <p class="card-text">Our brains are better at spotting potential negatives than envisioning an ideal path. Inversion works with your brain's natural wiring, not against it. Loss aversion, the same bias that kills investors, becomes an asset when used deliberately through inversion.</p>
+      </div>
+      <span class="badge badge-a">Core Concept</span>
+    </div>
+
+    <div class="card">
+      <div class="card-num">INVERSION 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M3 10 12 4l9 6M4 10h16v2H4zM5 12v7M9 12v7M15 12v7M19 12v7M3 21h18" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">How Munger & Buffett Use It</div>
+      <div class="card-sec">Berkshire's Secret</div>
+      <p class="card-text">When evaluating an investment, Munger doesn't ask: "How can this stock rise?" He asks: "What would cause this company to decline?" — identifying excessive debt, poor management, shrinking moats. Buffett's two rules of investing are pure inversion: Rule 1: Don't lose money. Rule 2: Don't forget Rule 1. If you can just not lose, the gains take care of themselves.</p>
+      <div class="card-sec">Munger's Best Line on This</div>
+      <p class="card-text">"It is remarkable how much long-term advantage people like us have gotten by trying to be consistently not stupid, instead of trying to be very intelligent." Avoiding stupidity is often more valuable than seeking genius.</p>
+      <span class="badge badge-a">Investing Application</span>
+    </div>
+
+    <div class="card">
+      <div class="card-num">INVERSION 03</div>
+      <span class="card-icon">💀</span>
+      <div class="card-title">The Pre-Mortem</div>
+      <div class="card-sec">Before You Launch Anything</div>
+      <p class="card-text">Before starting a project, imagine it is 6 months in the future and your project has completely failed. Ask: "Why did it fail?" Write down every reason. Then eliminate every single one of those failure modes before you begin. This is Gary Klein's pre-mortem — inversion applied to project planning — and it consistently surfaces risks that forward planning completely misses.</p>
+      <div class="real-world">
+        <div class="card-sec" style="color:#9b87e8">🌊 Real Example — CIA Counterterrorism</div>
+        <p class="card-text">After 9/11, Phillip Mudd of the CIA reframed everything through inversion. Instead of asking "Where is bin Laden?" he asked "How do we protect Americans?" This inverted question unlocked an entirely different strategy — and a far more effective one than the original forward framing.</p>
+      </div>
+      <span class="badge badge-d">Power Move</span>
+    </div>
+
+    <div class="card">
+      <div class="card-num">INVERSION 04</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="9" cy="10" r="6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="14" r="6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Johnny Carson Speech</div>
+      <div class="card-sec">Munger's Favourite Example</div>
+      <p class="card-text">When asked to give a commencement speech on "How to Be Happy," comedian Johnny Carson inverted the entire question and listed exactly how to be miserable instead. Be unreliable. Learn only from your own experience. Stay down when life knocks you down. Wallow in self-pity. Avoid the opposite of those things — and success follows naturally. Munger cited this speech repeatedly as one of the most elegant demonstrations of inversion in life.</p>
+      <span class="badge badge-b">Life Application</span>
+    </div>
+
+    <div class="card">
+      <div class="card-num">INVERSION 05</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M14.5 6.5a4 4 0 0 1-5 5L4 17l3 3 5.5-5.5a4 4 0 0 1 5-5l-2.7 2.7-2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Inversion in Practice: 5 Templates</div>
+      <div class="card-sec">Apply It Now</div>
+      <p class="card-text"><strong style="color:var(--cream)">Want better collaboration?</strong> Ask: "How would we completely destroy team collaboration?" Then prevent that.<br/><br/><strong style="color:var(--cream)">Want to increase sales?</strong> Ask: "How could we drive sales as low as possible, as fast as possible?" Then eliminate those forces.<br/><br/><strong style="color:var(--cream)">Want a great product launch?</strong> Ask: "What would make this launch a complete disaster?" Then build safeguards.<br/><br/><strong style="color:var(--cream)">Want a healthy life?</strong> Ask: "What habits would guarantee I destroy my health?" Stop doing those things.<br/><br/><strong style="color:var(--cream)">Want great relationships?</strong> Ask: "What would make me impossible to be around?" Then become the opposite.</p>
+      <span class="badge badge-b">Templates</span>
+    </div>
+
+    <div class="card">
+      <div class="card-num">INVERSION 06</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8A3.5 3.5 0 0 0 8 18a3 3 0 0 0 3-2.5V6a2 2 0 0 0-2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 1 5.8A3.5 3.5 0 0 1 16 18a3 3 0 0 1-3-2.5V6a2 2 0 0 1 2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Cognitive Obstacle: Inconsistency Avoidance</div>
+      <div class="card-sec">Why Inversion Is Hard</div>
+      <p class="card-text">The moment you make a decision, you love it more than you did a second before. You don't want to be inconsistent in your beliefs — this is what Munger calls "Inconsistency Avoidance Tendency." When you try to invert, your brain resists destroying its own favorite ideas. Munger's response: "Any year that you don't destroy one of your best-loved ideas is probably a wasted year." The antidote is to schedule inversion deliberately — not just when it feels comfortable.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 Also: Sunk Cost Bias</div>
+        <p class="card-text">Once you've predicted the rewards of a decision and committed, you're incentivized to believe the scenario will play out. To invert properly, you must mentally "give up" on those rewards before starting — which is why writing kill criteria before starting any project changes everything.</p>
+      </div>
+      <span class="badge badge-c">Cognitive Trap</span>
+    </div>
+  </div>
+
+  <div class="alert">
+    <div class="alert-head">🚨 Munger's Single Most Important Quote on Inversion</div>
+    <p class="alert-text"><strong>"All I want to know is where I'm going to die, so I'll never go there."</strong> — This encapsulates the entire model in one sentence. Don't optimize for arriving at success. Identify the roads that lead to failure. Then never take them.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 2 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"It is not enough to think problems through forward. You must also think in reverse. <em>Invert, always invert.</em> Many hard problems can only be solved when addressed backward."</p>
+  <p class="quote-attr">— Charlie Munger, Poor Charlie's Almanack</p>
+</div>
+
+<!-- ─── 03: MAP IS NOT THE TERRITORY ─── -->
+<section class="section" id="map">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Model 03</div>
+    <div class="s-meta">
+      <div class="s-cat">The Meta-Principle of All Decision Making</div>
+      <h2 class="s-title">The Map Is<br/>Not The <span>Territory</span></h2>
+      <p class="s-desc">Your mental model of the world is not the world itself. Every belief, framework, and assumption you carry is a simplified map — and outdated, incomplete maps are the single biggest source of bad decisions in business and life.</p>
+    </div>
+  </div>
+
+  <div class="two-col" style="margin-bottom:2px">
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M9 4v14M15 6v14" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">What "The Map" Is</div>
+      <p class="col-text">The map is any mental model, belief, framework, policy, financial report, or assumption you're using to navigate reality. Maps are essential — you cannot explore every inch of territory for yourself. But every map has three fundamental limitations: <strong>Omission</strong> (it leaves things out), <strong>Distortion</strong> (it changes proportions), and <strong>Time-boundedness</strong> (it represents a snapshot that may no longer exist). The trap: mistaking the map for the territory itself.</p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15.5 0 18M12 3c-2.5 2.5-2.5 15.5 0 18" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">What "The Territory" Is</div>
+      <p class="col-text">The territory is reality — complex, messy, ever-shifting, and far richer than any map of it. Alfred Korzybski, who coined the phrase, warned that language and models are like "blurry glasses" — useful for filtering complexity, but dangerous when we forget they filter. Jeff Bezos proved this empirically: he once discovered that Amazon's call centre wait times were being misreported — by calling the number himself and waiting on hold for 10 minutes. <strong>He touched the territory. The map was wrong.</strong></p>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">MAP LESSON 01</div>
+      <span class="card-icon">📰</span>
+      <div class="card-title">Where Maps Most Often Mislead</div>
+      <div class="card-sec">The Usual Suspects</div>
+      <p class="card-text"><strong style="color:var(--cream)">Financial statements:</strong> Distill thousands of transactions into something legible — but tell you nothing about employee morale, product quality, or what's really happening inside the business.<br/><br/><strong style="color:var(--cream)">Résumés:</strong> A map of experience and education — not the person. Many great hires are ignored because their map doesn't look right.<br/><br/><strong style="color:var(--cream)">Social media profiles:</strong> A curated, manufactured map designed to project a specific image — not a window into actual life.<br/><br/><strong style="color:var(--cream)">Business plans:</strong> A map of a hoped-for future — the market doesn't read them.</p>
+      <span class="badge badge-c">Common Traps</span>
+    </div>
+    <div class="card">
+      <div class="card-num">MAP LESSON 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="13" r="8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 9v4l3 2M4 6 2 4M20 6l2-2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Maps Go Out of Date</div>
+      <div class="card-sec">The Most Dangerous Kind of Wrong</div>
+      <p class="card-text">A 16th-century map of Spain is clearly wrong — no one would use it to drive today. But people use 16th-century mental models to make decisions every day, and never notice. Your beliefs about your market, your competitors, your customers, your own skills — when were they last updated? Nobody would travel with a 400-year-old map. But millions of people make decisions based on assumptions formed 10 years ago without questioning them.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 Model Bias</div>
+        <p class="card-text">We become so attached to our maps that we ignore contradictory evidence from the territory. Psychologists call this confirmation bias. Entrepreneurs call it their business model. One common pitfall: Becoming attached to your map of a customer segment that stopped existing two years ago.</p>
+      </div>
+      <span class="badge badge-c">Hidden Risk</span>
+    </div>
+    <div class="card">
+      <div class="card-num">MAP LESSON 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="10.5" cy="10.5" r="6.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m20 20-4.8-4.8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Reification Trap</div>
+      <div class="card-sec">When the Map Becomes Real</div>
+      <p class="card-text">Reification is when you start treating the map as if it were the territory. Examples: a spreadsheet model "coming to life" — where the model creates its own reality and everyone stops questioning whether the numbers reflect what's actually happening. Org charts that create departmental silos where actual work crosses boundaries. Metrics that everyone hits while the underlying reality they measure deteriorates.</p>
+      <div class="real-world">
+        <div class="card-sec" style="color:#9b87e8">🏙️ Urban Planning Example</div>
+        <p class="card-text">City planners in Helsinki studied "desire paths" — where people actually walked versus where official paths were placed. They redesigned parks around observed reality, not the original map. Teams estimating probabilities rather than treating maps as fixed facts reduced bad decisions by 41% in a 2023 study.</p>
+      </div>
+      <span class="badge badge-d">Advanced Trap</span>
+    </div>
+    <div class="card">
+      <div class="card-num">MAP LESSON 04</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M20 11a8 8 0 0 0-14.9-3.5M4 13a8 8 0 0 0 14.9 3.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 4v4h4M19 20v-4h-4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">How to Update Your Maps</div>
+      <div class="card-sec">The Practice</div>
+      <p class="card-text"><strong style="color:var(--cream)">Ask before every major decision:</strong> "What assumptions am I making? Are they still valid?"<br/><br/><strong style="color:var(--cream)">Seek disconfirming evidence:</strong> Actively look for information that challenges your beliefs. Darwin paid special attention to evidence that contradicted his own theories.<br/><br/><strong style="color:var(--cream)">Use multiple models:</strong> No single map captures all of reality. Use a latticework of mental models to challenge each other. All models are wrong — but some combination gets closer to the truth.<br/><br/><strong style="color:var(--cream)">Update apps regularly:</strong> Think of your mental models like software — schedule regular updates, not just when you feel the map is wrong.</p>
+      <span class="badge badge-b">Your Practice</span>
+    </div>
+    <div class="card">
+      <div class="card-num">MAP LESSON 05</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 3v18M8 21h8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 6h14M5 6l-3 6a3.2 3.2 0 0 0 6 0zM19 6l-3 6a3.2 3.2 0 0 0 6 0z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Mercator Projection Problem</div>
+      <div class="card-sec">Distortion at Scale</div>
+      <p class="card-text">The Mercator projection map makes Greenland appear the same size as Africa. In reality, Africa is 14 times larger. This isn't a trivial cartographic quirk — it's a perfect metaphor for how our mental models systematically distort the sizes and importances of things we perceive. Cognitive biases are not random. They have consistent, predictable distortion patterns — which means you can learn to correct for them, like adjusting a map for a known projection error.</p>
+      <span class="badge badge-a">Concept</span>
+    </div>
+    <div class="card">
+      <div class="card-num">MAP LESSON 06</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m15 9-2 6-6 2 2-6z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Choose Your Cartographers Wisely</div>
+      <div class="card-sec">When You Can't Make the Map Yourself</div>
+      <p class="card-text">In many areas of life, you rely on maps made by others: experts, teachers, media, mentors. You cannot always go into the territory yourself. Shane Parrish: "The best we can do is choose our mapmakers wisely — and seek those who are rigorous, transparent, and open to revision." A map-maker who has never updated their map, who refuses to show their methodology, and who claims perfect accuracy — is the most dangerous kind.</p>
+      <span class="badge badge-b">Practical Wisdom</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 3 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"We run into problems when our knowledge becomes knowledge of the map rather than of the actual underlying territory it describes. Reality is messy and complicated — our tendency to simplify it is understandable. But if the aim becomes simplification rather than understanding, <em>we start to make bad decisions.</em>"</p>
+  <p class="quote-attr">— Shane Parrish, The Great Mental Models</p>
+</div>
+
+<!-- ─── 04: SECOND ORDER THINKING ─── -->
+<section class="section section-alt" id="secondorder">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Model 04</div>
+    <div class="s-meta">
+      <div class="s-cat">The Edge That Separates Good from Great</div>
+      <h2 class="s-title">Second-<span>Order</span><br/>Thinking</h2>
+      <p class="s-desc">First-order thinking asks: "What happens next?" Second-order thinking asks: "And then what?" The world is full of decisions that looked brilliant on first-order analysis and created disasters through second-order effects. The 5% of people who think in second order consistently outperform everyone else.</p>
+    </div>
+  </div>
+
+  <div class="cmp-wrap">
+    <div class="cmp-side">
+      <div class="cmp-head first">🐢 First-Order Thinking</div>
+      <div class="cmp-row"><strong>I'm hungry → eat a chocolate bar.</strong> Fast. Easy. No deeper thinking.</div>
+      <div class="cmp-row"><strong>"The stock looks good → buy it."</strong> Surface-level. What everyone already sees.</div>
+      <div class="cmp-row"><strong>Suppress small forest fires.</strong> First order: prevent local damage. Done.</div>
+      <div class="cmp-row"><strong>Give team an ambitious production target.</strong> First order: more productivity. Win.</div>
+      <div class="cmp-row"><strong>Prescribe antibiotics for every infection.</strong> First order: cure the infection. Done.</div>
+      <div class="cmp-row"><strong>Introduce a cane toad to Australia to kill pests.</strong> First order: solve agricultural problem.</div>
+    </div>
+    <div class="cmp-side">
+      <div class="cmp-head second">🦅 Second-Order Thinking</div>
+      <div class="cmp-row"><strong>I'm hungry → why? What does my body actually need? What's the second-order effect of sugar right now?</strong></div>
+      <div class="cmp-row"><strong>"Everyone thinks it's good, so it's priced in. What happens if earnings miss by 3%?" → Actually sell.</strong></div>
+      <div class="cmp-row"><strong>Decades of suppressed fires → accumulated dry undergrowth → catastrophic inferno that destroys entire forests.</strong></div>
+      <div class="cmp-row"><strong>Team hits 130% → warehouse can't handle influx → demand drops → costs spiral. Net result: negative.</strong></div>
+      <div class="cmp-row"><strong>Overuse of antibiotics → resistant bacteria strains → infections that cannot be treated → a future medical crisis.</strong></div>
+      <div class="cmp-row"><strong>Cane toads are poisonous to local predators → they multiply uncontrolled → they become an invasive plague for decades.</strong></div>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">2ND ORDER 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M4 20 14 4l6 16z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M9 20h5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Howard Marks' Framework</div>
+      <div class="card-sec">The Most Important Thing</div>
+      <p class="card-text">Howard Marks coined the term "second-level thinking" in his book The Most Important Thing. He wrote: "First-level thinking is simplistic and superficial, and just about everyone can do it. Second-level thinking is deep, complex and convoluted." The key insight: with first-level thinking, everyone reaches the same answer. With second-level thinking, you see what others cannot.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Investing Edge</div>
+        <p class="card-text">First-level: "It's a good company; buy the stock." Second-level: "It's a good company, but everyone thinks it's a great company — and it's not. So the stock is overpriced; sell." First-level: "Bad earnings outlook; sell." Second-level: "Earnings will fall less than the market expects, and the relief will lift the stock; buy." The edge is always in seeing deeper than the consensus.</p>
+      </div>
+      <span class="badge badge-a">Investing Application</span>
+    </div>
+    <div class="card">
+      <div class="card-num">2ND ORDER 02</div>
+      <span class="card-icon">🕳️</span>
+      <div class="card-title">Why People Default to First Order</div>
+      <div class="card-sec">The Hard Truth</div>
+      <p class="card-text">The brain is wired to perform first-order thinking intuitively — it's fast, low-energy, and usually sufficient for basic survival. Second-order thinking is deliberate, slow, and energy-intensive. It requires asking "and then what?" repeatedly until you reach a natural stopping point. Howard Marks: "The difference in workload between first-level and second-level thinking is clearly massive, and the number of people capable of the latter is tiny compared to the number capable of the former."</p>
+      <span class="badge badge-c">Cognitive Reality</span>
+    </div>
+    <div class="card">
+      <div class="card-num">2ND ORDER 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="5" y="4" width="14" height="17" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="9" y="2.5" width="6" height="3.5" rx="1" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.5 12h7M8.5 16h7" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The 10-10-10 Questions</div>
+      <div class="card-sec">The Tool</div>
+      <p class="card-text">Before any major decision, ask:<br/><br/><strong style="color:var(--cream)">In 10 minutes,</strong> how will I feel about this decision?<br/><br/><strong style="color:var(--cream)">In 10 months,</strong> how will I feel? What consequences will have emerged?<br/><br/><strong style="color:var(--cream)">In 10 years,</strong> how will I feel looking back? What compounding effects — positive or negative — will have accumulated?<br/><br/>A decision that looks great in 10 minutes but terrible in 10 years is a first-order decision disguised as a good one.</p>
+      <span class="badge badge-b">Your Toolkit</span>
+    </div>
+    <div class="card">
+      <div class="card-num">2ND ORDER 04</div>
+      <span class="card-icon">🦋</span>
+      <div class="card-title">Unintended Consequences Are Inevitable</div>
+      <div class="card-sec">The Honest Reckoning</div>
+      <p class="card-text">The research is clear: over 83% of business failures can be traced to ignoring second-order and indirect consequences. Cutting employee training saves money in Q1 — but creates skill gaps that cost 10× that savings in Year 2. Offering unlimited PTO sounds generous — but without clear norms, nobody takes it, guilt compounds, and burnout rises. Amazon's early strategy of investing in infrastructure at a loss looked terrible in first order — and created an insurmountable moat in second order.</p>
+      <span class="badge badge-c">Warning</span>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-head">✅ How to Build This Habit</div>
+    <p class="tip-text">After every decision, before executing: write down first-order consequences. Then write second-order consequences. Then third, if relevant. Ask: "What behaviors will this incentivize?" "How will people adapt?" "What feedback loops does this create?" Ask "why" at least 5 times to trace the consequence chain. Start small — apply it to one decision per day. It compounds.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 4 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"Every action has consequences, and those consequences have consequences. The world is full of decisions that <em>looked good</em> based on first-order thinking but created disasters through second-order effects."</p>
+  <p class="quote-attr">— Howard Marks, The Most Important Thing</p>
+</div>
+
+<!-- ─── 05: CIRCLE OF COMPETENCE ─── -->
+<section class="section" id="circle">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Model 05</div>
+    <div class="s-meta">
+      <div class="s-cat">Warren Buffett's Most Underrated Edge</div>
+      <h2 class="s-title">Circle of<br/><span>Competence</span></h2>
+      <p class="s-desc">Knowing what you know — and what you don't — is more valuable than knowing everything. The circle of competence isn't about being the smartest person in the room. It's about knowing which room you belong in.</p>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">CIRCLE 01</div>
+      <span class="card-icon">⭕</span>
+      <div class="card-title">The Core Idea</div>
+      <p class="card-text">Every person has a domain of genuine expertise — a circle. Inside the circle, your knowledge is deep, your judgment is reliable, and your decisions are sound. Outside the circle, you're navigating without a map, at the mercy of currents and storms you don't fully understand. Buffett: "You don't have to be an expert on every company. You only have to be able to evaluate companies within your circle of competence. The size of that circle is not very important. Knowing its boundaries, however, is vital."</p>
+      <span class="badge badge-a">Core Concept</span>
+    </div>
+    <div class="card">
+      <div class="card-num">CIRCLE 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 3 2 20h20z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M12 10v4.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="17.3" r="0.9" fill="#c8943a"/></svg></span>
+      <div class="card-title">The Ego Problem</div>
+      <p class="card-text">When ego drives what you undertake — rather than competence — you develop blind spots. Munger: "Rise quite high in life by slowly developing a circle of competence — which results partly from what you were born with and partly from what you slowly develop through work." The failure mode: overestimating the radius of your circle. The trap of "I understand businesses, therefore I can invest in any business." Apple and a fruit vendor are both "businesses."</p>
+      <div class="psych">
+        <div class="card-sec">🔬 Dunning-Kruger Effect</div>
+        <p class="card-text">The people with the least knowledge in a domain consistently overestimate their competence in it. The most dangerous investors, leaders, and decision-makers are those who don't know what they don't know — and never will unless they're actively looking for the boundary.</p>
+      </div>
+      <span class="badge badge-c">The Trap</span>
+    </div>
+    <div class="card">
+      <div class="card-num">CIRCLE 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="m4 16 5-5 4 3 7-8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 6h5v5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Expanding the Circle</div>
+      <p class="card-text">Knowing your circle's limits is not a constraint — it's a competitive advantage. And it is not static. You can expand your circle deliberately, over time, through deep study. Charlie Munger built a latticework of circles — mental models drawn from mathematics, philosophy, biology, economics, and psychology. The goal is not to become an expert in everything, but to build enough adjacent knowledge that you can recognize when a problem belongs inside your circle — and when it doesn't.</p>
+      <span class="badge badge-b">Growth Path</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 06: THE RAZORS ─── -->
+<section class="section section-alt" id="razors">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Model 06</div>
+    <div class="s-meta">
+      <div class="s-cat">The Simplicity Principle</div>
+      <h2 class="s-title">The <span>Razors</span> —<br/>Occam & Hanlon</h2>
+      <p class="s-desc">Two of the most useful thinking tools in existence. One helps you cut through complexity. The other helps you preserve relationships and reduce paranoia. Both save enormous amounts of wasted mental energy.</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon">🪒</span>
+      <div class="col-title">Occam's Razor</div>
+      <p class="col-text">When faced with competing explanations or hypotheses, the one with <strong>the fewest assumptions is most likely correct.</strong> Named after 14th-century philosopher William of Ockham. Einstein used it in special relativity. Darwin used it to explain natural selection. The rule: don't multiply complexity beyond necessity.<br/><br/><strong>In practice:</strong> When something breaks, your first instinct is often to build an elaborate theory. Occam's Razor says: what's the simplest explanation that fits all the facts? Start there. Most of the time, you'll find it.<br/><br/><strong>The limit:</strong> Sometimes reality is genuinely complex. "Everything should be made as simple as possible — but no simpler." — Einstein. Don't oversimplify to the point of losing explanatory power.</p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon">🧹</span>
+      <div class="col-title">Hanlon's Razor</div>
+      <p class="col-text"><strong>"Never attribute to malice that which can be adequately explained by stupidity."</strong> In other words: when something bad happens to you, the most likely explanation is error or incompetence — not conspiracy or deliberate hostility.<br/><br/><strong>Why it matters:</strong> Humans are wired to see threats and hostile intent everywhere. This made sense on the savanna. It makes terrible sense in modern organisations. Most frustrating things that happen to you are caused by people who: forgot, made a mistake, had incomplete information, or were under pressure.<br/><br/><strong>The power:</strong> When you assume stupidity instead of malice, you respond with empathy instead of defensiveness. You find practical solutions instead of enemies. You reduce drama by roughly 90%.</p>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">RAZOR NOTE 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M3 12h4l3-3 3 3 3-3 5 3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 12v5h4v-5M17 12v5h4v-5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Hanlon's Razor in Daily Life</div>
+      <p class="card-text">Colleague didn't respond to your email → probably busy or it got lost, not ignoring you deliberately. Manager gave you critical feedback → probably trying to help, not attacking you. Partner snapped at you → probably stressed, not hostile. Supplier delivered late → probably had a real problem, not sabotaging you. This model doesn't mean everyone is innocent. It means start with the charitable explanation — then adjust only when evidence demands otherwise.</p>
+      <span class="badge badge-b">Relationship Tool</span>
+    </div>
+    <div class="card">
+      <div class="card-num">RAZOR NOTE 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 15 15 9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 6.5 13 4.5a3.5 3.5 0 0 1 5 5l-2 2M13 17.5 11 19.5a3.5 3.5 0 0 1-5-5l2-2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">How They Work Together</div>
+      <p class="card-text">Occam's Razor and Hanlon's Razor are deeply connected. Hanlon's is essentially Occam's applied specifically to human behavior. When someone does something bad, Occam says: "what's the simplest explanation?" Hanlon says: "incompetence requires fewer assumptions than malice." Used together, they form a powerful shield against paranoia, conspiracy thinking, and unnecessary conflict — three of the biggest drains on productive thinking.</p>
+      <span class="badge badge-a">Combined Power</span>
+    </div>
+    <div class="card">
+      <div class="card-num">RAZOR NOTE 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M4 21h16M5 21V10M19 21V10M3 10l9-6 9 6M7 10v11M11 10v11M13 10v11M17 10v11" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Occam's Razor & Napoleon's Wisdom</div>
+      <p class="card-text">Napoleon reportedly said: "Never ascribe to malice that which is adequately explained by incompetence." This predates Hanlon and shows how ancient this wisdom is. The oldest version appears in Robert Heinlein's 1941 novella Logic of Empire: "You have attributed conditions to villainy that simply result from stupidity." The enduring lesson: our evolutionary threat-detection systems consistently overdiagnose hostile intent. These razors are the correction.</p>
+      <span class="badge badge-d">Historical Context</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 07: PROBABILISTIC THINKING ─── -->
+<section class="section" id="probabilistic">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Model 07</div>
+    <div class="s-meta">
+      <div class="s-cat">Thinking in Odds, Not Absolutes</div>
+      <h2 class="s-title">Probabilistic<br/><span>Thinking</span></h2>
+      <p class="s-desc">Most people think in binary: this will work, or it won't. The best thinkers in the world think in distributions: "There's a 70% chance of X, a 20% chance of Y, and a 10% chance of Z." This single shift produces dramatically better decisions.</p>
+    </div>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <div class="step-title">Identify What Actually Matters</div>
+        <p class="step-text">Not all variables are equal. Probabilistic thinking starts with identifying the 2–3 variables that most heavily determine the outcome. Most people overweight noise and underweight signal. What are the key drivers? Focus on those.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <div class="step-title">Estimate the Odds Honestly</div>
+        <p class="step-text">Assign actual probabilities — not "likely" or "unlikely." "I think there's a 65% chance this customer closes." This sounds uncomfortable because it forces honesty. That discomfort is the point. Fuzzy language hides fuzzy thinking.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <div class="step-title">Check Your Assumptions</div>
+        <p class="step-text">Where did your probability estimate come from? What's your base rate? (How often does this type of thing succeed in general?) What biases might be inflating or deflating your estimate? Compare your view to the consensus — and know why you're different, if you are.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <div class="step-title">Decide — and Then Update</div>
+        <p class="step-text">Probabilistic thinkers update their beliefs continuously as new information arrives. What seemed 70% likely yesterday may be 40% likely today. This is what distinguishes great forecasters from everyone else — not that they're always right, but that they update efficiently. Clinging to a view in the face of new evidence is what kills decisions, not the original estimate.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip" style="margin-top:40px">
+    <div class="tip-head">✅ Jeff Bezos: The Regret Minimization Framework</div>
+    <p class="tip-text">A bonus model from Bezos — and perhaps the most emotionally intelligent mental model in this guide. Whenever facing a big decision, project yourself to age 80, looking back. <strong>Ask: "Will I regret not doing this?"</strong> Most of the things we most fear in the short term become trivially unimportant from that vantage point. Most of the things we regret most are not the things we tried and failed — they are the things we were too afraid to try. Bezos used this framework to leave his Wall Street career and start Amazon. He knew he wouldn't regret trying. He knew he would regret not trying.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── 08: MASTER CHEATSHEET ─── -->
+<section class="section" id="cheatsheet">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 08</div>
+    <div class="s-meta">
+      <div class="s-cat">Quick Reference</div>
+      <h2 class="s-title">The Master<br/><span>Cheatsheet</span></h2>
+      <p class="s-desc">Every model and principle from this guide — in one quick-reference table. Put it on your wall, screenshot it, or build it into your decision checklist.</p>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Model</th>
+          <th>The Core Question to Ask</th>
+          <th>Origin</th>
+          <th>Best Used For</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="num-cell">01</td><td class="name-cell">First Principles</td><td>What do I know is fundamentally, undeniably true here? What am I just assuming because of how things are done?</td><td>Aristotle · Elon Musk</td><td><span class="badge badge-a">Innovation</span></td></tr>
+        <tr><td class="num-cell">02</td><td class="name-cell">Socratic Method</td><td>Why do I believe this? How do I know this is true? What if I believed the opposite?</td><td>Socrates</td><td><span class="badge badge-a">Assumption-busting</span></td></tr>
+        <tr><td class="num-cell">03</td><td class="name-cell">Inversion</td><td>What would guarantee this fails? What would make this a complete disaster?</td><td>Jacobi · Munger</td><td><span class="badge badge-c">Risk avoidance</span></td></tr>
+        <tr><td class="num-cell">04</td><td class="name-cell">Pre-Mortem</td><td>It's 6 months from now and this completely failed. Why?</td><td>Gary Klein</td><td><span class="badge badge-c">Project planning</span></td></tr>
+        <tr><td class="num-cell">05</td><td class="name-cell">Map ≠ Territory</td><td>Is my mental model of this situation current, accurate, and complete?</td><td>Korzybski · Parrish</td><td><span class="badge badge-d">Decision making</span></td></tr>
+        <tr><td class="num-cell">06</td><td class="name-cell">Model Audit</td><td>When did I last update this assumption? Is it from 10 years ago?</td><td>Farnam Street</td><td><span class="badge badge-d">Belief updating</span></td></tr>
+        <tr><td class="num-cell">07</td><td class="name-cell">Second-Order Thinking</td><td>And then what? What happens after the immediate consequence?</td><td>Howard Marks</td><td><span class="badge badge-a">Strategy</span></td></tr>
+        <tr><td class="num-cell">08</td><td class="name-cell">10-10-10 Questions</td><td>How will I feel about this in 10 minutes, 10 months, 10 years?</td><td>Suzy Welch</td><td><span class="badge badge-a">Big decisions</span></td></tr>
+        <tr><td class="num-cell">09</td><td class="name-cell">Second-Level Investing</td><td>What does the market consensus think? How is my view different — and why?</td><td>Howard Marks</td><td><span class="badge badge-a">Investing</span></td></tr>
+        <tr><td class="num-cell">10</td><td class="name-cell">Circle of Competence</td><td>Am I operating inside my circle? Do I know where the boundary is?</td><td>Warren Buffett</td><td><span class="badge badge-b">Domain clarity</span></td></tr>
+        <tr><td class="num-cell">11</td><td class="name-cell">Circle Expansion</td><td>What adjacent knowledge would move this decision inside my circle?</td><td>Charlie Munger</td><td><span class="badge badge-b">Learning</span></td></tr>
+        <tr><td class="num-cell">12</td><td class="name-cell">Occam's Razor</td><td>What's the simplest explanation that fits all the facts?</td><td>William of Ockham</td><td><span class="badge badge-b">Problem diagnosis</span></td></tr>
+        <tr><td class="num-cell">13</td><td class="name-cell">Hanlon's Razor</td><td>Is there a simpler explanation than malicious intent? (Usually: yes.)</td><td>Hanlon · Napoleon</td><td><span class="badge badge-b">Relationships</span></td></tr>
+        <tr><td class="num-cell">14</td><td class="name-cell">Probabilistic Thinking</td><td>What are the actual odds here? What's my base rate?</td><td>Mathematics · Parrish</td><td><span class="badge badge-d">Forecasting</span></td></tr>
+        <tr><td class="num-cell">15</td><td class="name-cell">Belief Updating</td><td>What new information should shift my probability estimate?</td><td>Bayes · Kahneman</td><td><span class="badge badge-d">Ongoing decisions</span></td></tr>
+        <tr><td class="num-cell">16</td><td class="name-cell">Regret Minimization</td><td>At age 80, looking back: will I regret not doing this?</td><td>Jeff Bezos</td><td><span class="badge badge-a">Life decisions</span></td></tr>
+        <tr><td class="num-cell">17</td><td class="name-cell">The Five Whys</td><td>Why? Why? Why? Why? Why? (until you hit a first principle)</td><td>Toyota · Musk</td><td><span class="badge badge-c">Root cause</span></td></tr>
+        <tr><td class="num-cell">18</td><td class="name-cell">Latticework of Models</td><td>Am I only using one mental model here? What does a second lens reveal?</td><td>Charlie Munger</td><td><span class="badge badge-d">Complex problems</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-logo">Mental Models That Win</div>
+  <p class="footer-sub">Think Smarter · The Complete Research Guide · 2025–2026 Edition</p>
+  <p class="footer-sub" style="color:var(--muted);font-size:13px;margin-top:8px">8 Core Models · 18 Principles · Research sourced from Farnam Street, Charlie Munger's Almanack, Shane Parrish, Howard Marks, Elon Musk, Jeff Bezos & Aristotle</p>
+  <p class="footer-tiny">Research compiled April 2026 · Inspired by Parallelogram · Built for sharp minds</p>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:24px;font-style:italic;color:rgba(200,148,58,.28);margin-top:36px">"The quality of your thinking depends entirely on the models in your head."</p>
+</footer>
+
+<script>
+// Progress bar
+window.addEventListener('scroll',()=>{
+  const st=document.documentElement.scrollTop;
+  const sh=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('prog').style.width=(st/sh*100)+'%';
+});
+// Reveal animations
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.style.opacity='1';
+      e.target.style.transform='translateY(0)';
+    }
+  });
+},{threshold:0.07});
+document.querySelectorAll('.card,.col-card,.step,.s-stat,.cmp-side').forEach(el=>{
+  el.style.opacity='0';
+  el.style.transform='translateY(18px)';
+  el.style.transition='opacity .5s ease, transform .5s ease';
+  obs.observe(el);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Smarter Parenting in the Modern World</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07080a;--surface:#0e1014;--card:#13151a;--card2:#181b22;
+  --gold:#c8943a;--gold2:#e8b84b;--golddim:rgba(200,148,58,.13);
+  --cream:#f0e8d5;--muted:#5c5f68;--light:#9a9da8;
+  --border:rgba(200,148,58,.18);--rust:#b84532;
+  --teal:#2c7a72;--warm:#6b3a1a;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--cream);overflow-x:hidden;line-height:1.6}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.5}
+#prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--warm),var(--gold),var(--gold2));width:0%;z-index:2000;transition:width .08s}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:1500;display:flex;align-items:center;justify-content:space-between;padding:14px 48px;background:rgba(7,8,10,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(200,148,58,.1)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
+.nav-links{display:flex;gap:20px;list-style:none}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+@media(max-width:768px){.nav-links{display:none}.hero,.section,.toc-wrap,.quote-block,footer{padding-left:22px!important;padding-right:22px!important}nav{padding:14px 22px}}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px 64px 80px;position:relative;overflow:hidden}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 75% 55% at 92% 8%,rgba(107,58,26,.14) 0%,transparent 55%),radial-gradient(ellipse 55% 70% at 5% 90%,rgba(200,148,58,.1) 0%,transparent 60%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;opacity:.022;background-image:linear-gradient(rgba(200,148,58,1) 1px,transparent 1px),linear-gradient(90deg,rgba(200,148,58,1) 1px,transparent 1px);background-size:68px 68px}
+.hero-inner{position:relative;max-width:1100px}
+.hero-badge{display:inline-flex;align-items:center;background:rgba(107,58,26,.15);border:1px solid rgba(107,58,26,.4);padding:5px 16px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#e8b87a;margin-bottom:22px;opacity:0;animation:fadeup .7s .15s forwards}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:26px;display:flex;align-items:center;gap:14px;opacity:0;animation:fadeup .7s .2s forwards}
+.hero-tag::before{content:'';width:44px;height:1px;background:var(--gold);flex-shrink:0}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(44px,7.5vw,108px);font-weight:700;line-height:.88;letter-spacing:-4px;margin-bottom:10px;opacity:0;animation:fadeup .8s .4s forwards}
+.hero h1 span{color:var(--gold);font-style:italic}
+.hero h1 .sub{display:block;color:rgba(240,232,213,.2);font-size:clamp(22px,3.6vw,50px);font-weight:400;font-style:italic;letter-spacing:-1px;margin-top:8px}
+.hero-desc{font-size:clamp(15px,1.9vw,18px);color:var(--light);max-width:600px;margin:34px 0 50px;font-weight:300;line-height:1.78;opacity:0;animation:fadeup .8s .6s forwards}
+.hero-stats{display:flex;gap:0;border:1px solid var(--border);width:fit-content;opacity:0;animation:fadeup .8s .8s forwards;flex-wrap:wrap}
+.hstat{padding:18px 32px;border-right:1px solid var(--border);text-align:center}
+.hstat:last-child{border-right:none}
+.hstat-n{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.hstat-l{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-top:4px}
+.scroll-hint{position:absolute;bottom:40px;left:64px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:10px;animation:pulse 2.5s infinite}
+.scroll-hint::before{content:'';width:1px;height:38px;background:var(--gold);opacity:.35}
+@keyframes fadeup{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+
+.toc-wrap{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:56px 64px}
+.toc-inner{max-width:1100px;margin:0 auto}
+.toc-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:36px;display:flex;align-items:center;gap:12px}
+.toc-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px}
+.toc-item{background:var(--card);padding:18px 22px;display:flex;align-items:flex-start;gap:14px;cursor:pointer;transition:background .2s,border-color .2s;border:1px solid transparent;text-decoration:none}
+.toc-item:hover{background:var(--card2);border-color:var(--border)}
+.toc-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);opacity:.55;flex-shrink:0;min-width:26px;margin-top:2px}
+.toc-name{font-size:13.5px;color:var(--light);font-weight:400;transition:color .2s;line-height:1.4}
+.toc-item:hover .toc-name{color:var(--cream)}
+
+.section{padding:96px 64px;position:relative}
+.section-alt{background:var(--surface)}
+.s-inner{max-width:1100px;margin:0 auto}
+.s-head{display:grid;grid-template-columns:90px 1fr;gap:32px;align-items:start;margin-bottom:60px;padding-bottom:44px;border-bottom:1px solid var(--border)}
+.s-num{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;padding-top:8px}
+.s-meta{display:flex;flex-direction:column;gap:10px}
+.s-cat{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:3px;color:var(--rust);text-transform:uppercase}
+.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,60px);font-weight:700;line-height:.92;letter-spacing:-1.5px;color:var(--cream)}
+.s-title span{color:var(--gold);font-style:italic}
+.s-desc{font-size:15.5px;color:var(--light);max-width:660px;font-weight:300;line-height:1.78;margin-top:6px}
+@media(max-width:600px){.s-head{grid-template-columns:1fr;gap:14px}}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:2px}
+@media(max-width:600px){.cards{grid-template-columns:1fr}}
+.card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .25s,background .25s;position:relative;overflow:hidden}
+.card:hover{border-color:var(--border);background:var(--card2)}
+.card::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:linear-gradient(180deg,var(--gold),var(--warm));transition:height .35s}
+.card:hover::before{height:100%}
+.card-num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);opacity:.45;margin-bottom:14px}
+.card-icon{font-size:26px;margin-bottom:11px;display:block}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:700;color:var(--cream);letter-spacing:-.4px;margin-bottom:11px;line-height:1.15}
+.card-sec{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin:16px 0 7px}
+.card-text{font-size:13.5px;color:var(--light);line-height:1.72;font-weight:300}
+.psych{background:rgba(200,148,58,.06);border-left:2px solid var(--gold);padding:15px 18px;margin-top:18px}
+.psych .card-sec{margin-top:0}
+.scibox{background:rgba(44,122,114,.07);border-left:2px solid rgba(44,122,114,.5);padding:15px 18px;margin-top:14px}
+.scibox .card-sec{color:#4aaa9e}
+.badge{display:inline-flex;align-items:center;padding:4px 11px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;margin-top:14px}
+.ba{background:rgba(200,148,58,.11);color:var(--gold);border:1px solid var(--border)}
+.bb{background:rgba(44,122,114,.12);color:#4aaa9e;border:1px solid rgba(44,122,114,.3)}
+.bc{background:rgba(184,69,50,.11);color:#d46040;border:1px solid rgba(184,69,50,.28)}
+.bd{background:rgba(107,58,26,.14);color:#e8b87a;border:1px solid rgba(107,58,26,.35)}
+
+.quote-block{background:var(--surface);padding:72px 64px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center}
+.quote-text{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3.2vw,36px);font-weight:600;font-style:italic;color:var(--cream);max-width:880px;margin:0 auto;line-height:1.4}
+.quote-text em{color:var(--gold)}
+.quote-attr{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:24px}
+
+.stat-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:2px;margin:44px 0}
+.s-stat{background:var(--card);padding:26px 22px;text-align:center;border:1px solid transparent;transition:border-color .2s}
+.s-stat:hover{border-color:var(--border)}
+.s-stat-n{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.s-stat-l{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-top:5px}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}}
+.col-card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .2s}
+.col-card:hover{border-color:var(--border)}
+.col-icon{font-size:30px;margin-bottom:14px;display:block}
+.col-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:11px;letter-spacing:-.4px}
+.col-text{font-size:13.5px;color:var(--light);line-height:1.75;font-weight:300}
+.col-text strong{color:var(--cream);font-weight:500}
+
+/* PARENTING COMPARE */
+.style-compare{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:36px 0}
+@media(max-width:640px){.style-compare{grid-template-columns:1fr}}
+.style-side{background:var(--card);padding:30px;border:1px solid transparent;transition:border-color .2s}
+.style-side:hover{border-color:var(--border)}
+.style-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.style-label.auth{color:#d46040}
+.style-label.ative{color:#4aaa9e}
+.style-row{display:flex;gap:10px;margin-bottom:12px;font-size:13.5px;color:var(--light);line-height:1.6;font-weight:300}
+.style-row::before{content:'→';color:var(--gold);flex-shrink:0;font-size:11px;margin-top:3px}
+
+/* SCREEN TIME GRID */
+.screen-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2px;margin:36px 0}
+.screen-card{background:var(--card);padding:26px;border:1px solid transparent;transition:border-color .2s,background .2s}
+.screen-card:hover{border-color:var(--border);background:var(--card2)}
+.screen-verdict{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:8px}
+.screen-verdict.harm{color:#d46040}
+.screen-verdict.safe{color:#4aaa9e}
+.screen-verdict.mixed{color:var(--gold)}
+.screen-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--cream);margin-bottom:8px}
+.screen-text{font-size:13px;color:var(--light);line-height:1.65;font-weight:300}
+
+/* EQ STAGES */
+.eq-stages{display:flex;flex-direction:column;gap:2px;margin:36px 0}
+.eq-stage{display:grid;grid-template-columns:80px 1fr;gap:0;background:var(--card);border:1px solid transparent;transition:border-color .2s}
+.eq-stage:hover{border-color:var(--border)}
+.eq-age{background:var(--golddim);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 8px;text-align:center}
+.eq-age-num{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--gold);line-height:1}
+.eq-age-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-top:2px}
+.eq-body{padding:18px 24px}
+.eq-title{font-weight:600;color:var(--cream);font-size:14.5px;margin-bottom:4px}
+.eq-text{font-size:13px;color:var(--light);line-height:1.65;font-weight:300}
+.eq-phrase{font-size:12.5px;color:var(--gold);font-style:italic;margin-top:8px;line-height:1.5}
+
+/* FAILURE LANGUAGE */
+.failure-compare{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:36px 0}
+@media(max-width:640px){.failure-compare{grid-template-columns:1fr}}
+.failure-side{background:var(--card);padding:28px}
+.failure-head{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.failure-head.bad{color:#d46040}
+.failure-head.good{color:#4aaa9e}
+.failure-row{margin-bottom:16px}
+.failure-say{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--light);margin-bottom:4px;line-height:1.4}
+.failure-why{font-size:12px;color:var(--muted);line-height:1.5;font-style:italic}
+
+/* ALERT / TIP */
+.alert{background:rgba(184,69,50,.07);border:1px solid rgba(184,69,50,.24);padding:22px 26px;margin:28px 0}
+.alert-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:var(--rust);text-transform:uppercase;margin-bottom:9px}
+.alert-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.alert-text strong{color:var(--cream);font-weight:500}
+.tip{background:rgba(44,122,114,.07);border:1px solid rgba(44,122,114,.24);padding:22px 26px;margin:28px 0}
+.tip-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:#4aaa9e;text-transform:uppercase;margin-bottom:9px}
+.tip-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.tip-text strong{color:var(--cream);font-weight:500}
+
+.table-wrap{overflow-x:auto;margin-top:40px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--card2);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);padding:13px 16px;text-align:left;border-bottom:1px solid var(--border)}
+tbody tr{border-bottom:1px solid rgba(200,148,58,.07);transition:background .15s}
+tbody tr:hover{background:var(--card)}
+tbody td{padding:13px 16px;color:var(--light);vertical-align:top;line-height:1.5}
+.num-cell{font-family:'JetBrains Mono',monospace;color:var(--gold);opacity:.55;font-size:11px}
+.name-cell{font-weight:500;color:var(--cream)}
+
+footer{background:var(--bg);border-top:1px solid var(--border);padding:56px 64px 72px;text-align:center}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;letter-spacing:2px;color:var(--gold);margin-bottom:10px}
+.footer-sub{font-size:13.5px;color:var(--muted);margin-bottom:6px}
+.footer-tiny{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(92,95,104,.45);text-transform:uppercase;margin-top:26px}
+
+.pg-hero-art{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:.55;z-index:0}
+.pg-hero-art svg{width:100%;height:100%;display:block}
+[class*="icon"] svg.pg-icon{width:1em;height:1em;display:inline-block;vertical-align:-0.15em}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav>
+  <div class="nav-logo">Smarter Parenting</div>
+  <ul class="nav-links">
+    <li><a href="#parenting-styles">Parenting Styles</a></li>
+    <li><a href="#failure">Failure & Resilience</a></li>
+    <li><a href="#screentime">Screen Time</a></li>
+    <li><a href="#eq">Emotional Intelligence</a></li>
+    <li><a href="#discipline">Discipline</a></li>
+    <li><a href="#connection">Connection</a></li>
+    <li><a href="#modern">Modern Challenges</a></li>
+    <li><a href="#cheatsheet">Cheatsheet</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero"><div class="pg-hero-art" aria-hidden="true"><svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><path d="M785.4 310.4 A256.1 256.1 0 0 1 586.7 -145.7" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M262.4 130.3 A254.1 254.1 0 0 1 -3.1 318.1" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M600.1 131.5 A146.3 146.3 0 0 1 526.5 291.0" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><line x1="114.7" y1="56.1" x2="72.1" y2="29.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="616.7" y1="91.6" x2="705.0" y2="111.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="616.7" y1="91.6" x2="609.3" y2="207.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="701.1" y1="231.5" x2="687.0" y2="208.2" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="168.1" y1="84.3" x2="149.4" y2="109.0" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="94.5" y1="139.2" x2="149.4" y2="109.0" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="446.4" y1="120.6" x2="477.9" y2="162.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="687.0" y1="208.2" x2="755.0" y2="219.1" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="94.5" y1="139.2" x2="23.7" y2="202.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="149.4" y1="109.0" x2="169.9" y2="115.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="477.9" y1="162.4" x2="508.6" y2="186.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="446.4" y1="120.6" x2="384.9" y2="86.0" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="477.9" y1="162.4" x2="384.9" y2="86.0" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="701.1" y1="231.5" x2="755.0" y2="219.1" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="705.0" y1="111.6" x2="776.7" y2="117.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="858.2" y1="103.4" x2="776.7" y2="117.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="687.0" y1="208.2" x2="609.3" y2="207.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><circle cx="114.7" cy="56.1" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="616.7" cy="91.6" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="701.1" cy="231.5" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="701.1" cy="231.5" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="168.1" cy="84.3" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="168.1" cy="84.3" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="94.5" cy="139.2" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="446.4" cy="120.6" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="687.0" cy="208.2" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="687.0" cy="208.2" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="23.7" cy="202.3" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="149.4" cy="109.0" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="477.9" cy="162.4" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="477.9" cy="162.4" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="384.9" cy="86.0" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="384.9" cy="86.0" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="755.0" cy="219.1" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="508.6" cy="186.5" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="705.0" cy="111.6" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="858.2" cy="103.4" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="858.2" cy="103.4" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="609.3" cy="207.6" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="609.3" cy="207.6" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="72.1" cy="29.8" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="72.1" cy="29.8" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="776.7" cy="117.4" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="776.7" cy="117.4" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="169.9" cy="115.5" r="1.4" fill="#c8943a" opacity="0.50"/></svg></div>
+  <div class="hero-glow"></div><div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">Lifestyle · Child Development · Psychology · 2025–26</div>
+    <div class="hero-tag">The Complete Modern Parenting Research Guide · 2025–26</div>
+    <h1>Smarter<br/><span>Parenting</span><span class="sub">in the Modern World</span></h1>
+    <p class="hero-desc">The research-backed science of raising confident, emotionally intelligent, resilient children — in a world of screens, instant gratification, and unprecedented social pressure. Not guilt-trip parenting. Not perfect parenting. Evidence-based parenting. 8 deep chapters. Every principle grounded in 60+ years of child development research.</p>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-n">60yrs</span><span class="hstat-l">of research consistently confirms authoritative over authoritarian outcomes</span></div>
+      <div class="hstat"><span class="hstat-n">10</span><span class="hstat-l">years — the critical window for emotional intelligence development</span></div>
+      <div class="hstat"><span class="hstat-n">Content</span><span class="hstat-l">type matters more than screen time duration — 2025 PMC research</span></div>
+      <div class="hstat"><span class="hstat-n">Internal</span><span class="hstat-l">regulation vs external compliance — the one distinction that shapes everything</span></div>
+    </div>
+  </div>
+  <div class="scroll-hint">Scroll to begin</div>
+</section>
+
+<!-- ─── TOC ─── -->
+<div class="toc-wrap">
+  <div class="toc-inner">
+    <div class="toc-label">Everything Inside This Guide</div>
+    <div class="toc-grid">
+      <a href="#parenting-styles" class="toc-item"><span class="toc-num">01</span><span class="toc-name">Authoritative vs Authoritarian — The difference that shapes a child's entire adulthood</span></a>
+      <a href="#failure" class="toc-item"><span class="toc-num">02</span><span class="toc-name">Talking About Failure — So they grow up resilient, not fearful of it</span></a>
+      <a href="#screentime" class="toc-item"><span class="toc-num">03</span><span class="toc-name">Screen Time Decoded — What actually harms development vs what's media panic</span></a>
+      <a href="#eq" class="toc-item"><span class="toc-num">04</span><span class="toc-name">Teaching Emotional Intelligence — The window before age 10 that defines lifelong relationships</span></a>
+      <a href="#discipline" class="toc-item"><span class="toc-num">05</span><span class="toc-name">Discipline Without Damage — How to set limits that build, not break</span></a>
+      <a href="#connection" class="toc-item"><span class="toc-num">06</span><span class="toc-name">The Connection Foundation — Why relationship comes before everything else</span></a>
+      <a href="#modern" class="toc-item"><span class="toc-num">07</span><span class="toc-name">Modern Parenting Challenges — Social media, anxiety, identity & the pressure society puts on kids</span></a>
+      <a href="#cheatsheet" class="toc-item"><span class="toc-num">08</span><span class="toc-name">The Master Cheatsheet — Every principle, one table</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- ─── 01: PARENTING STYLES ─── -->
+<section class="section" id="parenting-styles">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 01</div>
+    <div class="s-meta">
+      <div class="s-cat">Diana Baumrind · 60 Years · Most-Searched Parenting Topic of March 2025</div>
+      <h2 class="s-title">Authoritative vs<br/><span>Authoritarian</span></h2>
+      <p class="s-desc">Psychologist Diana Baumrind identified four parenting styles in the 1960s. Six decades of subsequent research across every culture studied has produced one of the clearest findings in all of developmental psychology: authoritative parenting consistently produces better outcomes than authoritarian — across academic performance, emotional intelligence, mental health, and quality of adult relationships.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">60yrs</span><span class="s-stat-l">of consistent research: authoritative parenting outperforms authoritarian across all outcomes</span></div>
+    <div class="s-stat"><span class="s-stat-n">Internal</span><span class="s-stat-l">vs External: authoritative builds self-regulation, authoritarian builds compliance only</span></div>
+    <div class="s-stat"><span class="s-stat-n">March</span><span class="s-stat-l">2025: "authoritative parenting" was the single most-searched parenting term globally</span></div>
+    <div class="s-stat"><span class="s-stat-n">Adults</span><span class="s-stat-l">raised in authoritarian homes: higher anxiety, imposter syndrome, weaker emotional intelligence</span></div>
+  </div>
+
+  <div class="style-compare">
+    <div class="style-side">
+      <div class="style-label auth">❌ Authoritarian Parenting — High Control, Low Warmth</div>
+      <div class="style-row">"Do it because I said so" — no explanation, no collaboration</div>
+      <div class="style-row">Rigid top-down control. The parent needs to be right. Always.</div>
+      <div class="style-row">Punishment for non-compliance. Fear is the primary motivator.</div>
+      <div class="style-row">Boundaries set and enforced — but never explained or discussed</div>
+      <div class="style-row">Child is scared of, not connected to, parent</div>
+      <div class="style-row">Outcomes: anxiety, imposter syndrome, emotional immaturity</div>
+      <div class="style-row">Child behaves only when they fear the consequence of not doing so</div>
+      <div class="style-row">Adults put themselves in dangerous situations to avoid parental honesty</div>
+    </div>
+    <div class="style-side">
+      <div class="style-label ative">✅ Authoritative Parenting — High Warmth, High Structure</div>
+      <div class="style-row">"Here's why this matters" — explanation, discussion, collaboration</div>
+      <div class="style-row">Firm limits held with warmth. Parent is secure, not controlling.</div>
+      <div class="style-row">Consequences for choices — but explained and predictable</div>
+      <div class="style-row">Boundaries communicated clearly with the reasoning behind them</div>
+      <div class="style-row">Child is connected to, not scared of, parent — honesty flows naturally</div>
+      <div class="style-row">Outcomes: academic achievement, emotional resilience, self-efficacy</div>
+      <div class="style-row">Child behaves because they understand why — internal regulation</div>
+      <div class="style-row">Children seek parents out in difficulty — not avoid them</div>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">PARENTING INSIGHT 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 3v7.5L5.5 17a2 2 0 0 0 1.8 3h9.4a2 2 0 0 0 1.8-3L15 10.5V3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 3h6M6.5 15h11" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Single Most Important Distinction</div>
+      <p class="card-text">Both styles involve rules, structure, and consequences. The difference — identified by Baumrind and confirmed by 60 years of research — is this: authoritative parenting builds the internal capacity for self-regulation. Authoritarian parenting builds external compliance. A child raised authoritatively behaves well because they understand why. A child raised in an authoritarian environment behaves only when they fear the consequence. That distinction produces very different teenagers and adults — especially in contexts where no authority figure is present to enforce the rules.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Imposter Syndrome Finding</div>
+        <p class="card-text">Yaffe (2023): children raised with authoritarian parenting have a significantly greater chance of developing imposter syndrome — a dependent attitude on external approval to maintain self-esteem. Because their worth was always externally determined by compliance, they never develop intrinsic confidence. The internal voice of an authoritarian parent becomes the inner critic of the adult child.</p>
+      </div>
+      <span class="badge ba">Core Research</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PARENTING INSIGHT 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M4 5h13a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H9l-5 4v-4H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Communication Difference</div>
+      <p class="card-text">Authoritative parents explain their reasoning. "We don't hit because hurting other people isn't acceptable — even when we're angry." Authoritarian parents command without context. "Don't hit or you'll be punished." The first gives the child a value they can internalise and generalise to new situations. The second gives them a fear of specific consequences that evaporates when the parent isn't watching. Dr. Mona Amin: "An authoritarian parent doesn't communicate the boundaries to the child — there's not a lot of discussion, not a lot of collaboration." The explanation IS the parenting tool.</p>
+      <span class="badge ba">Daily Application</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PARENTING INSIGHT 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 21v-9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 12C6 12 5 6 5 6s6-1 7 6zM12 12c0-6 6-6.5 6-6.5S18.5 11 12 12z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Permissive Is Not the Antidote</div>
+      <p class="card-text">A common overcorrection by parents who experienced authoritarian upbringings: swinging to permissive parenting — high warmth, low structure. Research consistently shows this also produces poor outcomes. Children need both warmth (to feel safe and loved) and structure (to feel safe and contained). Permissive parenting leaves children without the internal framework for self-regulation that they need — just from neglect of structure rather than harshness. The authoritative synthesis is the research-confirmed goal: high on both dimensions, simultaneously and consistently.</p>
+      <div class="scibox">
+        <div class="card-sec">🌿 Baumrind's Four-Style Framework</div>
+        <p class="card-text">Authoritative (high warmth, high structure) → best outcomes. Authoritarian (low warmth, high structure) → anxiety, compliance. Permissive (high warmth, low structure) → poor self-regulation. Uninvolved (low warmth, low structure) → most damaging of all.</p>
+      </div>
+      <span class="badge ba">Framework</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PARENTING INSIGHT 04</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M20 11a8 8 0 0 0-14.9-3.5M4 13a8 8 0 0 0 14.9 3.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 4v4h4M19 20v-4h-4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">You Were Likely Raised Differently — And That's the Work</div>
+      <p class="card-text">Most adults raising children today were themselves raised in more authoritarian contexts — because that was the dominant cultural norm two generations ago. The research on intergenerational transmission shows that parents unconsciously replicate the parenting style they received, especially under stress. The moment you raise your voice, default to "because I said so," or feel the urge to control rather than connect — you're likely in a triggered, automated response from your own childhood. The insight doesn't produce guilt. It produces awareness. Awareness is the beginning of change.</p>
+      <span class="badge bd">Self-Awareness</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 1 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"Authoritative parenting builds internal capacity for self-regulation. Authoritarian parenting builds external compliance. <em>Those two things produce very different teenagers — and very different adults.</em>"</p>
+  <p class="quote-attr">— Victorious Parenting · Citing Baumrind 1966 / 60 Years of Replication Research</p>
+</div>
+
+<!-- ─── 02: FAILURE & RESILIENCE ─── -->
+<section class="section section-alt" id="failure">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 02</div>
+    <div class="s-meta">
+      <div class="s-cat">Carol Dweck · Angela Duckworth · Growth Mindset Science</div>
+      <h2 class="s-title">Talking About<br/><span>Failure</span></h2>
+      <p class="s-desc">How you talk to a child about failure is one of the most consequential parenting decisions you will make repeatedly. Carol Dweck's research on growth mindset established that the language used around failure — by parents, teachers, and coaches — directly determines whether a child experiences failure as information or as identity. The difference shapes academic performance, risk-taking, and resilience for decades.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">Growth</span><span class="s-stat-l">vs Fixed mindset — the distinction Dweck's 30 years of research consistently shows matters most</span></div>
+    <div class="s-stat"><span class="s-stat-n">Praise</span><span class="s-stat-l">for effort produces resilience. Praise for intelligence produces fragility. (Dweck 1998)</span></div>
+    <div class="s-stat"><span class="s-stat-n">Mistakes</span><span class="s-stat-l">= data in a growth mindset home. = shame in a fixed mindset home. Context is everything.</span></div>
+    <div class="s-stat"><span class="s-stat-n">Process</span><span class="s-stat-l">praise ("you worked hard") outperforms outcome praise ("you're so smart") in every study</span></div>
+  </div>
+
+  <div class="failure-compare">
+    <div class="failure-side">
+      <div class="failure-head bad">❌ What Parents Say That Creates Fear of Failure</div>
+      <div class="failure-row">
+        <div class="failure-say">"You're so smart — you should have got that right."</div>
+        <div class="failure-why">Connects intelligence to performance. Failure now threatens identity.</div>
+      </div>
+      <div class="failure-row">
+        <div class="failure-say">"Don't worry, you'll do better next time."</div>
+        <div class="failure-why">Dismisses the failure rather than engaging with it. Teaches avoidance.</div>
+      </div>
+      <div class="failure-row">
+        <div class="failure-say">"What happened? You were so good at this before."</div>
+        <div class="failure-why">Creates narrative of decline. Attaches worth to past performance.</div>
+      </div>
+      <div class="failure-row">
+        <div class="failure-say">"Everyone fails sometimes — it's not a big deal."</div>
+        <div class="failure-why">Minimises their experience. Doesn't build the capacity to engage with failure productively.</div>
+      </div>
+      <div class="failure-row">
+        <div class="failure-say">"I'm disappointed in you."</div>
+        <div class="failure-why">Connects parental love to performance. Creates shame rather than learning.</div>
+      </div>
+    </div>
+    <div class="failure-side">
+      <div class="failure-head good">✅ What Parents Say That Builds Resilience</div>
+      <div class="failure-row">
+        <div class="failure-say">"You worked really hard on that — I'm proud of your effort."</div>
+        <div class="failure-why">Praises process, not outcome. Separates worth from result. Resilient identity forms.</div>
+      </div>
+      <div class="failure-row">
+        <div class="failure-say">"What do you think happened? What would you do differently?"</div>
+        <div class="failure-why">Engages with failure as information. Builds analytical capacity and agency.</div>
+      </div>
+      <div class="failure-row">
+        <div class="failure-say">"This is hard — and hard things take time. What's one thing you could try?"</div>
+        <div class="failure-why">Normalises difficulty. Redirects to forward action. Builds persistence.</div>
+      </div>
+      <div class="failure-row">
+        <div class="failure-say">"Mistakes are how we learn — what did this one teach you?"</div>
+        <div class="failure-why">Reframes failure as data. Builds intellectual curiosity rather than shame.</div>
+      </div>
+      <div class="failure-row">
+        <div class="failure-say">"I love you. Full stop. Separate from how this turned out."</div>
+        <div class="failure-why">Unconditional love — the foundation that makes all risk-taking safe.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">FAILURE SCIENCE 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 3v7.5L5.5 17a2 2 0 0 0 1.8 3h9.4a2 2 0 0 0 1.8-3L15 10.5V3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 3h6M6.5 15h11" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Dweck Intelligence Praise Study</div>
+      <p class="card-text">Carol Dweck's landmark 1998 study: children given the same test were randomly assigned two types of praise — "You're so smart" (intelligence praise) or "You worked really hard" (effort praise). In subsequent rounds, the intelligence-praised children consistently chose easier tasks (to protect their "smart" identity), gave up faster, and lied about their scores more. The effort-praised children chose harder tasks, persisted longer, improved their scores, and reported enjoying the challenges more. The only difference: one sentence of feedback after the first test.</p>
+      <span class="badge ba">The Foundational Study</span>
+    </div>
+    <div class="card">
+      <div class="card-num">FAILURE SCIENCE 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8A3.5 3.5 0 0 0 8 18a3 3 0 0 0 3-2.5V6a2 2 0 0 0-2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 1 5.8A3.5 3.5 0 0 1 16 18a3 3 0 0 1-3-2.5V6a2 2 0 0 1 2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The "Not Yet" Reframe</div>
+      <p class="card-text">Dweck's most practical contribution to classroom and home language: replacing "I can't do this" with "I can't do this yet." The word "yet" is not an empty optimism — it is a neurologically accurate statement. The brain changes through effort. Skills develop through practice. "Yet" contains a model of the future that is both accurate and motivating — it positions the current failure as a stage in a process rather than a verdict on capacity. This single word, introduced consistently in childhood, has been shown to measurably affect risk-taking, persistence, and academic performance.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 Parent Application</div>
+        <p class="card-text">"You haven't learned this yet." "You can't do this yet — but let's think about what would help." "That's hard yet — which means your brain is building exactly the right pathways to get there." Make "yet" a household word from toddlerhood.</p>
+      </div>
+      <span class="badge ba">Use This Daily</span>
+    </div>
+    <div class="card">
+      <div class="card-num">FAILURE SCIENCE 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 15V9a2 2 0 0 1 2-2 2 2 0 0 1 2 2M9 9V6a2 2 0 0 1 4 0v6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 9a2 2 0 0 1 4 0v3.5c0 3-2 6-6 6H8a3 3 0 0 1-3-3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Productive Struggle — Don't Rescue Too Fast</div>
+      <p class="card-text">One of the most counterproductive instincts in parenting: rescuing children from difficulty before they've had time to struggle productively with it. Research by Wendy Grolnick shows that parental over-control and premature rescue — however well-intentioned — undermines children's intrinsic motivation and their belief in their own capacity. The skill is in calibrating: staying present and supportive while the child works through difficulty, without taking the difficulty away. The struggle is the lesson. The parent's job is to ensure the struggle is safe — not absent.</p>
+      <span class="badge ba">Core Principle</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 2 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"Telling children they are smart, after they do well on a test, harms their motivation and it harms their performance. <em>The word that changes everything is effort — not ability.</em>"</p>
+  <p class="quote-attr">— Carol Dweck · Mindset: The New Psychology of Success · Stanford University</p>
+</div>
+
+<!-- ─── 03: SCREEN TIME ─── -->
+<section class="section" id="screentime">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 03</div>
+    <div class="s-meta">
+      <div class="s-cat">PMC 2025 · APA June 2025 · Frontiers in Psychology · Children Journal Oct 2025</div>
+      <h2 class="s-title">Screen Time<br/><span>Decoded</span></h2>
+      <p class="s-desc">The screen time debate has generated more parental anxiety and media coverage than almost any parenting topic of the last decade. The research is now substantial enough to cut through the panic. Here is what the evidence actually shows — including what harms development, what doesn't, and where the research remains genuinely uncertain.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">Content</span><span class="s-stat-l">type matters far more than duration for most age groups (PMC 2025)</span></div>
+    <div class="s-stat"><span class="s-stat-n">0–3yrs</span><span class="s-stat-l">most vulnerable window — rapid brain development makes this period genuinely high-risk</span></div>
+    <div class="s-stat"><span class="s-stat-n">APA</span><span class="s-stat-l">2025: bidirectional relationship — emotional problems increase screen use AND screen use increases problems</span></div>
+    <div class="s-stat"><span class="s-stat-n">Co-view</span><span class="s-stat-l">watching with a parent transforms passive screen consumption into active language development</span></div>
+  </div>
+
+  <div class="screen-grid">
+    <div class="screen-card">
+      <div class="screen-verdict harm">⚠️ Confirmed: Harms Development</div>
+      <div class="screen-title">Under-3 Passive Exposure</div>
+      <p class="screen-text">The 0–3 year window is one of the most rapid periods of brain development in human life. Research consistently shows that passive screen consumption in this window replaces the face-to-face interaction, language input, and responsive caregiving that brain development requires. Language development, emotional attunement, and social cognition are all measurably impaired by high passive screen exposure before age 3. The median age of first screen exposure in India is now 10 months — well inside the critical window.</p>
+    </div>
+    <div class="screen-card">
+      <div class="screen-verdict harm">⚠️ Confirmed: Harms Development</div>
+      <div class="screen-title">Fast-Paced Social Media — All Ages</div>
+      <p class="screen-text">Fast-paced, algorithmically optimised social media content (TikTok, Instagram Reels, YouTube Shorts) is the form of screen use with the clearest and most concerning evidence for harm: shortened attention spans, sleep disruption (particularly the blue light and psychological stimulation pre-bed), social comparison effects driving anxiety and depression in adolescents, and the APA 2025 finding of a bidirectional vicious cycle between emotional problems and screen use.</p>
+    </div>
+    <div class="screen-card">
+      <div class="screen-verdict harm">⚠️ Confirmed: Harms Development</div>
+      <div class="screen-title">Screens During Family Meals & Before Sleep</div>
+      <p class="screen-text">Screens during family meals eliminate one of the highest-value child development opportunities available: the shared meal conversation. Research on family dinner conversation shows it is one of the strongest predictors of children's language development, emotional wellbeing, and family connection quality. Screens before sleep disrupt melatonin production and sleep architecture — and children's sleep quality is one of the most important predictors of emotional regulation and cognitive development.</p>
+    </div>
+    <div class="screen-card">
+      <div class="screen-verdict safe">✅ Evidence: Not Harmful</div>
+      <div class="screen-title">Co-Viewed Educational Content</div>
+      <p class="screen-text">When a parent watches educational content with a child and actively engages — pointing, commenting, relating to their life — the developmental impact of that screen time becomes positive. The screen is not the problem. The passive, unmediated consumption of it is the problem. Co-viewing transforms passive exposure into an interactive language and learning experience. A parent and child watching a nature documentary and discussing it is categorically different from a child alone watching any screen content of any kind.</p>
+    </div>
+    <div class="screen-card">
+      <div class="screen-verdict safe">✅ Evidence: Not Harmful</div>
+      <div class="screen-title">Video Calling — Maintains Relationships</div>
+      <p class="screen-text">Live video calling (FaceTime, video calls with grandparents and relatives) has been shown to not harm and often benefit child development — because it preserves responsive, face-to-face interaction that supports language, emotional, and social development. Unlike pre-recorded content, a live video call involves turn-taking, responsiveness, and genuine interpersonal engagement. The brain processes it similarly to an in-person interaction. Screen time rules should specifically exempt live, responsive video calling from restrictive limits.</p>
+    </div>
+    <div class="screen-card">
+      <div class="screen-verdict mixed">⚡ Mixed Evidence: Context Is Everything</div>
+      <div class="screen-title">Gaming — Depends Entirely on Type</div>
+      <p class="screen-text">Zhang et al. (2025): playing a cooperative game significantly increased sharing behaviour in young children. Meanwhile, excessive gaming of fast-paced, solo-competitive games is associated with attention and aggression problems. The research on gaming has produced genuinely mixed results — because "gaming" is not one thing. Cooperative problem-solving games with other people are categorically different from solitary, fast-paced, reward-loop games. Content type and social context determine outcomes more than duration.</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-head">✅ The Research-Based Screen Time Framework — By Age</div>
+    <p class="tip-text"><strong>Under 18 months:</strong> Video calls with family only. No other screen time. <strong>18–24 months:</strong> Only high-quality educational content, always co-viewed with a parent. <strong>2–5 years:</strong> Maximum 1 hour/day of high-quality, co-viewed content. No fast-paced media. <strong>6–12 years:</strong> Consistent limits, content-quality focus, screen-free mealtimes and 1 hour before bed. <strong>Adolescents:</strong> Social media is the highest-risk category — treat it as such. Family agreements on timing, location, and content — not blanket bans, which produce covert use.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── 04: EMOTIONAL INTELLIGENCE ─── -->
+<section class="section section-alt" id="eq">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 04</div>
+    <div class="s-meta">
+      <div class="s-cat">John Gottman · Daniel Siegel · Emotion Coaching · 0–10 Critical Window</div>
+      <h2 class="s-title">Teaching <span>Emotional</span><br/>Intelligence Before Age 10</h2>
+      <p class="s-desc">John Gottman's research on emotion coaching — the practice of helping children identify, name, and navigate their emotions — found that children raised with emotion coaching have lower rates of anxiety, depression, and behavioural problems, higher academic achievement, and better peer relationships. The window before age 10 is critical — but it's not about grand interventions. It's about what you do in the small moments every day.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">Age 10</span><span class="s-stat-l">the critical window for foundational emotional intelligence — after which patterns are deeply set</span></div>
+    <div class="s-stat"><span class="s-stat-n">Emotion</span><span class="s-stat-l">coaching children: lower anxiety, better grades, more friends, better marriages (Gottman)</span></div>
+    <div class="s-stat"><span class="s-stat-n">Name it</span><span class="s-stat-l">"name it to tame it" (Dan Siegel) — labelling emotions calms the amygdala in real time</span></div>
+    <div class="s-stat"><span class="s-stat-n">Vocab</span><span class="s-stat-l">children with larger emotional vocabularies resolve peer conflicts faster and with less aggression</span></div>
+  </div>
+
+  <div class="eq-stages">
+    <div class="eq-stage">
+      <div class="eq-age"><div class="eq-age-num">0–2</div><div class="eq-age-label">Foundation</div></div>
+      <div class="eq-body">
+        <div class="eq-title">👶 Attunement — The Root of All Emotional Intelligence</div>
+        <p class="eq-text">The foundation of EQ is laid before language. When an infant is distressed and a caregiver responds consistently and appropriately — picking up, soothing, meeting the need — the infant's nervous system learns: "my emotions are receivable, my needs are valid, the world is responsive." This "secure attachment" is the neurological template for every subsequent emotional relationship. Parents who cannot regulate their own emotions cannot consistently attune to their infant's — which is why adult emotional regulation is a prerequisite for EQ teaching.</p>
+        <p class="eq-phrase">"I'm here. I hear you. You're safe."</p>
+      </div>
+    </div>
+    <div class="eq-stage">
+      <div class="eq-age"><div class="eq-age-num">2–4</div><div class="eq-age-label">Vocabulary</div></div>
+      <div class="eq-body">
+        <div class="eq-title">📚 Naming Emotions — Grow the Vocabulary</div>
+        <p class="eq-text">Children cannot regulate emotions they cannot name. The larger a child's emotional vocabulary, the more precisely they can identify what they're experiencing — and the faster the prefrontal cortex (rational brain) can engage with the emotion rather than being overwhelmed by it. Parents build this vocabulary by narrating emotional reality: "You're frustrated because the tower fell down. That's frustrating." "I can see you're disappointed. Disappointment feels like sadness about something specific." Books, play, and consistent narration all grow emotional vocabulary rapidly in this window.</p>
+        <p class="eq-phrase">"That looks like frustration. What are you feeling right now?"</p>
+      </div>
+    </div>
+    <div class="eq-stage">
+      <div class="eq-age"><div class="eq-age-num">4–7</div><div class="eq-age-label">Regulation</div></div>
+      <div class="eq-body">
+        <div class="eq-title">🌊 Regulation — Moving Through Emotions, Not Around Them</div>
+        <p class="eq-text">At 4–7, children are developmentally ready to begin learning that emotions are experiences to move through — not suppress, avoid, or be overwhelmed by. The key parenting skill: validate before redirecting. "It makes sense you're angry — he took your toy." (validate) "And we still don't hit." (limit). Validation doesn't mean permission. It means acknowledgment of the emotional reality — which reduces the emotional intensity so the child can actually hear the limit. Skipping validation and going straight to the limit produces resistance, because the child is still flooded.</p>
+        <p class="eq-phrase">"I understand why you feel that way — and we're still not doing that. Let's figure out another way."</p>
+      </div>
+    </div>
+    <div class="eq-stage">
+      <div class="eq-age"><div class="eq-age-num">7–10</div><div class="eq-age-label">Complexity</div></div>
+      <div class="eq-body">
+        <div class="eq-title">🧠 Complex Emotions — Mixed Feelings, Empathy, Perspective-Taking</div>
+        <p class="eq-text">Between 7–10, children become neurologically capable of holding conflicting emotions simultaneously (excited AND scared about a new school) and of taking the perspective of others with some accuracy. This is the window to teach: that emotions can coexist, that other people have different emotional experiences for valid reasons, and that our feelings inform our choices but don't make our choices for us. Parents who discuss their own emotions honestly — including their mistakes and apologies — provide the most powerful EQ modelling available.</p>
+        <p class="eq-phrase">"How do you think they felt when that happened? What would you have needed in that moment?"</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">EQ TOOL 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="3.5" y="5" width="17" height="15" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 10h17M8 3v4M16 3v4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The 20-Minute Daily Connection</div>
+      <p class="card-text">Gottman's research identified a surprisingly simple predictor of child EQ: consistent daily one-on-one time with full parental attention — no phones, no agendas, following the child's lead. Just 20 minutes per day of this quality connection produces measurable improvements in behaviour, emotional regulation, and parent-child relationship quality within weeks. The research finding that most parents resist: this works better than any amount of correction, consequence, or structured intervention. Connection before correction, in both order and importance.</p>
+      <span class="badge ba">Daily Practice</span>
+    </div>
+    <div class="card">
+      <div class="card-num">EQ TOOL 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><ellipse cx="12" cy="10" rx="6" ry="7.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 17.5V21M9 21h6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Model Your Own Emotional Process</div>
+      <p class="card-text">The most powerful EQ teaching happens when parents narrate their own emotional experience out loud — including the messy parts. "I'm feeling frustrated right now. I'm going to take a few deep breaths before I respond." "I was short with you earlier and I'm sorry — I was stressed about work and I took it out on you. That wasn't fair." Children learn emotional literacy primarily through observation of how the adults around them handle emotions. Perfect emotional management is not the goal. Visible, honest, repair-oriented emotional processing is.</p>
+      <span class="badge ba">Model It First</span>
+    </div>
+    <div class="card">
+      <div class="card-num">EQ TOOL 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 6c-2-1.5-5-2-8-1.5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-13c-3-.5-6 0-8 1.5z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M12 6v13" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">"Name It to Tame It" — Daniel Siegel's Insight</div>
+      <p class="card-text">Neuroscientist Daniel Siegel's research showed that simply labelling an emotion — "I feel angry" or "you're feeling scared" — measurably calms the amygdala's threat response. When you name an emotion, you activate the prefrontal cortex (rational brain) and reduce the amygdala's dominance. For children, this means that a parent saying "you look really scared about that" in a calm voice literally changes the child's brain state in real time — before any intervention, strategy, or solution. The naming IS the first intervention.</p>
+      <span class="badge ba">Immediate Tool</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 05: DISCIPLINE ─── -->
+<section class="section" id="discipline">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 05</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · Discipline That Builds Without Breaking</div>
+      <h2 class="s-title">Discipline<br/>Without <span>Damage</span></h2>
+      <p class="s-desc">Discipline is not punishment. The root of the word is "discipulus" — Latin for student. To discipline a child is to teach them. The most effective discipline in child development research is neither punitive nor permissive — it is instructive, predictable, and relational. Here is what the science shows about what works and what doesn't.</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 5l14 14M19 5 5 19" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">What Damages — The Research</div>
+      <p class="col-text">
+        <strong>Harsh physical punishment</strong> (spanking): Associated with increased aggression, mental health problems, and damaged parent-child relationship. Banned in 65+ countries. The American Psychological Association and the American Academy of Pediatrics both recommend against it unequivocally.<br/><br/>
+        <strong>Shame-based discipline</strong> ("I'm ashamed of you," "what's wrong with you"): Connects the child's worth to their behaviour — producing the same imposter syndrome outcomes as authoritarian parenting. Shame motivates hiding behaviour, not changing it.<br/><br/>
+        <strong>Inconsistent consequences</strong>: Research shows inconsistency in discipline produces more behaviour problems than either consistent firmness or consistent leniency. Predictability is what creates safety — not strictness.
+      </p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m7.5 12.5 3 3 6-6.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">What Works — The Research</div>
+      <p class="col-text">
+        <strong>Natural and logical consequences</strong>: Consequences that directly relate to the behaviour (leave your bike in the rain → the bike rusts) teach cause-and-effect thinking. Arbitrary punishments teach only "I don't like what you did" without teaching the lesson.<br/><br/>
+        <strong>Connection before correction</strong>: When a child is emotionally dysregulated, the prefrontal cortex (rational thinking) is offline. Correction at this moment doesn't land — it escalates. Connect first, then correct once the child is regulated.<br/><br/>
+        <strong>Clear, calm, consistent limits</strong>: State the limit once, clearly, calmly. Follow through every time without escalation. Research on authoritative parenting: warmth and firmness are not opposites. They are simultaneous, and together they produce the best outcomes.
+      </p>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">DISCIPLINE TOOL 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M8 3h8l5 5v8l-5 5H8l-5-5V8z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M9 9h6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">When Behaviour Is the Message</div>
+      <p class="card-text">Most problematic child behaviour is communication — not defiance. A child who is acting out is almost always experiencing an unmet need: connection, control, significance, or safety. When a child's behaviour spikes dramatically, the most important diagnostic question is not "how do I stop this?" but "what is this behaviour trying to tell me?" The child who throws tantrums when siblings arrive is communicating a fear about their place in the family. The child who refuses school is communicating overwhelm. Find the need, and the behaviour often resolves without direct intervention.</p>
+      <span class="badge ba">Diagnostic Tool</span>
+    </div>
+    <div class="card">
+      <div class="card-num">DISCIPLINE TOOL 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="6" y="4" width="4" height="16" rx="1" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="14" y="4" width="4" height="16" rx="1" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The "Time In" vs "Time Out" Research</div>
+      <p class="card-text">Traditional "time out" (isolation as consequence) is effective for some children but counterproductive for others — particularly anxious children or those with insecure attachment, for whom isolation intensifies distress rather than producing reflection. Research on "time in" — staying with the child during the difficult moment, regulating together rather than isolating — shows it to be more effective for emotionally sensitive children. The goal of both: give the child space to regulate their nervous system. Time out works when the child can regulate alone. Time in works when they can't yet.</p>
+      <span class="badge ba">Age-Appropriate</span>
+    </div>
+    <div class="card">
+      <div class="card-num">DISCIPLINE TOOL 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M20 11a8 8 0 0 0-14.9-3.5M4 13a8 8 0 0 0 14.9 3.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 4v4h4M19 20v-4h-4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Repair — The Most Underused Discipline Tool</div>
+      <p class="card-text">Every parent loses their temper. Raises their voice. Says something too harshly. The research finding that surprises most parents: moments of rupture and repair in the parent-child relationship are among the most powerful developmental experiences available. When a parent loses their temper and then genuinely apologises — "I raised my voice and that wasn't okay. I was stressed and I took it out on you. I'm sorry." — children learn: relationships survive conflict, adults can be wrong and acknowledge it, and repair is possible. This is the relational learning that protects against depression and anxiety in adulthood.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Perfect Parent Myth</div>
+        <p class="card-text">Dan Siegel's research shows that parents don't need to be perfectly attuned 100% of the time. Adequate attunement — being present and responsive most of the time, and repairing the gaps — is sufficient for secure attachment and healthy development. Perfectionism in parenting is itself a form of harm — because it communicates that mistakes are catastrophic, rather than normal and repairable.</p>
+      </div>
+      <span class="badge ba">Most Underused</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 06: CONNECTION ─── -->
+<section class="section section-alt" id="connection">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 06</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · The Foundation That Makes Everything Else Work</div>
+      <h2 class="s-title">The <span>Connection</span><br/>Foundation</h2>
+      <p class="s-desc">Every piece of parenting advice — discipline, screen time management, emotional coaching, academic support — works better when the parent-child relationship is strong. And when the relationship is weak, almost no strategy works reliably. Connection is not the reward for good parenting. It is the precondition for it.</p>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">CONNECTION 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="7" y="3" width="10" height="18" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 18h2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Absent-While-Present Parent</div>
+      <p class="card-text">The most pervasive modern parenting challenge identified by child development researchers: the physically present but psychologically absent parent. A parent scrolling their phone while the child plays is present in body and absent in relationship. Children notice — with their entire nervous system — whether the adult they need most is genuinely there. Research by Jenny Radesky found that parents who used mobile devices frequently during meals with children showed reduced sensitivity and responsiveness to their child's bids for attention. The phone doesn't need to disappear. But it needs to not compete with the moments that matter.</p>
+      <span class="badge bc">Modern Challenge</span>
+    </div>
+    <div class="card">
+      <div class="card-num">CONNECTION 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 18h18M5 15l1.5-1.5M19 15l-1.5-1.5M12 6V4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Rituals of Connection</div>
+      <p class="card-text">John Gottman's relationship research applies to parent-child bonds as directly as to couples: relationships are maintained and deepened through deliberate rituals of connection — small, recurring, predictable moments of positive engagement. Bedtime routines. Saturday morning pancakes. The specific car conversation on the way to school. Weekly one-on-one time with each child. These rituals don't need to be grand. Their power comes from their consistency — which communicates: "You matter. This time with you is protected. You are not competing for my attention right now."</p>
+      <span class="badge ba">Design These</span>
+    </div>
+    <div class="card">
+      <div class="card-num">CONNECTION 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 4a6 6 0 0 1 6 6c0 2-1 3-2 4.5-.6.9-1 1.5-1 2.5a2 2 0 0 1-4 0" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12a3 3 0 0 1 3-3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Listen Like Your Child Is Your Most Important Client</div>
+      <p class="card-text">Research on parent-child communication shows that children whose parents listen actively — full eye contact, put down the phone, acknowledge before advising — are significantly more likely to come to their parents with serious problems in adolescence. The pattern of whether a teenager tells their parent about a difficult situation is built across thousands of small moments in childhood: every time a child told you something small and you were truly present — or not. The listening in childhood is the deposit that earns the trust in the teenage years.</p>
+      <span class="badge ba">Long-Term Investment</span>
+    </div>
+    <div class="card">
+      <div class="card-num">CONNECTION 04</div>
+      <span class="card-icon">❤️</span>
+      <div class="card-title">Unconditional Positive Regard</div>
+      <p class="card-text">Carl Rogers' most influential concept, applied to parenting: unconditional positive regard — communicating to your child that they are loved, valued, and accepted regardless of their behaviour, performance, or compliance. This does not mean accepting all behaviour. It means separating the child's intrinsic worth from their actions. "I love you, and I'm not okay with what you just did." Both are true simultaneously. The child who internalises that parental love is conditional on performance, compliance, or achievement carries that threat with them into every adult relationship — including their relationship with themselves.</p>
+      <span class="badge ba">Foundation</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 07: MODERN CHALLENGES ─── -->
+<section class="section" id="modern">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 07</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · Social Media · Anxiety · Identity · 2025–26</div>
+      <h2 class="s-title">Modern<br/><span>Parenting</span> Challenges</h2>
+      <p class="s-desc">Today's parents are navigating challenges that no previous generation faced at this scale or intensity: pervasive social media from early adolescence, a documented anxiety epidemic among children and teens, and an accelerated cultural conversation about identity that parents often feel under-equipped for. Here is the evidence-based approach to each.</p>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">MODERN CHALLENGE 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="7" y="3" width="10" height="18" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 18h2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Social Media & Adolescent Mental Health</div>
+      <p class="card-text">The evidence linking social media use to adolescent anxiety and depression — particularly in girls — has accumulated substantially since 2020. Jonathan Haidt's "The Anxious Generation" (2024) documents the correlation between smartphone adoption in early adolescence and the mental health decline. The most robust research finding: it's not social media as a category but social comparison (passive scrolling and comparing yourself to curated images of others' lives) that drives the worst outcomes. The practical parenting response: delay smartphone adoption as long as socially viable, prioritise in-person social activity, and when devices are introduced, set strong context-based norms (mealtimes, bedrooms, school).</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Research Nuance</div>
+        <p class="card-text">Not all social media use is equivalent. Active, communicative use (chatting with friends, sharing content) shows much weaker negative effects than passive, comparative scrolling. Teaching children to be active rather than passive consumers of social media may be more achievable and more effective than elimination — which often drives use underground.</p>
+      </div>
+      <span class="badge bc">High Priority</span>
+    </div>
+    <div class="card">
+      <div class="card-num">MODERN CHALLENGE 02</div>
+      <span class="card-icon">😰</span>
+      <div class="card-title">The Anxiety Epidemic — And What Parents Do That Helps or Hurts</div>
+      <p class="card-text">Anxiety in children and adolescents has reached epidemic proportions — with prevalence rates roughly doubling since 2012. Research on parental responses to child anxiety identifies two opposite but equally problematic patterns: <strong style="color:var(--cream)">Over-accommodation</strong> (removing every source of discomfort, speaking for them, rescuing before the struggle) maintains anxiety by preventing the exposures that reduce it. <strong style="color:var(--cream)">Dismissal</strong> ("you're fine, stop worrying") invalidates the experience and reduces the child's willingness to seek help. The research-backed response: validate the anxiety, express confidence in their capacity, and support them to face the feared situation rather than avoid it.</p>
+      <span class="badge ba">Critical Framework</span>
+    </div>
+    <div class="card">
+      <div class="card-num">MODERN CHALLENGE 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M3 18a9 9 0 0 1 18 0" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.5 18a5.5 5.5 0 0 1 11 0" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Supporting Identity Development</div>
+      <p class="card-text">Adolescent identity development has always been one of the most psychologically complex stages of human development. In 2025, it occurs against a backdrop of social media amplification, accelerated cultural change, and unprecedented access to information and community outside the family. The research is consistent: children whose family provides secure unconditional love while allowing appropriate exploration — without coercion or shaming in either direction — have significantly better mental health outcomes regardless of how their identity develops. Connection and acceptance are the variables that matter. Certainty about the outcome is not what protects children. Love that is not conditional on the outcome is.</p>
+      <span class="badge bd">Connection Is Key</span>
+    </div>
+    <div class="card">
+      <div class="card-num">MODERN CHALLENGE 04</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="1.4" fill="#c8943a"/></svg></span>
+      <div class="card-title">The Achievement Pressure Trap</div>
+      <p class="card-text">Research on achievement pressure in children — the parental projection of perfectionism, the overpacked schedules, the emphasis on academic results over genuine learning — consistently shows it produces the opposite of its intention. High achievement pressure is correlated with higher anxiety, lower intrinsic motivation, more cheating, and weaker long-term performance in the domains where it was most applied. Children need time that is unstructured, unscheduled, and unpressured to develop the creativity, intrinsic motivation, and self-directedness that actually predict long-term success and wellbeing.</p>
+      <span class="badge ba">Counterintuitive</span>
+    </div>
+    <div class="card">
+      <div class="card-num">MODERN CHALLENGE 05</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M3 12h4l3-3 3 3 3-3 5 3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 12v5h4v-5M17 12v5h4v-5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Co-Parenting & Family Structure</div>
+      <p class="card-text">Research on children's outcomes across diverse family structures consistently shows one predictor that outweighs structure: the quality of relationships between the adults in the child's life. Children raised in high-conflict two-parent households show worse outcomes than children in low-conflict single-parent or blended households. The quality of the co-parenting relationship — how respectfully two parents interact with each other in the child's presence — is one of the most powerful variables in child wellbeing. Children should never be used as messengers, confidants about adult conflict, or leveraged in adult disagreements. This is true regardless of family structure.</p>
+      <span class="badge ba">Universal</span>
+    </div>
+    <div class="card">
+      <div class="card-num">MODERN CHALLENGE 06</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 3 5 6v6c0 5 3 8 7 9 4-1 7-4 7-9V6z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Raising Children Who Can Say No</div>
+      <p class="card-text">One of the most practically important parenting goals — rarely named explicitly: raising children who can say "no" to peer pressure, to adults who make them uncomfortable, and to situations that feel wrong. This capacity is built entirely within the parent-child relationship. Children who are allowed to say "no" at home — to hugs from relatives they don't want, to foods they don't like, to activities that genuinely don't interest them — learn that their "no" is respected and valid. Children who are not allowed this practice at home cannot reliably exercise it outside it. Bodily autonomy begins at home, in the small moments.</p>
+      <span class="badge bb">Safety Skill</span>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-head">✅ The Single Most Important Modern Parenting Insight</div>
+    <p class="tip-text">Every challenge in this chapter — social media, anxiety, identity, achievement pressure — is navigated more successfully from a foundation of secure, unconditional parent-child connection. <strong>Children who know they are loved regardless of their performance, compliance, or identity</strong> are more resilient to peer pressure, more willing to seek help when struggling, more honest about their difficulties, and more able to take risks that produce growth. The relationship is not one tool among many. It is the foundation that determines whether every other tool works. If you have limited energy and attention — invest it in the relationship first.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── 08: MASTER CHEATSHEET ─── -->
+<section class="section" id="cheatsheet">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 08</div>
+    <div class="s-meta">
+      <div class="s-cat">Quick Reference</div>
+      <h2 class="s-title">The Master<br/><span>Cheatsheet</span></h2>
+      <p class="s-desc">Every principle from this guide — one quick-reference table. Build these into your daily parenting and the compound effect becomes visible within weeks.</p>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Principle</th><th>The Action</th><th>Chapter</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td class="num-cell">01</td><td class="name-cell">High Warmth + High Structure</td><td>Authoritative = both simultaneously. Not one or the other. Always both. This is the research-backed goal.</td><td>Parenting Styles</td><td><span class="badge ba">Foundation</span></td></tr>
+        <tr><td class="num-cell">02</td><td class="name-cell">Explain the Reasoning</td><td>"Here's why" — not "because I said so." The explanation IS the parenting. Children internalise values, not commands.</td><td>Parenting Styles</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">03</td><td class="name-cell">Internal Regulation Is the Goal</td><td>The goal is not compliance. It is a child who understands why — and regulates themselves without an authority figure watching.</td><td>Parenting Styles</td><td><span class="badge ba">Always</span></td></tr>
+        <tr><td class="num-cell">04</td><td class="name-cell">Watch Your Automated Responses</td><td>Under stress, you revert to how you were parented. Notice the triggers. Awareness is the beginning of change.</td><td>Parenting Styles</td><td><span class="badge bd">Self-Awareness</span></td></tr>
+        <tr><td class="num-cell">05</td><td class="name-cell">Praise Effort, Not Ability</td><td>"You worked so hard on that" > "You're so smart." Effort praise produces resilience. Ability praise produces fragility.</td><td>Failure</td><td><span class="badge ba">Every Time</span></td></tr>
+        <tr><td class="num-cell">06</td><td class="name-cell">Use "Yet"</td><td>"You can't do this yet." Neurologically accurate and motivating. Make it a household word from toddlerhood.</td><td>Failure</td><td><span class="badge ba">Daily Language</span></td></tr>
+        <tr><td class="num-cell">07</td><td class="name-cell">Engage With Failure, Don't Dismiss It</td><td>"What do you think happened? What would you do differently?" Failure is data — treat it as such.</td><td>Failure</td><td><span class="badge ba">Every Failure</span></td></tr>
+        <tr><td class="num-cell">08</td><td class="name-cell">Allow Productive Struggle</td><td>Don't rescue too fast. The struggle is the lesson. Your job: ensure it's safe, not absent.</td><td>Failure</td><td><span class="badge ba">Core Skill</span></td></tr>
+        <tr><td class="num-cell">09</td><td class="name-cell">Under-3 Screen Priority</td><td>No passive screen time under 18 months. Video calls only. This window is the highest-risk and most critical.</td><td>Screen Time</td><td><span class="badge bc">Non-Negotiable</span></td></tr>
+        <tr><td class="num-cell">10</td><td class="name-cell">Content Type > Duration</td><td>What they watch matters more than how long. Slow, co-viewed educational content is categorically different from fast-paced social media.</td><td>Screen Time</td><td><span class="badge ba">Framework</span></td></tr>
+        <tr><td class="num-cell">11</td><td class="name-cell">Co-View Always When Possible</td><td>Watching with your child and engaging transforms passive consumption into active language development.</td><td>Screen Time</td><td><span class="badge ba">When Possible</span></td></tr>
+        <tr><td class="num-cell">12</td><td class="name-cell">Screens-Free Mealtimes</td><td>Family dinner conversation is one of the strongest predictors of language development and family connection. Protect it.</td><td>Screen Time</td><td><span class="badge ba">Daily Rule</span></td></tr>
+        <tr><td class="num-cell">13</td><td class="name-cell">1hr Screen-Free Before Bed</td><td>Sleep quality in children is a top predictor of emotional regulation and cognitive development. Protect it.</td><td>Screen Time</td><td><span class="badge ba">Daily Rule</span></td></tr>
+        <tr><td class="num-cell">14</td><td class="name-cell">Name It to Tame It</td><td>"You look really scared about that." Naming emotion calms the amygdala in real time. Say it calmly. Always.</td><td>EQ</td><td><span class="badge ba">Immediate Tool</span></td></tr>
+        <tr><td class="num-cell">15</td><td class="name-cell">Grow the Emotional Vocabulary</td><td>Children cannot regulate emotions they cannot name. Narrate emotional reality constantly. Grow the vocabulary daily.</td><td>EQ</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">16</td><td class="name-cell">Validate Before Redirecting</td><td>"It makes sense you feel angry — AND we still don't hit." Validation first reduces intensity so the limit can land.</td><td>EQ</td><td><span class="badge ba">Every Time</span></td></tr>
+        <tr><td class="num-cell">17</td><td class="name-cell">Model Your Own Emotions</td><td>"I'm frustrated right now — I'm going to breathe before I respond." Children learn EQ by watching, not being told.</td><td>EQ</td><td><span class="badge ba">Daily Model</span></td></tr>
+        <tr><td class="num-cell">18</td><td class="name-cell">20-Minute Daily Connection</td><td>One-on-one, child-led, no phone, no agenda. 20 minutes daily. More powerful than any consequence or strategy.</td><td>Discipline</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">19</td><td class="name-cell">Connection Before Correction</td><td>If the child is dysregulated — connect first. The prefrontal cortex (rational brain) must be online before correction lands.</td><td>Discipline</td><td><span class="badge ba">Always</span></td></tr>
+        <tr><td class="num-cell">20</td><td class="name-cell">Natural Consequences</td><td>Consequences that logically relate to the behaviour teach cause-and-effect. Arbitrary punishments teach only fear.</td><td>Discipline</td><td><span class="badge ba">Principle</span></td></tr>
+        <tr><td class="num-cell">21</td><td class="name-cell">Repair When You Lose It</td><td>"I raised my voice and that wasn't okay. I'm sorry." Repair is as important as the original response. Model it.</td><td>Discipline</td><td><span class="badge ba">After Every Rupture</span></td></tr>
+        <tr><td class="num-cell">22</td><td class="name-cell">Behaviour Is Communication</td><td>When behaviour spikes — ask "what unmet need is this communicating?" Find the need; the behaviour often resolves.</td><td>Discipline</td><td><span class="badge ba">Diagnostic</span></td></tr>
+        <tr><td class="num-cell">23</td><td class="name-cell">Unconditional Positive Regard</td><td>"I love you. Full stop. Separate from how this turned out." Intrinsic worth never connected to performance or compliance.</td><td>Connection</td><td><span class="badge ba">Always</span></td></tr>
+        <tr><td class="num-cell">24</td><td class="name-cell">Protect Rituals of Connection</td><td">Design recurring, predictable moments of positive engagement. They don't need to be grand — they need to be consistent.</td><td>Connection</td><td><span class="badge ba">Weekly Design</span></td></tr>
+        <tr><td class="num-cell">25</td><td class="name-cell">Put the Phone Down</td><td">Children's nervous systems detect your psychological absence even when you're physically present. The phone competes.</td><td>Connection</td><td><span class="badge ba">Daily Practice</span></td></tr>
+        <tr><td class="num-cell">26</td><td class="name-cell">Listen Like They're Your Most Important Client</td><td>The small conversations in childhood are the investment that earns teenagers who come to you with serious problems.</td><td>Connection</td><td><span class="badge ba">Long-Term</span></td></tr>
+        <tr><td class="num-cell">27</td><td class="name-cell">Delay Smartphones</td><td>As long as socially viable. When introduced: strong context norms (meals, bedrooms, school). Family agreements, not unilateral rules.</td><td>Modern</td><td><span class="badge bc">High Priority</span></td></tr>
+        <tr><td class="num-cell">28</td><td class="name-cell">Validate Anxiety — Then Encourage Exposure</td><td>Don't accommodate or dismiss anxiety. Validate, express confidence, and support them to face it — not avoid it.</td><td>Modern</td><td><span class="badge ba">For Anxiety</span></td></tr>
+        <tr><td class="num-cell">29</td><td class="name-cell">Bodily Autonomy Starts at Home</td><td>Children allowed to say "no" at home learn their "no" is valid. This is the foundation of safety outside the home.</td><td>Modern</td><td><span class="badge bb">Safety</span></td></tr>
+        <tr><td class="num-cell">30</td><td class="name-cell">Relationship Is the Foundation</td><td>Every parenting strategy works better from a foundation of connection. If in doubt — invest in the relationship first.</td><td>All Chapters</td><td><span class="badge ba">Always</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</section>
+
+<footer>
+  <div class="footer-logo">Smarter Parenting in the Modern World</div>
+  <p class="footer-sub">Lifestyle · Child Development · Psychology · 2025–2026 Edition</p>
+  <p class="footer-sub" style="color:var(--muted);font-size:13px;margin-top:8px">8 Complete Chapters · 30 Core Principles · Research from Diana Baumrind, Carol Dweck, John Gottman, Daniel Siegel, Angela Duckworth, PMC 2025, APA June 2025, Jonathan Haidt, Carl Rogers & Wendy Grolnick</p>
+  <p class="footer-tiny">Research compiled May 2026 · Inspired by Parallelogram · Built for every parent who is trying their best and wants to do better</p>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:rgba(200,148,58,.28);margin-top:36px">"Children need love, especially when they do not deserve it." — Harold Hulbert</p>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const st=document.documentElement.scrollTop;
+  const sh=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('prog').style.width=(st/sh*100)+'%';
+});
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}});
+},{threshold:0.07});
+document.querySelectorAll('.card,.col-card,.s-stat,.style-side,.screen-card,.eq-stage,.failure-side').forEach(el=>{
+  el.style.opacity='0';el.style.transform='translateY(18px)';
+  el.style.transition='opacity .5s ease, transform .5s ease';
+  obs.observe(el);
+});
+</script>
+</body>
+</html>

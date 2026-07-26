@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Stay Positive When Life Gets Hard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07080a;--surface:#0e1014;--card:#13151a;--card2:#181b22;
+  --gold:#c8943a;--gold2:#e8b84b;--golddim:rgba(200,148,58,.13);
+  --cream:#f0e8d5;--muted:#5c5f68;--light:#9a9da8;
+  --border:rgba(200,148,58,.18);--rust:#b84532;
+  --teal:#2c7a72;--sage:#3a6b4a;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--cream);overflow-x:hidden;line-height:1.6}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.5}
+#prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--sage),var(--gold),var(--gold2));width:0%;z-index:2000;transition:width .08s}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:1500;display:flex;align-items:center;justify-content:space-between;padding:14px 48px;background:rgba(7,8,10,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(200,148,58,.1)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
+.nav-links{display:flex;gap:20px;list-style:none}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+@media(max-width:768px){.nav-links{display:none}.hero,.section,.toc-wrap,.quote-block,footer{padding-left:22px!important;padding-right:22px!important}nav{padding:14px 22px}}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px 64px 80px;position:relative;overflow:hidden}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 75% 55% at 92% 8%,rgba(58,107,74,.14) 0%,transparent 55%),radial-gradient(ellipse 55% 70% at 5% 90%,rgba(200,148,58,.1) 0%,transparent 60%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;opacity:.022;background-image:linear-gradient(rgba(200,148,58,1) 1px,transparent 1px),linear-gradient(90deg,rgba(200,148,58,1) 1px,transparent 1px);background-size:68px 68px}
+.hero-inner{position:relative;max-width:1100px}
+.hero-badge{display:inline-flex;align-items:center;background:rgba(58,107,74,.15);border:1px solid rgba(58,107,74,.4);padding:5px 16px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#7aaa8e;margin-bottom:22px;opacity:0;animation:fadeup .7s .15s forwards}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:26px;display:flex;align-items:center;gap:14px;opacity:0;animation:fadeup .7s .2s forwards}
+.hero-tag::before{content:'';width:44px;height:1px;background:var(--gold);flex-shrink:0}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(46px,8vw,112px);font-weight:700;line-height:.88;letter-spacing:-4px;margin-bottom:10px;opacity:0;animation:fadeup .8s .4s forwards}
+.hero h1 span{color:var(--gold);font-style:italic}
+.hero h1 .sub{display:block;color:rgba(240,232,213,.2);font-size:clamp(22px,3.6vw,50px);font-weight:400;font-style:italic;letter-spacing:-1px;margin-top:8px}
+.hero-desc{font-size:clamp(15px,1.9vw,18px);color:var(--light);max-width:600px;margin:34px 0 50px;font-weight:300;line-height:1.78;opacity:0;animation:fadeup .8s .6s forwards}
+.hero-stats{display:flex;gap:0;border:1px solid var(--border);width:fit-content;opacity:0;animation:fadeup .8s .8s forwards;flex-wrap:wrap}
+.hstat{padding:18px 32px;border-right:1px solid var(--border);text-align:center}
+.hstat:last-child{border-right:none}
+.hstat-n{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.hstat-l{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-top:4px}
+.scroll-hint{position:absolute;bottom:40px;left:64px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:10px;animation:pulse 2.5s infinite}
+.scroll-hint::before{content:'';width:1px;height:38px;background:var(--gold);opacity:.35}
+@keyframes fadeup{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+
+.toc-wrap{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:56px 64px}
+.toc-inner{max-width:1100px;margin:0 auto}
+.toc-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:36px;display:flex;align-items:center;gap:12px}
+.toc-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px}
+.toc-item{background:var(--card);padding:18px 22px;display:flex;align-items:flex-start;gap:14px;cursor:pointer;transition:background .2s,border-color .2s;border:1px solid transparent;text-decoration:none}
+.toc-item:hover{background:var(--card2);border-color:var(--border)}
+.toc-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);opacity:.55;flex-shrink:0;min-width:26px;margin-top:2px}
+.toc-name{font-size:13.5px;color:var(--light);font-weight:400;transition:color .2s;line-height:1.4}
+.toc-item:hover .toc-name{color:var(--cream)}
+
+.section{padding:96px 64px;position:relative}
+.section-alt{background:var(--surface)}
+.s-inner{max-width:1100px;margin:0 auto}
+.s-head{display:grid;grid-template-columns:90px 1fr;gap:32px;align-items:start;margin-bottom:60px;padding-bottom:44px;border-bottom:1px solid var(--border)}
+.s-num{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;padding-top:8px}
+.s-meta{display:flex;flex-direction:column;gap:10px}
+.s-cat{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:3px;color:var(--rust);text-transform:uppercase}
+.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,60px);font-weight:700;line-height:.92;letter-spacing:-1.5px;color:var(--cream)}
+.s-title span{color:var(--gold);font-style:italic}
+.s-desc{font-size:15.5px;color:var(--light);max-width:660px;font-weight:300;line-height:1.78;margin-top:6px}
+@media(max-width:600px){.s-head{grid-template-columns:1fr;gap:14px}}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:2px}
+@media(max-width:600px){.cards{grid-template-columns:1fr}}
+.card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .25s,background .25s;position:relative;overflow:hidden}
+.card:hover{border-color:var(--border);background:var(--card2)}
+.card::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:linear-gradient(180deg,var(--gold),var(--sage));transition:height .35s}
+.card:hover::before{height:100%}
+.card-num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);opacity:.45;margin-bottom:14px}
+.card-icon{font-size:26px;margin-bottom:11px;display:block}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:700;color:var(--cream);letter-spacing:-.4px;margin-bottom:11px;line-height:1.15}
+.card-sec{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin:16px 0 7px}
+.card-text{font-size:13.5px;color:var(--light);line-height:1.72;font-weight:300}
+.psych{background:rgba(200,148,58,.06);border-left:2px solid var(--gold);padding:15px 18px;margin-top:18px}
+.psych .card-sec{margin-top:0}
+.scibox{background:rgba(58,107,74,.07);border-left:2px solid rgba(58,107,74,.5);padding:15px 18px;margin-top:14px}
+.scibox .card-sec{color:#7aaa8e}
+.badge{display:inline-flex;align-items:center;padding:4px 11px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;margin-top:14px}
+.ba{background:rgba(200,148,58,.11);color:var(--gold);border:1px solid var(--border)}
+.bb{background:rgba(58,107,74,.12);color:#7aaa8e;border:1px solid rgba(58,107,74,.3)}
+.bc{background:rgba(184,69,50,.11);color:#d46040;border:1px solid rgba(184,69,50,.28)}
+.bd{background:rgba(44,122,114,.12);color:#4aaa9e;border:1px solid rgba(44,122,114,.3)}
+
+.quote-block{background:var(--surface);padding:72px 64px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center}
+.quote-text{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3.2vw,36px);font-weight:600;font-style:italic;color:var(--cream);max-width:880px;margin:0 auto;line-height:1.4}
+.quote-text em{color:var(--gold)}
+.quote-attr{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:24px}
+
+.stat-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:2px;margin:44px 0}
+.s-stat{background:var(--card);padding:26px 22px;text-align:center;border:1px solid transparent;transition:border-color .2s}
+.s-stat:hover{border-color:var(--border)}
+.s-stat-n{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.s-stat-l{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-top:5px}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}}
+.col-card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .2s}
+.col-card:hover{border-color:var(--border)}
+.col-icon{font-size:30px;margin-bottom:14px;display:block}
+.col-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:11px;letter-spacing:-.4px}
+.col-text{font-size:13.5px;color:var(--light);line-height:1.75;font-weight:300}
+.col-text strong{color:var(--cream);font-weight:500}
+
+/* 21-DAY PLAN */
+.day-plan{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin:36px 0}
+@media(max-width:640px){.day-plan{grid-template-columns:repeat(3,1fr)}}
+.day-cell{background:var(--card);padding:16px 10px;border:1px solid transparent;transition:border-color .2s,background .2s;text-align:center}
+.day-cell:hover{border-color:var(--border);background:var(--card2)}
+.day-num{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:var(--gold);line-height:1;display:block;margin-bottom:4px}
+.day-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:6px}
+.day-practice{font-size:11px;color:var(--light);line-height:1.4;font-weight:300}
+.week-header{grid-column:1/-1;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;padding:8px 0 4px;border-bottom:1px solid var(--border);margin-bottom:4px}
+
+/* STOIC TWO-COLUMN */
+.stoic-compare{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:36px 0}
+@media(max-width:640px){.stoic-compare{grid-template-columns:1fr}}
+.stoic-side{background:var(--card);padding:30px;border:1px solid transparent;transition:border-color .2s}
+.stoic-side:hover{border-color:var(--border)}
+.stoic-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.stoic-label.bad{color:#d46040}
+.stoic-label.good{color:#7aaa8e}
+.stoic-item{display:flex;gap:10px;margin-bottom:12px;font-size:13.5px;color:var(--light);line-height:1.6;font-weight:300}
+.stoic-item::before{content:'→';color:var(--gold);flex-shrink:0;font-size:11px;margin-top:3px}
+
+/* GRATITUDE SYSTEM */
+.grat-steps{display:flex;flex-direction:column;gap:2px;margin:36px 0}
+.grat-step{display:grid;grid-template-columns:72px 1fr;gap:0;background:var(--card);border:1px solid transparent;transition:border-color .2s}
+.grat-step:hover{border-color:var(--border)}
+.grat-icon{background:var(--golddim);display:flex;align-items:center;justify-content:center;font-size:26px}
+.grat-body{padding:18px 24px}
+.grat-title{font-weight:600;color:var(--cream);font-size:14.5px;margin-bottom:4px}
+.grat-text{font-size:13px;color:var(--light);line-height:1.65;font-weight:300}
+.grat-prompt{font-size:12.5px;color:var(--gold);font-style:italic;margin-top:8px;line-height:1.5}
+
+/* RESILIENCE PROTOCOL */
+.res-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin:36px 0}
+@media(max-width:640px){.res-steps{grid-template-columns:1fr}}
+.res-step{background:var(--card);padding:30px;border:1px solid transparent;transition:border-color .2s,background .2s;position:relative;overflow:hidden}
+.res-step:hover{border-color:var(--border);background:var(--card2)}
+.res-num{font-family:'Cormorant Garamond',serif;font-size:80px;font-weight:700;color:var(--gold);opacity:.07;position:absolute;top:6px;right:12px;line-height:1}
+.res-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+.res-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--cream);margin-bottom:10px}
+.res-text{font-size:13.5px;color:var(--light);line-height:1.7;font-weight:300}
+.res-example{margin-top:14px;background:rgba(200,148,58,.05);border-left:2px solid rgba(200,148,58,.3);padding:10px 14px;font-size:12.5px;color:var(--light);font-style:italic;line-height:1.55}
+
+/* ALERT / TIP */
+.alert{background:rgba(184,69,50,.07);border:1px solid rgba(184,69,50,.24);padding:22px 26px;margin:28px 0}
+.alert-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:var(--rust);text-transform:uppercase;margin-bottom:9px}
+.alert-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.alert-text strong{color:var(--cream);font-weight:500}
+.tip{background:rgba(58,107,74,.07);border:1px solid rgba(58,107,74,.24);padding:22px 26px;margin:28px 0}
+.tip-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:#7aaa8e;text-transform:uppercase;margin-bottom:9px}
+.tip-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.tip-text strong{color:var(--cream);font-weight:500}
+
+.table-wrap{overflow-x:auto;margin-top:40px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--card2);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);padding:13px 16px;text-align:left;border-bottom:1px solid var(--border)}
+tbody tr{border-bottom:1px solid rgba(200,148,58,.07);transition:background .15s}
+tbody tr:hover{background:var(--card)}
+tbody td{padding:13px 16px;color:var(--light);vertical-align:top;line-height:1.5}
+.num-cell{font-family:'JetBrains Mono',monospace;color:var(--gold);opacity:.55;font-size:11px}
+.name-cell{font-weight:500;color:var(--cream)}
+
+footer{background:var(--bg);border-top:1px solid var(--border);padding:56px 64px 72px;text-align:center}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;letter-spacing:2px;color:var(--gold);margin-bottom:10px}
+.footer-sub{font-size:13.5px;color:var(--muted);margin-bottom:6px}
+.footer-tiny{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(92,95,104,.45);text-transform:uppercase;margin-top:26px}
+
+.pg-hero-art{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:.55;z-index:0}
+.pg-hero-art svg{width:100%;height:100%;display:block}
+[class*="icon"] svg.pg-icon{width:1em;height:1em;display:inline-block;vertical-align:-0.15em}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav>
+  <div class="nav-logo">Stay Positive</div>
+  <ul class="nav-links">
+    <li><a href="#negativity">Negativity Bias</a></li>
+    <li><a href="#stoic">Stoic Control</a></li>
+    <li><a href="#gratitude">Gratitude</a></li>
+    <li><a href="#resilience">Resilience</a></li>
+    <li><a href="#meaning">Meaning</a></li>
+    <li><a href="#selfcompassion">Self-Compassion</a></li>
+    <li><a href="#environment">Environment</a></li>
+    <li><a href="#cheatsheet">Cheatsheet</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero"><div class="pg-hero-art" aria-hidden="true"><svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><path d="M228.9 -88.6 A219.9 219.9 0 0 1 282.2 270.8" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M221.8 142.5 A141.0 141.0 0 0 1 -29.8 56.5" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M501.3 160.6 A212.8 212.8 0 0 1 743.4 -117.7" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><line x1="535.3" y1="96.5" x2="541.3" y2="36.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="231.2" y1="118.4" x2="257.3" y2="148.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="231.2" y1="118.4" x2="289.3" y2="44.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="492.2" y1="223.2" x2="596.9" y2="208.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="535.3" y1="96.5" x2="492.2" y2="223.2" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="596.9" y1="208.8" x2="598.4" y2="118.1" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="596.9" y1="208.8" x2="623.9" y2="115.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="598.4" y1="118.1" x2="623.9" y2="115.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="535.3" y1="96.5" x2="598.4" y2="118.1" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="24.7" y1="230.6" x2="124.2" y2="138.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="24.7" y1="230.6" x2="241.5" y2="220.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="863.9" y1="132.9" x2="756.0" y2="69.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="863.9" y1="132.9" x2="623.9" y2="115.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="419.1" y1="86.5" x2="451.2" y2="82.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="289.3" y1="44.3" x2="202.7" y2="22.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="441.3" y1="49.6" x2="451.2" y2="82.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="419.1" y1="86.5" x2="441.3" y2="49.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="231.2" y1="118.4" x2="124.2" y2="138.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="257.3" y1="148.5" x2="124.2" y2="138.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="257.3" y1="148.5" x2="241.5" y2="220.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><circle cx="535.3" cy="96.5" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="535.3" cy="96.5" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="231.2" cy="118.4" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="541.3" cy="36.7" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="492.2" cy="223.2" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="492.2" cy="223.2" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="596.9" cy="208.8" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="596.9" cy="208.8" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="598.4" cy="118.1" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="598.4" cy="118.1" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="24.7" cy="230.6" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="24.7" cy="230.6" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="863.9" cy="132.9" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="863.9" cy="132.9" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="257.3" cy="148.5" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="257.3" cy="148.5" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="419.1" cy="86.5" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="289.3" cy="44.3" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="289.3" cy="44.3" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="441.3" cy="49.6" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="441.3" cy="49.6" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="202.7" cy="22.6" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="756.0" cy="69.6" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="451.2" cy="82.8" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="124.2" cy="138.6" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="124.2" cy="138.6" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="241.5" cy="220.9" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="623.9" cy="115.4" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="623.9" cy="115.4" r="2.2" fill="#e8b84b" opacity="0.85"/></svg></div>
+  <div class="hero-glow"></div><div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">Mindset · Psychology · Stoicism · Neuroscience · 2025–26</div>
+    <div class="hero-tag">The Complete Positive Mindset Research Guide · 2025–26 Edition</div>
+    <h1>Stay <span>Positive</span><span class="sub">When Life Gets Hard</span></h1>
+    <p class="hero-desc">The neuroscience, philosophy, and battle-tested systems behind staying grounded when life is actively working against you. Not toxic positivity. Not "good vibes only." The evidence-based truth about building a mind that can weather anything — and come back stronger. 8 deep chapters. Real science. No pretending.</p>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-n">5×</span><span class="hstat-l">the brain registers negative experiences vs positive (negativity bias)</span></div>
+      <div class="hstat"><span class="hstat-n">21days</span><span class="hstat-l">consistent practice to begin building new neural pathways (neuroplasticity)</span></div>
+      <div class="hstat"><span class="hstat-n">.51</span><span class="hstat-l">correlation between "controlling the controllables" and flourishing (Stoic Week 2022)</span></div>
+      <div class="hstat"><span class="hstat-n">#1</span><span class="hstat-l">predictor of resilience: the ability to find meaning in difficulty (Viktor Frankl)</span></div>
+    </div>
+  </div>
+  <div class="scroll-hint">Scroll to begin</div>
+</section>
+
+<!-- ─── TOC ─── -->
+<div class="toc-wrap">
+  <div class="toc-inner">
+    <div class="toc-label">Everything Inside This Guide</div>
+    <div class="toc-grid">
+      <a href="#negativity" class="toc-item"><span class="toc-num">01</span><span class="toc-name">Negativity Bias — Wired into your brain. Here's how to rewire it in 21 days.</span></a>
+      <a href="#stoic" class="toc-item"><span class="toc-num">02</span><span class="toc-name">The Dichotomy of Control — Stop spending energy on what you cannot change</span></a>
+      <a href="#gratitude" class="toc-item"><span class="toc-num">03</span><span class="toc-name">The Gratitude System — Backed by neuroscience. Shifts your mood baseline permanently.</span></a>
+      <a href="#resilience" class="toc-item"><span class="toc-num">04</span><span class="toc-name">Resilience is a Skill — The 3-step bounce-back protocol used by athletes & CEOs</span></a>
+      <a href="#meaning" class="toc-item"><span class="toc-num">05</span><span class="toc-name">Finding Meaning in Hard Times — Viktor Frankl's most powerful insight</span></a>
+      <a href="#selfcompassion" class="toc-item"><span class="toc-num">06</span><span class="toc-name">Self-Compassion — Why being kind to yourself produces better results than self-criticism</span></a>
+      <a href="#environment" class="toc-item"><span class="toc-num">07</span><span class="toc-name">The Environment of Positivity — Design your surroundings to support your mindset</span></a>
+      <a href="#cheatsheet" class="toc-item"><span class="toc-num">08</span><span class="toc-name">The Master Cheatsheet — Every principle, one table</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- ─── 01: NEGATIVITY BIAS ─── -->
+<section class="section" id="negativity">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 01</div>
+    <div class="s-meta">
+      <div class="s-cat">Neuroplasticity · Rick Hanson · Martin Seligman · Notice-Shift-Rewire</div>
+      <h2 class="s-title">Negativity Bias —<br/>How to <span>Rewire It</span></h2>
+      <p class="s-desc">Your brain is not neutral. It is wired by 120,000 years of evolution to register negative experiences 5× more powerfully than positive ones. This was once a survival advantage. In modern life, it is the source of unnecessary suffering, rumination, and the feeling that things are worse than they are. The good news: neuroplasticity means this is changeable. Here's the science-backed 21-day protocol.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">5×</span><span class="s-stat-l">more powerfully the brain registers negative vs positive experiences (negativity bias)</span></div>
+    <div class="s-stat"><span class="s-stat-n">21–30</span><span class="s-stat-l">days of consistent practice to notice new neural patterns forming</span></div>
+    <div class="s-stat"><span class="s-stat-n">Highway</span><span class="s-stat-l">negative neural pathways are like 6-lane highways — efficient through repetition</span></div>
+    <div class="s-stat"><span class="s-stat-n">Savoring</span><span class="s-stat-l">deliberately holding positive experiences 15–30 sec rewires circuitry (Seligman)</span></div>
+  </div>
+
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8A3.5 3.5 0 0 0 8 18a3 3 0 0 0 3-2.5V6a2 2 0 0 0-2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 1 5.8A3.5 3.5 0 0 1 16 18a3 3 0 0 1-3-2.5V6a2 2 0 0 1 2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">Why Negativity Bias Exists</div>
+      <p class="col-text">
+        The negativity bias is not a character flaw or a sign of weakness. It is an evolutionary inheritance — the same system that kept your ancestors alive on the savanna. The amygdala, your brain's threat detection centre, evolved to prioritise danger over pleasure. A missed predator was lethal. A missed berry was merely unfortunate. So the brain learned to pay 5× more attention to threats.<br/><br/>
+        <strong>The modern problem:</strong> In a world where most threats are social, professional, or psychological rather than physical, this system becomes overactive. It makes social rejection feel like mortal danger. It replays embarrassing moments at 3AM. It catastrophises setbacks and minimises wins.<br/><br/>
+        <strong>The critical insight:</strong> The brain's negative neural pathways are like 6-lane highways — deeply grooved through repetition. But because of neuroplasticity, you can build alternative routes. The goal is not to destroy the highway. It is to build a new one — through deliberate, repeated practice that gradually becomes automatic.
+      </p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M20 11a8 8 0 0 0-14.9-3.5M4 13a8 8 0 0 0 14.9 3.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 4v4h4M19 20v-4h-4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">The Notice-Shift-Rewire Method</div>
+      <p class="col-text">
+        Developed from neuroscience research and popularised by Dr. Nate Klemp, the Notice-Shift-Rewire technique is designed to interrupt the negativity bias in real-time:<br/><br/>
+        <strong>Notice:</strong> Catch the negative thought or feeling as it arises. Don't judge it. Don't fight it. Simply notice it — "there's the negativity bias doing its thing." This moment of metacognitive awareness is itself a pattern interrupt.<br/><br/>
+        <strong>Shift:</strong> Consciously redirect attention to something neutral or positive in the present moment. Not toxic positivity — just a deliberate redirection. A breath. A sight. A genuine moment of appreciation.<br/><br/>
+        <strong>Rewire:</strong> Let the positive experience land for 15–30 seconds. Don't rush past it. Rick Hanson's research: "The brain is Velcro for negative experiences and Teflon for positive ones." Savoring forces the positive to stick. Over 21–30 days, this creates measurable changes in neural architecture.
+      </p>
+    </div>
+  </div>
+
+  <!-- 21-Day Plan -->
+  <p style="font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:var(--gold);margin:28px 0 16px">The 21-Day Rewire Plan — One Practice Per Day</p>
+  <div class="day-plan">
+    <div class="week-header">Week 1 — Awareness: Notice the Bias</div>
+    <div class="day-cell"><span class="day-num">1</span><span class="day-label">Mon</span><div class="day-practice">Notice 3 automatic negative thoughts today. Label each: "negativity bias." No judgment.</div></div>
+    <div class="day-cell"><span class="day-num">2</span><span class="day-label">Tue</span><div class="day-practice">Write the day's first negative thought. Ask: "Is this a real threat or an evolutionary misfire?"</div></div>
+    <div class="day-cell"><span class="day-num">3</span><span class="day-label">Wed</span><div class="day-practice">Spot 3 moments you minimised something positive. Write what actually happened, fairly.</div></div>
+    <div class="day-cell"><span class="day-num">4</span><span class="day-label">Thu</span><div class="day-practice">Ask yourself at 9PM: "What went right today that I didn't fully notice?" Write 3 answers.</div></div>
+    <div class="day-cell"><span class="day-num">5</span><span class="day-label">Fri</span><div class="day-practice">Notice one moment of unexpected kindness or beauty today. Sit with it for 30 seconds.</div></div>
+    <div class="day-cell"><span class="day-num">6</span><span class="day-label">Sat</span><div class="day-practice">Catch one catastrophic thought. Ask: "What's the realistic probability this actually happens?"</div></div>
+    <div class="day-cell"><span class="day-num">7</span><span class="day-label">Sun</span><div class="day-practice">Review the week's journal. What patterns did you notice? What surprised you?</div></div>
+
+    <div class="week-header">Week 2 — Shift: Practice the Redirect</div>
+    <div class="day-cell"><span class="day-num">8</span><span class="day-label">Mon</span><div class="day-practice">Every time a negative loop starts — breathe in for 4, hold 4, out for 4. Then redirect attention.</div></div>
+    <div class="day-cell"><span class="day-num">9</span><span class="day-label">Tue</span><div class="day-practice">Ask "agent questions" not victim questions. Not "why me?" but "what's one step I can take?"</div></div>
+    <div class="day-cell"><span class="day-num">10</span><span class="day-label">Wed</span><div class="day-practice">For one negative situation today: write 3 things that could realistically go right.</div></div>
+    <div class="day-cell"><span class="day-num">11</span><span class="day-label">Thu</span><div class="day-practice">Savoring practice: after something good happens — pause and stay with it for 30 full seconds.</div></div>
+    <div class="day-cell"><span class="day-num">12</span><span class="day-label">Fri</span><div class="day-practice">Replace "I have to" with "I get to" for 5 daily tasks. Notice the shift in feeling.</div></div>
+    <div class="day-cell"><span class="day-num">13</span><span class="day-label">Sat</span><div class="day-practice">Take a 20-minute walk without headphones. Notice your environment. Actively look for beauty.</div></div>
+    <div class="day-cell"><span class="day-num">14</span><span class="day-label">Sun</span><div class="day-practice">Week review: Which shift technique worked best? Which was hardest? Why?</div></div>
+
+    <div class="week-header">Week 3 — Rewire: Build the New Pattern</div>
+    <div class="day-cell"><span class="day-num">15</span><span class="day-label">Mon</span><div class="day-practice">Morning: write 1 thing you're genuinely excited about today. Evening: did it happen? How did it feel?</div></div>
+    <div class="day-cell"><span class="day-num">16</span><span class="day-label">Tue</span><div class="day-practice">Celebrate one small win today immediately — tell someone, write it down, or simply acknowledge it fully.</div></div>
+    <div class="day-cell"><span class="day-num">17</span><span class="day-label">Wed</span><div class="day-practice">Reframe one difficulty from today: "What did this teach me? What skill is it developing?"</div></div>
+    <div class="day-cell"><span class="day-num">18</span><span class="day-label">Thu</span><div class="day-practice">Notice when the new neural pathway fires naturally — when you catch yourself finding the positive without forcing it.</div></div>
+    <div class="day-cell"><span class="day-num">19</span><span class="day-label">Fri</span><div class="day-practice">Write: "One year from now, this difficulty will have helped me by..." Complete the sentence fully.</div></div>
+    <div class="day-cell"><span class="day-num">20</span><span class="day-label">Sat</span><div class="day-practice">Spend time with someone whose energy lifts you. Notice how external environments affect your baseline.</div></div>
+    <div class="day-cell"><span class="day-num">21</span><span class="day-label">Sun</span><div class="day-practice">Full 21-day review. What shifted? What new awareness do you have about your own negativity bias?</div></div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-head">✅ The Critical Distinction — Positivity vs Toxic Positivity</div>
+    <p class="tip-text">Rewiring for positivity does not mean pretending life is always good. <strong>Toxic positivity suppresses legitimate negative emotions</strong> — which compounds them rather than processing them. The goal is balance: a brain that genuinely notices the good without ignoring the bad. <strong>The goal isn't to ignore difficulties — it's to create balance so your brain recognises both the struggles and the good moments.</strong> Suppressing negative emotions makes them stronger. Acknowledging them and then deliberately redirecting attention is the neurologically sound approach.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 1 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"The brain is like Velcro for negative experiences and Teflon for positive ones. But with practice, <em>you can reverse the ratio — and genuinely change what your mind returns to by default.</em>"</p>
+  <p class="quote-attr">— Rick Hanson · Neuroscientist · Author of Hardwiring Happiness · UC Berkeley</p>
+</div>
+
+<!-- ─── 02: STOIC DICHOTOMY ─── -->
+<section class="section section-alt" id="stoic">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 02</div>
+    <div class="s-meta">
+      <div class="s-cat">Epictetus · Marcus Aurelius · Stoic Week 2022 · Modern Research</div>
+      <h2 class="s-title">The Dichotomy<br/>of <span>Control</span></h2>
+      <p class="s-desc">Epictetus opened his Enchiridion — the handbook that influenced emperors, Navy SEALs, and Silicon Valley CEOs — with the most important distinction in all of philosophy: "Some things are within our power, while others are not." Stoic Week 2022 data: "controlling the controllables" had an exceptionally high correlation (.51) with flourishing. This single principle changes everything.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">.51</span><span class="s-stat-l">correlation — "control the controllables" with flourishing (Stoic Week 2022, 2,000+ participants)</span></div>
+    <div class="s-stat"><span class="s-stat-n">.47</span><span class="s-stat-l">correlation — "let go of what I can't control" with positive over negative emotions</span></div>
+    <div class="s-stat"><span class="s-stat-n">CBT</span><span class="s-stat-l">cognitive behavioural therapy is directly derived from Epictetus's dichotomy of control</span></div>
+    <div class="s-stat"><span class="s-stat-n">CEOs</span><span class="s-stat-l">Tim Ferriss, hedge fund managers, Navy SEALs, tech founders all cite Stoicism as foundational</span></div>
+  </div>
+
+  <div class="stoic-compare">
+    <div class="stoic-side">
+      <div class="stoic-label bad">NOT IN YOUR CONTROL</div>
+      <div class="stoic-item">Other people's opinions, judgments, and reactions</div>
+      <div class="stoic-item">External events — market downturns, weather, other's behaviour</div>
+      <div class="stoic-item">Your body's health, appearance, and physical limitations</div>
+      <div class="stoic-item">Your reputation and how others interpret your actions</div>
+      <div class="stoic-item">Your past — every decision, every moment, every mistake</div>
+      <div class="stoic-item">The decisions of employers, institutions, or governments</div>
+      <div class="stoic-item">Whether your effort produces the outcome you wanted</div>
+    </div>
+    <div class="stoic-side">
+      <div class="stoic-label good">COMPLETELY IN YOUR CONTROL</div>
+      <div class="stoic-item">Your judgments about events — what they mean to you</div>
+      <div class="stoic-item">Your intentions — what you aim to do and why</div>
+      <div class="stoic-item">Your effort and the quality of your preparation</div>
+      <div class="stoic-item">How you respond — your reaction, not your reaction's trigger</div>
+      <div class="stoic-item">What you focus attention on from moment to moment</div>
+      <div class="stoic-item">Your values — what you choose to prioritise</div>
+      <div class="stoic-item">Your honesty and integrity in every interaction</div>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">STOIC INSIGHT 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M13 2 4 14h6l-1 8 9-12h-6z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Why This Changes Everything</div>
+      <p class="card-text">Most human suffering comes from trying to control what cannot be controlled — other people's opinions, past decisions, external events — while neglecting the inner domain that is entirely ours. Epictetus observed: "People are disturbed not by events but by their judgments about events." This insight — that the meaning we assign to events, not the events themselves, determines our suffering — directly inspired Beck and Ellis to develop cognitive behavioural therapy (CBT). Every CBT technique is, at its core, an application of the Stoic dichotomy.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Misclassification Problem</div>
+        <p class="card-text">Stoic scholar John Sellars: "Epictetus thinks that much of human unhappiness is simply due to misclassification — thinking we have control over certain things when in fact we don't." The moment you correctly classify something as outside your control, you are free to stop suffering about it and start responding to it. The suffering was never about the event. It was about the misclassification.</p>
+      </div>
+      <span class="badge ba">Core Insight</span>
+    </div>
+    <div class="card">
+      <div class="card-num">STOIC INSIGHT 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="1.4" fill="#c8943a"/></svg></span>
+      <div class="card-title">The Reserve Clause — Action Without Attachment</div>
+      <p class="card-text">The Stoics were not passive. Marcus Aurelius governed the Roman Empire. Cato was an unyielding political force. Seneca advised emperors. They acted with full force — but with what they called a "reserve clause": "I will do my best at this — fate permitting." This strategy minimises emotional distress from failure by acknowledging that the outcome is not fully yours to control. The effort is fully yours. The result is partly fate's. You can care deeply about the outcome while releasing attachment to controlling it. That combination — full commitment to action, no attachment to result — is the highest athletic and professional performance state known to sports psychology.</p>
+      <span class="badge ba">Practice Tool</span>
+    </div>
+    <div class="card">
+      <div class="card-num">STOIC TOOL 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="5" y="4" width="14" height="17" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="9" y="2.5" width="6" height="3.5" rx="1" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.5 12h7M8.5 16h7" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Two-Column Exercise</div>
+      <div class="card-sec">For Any Stressful Situation</div>
+      <p class="card-text">When facing any difficult situation, take a piece of paper and draw a line down the middle. Left column: "What I cannot control about this." Right column: "What I can do about this." The act of writing forces clarity. You cannot be anxious about something and simultaneously thinking clearly about it. The exercise transfers your mental energy from the left column (infinite potential for anxiety) to the right column (finite, actionable, empowering). Everything in the left column — release. Everything in the right column — act on immediately and with full effort.</p>
+      <span class="badge ba">Daily Tool</span>
+    </div>
+    <div class="card">
+      <div class="card-num">STOIC TOOL 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="11" r="6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 19h10" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Amor Fati — Love What Is</div>
+      <div class="card-sec">Nietzsche & Marcus Aurelius</div>
+      <p class="card-text">Amor fati: Latin for "love of fate." Not mere acceptance of difficulty — but active embrace of it as necessary and useful. Marcus Aurelius: "Accept whatever comes to you woven in the pattern of your destiny, for what could more aptly fit your needs?" The practical implication: every setback contains exactly the training your character needs. Every difficulty is building exactly the muscle the next chapter of your life will require. This is not a comfortable belief. It is an extremely useful one — and it has been used by athletes, POWs, cancer survivors, and CEOs to find leverage in situations that otherwise produce only despair.</p>
+      <span class="badge bd">Philosophy</span>
+    </div>
+    <div class="card">
+      <div class="card-num">STOIC TOOL 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 18h18M5 15l1.5-1.5M19 15l-1.5-1.5M12 6V4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Memento Mori Practice</div>
+      <div class="card-sec">For Perspective on Daily Problems</div>
+      <p class="card-text">Marcus Aurelius regularly reminded himself of his own mortality — not as a cause for despair but as a tool for perspective. Memento mori: "remember you will die." The practical application: when a minor frustration or setback activates your stress response, ask: "Will this matter in 5 years? In 1 year? In 1 month?" This question does not dismiss the pain. It accurately categorises it. Most daily stressors — traffic, a rude email, a minor professional setback — fail the 5-year test. The ones that don't fail it deserve your full strategic attention. The ones that do: release, move on.</p>
+      <span class="badge bb">Perspective Tool</span>
+    </div>
+    <div class="card">
+      <div class="card-num">STOIC IN PRACTICE</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="3" y="8" width="18" height="12" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Stoicism for Modern Professionals</div>
+      <div class="card-sec">Why Every High Performer Studies It</div>
+      <p class="card-text">The result that many highly successful people are simultaneously highly anxious tells us something important: external success does not produce equanimity. Stoicism offers the antidote — a philosophy that decouples your sense of worth and stability from outcomes you cannot fully control. Tim Ferriss calls Stoicism "an operating system for thriving in high-stress environments." During market downturns, venture capitalists cite amor fati. During product failures, founders return to the dichotomy. What they've discovered is that Stoicism is not a philosophy of resignation. It is a philosophy of focused, strategic, maximally effective action — in the inner domain that is entirely theirs.</p>
+      <span class="badge ba">Applied Philosophy</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 2 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"Some things are within our power, while others are not. Seek good only in what is your own. Seek it not in external things. <em>This is the path to a life lived without restraint, without hindrance, without grief.</em>"</p>
+  <p class="quote-attr">— Epictetus · Enchiridion · Former Slave. Philosopher. Teacher of Emperors.</p>
+</div>
+
+<!-- ─── 03: GRATITUDE ─── -->
+<section class="section" id="gratitude">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 03</div>
+    <div class="s-meta">
+      <div class="s-cat">Robert Emmons · Martin Seligman · Harvard · Three Good Things</div>
+      <h2 class="s-title">The <span>Gratitude</span><br/>System</h2>
+      <p class="s-desc">Gratitude is the most consistently evidence-backed positive psychology intervention in the literature. Robert Emmons' research showed it produces significant improvements in wellbeing, sleep quality, and resilience — measurable in just 3 weeks of consistent practice. It also directly counteracts the negativity bias by deliberately training attention toward what is actually working in your life.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">25%</span><span class="s-stat-l">improvement in wellbeing from consistent gratitude practice (Emmons & McCullough)</span></div>
+    <div class="s-stat"><span class="s-stat-n">3weeks</span><span class="s-stat-l">before measurable shifts in mood baseline begin to appear</span></div>
+    <div class="s-stat"><span class="s-stat-n">Specific</span><span class="s-stat-l">gratitude (names, details, moments) produces far stronger effects than generic</span></div>
+    <div class="s-stat"><span class="s-stat-n">Seligman</span><span class="s-stat-l">"Three Good Things" exercise — most replicated positive psychology intervention ever</span></div>
+  </div>
+
+  <div class="grat-steps">
+    <div class="grat-step">
+      <div class="grat-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="4.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 2.5v3M12 18.5v3M21.5 12h-3M5.5 12h-3M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1M18.4 18.4l-2.1-2.1M7.7 7.7 5.6 5.6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="grat-body">
+        <div class="grat-title">Morning Anchor — Set the Lens for the Day</div>
+        <p class="grat-text">Before checking your phone, email, or any news: write one sentence about something you're genuinely looking forward to today. Not a grand thing — something real. The warmth of your first coffee. A conversation you'll have. A task you actually enjoy. This "lens-setting" practice primes your reticular activating system (RAS) to notice positive experiences throughout the day — rather than defaulting to the negativity bias scan.</p>
+        <p class="grat-prompt">Prompt: "One thing I'm genuinely glad exists in my life today is..."</p>
+      </div>
+    </div>
+    <div class="grat-step">
+      <div class="grat-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 3h9l5 5v13H5z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M14 3v5h5M8 12h8M8 16h8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="grat-body">
+        <div class="grat-title">Three Good Things — Seligman's Most Replicated Intervention</div>
+        <p class="grat-text">Each evening, write down 3 specific things that went well today. Then — critically — write why each one happened. The "why" step is what makes this exercise so powerful: it connects the good things in your life to your own actions, other people, and the world around you — building a neural map of how goodness enters your life. Not generic ("I'm grateful for my health") — specific ("I'm grateful for the conversation with my colleague at lunch — they were genuinely interested in what I was working on").</p>
+        <p class="grat-prompt">Prompt: "What went well today? And why did it go well?" — 3 answers, in writing, every night.</p>
+      </div>
+    </div>
+    <div class="grat-step">
+      <div class="grat-icon">💌</div>
+      <div class="grat-body">
+        <div class="grat-title">Gratitude Letter — The Most Powerful Single Intervention</div>
+        <p class="grat-text">Seligman's research found that writing and delivering a gratitude letter — a specific, detailed expression of appreciation to someone who meaningfully influenced your life — produced the largest single uplift in wellbeing of any positive psychology intervention tested. The effect lasted over a month for most participants. The rule: be specific. Name exactly what they did. Describe exactly how it affected you. Tell them who you became because of them. Deliver it in person if possible — reading it aloud amplifies the effect for both parties.</p>
+        <p class="grat-prompt">Do this once per month with someone different. The benefit compounds — for you and for them.</p>
+      </div>
+    </div>
+    <div class="grat-step">
+      <div class="grat-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="6" y="4" width="4" height="16" rx="1" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="14" y="4" width="4" height="16" rx="1" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="grat-body">
+        <div class="grat-title">Savoring — The Missing Step in Gratitude Practice</div>
+        <p class="grat-text">Most people register good experiences briefly and move on — then wonder why life feels empty despite having many good things. Savoring is the deliberate extension of positive experience: when something good happens, pause. Stay with it for 15–30 seconds. Breathe it in. Let it register fully in your body and mind. Rick Hanson: "Your brain is Velcro for negative experiences and Teflon for positive ones." Savoring is how you reverse this — by forcing positive experiences to fully encode into memory rather than sliding off the Teflon before they've registered.</p>
+        <p class="grat-prompt">Practice: the next time something genuinely good happens — stop, close your eyes briefly, and stay with it for 30 full seconds. This is not a small thing. This is literally rewiring your brain.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert">
+    <div class="alert-head">⚠️ Why Gratitude Journals Stop Working</div>
+    <p class="alert-text">The most common gratitude journal failure: writing the same things in the same way every day until it becomes meaningless rote. Research by Sonja Lyubomirsky found that <strong>variety and specificity are what maintain the brain's positive response to gratitude practice.</strong> When gratitude becomes a formulaic habit without fresh attention, it loses its neurological effect. Fix: vary your format weekly. Alternate between the Three Good Things, a Gratitude Letter, a Savoring practice, and a Gratitude Walk. The practice must remain a genuine act of attention — not a checkbox.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── 04: RESILIENCE ─── -->
+<section class="section section-alt" id="resilience">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 04</div>
+    <div class="s-meta">
+      <div class="s-cat">Martin Seligman · Angela Duckworth · Olympic Athletes · Fortune 500 CEOs</div>
+      <h2 class="s-title">Resilience is<br/>a <span>Skill</span></h2>
+      <p class="s-desc">Resilience is not a personality trait you either have or don't. It is a learnable, trainable skill — one that professional athletes, Special Forces operatives, and Fortune 500 CEOs have all built deliberately using the same core frameworks. Here is the 3-step bounce-back protocol that works regardless of your starting point.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">Skill</span><span class="s-stat-l">Resilience is trainable — not fixed by genetics or past experience</span></div>
+    <div class="s-stat"><span class="s-stat-n">3</span><span class="s-stat-l">core steps in every evidence-based resilience protocol</span></div>
+    <div class="s-stat"><span class="s-stat-n">Duckworth</span><span class="s-stat-l">Grit = passion + persistence: the combination that predicts success over talent</span></div>
+    <div class="s-stat"><span class="s-stat-n">Navy SEAL</span><span class="s-stat-l">40% rule: when you think you're done, you're only at 40% of your actual capacity</span></div>
+  </div>
+
+  <div class="res-steps">
+    <div class="res-step">
+      <div class="res-num">1</div>
+      <div class="res-label">Step 1 · Acknowledge</div>
+      <div class="res-title">Acknowledge — Fully and Without Drama</div>
+      <p class="res-text">The first step in any resilience protocol is the one most people skip: fully acknowledging that something genuinely difficult has happened. Not suppressing it ("I'm fine"). Not catastrophising it ("everything is ruined"). Naming it accurately: "This is genuinely hard. I'm struggling right now. That's real." Research on emotional resilience consistently shows that the ability to name and acknowledge difficulty — without either minimising or dramatising it — is the prerequisite for moving through it. You cannot recover from what you will not acknowledge.</p>
+      <div class="res-example">Olympic athletes: first 48 hours after a major loss or failure → deliberately scheduled processing time. Not performance review. Not training. Processing.</div>
+    </div>
+    <div class="res-step">
+      <div class="res-num">2</div>
+      <div class="res-label">Step 2 · Learn</div>
+      <div class="res-title">Learn — Extract What the Difficulty is Teaching You</div>
+      <p class="res-text">Once acknowledged, the most powerful question available is: "What is this teaching me?" Not "why did this happen to me?" (victim question — rumination spiral). But "what specific skill, insight, or strength is this developing?" (agent question — growth activation). Seligman's research on explanatory style shows that people who explain difficulties as specific, temporary, and external ("this particular thing didn't work this time") recover dramatically faster than those who explain them as general, permanent, and personal ("I always fail at everything").</p>
+      <div class="res-example">CEOs post-failed launch: mandatory debrief within 72 hours — "3 things we learned, 3 things we'd do differently, 1 thing we'd never change." The failure becomes tuition.</div>
+    </div>
+    <div class="res-step">
+      <div class="res-num">3</div>
+      <div class="res-label">Step 3 · Forward</div>
+      <div class="res-title">Forward — Take One Concrete Action</div>
+      <p class="res-text">Recovery momentum is built through action — any action that moves you forward, however small. The brain's reward system responds to forward progress regardless of scale. One small win after a setback produces a disproportionate psychological benefit — it signals to the brain's threat system that you are capable, moving, and not stuck. Rule: don't wait to feel ready. Take one action before you feel ready. The action creates the feeling — not the reverse. This is the bounce-back step. Not the "everything is now solved" step. Just: one step forward, taken deliberately.</p>
+      <div class="res-example">Navy SEAL mental model: after any failure — immediate next physical action. Not analysis. Not planning. Action. Movement is itself the recovery mechanism.</div>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">RESILIENCE SCIENCE 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 15V9a2 2 0 0 1 2-2 2 2 0 0 1 2 2M9 9V6a2 2 0 0 1 4 0v6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 9a2 2 0 0 1 4 0v3.5c0 3-2 6-6 6H8a3 3 0 0 1-3-3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Grit — Angela Duckworth's Finding</div>
+      <p class="card-text">Angela Duckworth's landmark research across West Point cadets, National Spelling Bee contestants, and rookie teachers found that the single best predictor of success was not IQ, talent, or social intelligence. It was grit: the combination of passion for a long-term goal and perseverance through setbacks. The critical finding: grit is not a fixed trait. It is developable. And the two components — passion and perseverance — develop through different practices. Passion develops through exploration and connection to purpose. Perseverance develops through deliberate repeated effort through difficulty. Both are accessible to anyone willing to build them.</p>
+      <span class="badge ba">Research-Backed</span>
+    </div>
+    <div class="card">
+      <div class="card-num">RESILIENCE SCIENCE 02</div>
+      <span class="card-icon">🔲</span>
+      <div class="card-title">Post-Traumatic Growth</div>
+      <p class="card-text">One of the most powerful and least known findings in positive psychology: the research of Richard Tedeschi and Lawrence Calhoun on post-traumatic growth (PTG). Contrary to what most people expect, many individuals report not just recovering from significant adversity — but emerging from it with measurably higher levels of: personal strength, new possibilities, relating to others, appreciation for life, and spiritual/existential understanding. PTG is not universal, and it requires processing rather than suppression. But its consistent occurrence across cancer survivors, accident victims, and combat veterans tells us something profound: the relationship between hardship and growth is real and measurable.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Practical Implication</div>
+        <p class="card-text">PTG doesn't mean hardship is good. It means the human capacity to grow through hardship is genuine and documented. Knowing this changes how you relate to difficulty in real time — not with denial, but with the legitimate expectation that on the other side of this, you may find something you couldn't have found any other way.</p>
+      </div>
+      <span class="badge ba">Science of Growth</span>
+    </div>
+    <div class="card">
+      <div class="card-num">RESILIENCE TOOL</div>
+      <span class="card-icon">🔭</span>
+      <div class="card-title">The 10-10-10 Rule</div>
+      <p class="card-text">Suzy Welch's 10-10-10 decision and perspective tool: when something feels overwhelming, ask three questions: How will I feel about this in 10 minutes? In 10 months? In 10 years? Most acute pain is accurate at 10 minutes. Very few things hold the same weight at 10 months. Almost nothing that causes acute distress today will be equally distressing in 10 years. The 10-year question doesn't dismiss the pain — it accurately places it in the context of your full life. This placement is the beginning of perspective — and perspective is one of the most powerful resilience tools available.</p>
+      <span class="badge ba">Perspective Tool</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 05: MEANING ─── -->
+<section class="section" id="meaning">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 05</div>
+    <div class="s-meta">
+      <div class="s-cat">Viktor Frankl · Man's Search for Meaning · Logotherapy · 1945</div>
+      <h2 class="s-title">Finding <span>Meaning</span><br/>in Hard Times</h2>
+      <p class="s-desc">Viktor Frankl survived Auschwitz and three other Nazi concentration camps. His observation — that those who survived longest were those who found meaning in their suffering, not those who were physically strongest — became the foundation of logotherapy, the third great Viennese school of psychology. His insight is the most powerful framework for staying human in inhuman circumstances.</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="m12 3 2.6 5.9L21 10l-4.7 4.2L17.5 21 12 17.6 6.5 21l1.2-6.8L3 10l6.4-1.1z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">The Core Frankl Insight</div>
+      <p class="col-text">
+        "He who has a why to live can bear almost any how." Frankl observed that in the camps, it was not the strongest or healthiest prisoners who survived longest — it was those who had a compelling reason to live. A manuscript to complete. Children waiting for them. A person they had to return to. A promise they had made.<br/><br/>
+        <strong>The radical insight:</strong> suffering is not the problem. Meaningless suffering is the problem. When suffering can be connected to a purpose — when difficulty is understood as part of a larger story — it becomes endurable, and sometimes even generative.<br/><br/>
+        <strong>The practical implication:</strong> In any hard period, the question that changes everything is not "when will this end?" but "what is this for?" What is it building? What is it teaching? Who is it preparing you to become?
+      </p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="10.5" cy="10.5" r="6.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m20 20-4.8-4.8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">Three Sources of Meaning (Frankl)</div>
+      <p class="col-text">
+        Frankl identified three dimensions from which meaning can always be drawn — even in the worst circumstances:<br/><br/>
+        <strong>1. Creative Values:</strong> Meaning through what you create, contribute, or give to the world. What are you building? What are you offering? This is the meaning of productive work, service, and craft.<br/><br/>
+        <strong>2. Experiential Values:</strong> Meaning through what you experience, encounter, or love. A beautiful piece of music. A person you love. A moment of genuine connection. These require nothing external — only openness to receiving them.<br/><br/>
+        <strong>3. Attitudinal Values:</strong> The most radical and most powerful: meaning through the attitude you choose toward unavoidable suffering. "When we are no longer able to change a situation, we are challenged to change ourselves." This is the freedom that no circumstance can remove.
+      </p>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">MEANING PRACTICE 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 6c-2-1.5-5-2-8-1.5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-13c-3-.5-6 0-8 1.5z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M12 6v13" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Write Your "Why" Statement</div>
+      <p class="card-text">Spend 20 minutes writing a personal "why" statement — not a goal or a mission, but a statement of purpose. Why are you doing what you're doing? What are you ultimately working toward? Who are you ultimately doing it for? This statement becomes your anchor when circumstances become difficult. It is not a productivity tool. It is a meaning-making tool — the thing that keeps you moving when all motivation has temporarily run out. People with a clearly articulated "why" recover from setbacks faster, sustain effort longer, and report higher overall wellbeing in longitudinal research.</p>
+      <span class="badge ba">First Step</span>
+    </div>
+    <div class="card">
+      <div class="card-num">MEANING PRACTICE 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M20 11a8 8 0 0 0-14.9-3.5M4 13a8 8 0 0 0 14.9 3.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 4v4h4M19 20v-4h-4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The "For What?" Reframe</div>
+      <p class="card-text">For any difficult period, situation, or experience — ask: "For what is this preparing me?" or "For whom am I doing this?" These questions activate the prefrontal cortex's meaning-making networks rather than the amygdala's threat response. They are not about denying the difficulty. They are about finding the thread of purpose that runs through it. A parent endures sleepless nights — for whom. An athlete endures painful training — for what future performance. A professional endures a difficult career transition — for what version of themselves they're becoming. The difficulty doesn't change. The relationship to it does.</p>
+      <span class="badge ba">Daily Reframe</span>
+    </div>
+    <div class="card">
+      <div class="card-num">MEANING PRACTICE 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 21v-9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 12C6 12 5 6 5 6s6-1 7 6zM12 12c0-6 6-6.5 6-6.5S18.5 11 12 12z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Contribute — The Fastest Path to Meaning</div>
+      <p class="card-text">Research by Adam Grant at Wharton and by the positive psychology field broadly shows a consistent finding: contribution to others — service, helping, giving — produces meaning more reliably and more quickly than any self-focused pursuit. When you are struggling, helping someone else produces a paradoxical but documented effect: your own suffering becomes more tolerable and your sense of agency returns. This is not coincidence. Contribution activates the same neural circuits as meaning — because, for a social species, giving to others is among the deepest expressions of purpose available.</p>
+      <span class="badge bb">Fastest Path</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 3 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"Everything can be taken from a person but one thing: the last of the human freedoms — <em>to choose one's attitude in any given set of circumstances.</em>"</p>
+  <p class="quote-attr">— Viktor Frankl · Man's Search for Meaning · Holocaust Survivor · Founder of Logotherapy</p>
+</div>
+
+<!-- ─── 06: SELF-COMPASSION ─── -->
+<section class="section section-alt" id="selfcompassion">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 06</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · Kristin Neff · University of Texas</div>
+      <h2 class="s-title">Self-<span>Compassion</span></h2>
+      <p class="s-desc">Kristin Neff's research at the University of Texas produced one of the most counterintuitive findings in positive psychology: self-compassion — treating yourself with the same kindness you'd offer a close friend — produces better performance, faster recovery from setbacks, and higher long-term wellbeing than self-criticism. Not despite being gentle with yourself. Because of it.</p>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">SELF-COMPASSION 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="9" cy="8" r="3.3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 20c0-3.5 2.5-6 5.5-6s5.5 2.5 5.5 6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="17" cy="9" r="2.6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15.5 12.3c2.6.4 4.5 2.5 4.5 5.7" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Self-Compassion vs Self-Criticism Finding</div>
+      <p class="card-text">Most people believe that self-criticism — holding yourself to a harsh standard, punishing yourself for mistakes — produces better performance. Neff's research, along with dozens of subsequent studies, found the opposite. Self-criticism activates the fight-or-flight response — the same threat system that the negativity bias activates. When you criticise yourself harshly, your brain treats you as a threat — which impairs the very thinking, creativity, and resilience you need to improve. Self-compassion, by contrast, activates the care system — producing safety, calm, and the cognitive space needed for genuine learning and growth.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Athletic Evidence</div>
+        <p class="card-text">A 2011 study found that athletes who were self-compassionate after a poor performance reported lower negative emotions, higher motivation to improve, and better performance in the subsequent competition than those who were self-critical. The "tough love" approach athletes believe makes them better is, neurologically, making them worse.</p>
+      </div>
+      <span class="badge ba">Counterintuitive Truth</span>
+    </div>
+    <div class="card">
+      <div class="card-num">SELF-COMPASSION 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15.5 0 18M12 3c-2.5 2.5-2.5 15.5 0 18" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Common Humanity — You Are Not Alone</div>
+      <p class="card-text">One of Neff's three components of self-compassion is "common humanity" — the recognition that suffering, struggle, and imperfection are universal human experiences, not personal failures. When something goes wrong, the internal narrative often sounds like: "Why does this always happen to me?" or "What's wrong with me?" These framings isolate the experience — as if you are the only person in the world facing this particular difficulty. The truth: whatever you are going through, millions of people have faced the same thing. This recognition doesn't minimise the pain. It removes the additional suffering of isolation and shame.</p>
+      <span class="badge ba">Mindset Shift</span>
+    </div>
+    <div class="card">
+      <div class="card-num">SELF-COMPASSION PRACTICE</div>
+      <span class="card-icon">✋</span>
+      <div class="card-title">The Self-Compassion Break</div>
+      <p class="card-text">Neff's most widely used practice — the Self-Compassion Break — for moments of acute difficulty or self-criticism:<br/><br/><strong style="color:var(--cream)">1. Mindfulness:</strong> "This is a moment of suffering. This is genuinely hard."<br/><strong style="color:var(--cream)">2. Common Humanity:</strong> "Suffering is part of being human. I am not alone in this."<br/><strong style="color:var(--cream)">3. Self-Kindness:</strong> "May I be kind to myself. May I give myself the compassion I need right now."<br/><br/>Place one hand on your heart. Breathe. Say these phrases — or your own equivalent — slowly. This 60-second practice measurably reduces cortisol and activates the parasympathetic nervous system.</p>
+      <span class="badge ba">60-Second Practice</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 07: ENVIRONMENT ─── -->
+<section class="section" id="environment">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 07</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · Design for Your Mindset</div>
+      <h2 class="s-title">The <span>Environment</span><br/>of Positivity</h2>
+      <p class="s-desc">You cannot out-will a consistently negative environment. Research shows that your surroundings — the people you spend time with, the information you consume, the physical spaces you inhabit — directly shape your baseline mood, your habitual thought patterns, and your capacity for resilience. Designing your environment proactively is one of the highest-leverage mindset interventions available.</p>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">ENVIRONMENT 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="9" cy="8" r="3.3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 20c0-3.5 2.5-6 5.5-6s5.5 2.5 5.5 6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="17" cy="9" r="2.6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15.5 12.3c2.6.4 4.5 2.5 4.5 5.7" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The People Environment</div>
+      <p class="card-text">Jim Rohn's observation that you are the average of the five people you spend the most time with has been supported by subsequent social contagion research. Emotions, attitudes, and beliefs are genuinely contagious — they spread through social networks through a mechanism called emotional contagion. Chronically negative people don't just feel negative — they produce negative emotional states in those around them. This is not a moral judgment. It is neurological reality. Deliberately spending more time with people who are constructively engaged with life, who celebrate your progress, and who approach difficulty with agency is one of the highest-leverage environmental changes you can make.</p>
+      <span class="badge ba">Highest Leverage</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ENVIRONMENT 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="7" y="3" width="10" height="18" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 18h2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Information Environment</div>
+      <p class="card-text">The information you consume shapes your perception of reality — and news media is structurally biased toward negative content because negative events capture more attention than positive ones (negativity bias at the societal level). A news diet of unfiltered daily negative information is not "staying informed." It is systematic negativity bias reinforcement. The practice: curate your information environment deliberately. Limit news consumption to 15 minutes of selected sources. Unfollow accounts that produce anxiety without value. Replace with content from people building things, solving problems, and creating. Your input shapes your output — including your emotional baseline.</p>
+      <span class="badge bc">Audit This</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ENVIRONMENT 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 21V9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 12C6 12 5 6 5 6s6-1 7 6zM12 12c0-6 6-6.5 6-6.5S18.5 11 12 12z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Physical Environment</div>
+      <p class="card-text">Nature exposure reduces cortisol, improves mood, and supports the neuroplastic changes that positive mindset practices are trying to build. A 2024 study found that even 20 minutes in a park produced measurable cortisol reduction and mood improvement. Physical clutter has been linked to elevated cortisol and decision fatigue — both of which undermine positive mindset. Bright light exposure in the morning anchors circadian rhythms that support emotional regulation. The physical environment is not separate from your mindset — it is a constant input into it. Design it accordingly.</p>
+      <span class="badge bb">Design for It</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ENVIRONMENT 04</div>
+      <span class="card-icon">🛌</span>
+      <div class="card-title">Sleep as the Foundation</div>
+      <p class="card-text">Every positive mindset practice in this guide — gratitude, Stoic reflection, meaning-making, self-compassion — is significantly less accessible when you are sleep-deprived. Matthew Walker's research: sleep deprivation produces a 60% increase in emotional reactivity to negative stimuli (the amygdala becomes 60% more reactive). Simultaneously, the prefrontal cortex — which governs rational response, perspective, and emotional regulation — becomes significantly less active. You cannot rewire your brain for positivity while running on 5 hours. Sleep is the foundation that everything else stands on. This is not optional. It is physiological.</p>
+      <span class="badge ba">Non-Negotiable</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ENVIRONMENT 05</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="14.5" cy="4.5" r="1.7" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 9l3-2 3 3-2 2 4 3-1.5 4M8 13l3.5-3 2 2-2.5 3-4.5 1M6 21l3-5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Exercise as the Fastest Mood Intervention</div>
+      <p class="card-text">A Harvard Medical School study found that exercise was equally effective to antidepressants for mild-to-moderate depression — and produced longer-lasting results with fewer relapses. The mechanism: exercise releases BDNF ("miracle-Gro for the brain"), endorphins, serotonin, dopamine, and norepinephrine — the complete neurochemical cocktail that underlies mood regulation, emotional resilience, and cognitive clarity. The minimum effective dose for mood benefit: 20 minutes of moderate-intensity exercise (brisk walk, light jog, cycle). This is available to almost everyone. And it changes your neurochemical baseline faster than any other single intervention.</p>
+      <span class="badge ba">Fastest Intervention</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ENVIRONMENT 06</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 18h18M5 15l1.5-1.5M19 15l-1.5-1.5M12 6V4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Morning Architecture</div>
+      <p class="card-text">The first 60–90 minutes of every day set the neurological tone for everything that follows. What you consume, how you move, what you think about — all of it primes the neural networks that will be most active for the rest of the day. The highest-leverage morning architecture for positivity and resilience: no phone for the first 30 minutes (avoids reactive mode). Brief movement (10–20 min walk or exercise). Gratitude anchor (1–2 minutes of morning writing). Intentional reading or reflection (vs news or social media). This sequence is available before 7:30AM and changes the entire character of the day that follows.</p>
+      <span class="badge ba">Daily Architecture</span>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-head">✅ The One Environmental Change That Changes Everything Else</div>
+    <p class="tip-text">If you could make only one environmental change: <strong>put your phone in another room for the first 60 minutes of every morning.</strong> This single change — consistently applied — stops the reactive, comparison, and news-driven state from being the first thing your brain processes each day. It preserves the Cortisol Awakening Response (your natural morning performance boost) for your own thoughts and intentions. It gives you 60 minutes of mental sovereignty every day. Within 2 weeks, most people report significantly improved mood, more creative ideas in the morning, and a qualitatively different relationship with their own inner life.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── 08: MASTER CHEATSHEET ─── -->
+<section class="section" id="cheatsheet">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 08</div>
+    <div class="s-meta">
+      <div class="s-cat">Quick Reference</div>
+      <h2 class="s-title">The Master<br/><span>Cheatsheet</span></h2>
+      <p class="s-desc">Every principle from this guide — one quick-reference table. Build these into your daily and weekly practice. The compound effect of small, consistent positive inputs is among the most powerful forces available to any human being.</p>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Principle</th><th>The Action</th><th>Chapter</th><th>Frequency</th></tr></thead>
+      <tbody>
+        <tr><td class="num-cell">01</td><td class="name-cell">Notice the Bias</td><td>When a negative thought spirals — label it: "negativity bias." No judgment. Just naming it interrupts it.</td><td>Negativity</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">02</td><td class="name-cell">Notice-Shift-Rewire</td><td>Catch the negative loop → redirect attention deliberately → sit with the positive for 30 seconds.</td><td>Negativity</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">03</td><td class="name-cell">Agent Questions</td><td>"What can I learn from this?" not "Why me?" Switches neural activation from rumination to problem-solving.</td><td>Negativity</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">04</td><td class="name-cell">Savoring</td><td>When something good happens — stop. Stay with it for 30 full seconds. Force it to encode.</td><td>Negativity</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">05</td><td class="name-cell">The 21-Day Plan</td><td>Follow the day-by-day protocol: Week 1 (Notice), Week 2 (Shift), Week 3 (Rewire). Consistency is everything.</td><td>Negativity</td><td><span class="badge ba">21-Day Sprint</span></td></tr>
+        <tr><td class="num-cell">06</td><td class="name-cell">Two-Column Exercise</td><td>Any stressful situation: "What I cannot control" (left) vs "What I can do" (right). Focus all energy on right column.</td><td>Stoic</td><td><span class="badge ba">When Stressed</span></td></tr>
+        <tr><td class="num-cell">07</td><td class="name-cell">The Reserve Clause</td><td>"I will give this my full effort — outcome permitting." Full commitment. Zero attachment to result.</td><td>Stoic</td><td><span class="badge ba">Before Any Action</span></td></tr>
+        <tr><td class="num-cell">08</td><td class="name-cell">Amor Fati</td><td>"What is this difficulty building in me?" Accept what is. Find the utility in the hardship.</td><td>Stoic</td><td><span class="badge bd">Philosophy</span></td></tr>
+        <tr><td class="num-cell">09</td><td class="name-cell">Memento Mori Test</td><td>"Will this matter in 5 years? In 1 year? In 1 month?" Accurate categorisation of pain.</td><td>Stoic</td><td><span class="badge ba">When Overwhelmed</span></td></tr>
+        <tr><td class="num-cell">10</td><td class="name-cell">Control Classification</td><td>Classify every stressor: in control (focus here) or not in control (release here). No middle ground.</td><td>Stoic</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">11</td><td class="name-cell">Morning Gratitude Anchor</td><td>"One thing I'm genuinely glad exists today..." Before phone, before email, every morning.</td><td>Gratitude</td><td><span class="badge ba">Every AM</span></td></tr>
+        <tr><td class="num-cell">12</td><td class="name-cell">Three Good Things</td><td>Each evening: 3 specific things that went well + why each happened. In writing. Every night.</td><td>Gratitude</td><td><span class="badge ba">Every Evening</span></td></tr>
+        <tr><td class="num-cell">13</td><td class="name-cell">Gratitude Letter</td><td>Write and deliver (in person where possible) once per month to someone who has meaningfully impacted you.</td><td>Gratitude</td><td><span class="badge ba">Monthly</span></td></tr>
+        <tr><td class="num-cell">14</td><td class="name-cell">Vary the Practice</td><td>Rotate format weekly — same practice daily becomes rote and loses effect. Variety maintains neural benefit.</td><td>Gratitude</td><td><span class="badge bc">Avoid Rote</span></td></tr>
+        <tr><td class="num-cell">15</td><td class="name-cell">Step 1 — Acknowledge</td><td>After any setback: "This is genuinely hard. I'm struggling right now. That's real." Say it fully.</td><td>Resilience</td><td><span class="badge ba">After Setbacks</span></td></tr>
+        <tr><td class="num-cell">16</td><td class="name-cell">Step 2 — Learn</td><td>"What is this teaching me? What specific skill is this developing?" Write the answer. It becomes tuition.</td><td>Resilience</td><td><span class="badge ba">After Step 1</span></td></tr>
+        <tr><td class="num-cell">17</td><td class="name-cell">Step 3 — Forward</td><td>Take one concrete action before you feel ready. Action creates the feeling — not the reverse.</td><td>Resilience</td><td><span class="badge ba">After Step 2</span></td></tr>
+        <tr><td class="num-cell">18</td><td class="name-cell">10-10-10 Rule</td><td>"How will I feel about this in 10 minutes? 10 months? 10 years?" Accurate temporal categorisation.</td><td>Resilience</td><td><span class="badge ba">Perspective</span></td></tr>
+        <tr><td class="num-cell">19</td><td class="name-cell">Write Your "Why"</td><td>Spend 20 minutes writing your personal "why" statement. Return to it in every hard period.</td><td>Meaning</td><td><span class="badge bb">Once, Then Review</span></td></tr>
+        <tr><td class="num-cell">20</td><td class="name-cell">"For What?" Reframe</td><td>"What is this preparing me for?" Connects difficulty to purpose. Converts pain into growth.</td><td>Meaning</td><td><span class="badge ba">Daily Reframe</span></td></tr>
+        <tr><td class="num-cell">21</td><td class="name-cell">Contribute First</td><td>When struggling — help someone else. Contribution to others produces meaning faster than self-focus.</td><td>Meaning</td><td><span class="badge bb">When Stuck</span></td></tr>
+        <tr><td class="num-cell">22</td><td class="name-cell">Three Sources of Meaning</td><td>Creative (what you create), Experiential (what you love), Attitudinal (how you face what you cannot change).</td><td>Meaning</td><td><span class="badge bd">Framework</span></td></tr>
+        <tr><td class="num-cell">23</td><td class="name-cell">Self-Compassion Break</td><td>"This is hard. Suffering is human. May I be kind to myself." Hand on heart. Breathe. 60 seconds.</td><td>Self-Compassion</td><td><span class="badge ba">When Struggling</span></td></tr>
+        <tr><td class="num-cell">24</td><td class="name-cell">Common Humanity</td><td>Whatever you're facing — millions of people have faced the same thing and survived. You are not uniquely broken.</td><td>Self-Compassion</td><td><span class="badge ba">Mindset</span></td></tr>
+        <tr><td class="num-cell">25</td><td class="name-cell">People Environment</td><td>Deliberately spend more time with people who approach life with agency. Emotions are contagious.</td><td>Environment</td><td><span class="badge ba">Design This</span></td></tr>
+        <tr><td class="num-cell">26</td><td class="name-cell">Information Diet</td><td>Max 15 min curated news. Unfollow anxiety-producing accounts. Follow builders, creators, solvers.</td><td>Environment</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">27</td><td class="name-cell">No Phone First 60min</td><td>Put it in another room. 60 minutes of mental sovereignty every morning. The single highest-leverage change.</td><td>Environment</td><td><span class="badge ba">Every AM</span></td></tr>
+        <tr><td class="num-cell">28</td><td class="name-cell">20-Minute Movement</td><td>20 min moderate exercise = measurable cortisol reduction, mood improvement, neuroplasticity support.</td><td>Environment</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">29</td><td class="name-cell">Sleep First</td><td>7–8 hours. Every positive practice is less accessible on less sleep. This is the foundation — not a bonus.</td><td>Environment</td><td><span class="badge ba">Non-Negotiable</span></td></tr>
+        <tr><td class="num-cell">30</td><td class="name-cell">The Last Freedom</td><td>No circumstance removes your ability to choose your attitude toward it. This is Viktor Frankl's core gift.</td><td>Meaning</td><td><span class="badge bd">Always</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</section>
+
+<footer>
+  <div class="footer-logo">Stay Positive When Life Gets Hard</div>
+  <p class="footer-sub">Mindset · Psychology · Stoicism · Neuroscience · 2025–2026 Edition</p>
+  <p class="footer-sub" style="color:var(--muted);font-size:13px;margin-top:8px">8 Complete Chapters · 30 Core Principles · Research from Viktor Frankl, Rick Hanson, Martin Seligman, Angela Duckworth, Kristin Neff, Epictetus, Marcus Aurelius, Robert Emmons & Matthew Walker</p>
+  <p class="footer-tiny">Research compiled May 2026 · Inspired by Parallelogram · Built for everyone navigating something genuinely hard</p>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:rgba(200,148,58,.28);margin-top:36px">"You have power over your mind — not outside events. Realise this, and you will find strength." — Marcus Aurelius</p>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const st=document.documentElement.scrollTop;
+  const sh=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('prog').style.width=(st/sh*100)+'%';
+});
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}});
+},{threshold:0.07});
+document.querySelectorAll('.card,.col-card,.s-stat,.day-cell,.stoic-side,.grat-step,.res-step').forEach(el=>{
+  el.style.opacity='0';el.style.transform='translateY(18px)';
+  el.style.transition='opacity .5s ease, transform .5s ease';
+  obs.observe(el);
+});
+</script>
+</body>
+</html>

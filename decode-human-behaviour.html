@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Decode Human Behaviour</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07080a;--surface:#0e1014;--card:#13151a;--card2:#181b22;
+  --gold:#c8943a;--gold2:#e8b84b;--golddim:rgba(200,148,58,.13);
+  --cream:#f0e8d5;--muted:#5c5f68;--light:#9a9da8;
+  --border:rgba(200,148,58,.18);--rust:#b84532;
+  --teal:#2c7a72;--indigo:#3d3fa8;--white:#faf9f6;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--cream);overflow-x:hidden;line-height:1.6}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.5}
+#prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--indigo),var(--gold),var(--gold2));width:0%;z-index:2000;transition:width .08s}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:1500;display:flex;align-items:center;justify-content:space-between;padding:14px 48px;background:rgba(7,8,10,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(200,148,58,.1)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
+.nav-links{display:flex;gap:20px;list-style:none}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+@media(max-width:768px){.nav-links{display:none}.hero,.section,.toc-wrap,.quote-block,footer{padding-left:22px!important;padding-right:22px!important}nav{padding:14px 22px}}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px 64px 80px;position:relative;overflow:hidden}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 75% 55% at 92% 8%,rgba(61,63,168,.14) 0%,transparent 55%),radial-gradient(ellipse 55% 70% at 5% 90%,rgba(200,148,58,.1) 0%,transparent 60%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;opacity:.022;background-image:linear-gradient(rgba(200,148,58,1) 1px,transparent 1px),linear-gradient(90deg,rgba(200,148,58,1) 1px,transparent 1px);background-size:68px 68px}
+.hero-inner{position:relative;max-width:1100px}
+.hero-badge{display:inline-flex;align-items:center;background:rgba(61,63,168,.15);border:1px solid rgba(61,63,168,.4);padding:5px 16px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#8a8de8;margin-bottom:22px;opacity:0;animation:fadeup .7s .15s forwards}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:26px;display:flex;align-items:center;gap:14px;opacity:0;animation:fadeup .7s .2s forwards}
+.hero-tag::before{content:'';width:44px;height:1px;background:var(--gold);flex-shrink:0}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(48px,8.5vw,120px);font-weight:700;line-height:.88;letter-spacing:-4px;margin-bottom:10px;opacity:0;animation:fadeup .8s .4s forwards}
+.hero h1 span{color:var(--gold);font-style:italic}
+.hero h1 .sub{display:block;color:rgba(240,232,213,.2);font-size:clamp(22px,3.8vw,52px);font-weight:400;font-style:italic;letter-spacing:-1px;margin-top:8px}
+.hero-desc{font-size:clamp(15px,1.9vw,18px);color:var(--light);max-width:600px;margin:34px 0 50px;font-weight:300;line-height:1.78;opacity:0;animation:fadeup .8s .6s forwards}
+.hero-stats{display:flex;gap:0;border:1px solid var(--border);width:fit-content;opacity:0;animation:fadeup .8s .8s forwards;flex-wrap:wrap}
+.hstat{padding:18px 32px;border-right:1px solid var(--border);text-align:center}
+.hstat:last-child{border-right:none}
+.hstat-n{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.hstat-l{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-top:4px}
+.scroll-hint{position:absolute;bottom:40px;left:64px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:10px;animation:pulse 2.5s infinite}
+.scroll-hint::before{content:'';width:1px;height:38px;background:var(--gold);opacity:.35}
+@keyframes fadeup{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+
+.toc-wrap{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:56px 64px}
+.toc-inner{max-width:1100px;margin:0 auto}
+.toc-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:36px;display:flex;align-items:center;gap:12px}
+.toc-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px}
+.toc-item{background:var(--card);padding:18px 22px;display:flex;align-items:flex-start;gap:14px;cursor:pointer;transition:background .2s,border-color .2s;border:1px solid transparent;text-decoration:none}
+.toc-item:hover{background:var(--card2);border-color:var(--border)}
+.toc-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);opacity:.55;flex-shrink:0;min-width:26px;margin-top:2px}
+.toc-name{font-size:13.5px;color:var(--light);font-weight:400;transition:color .2s;line-height:1.4}
+.toc-item:hover .toc-name{color:var(--cream)}
+
+.section{padding:96px 64px;position:relative}
+.section-alt{background:var(--surface)}
+.s-inner{max-width:1100px;margin:0 auto}
+.s-head{display:grid;grid-template-columns:90px 1fr;gap:32px;align-items:start;margin-bottom:60px;padding-bottom:44px;border-bottom:1px solid var(--border)}
+.s-num{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;padding-top:8px}
+.s-meta{display:flex;flex-direction:column;gap:10px}
+.s-cat{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:3px;color:var(--rust);text-transform:uppercase}
+.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,60px);font-weight:700;line-height:.92;letter-spacing:-1.5px;color:var(--cream)}
+.s-title span{color:var(--gold);font-style:italic}
+.s-desc{font-size:15.5px;color:var(--light);max-width:660px;font-weight:300;line-height:1.78;margin-top:6px}
+@media(max-width:600px){.s-head{grid-template-columns:1fr;gap:14px}}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:2px}
+@media(max-width:600px){.cards{grid-template-columns:1fr}}
+.card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .25s,background .25s;position:relative;overflow:hidden}
+.card:hover{border-color:var(--border);background:var(--card2)}
+.card::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:linear-gradient(180deg,var(--gold),var(--indigo));transition:height .35s}
+.card:hover::before{height:100%}
+.card-num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);opacity:.45;margin-bottom:14px}
+.card-icon{font-size:26px;margin-bottom:11px;display:block}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:700;color:var(--cream);letter-spacing:-.4px;margin-bottom:11px;line-height:1.15}
+.card-sec{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin:16px 0 7px}
+.card-text{font-size:13.5px;color:var(--light);line-height:1.72;font-weight:300}
+.psych{background:rgba(200,148,58,.06);border-left:2px solid var(--gold);padding:15px 18px;margin-top:18px}
+.psych .card-sec{margin-top:0}
+.scibox{background:rgba(61,63,168,.07);border-left:2px solid rgba(61,63,168,.5);padding:15px 18px;margin-top:14px}
+.scibox .card-sec{color:#8a8de8}
+.badge{display:inline-flex;align-items:center;padding:4px 11px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;margin-top:14px}
+.ba{background:rgba(200,148,58,.11);color:var(--gold);border:1px solid var(--border)}
+.bb{background:rgba(44,122,114,.12);color:#4aaa9e;border:1px solid rgba(44,122,114,.3)}
+.bc{background:rgba(184,69,50,.11);color:#d46040;border:1px solid rgba(184,69,50,.28)}
+.bd{background:rgba(61,63,168,.12);color:#8a8de8;border:1px solid rgba(61,63,168,.3)}
+
+.quote-block{background:var(--surface);padding:72px 64px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center}
+.quote-text{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3.2vw,36px);font-weight:600;font-style:italic;color:var(--cream);max-width:880px;margin:0 auto;line-height:1.4}
+.quote-text em{color:var(--gold)}
+.quote-attr{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:24px}
+
+.stat-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:2px;margin:44px 0}
+.s-stat{background:var(--card);padding:26px 22px;text-align:center;border:1px solid transparent;transition:border-color .2s}
+.s-stat:hover{border-color:var(--border)}
+.s-stat-n{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.s-stat-l{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-top:5px}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}}
+.col-card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .2s}
+.col-card:hover{border-color:var(--border)}
+.col-icon{font-size:30px;margin-bottom:14px;display:block}
+.col-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:11px;letter-spacing:-.4px}
+.col-text{font-size:13.5px;color:var(--light);line-height:1.75;font-weight:300}
+.col-text strong{color:var(--cream);font-weight:500}
+
+/* DRIVERS GRID */
+.drivers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin:36px 0}
+@media(max-width:640px){.drivers-grid{grid-template-columns:1fr}}
+.driver-card{background:var(--card);padding:30px;border:1px solid transparent;transition:border-color .2s,background .2s;position:relative;overflow:hidden}
+.driver-card:hover{border-color:var(--border);background:var(--card2)}
+.driver-num{font-family:'Cormorant Garamond',serif;font-size:72px;font-weight:700;color:var(--gold);opacity:.07;position:absolute;top:6px;right:12px;line-height:1}
+.driver-icon{font-size:30px;margin-bottom:12px;display:block}
+.driver-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+.driver-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:10px}
+.driver-text{font-size:13.5px;color:var(--light);line-height:1.7;font-weight:300}
+.driver-trigger{background:rgba(200,148,58,.05);border-left:2px solid rgba(200,148,58,.3);padding:10px 14px;margin-top:14px;font-size:12.5px;color:var(--light);line-height:1.55}
+.driver-trigger strong{color:var(--cream);font-weight:500}
+
+/* BIAS CARDS */
+.bias-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:2px;margin:36px 0}
+.bias-card{background:var(--card);padding:28px;border:1px solid transparent;transition:border-color .2s,background .2s;position:relative}
+.bias-card:hover{border-color:var(--border);background:var(--card2)}
+.bias-name{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+.bias-title{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:700;color:var(--cream);margin-bottom:10px;letter-spacing:-.3px}
+.bias-def{font-size:13.5px;color:var(--light);line-height:1.7;font-weight:300;margin-bottom:12px}
+.bias-example{background:rgba(61,63,168,.07);border-left:2px solid rgba(61,63,168,.4);padding:10px 14px;font-size:12.5px;color:var(--light);line-height:1.55;font-style:italic}
+.bias-example strong{color:var(--cream);font-style:normal;font-weight:500}
+.bias-counter{background:rgba(44,122,114,.06);border-left:2px solid rgba(44,122,114,.4);padding:10px 14px;margin-top:8px;font-size:12.5px;color:var(--light);line-height:1.55}
+.bias-counter strong{color:#4aaa9e;font-weight:500}
+
+/* INFLUENCE PRINCIPLES */
+.influence-list{display:flex;flex-direction:column;gap:2px;margin:36px 0}
+.influence-row{display:grid;grid-template-columns:72px 1fr;gap:0;background:var(--card);border:1px solid transparent;transition:border-color .2s}
+.influence-row:hover{border-color:var(--border)}
+.influence-icon{background:var(--golddim);display:flex;align-items:center;justify-content:center;font-size:26px}
+.influence-body{padding:20px 26px}
+.influence-title{font-weight:600;color:var(--cream);font-size:15px;margin-bottom:5px;display:flex;align-items:center;gap:10px}
+.influence-tag{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;padding:3px 8px;text-transform:uppercase}
+.tag-ethical{background:rgba(44,122,114,.12);color:#4aaa9e;border:1px solid rgba(44,122,114,.3)}
+.influence-text{font-size:13px;color:var(--light);line-height:1.65;font-weight:300}
+.influence-apply{font-size:12.5px;color:var(--gold);margin-top:8px;font-style:italic;line-height:1.5}
+
+/* BEHAVIOUR DECODE TABLE */
+.decode-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2px;margin:36px 0}
+.decode-card{background:var(--card);padding:26px;border:1px solid transparent;transition:border-color .2s,background .2s}
+.decode-card:hover{border-color:var(--border);background:var(--card2)}
+.decode-behaviour{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--rust);text-transform:uppercase;margin-bottom:8px}
+.decode-what{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700;color:var(--cream);margin-bottom:8px}
+.decode-why{font-size:13px;color:var(--light);line-height:1.65;font-weight:300;margin-bottom:10px}
+.decode-response{background:rgba(44,122,114,.06);border-left:2px solid rgba(44,122,114,.35);padding:9px 13px;font-size:12.5px;color:var(--light);line-height:1.55}
+.decode-response strong{color:#4aaa9e;font-weight:500}
+
+/* ALERT / TIP */
+.alert{background:rgba(184,69,50,.07);border:1px solid rgba(184,69,50,.24);padding:22px 26px;margin:28px 0}
+.alert-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:var(--rust);text-transform:uppercase;margin-bottom:9px}
+.alert-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.alert-text strong{color:var(--cream);font-weight:500}
+.tip{background:rgba(44,122,114,.07);border:1px solid rgba(44,122,114,.24);padding:22px 26px;margin:28px 0}
+.tip-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:#4aaa9e;text-transform:uppercase;margin-bottom:9px}
+.tip-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.tip-text strong{color:var(--cream);font-weight:500}
+
+.table-wrap{overflow-x:auto;margin-top:40px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--card2);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);padding:13px 16px;text-align:left;border-bottom:1px solid var(--border)}
+tbody tr{border-bottom:1px solid rgba(200,148,58,.07);transition:background .15s}
+tbody tr:hover{background:var(--card)}
+tbody td{padding:13px 16px;color:var(--light);vertical-align:top;line-height:1.5}
+.num-cell{font-family:'JetBrains Mono',monospace;color:var(--gold);opacity:.55;font-size:11px}
+.name-cell{font-weight:500;color:var(--cream)}
+
+footer{background:var(--bg);border-top:1px solid var(--border);padding:56px 64px 72px;text-align:center}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;letter-spacing:2px;color:var(--gold);margin-bottom:10px}
+.footer-sub{font-size:13.5px;color:var(--muted);margin-bottom:6px}
+.footer-tiny{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(92,95,104,.45);text-transform:uppercase;margin-top:26px}
+
+.pg-hero-art{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:.55;z-index:0}
+.pg-hero-art svg{width:100%;height:100%;display:block}
+[class*="icon"] svg.pg-icon{width:1em;height:1em;display:inline-block;vertical-align:-0.15em}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav>
+  <div class="nav-logo">Human Behaviour</div>
+  <ul class="nav-links">
+    <li><a href="#drivers">6 Drivers</a></li>
+    <li><a href="#biases">Cognitive Biases</a></li>
+    <li><a href="#influence">Influence</a></li>
+    <li><a href="#lying">Lying & Avoiding</a></li>
+    <li><a href="#overreact">Overreacting</a></li>
+    <li><a href="#darktriad">Dark Patterns</a></li>
+    <li><a href="#empathy">Empathy as X-Ray</a></li>
+    <li><a href="#cheatsheet">Cheatsheet</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero"><div class="pg-hero-art" aria-hidden="true"><svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><path d="M191.3 185.1 A189.5 189.5 0 0 1 -74.5 389.4" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M648.1 -29.4 A203.4 203.4 0 0 1 1000.4 -31.8" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M308.7 121.2 A141.0 141.0 0 0 1 257.6 260.7" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><line x1="318.9" y1="150.6" x2="292.0" y2="137.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="573.6" y1="169.7" x2="559.0" y2="203.2" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="278.6" y1="101.4" x2="292.0" y2="137.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="318.9" y1="150.6" x2="278.6" y2="101.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="827.9" y1="25.6" x2="773.2" y2="47.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="587.5" y1="239.1" x2="559.0" y2="203.2" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="587.5" y1="239.1" x2="734.1" y2="233.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="83.0" y1="112.8" x2="201.0" y2="79.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="278.6" y1="101.4" x2="83.0" y2="112.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="318.9" y1="150.6" x2="358.0" y2="153.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="453.9" y1="185.1" x2="463.1" y2="145.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="292.0" y1="137.6" x2="277.6" y2="182.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="278.6" y1="101.4" x2="201.0" y2="79.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="292.0" y1="137.6" x2="201.0" y2="79.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><circle cx="318.9" cy="150.6" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="573.6" cy="169.7" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="278.6" cy="101.4" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="278.6" cy="101.4" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="827.9" cy="25.6" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="587.5" cy="239.1" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="587.5" cy="239.1" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="734.1" cy="233.3" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="559.0" cy="203.2" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="559.0" cy="203.2" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="292.0" cy="137.6" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="773.2" cy="47.4" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="773.2" cy="47.4" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="83.0" cy="112.8" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="358.0" cy="153.3" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="358.0" cy="153.3" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="453.9" cy="185.1" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="277.6" cy="182.5" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="277.6" cy="182.5" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="463.1" cy="145.5" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="201.0" cy="79.9" r="1.4" fill="#c8943a" opacity="0.50"/></svg></div>
+  <div class="hero-glow"></div><div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">Psychology · Behavioural Science · Decision Science · 2025–26</div>
+    <div class="hero-tag">The Complete Human Behaviour Research Guide · 2025–26 Edition</div>
+    <h1>Decode<br/><span>Human</span><span class="sub">Behaviour</span></h1>
+    <p class="hero-desc">The science behind why people do what they do — backed by 40 years of behavioural research, Kahneman & Tversky's Nobel Prize-winning work, Cialdini's influence science, and the latest research on lying, overreacting, and the invisible forces steering every decision. 8 deep chapters. Zero jargon. Pure understanding.</p>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-n">200+</span><span class="hstat-l">cognitive biases documented in humans</span></div>
+      <div class="hstat"><span class="hstat-n">95%</span><span class="hstat-l">of decisions are made unconsciously (Zaltman, Harvard)</span></div>
+      <div class="hstat"><span class="hstat-n">2×</span><span class="hstat-l">losses feel twice as painful as equivalent gains (Kahneman)</span></div>
+      <div class="hstat"><span class="hstat-n">6</span><span class="hstat-l">universal drivers behind all human action</span></div>
+    </div>
+  </div>
+  <div class="scroll-hint">Scroll to begin</div>
+</section>
+
+<!-- ─── TOC ─── -->
+<div class="toc-wrap">
+  <div class="toc-inner">
+    <div class="toc-label">Everything Inside This Guide</div>
+    <div class="toc-grid">
+      <a href="#drivers" class="toc-item"><span class="toc-num">01</span><span class="toc-name">The 6 Universal Drivers — Distilled from 40 years of behavioural research</span></a>
+      <a href="#biases" class="toc-item"><span class="toc-num">02</span><span class="toc-name">Confirmation Bias, Anchoring & Loss Aversion — The invisible forces steering decisions</span></a>
+      <a href="#influence" class="toc-item"><span class="toc-num">03</span><span class="toc-name">Ethical Influence — Understanding what people already want, then helping them get it</span></a>
+      <a href="#lying" class="toc-item"><span class="toc-num">04</span><span class="toc-name">Why People Lie & Avoid — The fear beneath the behaviour</span></a>
+      <a href="#overreact" class="toc-item"><span class="toc-num">05</span><span class="toc-name">Why People Overreact — And how to respond without escalating</span></a>
+      <a href="#darktriad" class="toc-item"><span class="toc-num">06</span><span class="toc-name">Dark Personality Patterns — Recognising manipulation before it costs you</span></a>
+      <a href="#empathy" class="toc-item"><span class="toc-num">07</span><span class="toc-name">Empathy as an X-Ray — Read people without a word being spoken</span></a>
+      <a href="#cheatsheet" class="toc-item"><span class="toc-num">08</span><span class="toc-name">The Master Cheatsheet — Every principle, one table</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- ─── 01: 6 UNIVERSAL DRIVERS ─── -->
+<section class="section" id="drivers">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 01</div>
+    <div class="s-meta">
+      <div class="s-cat">Maslow · Deci & Ryan · Tony Robbins · Evolutionary Psychology</div>
+      <h2 class="s-title">The 6 <span>Universal</span><br/>Drivers</h2>
+      <p class="s-desc">Every human action — from buying a coffee to starting a war — is driven by one or more of six universal needs. These were identified across Maslow's hierarchy, Deci & Ryan's Self-Determination Theory, evolutionary psychology, and 40+ years of behavioural research. Understand these and you understand every person you've ever met.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">95%</span><span class="s-stat-l">of decisions are made unconsciously (Zaltman, Harvard Business School)</span></div>
+    <div class="s-stat"><span class="s-stat-n">6</span><span class="s-stat-l">core needs — every human action traces back to at least one</span></div>
+    <div class="s-stat"><span class="s-stat-n">Universal</span><span class="s-stat-l">across cultures, ages, genders — confirmed by cross-cultural research</span></div>
+    <div class="s-stat"><span class="s-stat-n">1943</span><span class="s-stat-l">Maslow's first framework — refined by 80+ years of subsequent research</span></div>
+  </div>
+
+  <div class="drivers-grid">
+    <div class="driver-card">
+      <div class="driver-num">1</div>
+      <span class="driver-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 3 5 6v6c0 5 3 8 7 9 4-1 7-4 7-9V6z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="driver-label">Driver 01</div>
+      <div class="driver-title">Safety & Certainty</div>
+      <p class="driver-text">The most primal driver — the need for physical safety, predictability, stability, and control. This driver is never fully satisfied because uncertainty is the natural state of the world. It governs more behaviour than most people realise: why people resist change, cling to routines, avoid difficult conversations, and prefer the familiar over the superior.</p>
+      <div class="driver-trigger"><strong>In action:</strong> Someone resisting your perfectly logical proposal → their Safety driver is activated. They're not being irrational. They're protecting against an uncertain outcome. Address the risk, not the logic.</div>
+    </div>
+    <div class="driver-card">
+      <div class="driver-num">2</div>
+      <span class="driver-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M2 12c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 18c2-2 4-2 6 0s4 2 6 0 4-2 6 0" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="driver-label">Driver 02</div>
+      <div class="driver-title">Variety & Stimulation</div>
+      <p class="driver-text">The counterforce to certainty — the need for novelty, adventure, challenge, and change. Humans are neurologically wired for both certainty AND variety simultaneously. This creates the fundamental tension that drives much of human irrationality: people want security and excitement at the same time, from the same situations, with the same people.</p>
+      <div class="driver-trigger"><strong>In action:</strong> Someone sabotaging a stable relationship or leaving a great job for no clear reason → their Variety driver is likely starved. The behaviour looks irrational because the logic of Safety doesn't explain it.</div>
+    </div>
+    <div class="driver-card">
+      <div class="driver-num">3</div>
+      <span class="driver-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M3 12h4l3-3 3 3 3-3 5 3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 12v5h4v-5M17 12v5h4v-5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="driver-label">Driver 03</div>
+      <div class="driver-title">Connection & Love</div>
+      <p class="driver-text">The need to belong — to be loved, to love, and to feel part of something larger than yourself. Harvard's 85-year longitudinal study confirmed: the quality of human connection is the single most powerful predictor of wellbeing, health, and longevity. This driver is so powerful that people will tolerate abuse, shrink their identity, and make catastrophically poor decisions just to preserve a sense of belonging.</p>
+      <div class="driver-trigger"><strong>In action:</strong> People staying in toxic relationships, joining extremist groups, or conforming to social norms they privately reject → the Connection driver overriding every other logic.</div>
+    </div>
+    <div class="driver-card">
+      <div class="driver-num">4</div>
+      <span class="driver-icon">👑</span>
+      <div class="driver-label">Driver 04</div>
+      <div class="driver-title">Significance & Status</div>
+      <p class="driver-text">The need to feel important, valued, special, and recognised. This is the driver behind ambition, competition, status displays, Instagram posts, and most political behaviour. Research by Maslow and later by evolutionary psychologists shows status is not a superficial vanity — it is deeply hardwired as a survival mechanism. Higher status historically meant more access to resources, partners, and safety.</p>
+      <div class="driver-trigger"><strong>In action:</strong> Someone taking an irrational position in an argument just to "win" → Significance driver preventing the cognitive cost of being wrong. The ego's survival system is activated. Give them a way to save face and they'll often agree.</div>
+    </div>
+    <div class="driver-card">
+      <div class="driver-num">5</div>
+      <span class="driver-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 21v-9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 12C6 12 5 6 5 6s6-1 7 6zM12 12c0-6 6-6.5 6-6.5S18.5 11 12 12z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="driver-label">Driver 05</div>
+      <div class="driver-title">Growth & Learning</div>
+      <p class="driver-text">The need to grow, progress, develop skills, and expand capabilities. Deci & Ryan's Self-Determination Theory identifies "competence" as one of three fundamental psychological needs. When growth stops, meaning begins to erode — often producing restlessness, depression, or compulsive behaviour as the psyche attempts to force movement. This driver explains the midlife crisis, career pivots, and the dissatisfaction of people who have "everything" except forward momentum.</p>
+      <div class="driver-trigger"><strong>In action:</strong> A technically successful person who is visibly miserable and can't explain why → their Growth driver is starved. Giving them a learning challenge often produces more motivation than any incentive.</div>
+    </div>
+    <div class="driver-card">
+      <div class="driver-num">6</div>
+      <span class="driver-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15.5 0 18M12 3c-2.5 2.5-2.5 15.5 0 18" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="driver-label">Driver 06</div>
+      <div class="driver-title">Contribution & Meaning</div>
+      <p class="driver-text">The need to contribute to something beyond yourself — to matter, to make a difference, to leave a mark. Viktor Frankl's research from Auschwitz and Deci & Ryan's work on autonomy both point to the same conclusion: meaning is a fundamental human need, not a luxury. Without it, people survive. With it, they flourish. This is why the wealthiest people still get up every day to build something, and why volunteers often report higher life satisfaction than their salaried counterparts.</p>
+      <div class="driver-trigger"><strong>In action:</strong> Connecting someone's daily work to a larger purpose — even briefly — increases engagement, performance, and retention more reliably than salary increases alone.</div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-head">✅ The Diagnostic Question</div>
+    <p class="tip-text">When you can't understand why someone is behaving a certain way, ask: <strong>"Which of the 6 drivers is this behaviour serving — or trying to serve?"</strong> Every behaviour makes sense when you understand the driver behind it. People are not irrational. They are serving needs that you haven't yet identified. Find the need and you find the behaviour's logic — and often, the path to changing it.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 1 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"Human beings are not rational animals. We are <em>rationalising animals</em> — we make decisions driven by unconscious needs and then construct logical explanations afterward."</p>
+  <p class="quote-attr">— Jonathan Haidt · The Righteous Mind · NYU Stern School of Business</p>
+</div>
+
+<!-- ─── 02: COGNITIVE BIASES ─── -->
+<section class="section section-alt" id="biases">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 02</div>
+    <div class="s-meta">
+      <div class="s-cat">Kahneman & Tversky · Nobel Prize 2002 · System 1 & System 2</div>
+      <h2 class="s-title">The <span>Invisible Forces</span><br/>Steering Decisions</h2>
+      <p class="s-desc">Daniel Kahneman and Amos Tversky's Nobel Prize-winning research proved what should have been obvious: humans are not rational. We operate under systematic biases — predictable, measurable errors in thinking that steer our decisions without our knowledge. Here are the most powerful ones and exactly how they operate.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">200+</span><span class="s-stat-l">cognitive biases documented in humans — all predictable and measurable</span></div>
+    <div class="s-stat"><span class="s-stat-n">78.2%</span><span class="s-stat-l">of decision-makers primarily affected by Confirmation Bias (2025 study)</span></div>
+    <div class="s-stat"><span class="s-stat-n">2×</span><span class="s-stat-l">the pain of loss vs the pleasure of equivalent gain (Prospect Theory)</span></div>
+    <div class="s-stat"><span class="s-stat-n">System 1</span><span class="s-stat-l">fast, automatic, unconscious — governs 95% of thinking (Kahneman)</span></div>
+  </div>
+
+  <div class="two-col" style="margin-bottom:2px">
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M13 2 4 14h6l-1 8 9-12h-6z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">System 1 — Fast Thinking</div>
+      <p class="col-text">
+        Operates automatically, quickly, and with no sense of voluntary control. This is the brain's default system — it makes snap judgments, reads faces, drives home on autopilot, fills in gaps in information with plausible guesses. It is the source of intuition, bias, and most real-world decisions.<br/><br/>
+        <strong>System 1 is:</strong> Fast. Unconscious. Pattern-matching. Emotionally driven. Confident in its conclusions. Prone to systematic errors that feel completely logical from the inside.<br/><br/>
+        <strong>The critical insight:</strong> System 1 doesn't know when it's wrong. It delivers its conclusions with the same confidence regardless of accuracy. You cannot feel a cognitive bias operating — which is precisely what makes it powerful.
+      </p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 3v7.5L5.5 17a2 2 0 0 0 1.8 3h9.4a2 2 0 0 0 1.8-3L15 10.5V3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 3h6M6.5 15h11" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">System 2 — Slow Thinking</div>
+      <p class="col-text">
+        The deliberate, effortful, analytical mode of thinking. This is what activates when you do complex arithmetic, evaluate a logical argument, or make a consciously considered decision. It is slow, energy-intensive, and prone to fatigue.<br/><br/>
+        <strong>The problem:</strong> System 2 is lazy by design. The brain is wired to conserve energy by allowing System 1 to handle as much as possible. When System 2 is available, it often simply endorses System 1's conclusions rather than genuinely examining them.<br/><br/>
+        <strong>The practical implication:</strong> Most of what feels like careful thinking is actually System 1 operating with System 2 providing post-hoc rationalisation. True slow thinking requires deliberate activation and significant effort.
+      </p>
+    </div>
+  </div>
+
+  <div class="bias-grid">
+    <div class="bias-card">
+      <div class="bias-name">Bias 01 · Most Prevalent</div>
+      <div class="bias-title">Confirmation Bias</div>
+      <p class="bias-def">The tendency to seek, interpret, and remember information in a way that confirms what you already believe — while unconsciously discounting contradictory evidence. The most prevalent bias in human cognition, affecting 78.2% of decision-makers in recent research.</p>
+      <div class="bias-example"><strong>Real world:</strong> A manager who believes an employee is underperforming notices every mistake but not the successes. An investor who loves a stock dismisses negative analyst reports and gravitates toward positive ones. A person in a bad relationship remembers the good days more vividly than the pattern.</div>
+      <div class="bias-counter"><strong>Counter:</strong> Deliberately seek disconfirming evidence. Ask: "What would I need to see to change my mind about this?" If you can't answer — you're in confirmation bias.</div>
+    </div>
+    <div class="bias-card">
+      <div class="bias-name">Bias 02 · Kahneman's Discovery</div>
+      <div class="bias-title">Anchoring Bias</div>
+      <p class="bias-def">The tendency to rely too heavily on the first piece of information encountered — the "anchor" — when making decisions. All subsequent information is evaluated relative to this anchor, even when it's completely arbitrary or irrelevant.</p>
+      <div class="bias-example"><strong>Real world:</strong> A product listed at "Was £200, Now £80" feels like a bargain — even if £80 was always the intended price. A salary negotiation started with a high number produces a higher final offer than one started with a low number. A doctor who anchors on the first diagnosis often misses the correct one.</div>
+      <div class="bias-counter"><strong>Counter:</strong> When negotiating — always set the anchor first. When evaluating — consciously discard the first number and start fresh. Ask: "If I hadn't seen that initial figure, what would my estimate be?"</div>
+    </div>
+    <div class="bias-card">
+      <div class="bias-name">Bias 03 · Prospect Theory</div>
+      <div class="bias-title">Loss Aversion</div>
+      <p class="bias-def">Losses feel approximately twice as painful as equivalent gains feel pleasurable. Losing £50 produces twice the emotional impact of gaining £50. This fundamental asymmetry drives enormous amounts of apparently irrational human behaviour.</p>
+      <div class="bias-example"><strong>Real world:</strong> Investors hold losing stocks too long and sell winning ones too early. People stay in bad situations rather than risk the unknown. Managers resist cutting failing projects because of sunk costs. A product framed as "saving £200" converts better than one "costing £800 less than competitors."</div>
+      <div class="bias-counter"><strong>Counter:</strong> Frame choices in terms of potential losses rather than gains when you want action. Frame choices in terms of gains when you want calm evaluation. Ask: "Am I avoiding this because it's genuinely bad — or because loss feels worse than gain?"</div>
+    </div>
+    <div class="bias-card">
+      <div class="bias-name">Bias 04 · Social Proof</div>
+      <div class="bias-title">Bandwagon Effect</div>
+      <p class="bias-def">The tendency to adopt beliefs, behaviours, and choices simply because many other people have done so — regardless of the evidence. The brain uses social consensus as a heuristic for truth, especially in uncertain situations.</p>
+      <div class="bias-example"><strong>Real world:</strong> A restaurant with a queue outside feels more appealing than an identical empty one. An investment trend attracts more capital as it rises — not because fundamentals improve, but because others are investing. Fashion, religion, and political polarisation are all massively driven by the bandwagon effect.</div>
+      <div class="bias-counter"><strong>Counter:</strong> Ask: "Am I adopting this view because I've evaluated the evidence — or because it's what the people around me believe?" Popularity is not proof. The crowd is often wrong at exactly the wrong moment.</div>
+    </div>
+    <div class="bias-card">
+      <div class="bias-name">Bias 05 · Status Quo</div>
+      <div class="bias-title">Status Quo Bias</div>
+      <p class="bias-def">The preference for the current state of affairs — change from the baseline is perceived as a loss, while maintaining the current position is perceived as the safe option. This bias explains much of human resistance to change, even when the evidence for change is overwhelming.</p>
+      <div class="bias-example"><strong>Real world:</strong> Defaulting to the same bank, insurance, or phone plan for years — not because it's best but because changing feels costly. Countries maintaining outdated policies because "this is how it's always been done." Organisations failing to innovate until forced by external crisis.</div>
+      <div class="bias-counter"><strong>Counter:</strong> When evaluating the status quo, ask: "If I were starting from scratch today, would I choose this?" If no — the status quo is costing you more than change would.</div>
+    </div>
+    <div class="bias-card">
+      <div class="bias-name">Bias 06 · Availability</div>
+      <div class="bias-title">Availability Heuristic</div>
+      <p class="bias-def">The tendency to judge the likelihood of something by how easily examples come to mind. Events that are emotionally vivid, recent, or frequently covered feel more probable — regardless of their actual statistical frequency.</p>
+      <div class="bias-example"><strong>Real world:</strong> People dramatically overestimate the probability of death by plane crash (dramatic, memorable) and underestimate the probability of death by car accident (familiar, boring). Investors overestimate the probability of a market crash immediately after one has occurred. Managers recall a vocal employee's last mistake more vividly than months of good work.</div>
+      <div class="bias-counter"><strong>Counter:</strong> Ask for base rates. "How often does this actually happen statistically?" Don't let vividness substitute for probability. The most frightening option is not necessarily the most likely one.</div>
+    </div>
+    <div class="bias-card">
+      <div class="bias-name">Bias 07 · Dunning-Kruger</div>
+      <div class="bias-title">Overconfidence Bias</div>
+      <p class="bias-def">The tendency to overestimate one's own knowledge, abilities, and judgment. Counterintuitively, people with less knowledge in a domain are more overconfident — because they lack the understanding to recognise what they don't know. The most dangerous decisions are often made by the most confidently wrong people.</p>
+      <div class="bias-example"><strong>Real world:</strong> 93% of American drivers rate themselves as above-average drivers. Novice investors consistently outperform their actual expectations in their first year — before reality corrects. Managers who have never done a job often believe they could do it better than the person doing it.</div>
+      <div class="bias-counter"><strong>Counter:</strong> The more certain you feel about a complex decision — the more suspicious you should be. True expertise comes with an awareness of what remains unknown. Calibrate your confidence by asking: "What's my actual track record in this domain?"</div>
+    </div>
+    <div class="bias-card">
+      <div class="bias-name">Bias 08 · Sunk Cost</div>
+      <div class="bias-title">Sunk Cost Fallacy</div>
+      <p class="bias-def">The tendency to continue investing in something because of what has already been invested — even when the forward-looking case for continuing is weak. "I've already spent three years on this" is not a reason to spend a fourth. Yet it feels like one.</p>
+      <div class="bias-example"><strong>Real world:</strong> Staying in a failing business because of what's already been invested. Continuing to watch a terrible movie because you paid for the ticket. Maintaining a damaging relationship because of shared history. Continuing a losing war because of past sacrifices — the "Vietnam fallacy."</div>
+      <div class="bias-counter"><strong>Counter:</strong> The sunk cost is gone regardless of what you decide next. Ask only: "Given where I am now — what is the best decision going forward?" Ignore the past investment entirely in this calculation.</div>
+    </div>
+    <div class="bias-card">
+      <div class="bias-name">Bias 09 · Framing</div>
+      <div class="bias-title">Framing Effect</div>
+      <p class="bias-def">Identical information is evaluated differently depending on how it is presented. A medical procedure described as having "90% survival rate" generates different responses than one described as "10% mortality rate" — even though they are mathematically identical. Context changes evaluation.</p>
+      <div class="bias-example"><strong>Real world:</strong> "95% fat-free" sells better than "5% fat." A negotiation framed as "what you'll gain" produces different outcomes than one framed as "what you'll lose." Charities that show one identifiable child generate more donations than those showing thousands of unnamed victims — the identifiable victim effect.</div>
+      <div class="bias-counter"><strong>Counter:</strong> Always reframe the same decision in multiple ways before committing. "Is this framed to make the choice feel better than it is?" Restate in both gain and loss frames and check if your preference changes.</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 2 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"It is not that people think slowly and come to wrong conclusions. It is that they <em>think fast, feel certain, and never examine the assumption underneath.</em>"</p>
+  <p class="quote-attr">— Daniel Kahneman · Thinking, Fast and Slow · Nobel Prize in Economic Sciences 2002</p>
+</div>
+
+<!-- ─── 03: ETHICAL INFLUENCE ─── -->
+<section class="section" id="influence">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 03</div>
+    <div class="s-meta">
+      <div class="s-cat">Robert Cialdini · 35 Years of Research · Influence & Pre-Suasion</div>
+      <h2 class="s-title">Ethical<br/><span>Influence</span></h2>
+      <p class="s-desc">Robert Cialdini's 35 years of research identified the six principles of ethical influence — the universal triggers that move people to say yes. Used ethically, they align your request with what people already want. Used manipulatively, they become coercion. The difference is whether the influence serves the other person's genuine interests.</p>
+    </div>
+  </div>
+
+  <div class="influence-list">
+    <div class="influence-row">
+      <div class="influence-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M20 11a8 8 0 0 0-14.9-3.5M4 13a8 8 0 0 0 14.9 3.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 4v4h4M19 20v-4h-4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="influence-body">
+        <div class="influence-title">Reciprocity <span class="influence-tag tag-ethical">Ethical</span></div>
+        <p class="influence-text">People feel a powerful obligation to return favours. When you give something of genuine value — information, help, a gift — without an immediate agenda, it creates a deep social obligation to reciprocate. The key word is genuine: reciprocity works because it taps into a real social norm, not because it manipulates. Give first, without expectation. People feel it and respond in kind more often than most would predict.</p>
+        <p class="influence-apply">→ Ethical application: Lead with real value. Help before asking. Share expertise before pitching. The relationship serves both parties — not just you.</p>
+      </div>
+    </div>
+    <div class="influence-row">
+      <div class="influence-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M3 12h4l3-3 3 3 3-3 5 3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 12v5h4v-5M17 12v5h4v-5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="influence-body">
+        <div class="influence-title">Commitment & Consistency <span class="influence-tag tag-ethical">Ethical</span></div>
+        <p class="influence-text">People are wired to behave consistently with their stated values, past choices, and public commitments. Once someone commits to something — even small — they are significantly more likely to follow through and make subsequent commitments in the same direction. This is the mechanism behind "foot in the door" techniques. Ethically: invite small commitments that align genuinely with someone's stated goals.</p>
+        <p class="influence-apply">→ Ethical application: Help people articulate their own values and goals. Then connect your request to those. People feel more motivated by their own stated commitments than by your persuasion.</p>
+      </div>
+    </div>
+    <div class="influence-row">
+      <div class="influence-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="9" cy="8" r="3.3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 20c0-3.5 2.5-6 5.5-6s5.5 2.5 5.5 6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="17" cy="9" r="2.6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15.5 12.3c2.6.4 4.5 2.5 4.5 5.7" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="influence-body">
+        <div class="influence-title">Social Proof <span class="influence-tag tag-ethical">Ethical</span></div>
+        <p class="influence-text">When uncertain, people look to what others are doing as evidence of what they should do. This is not irrationality — it's an efficient heuristic that works well most of the time. Ethically, social proof means showing genuine evidence of how people similar to your audience have benefited. Not manufactured reviews, not inflated numbers — real stories from real, similar people.</p>
+        <p class="influence-apply">→ Ethical application: Specific, authentic testimonials from people who genuinely share the characteristics of your audience. "People like you" is the trigger — not just "many people."</p>
+      </div>
+    </div>
+    <div class="influence-row">
+      <div class="influence-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M4 21h16M5 21V10M19 21V10M3 10l9-6 9 6M7 10v11M11 10v11M13 10v11M17 10v11" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="influence-body">
+        <div class="influence-title">Authority <span class="influence-tag tag-ethical">Ethical</span></div>
+        <p class="influence-text">People defer to genuine expertise. Credentials, experience, track records, and endorsements from respected institutions all increase trust and influence. Ethically, authority means being honest about your actual qualifications — and being transparent about the limits of your knowledge. Claimed authority that exceeds actual expertise is manipulation; communicated genuine expertise is service.</p>
+        <p class="influence-apply">→ Ethical application: Cite genuine credentials. Reference real evidence and research. And be equally explicit about what you don't know. Intellectual honesty amplifies authority rather than undermining it.</p>
+      </div>
+    </div>
+    <div class="influence-row">
+      <div class="influence-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="9" cy="8" r="3.3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 20c0-3.5 2.5-6 5.5-6s5.5 2.5 5.5 6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="17" cy="9" r="2.6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15.5 12.3c2.6.4 4.5 2.5 4.5 5.7" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="influence-body">
+        <div class="influence-title">Liking <span class="influence-tag tag-ethical">Ethical</span></div>
+        <p class="influence-text">People are more easily influenced by people they like. And liking is driven by: similarity (we see ourselves in them), genuine compliments (authentic, specific appreciation), familiarity (repeated positive exposure), and cooperative goals (working toward the same outcome). Ethically, this means building genuine connection — not performing friendliness to extract a yes.</p>
+        <p class="influence-apply">→ Ethical application: Find genuine common ground. Express honest appreciation. Show that you actually care about their goals — not just your own. The influence flows naturally from the genuine relationship.</p>
+      </div>
+    </div>
+    <div class="influence-row">
+      <div class="influence-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M6 3h12M6 21h12" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 3c0 6 12 6 12 0M6 21c0-6 12-6 12 0" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="influence-body">
+        <div class="influence-title">Scarcity <span class="influence-tag tag-ethical">Ethical</span></div>
+        <p class="influence-text">People value what is rare and fear what they might lose. Genuine scarcity — real limits on availability, time, or access — creates urgency that reflects reality. Ethically, scarcity means communicating real constraints honestly. Manufactured scarcity — fake countdown timers, artificial limitations — is manipulation that destroys long-term trust when discovered.</p>
+        <p class="influence-apply">→ Ethical application: Only invoke scarcity when it genuinely exists. "I only have capacity for 3 more clients this quarter" is ethical if true. The ethical line: would you be comfortable if your audience knew exactly how you're using this principle?</p>
+      </div>
+    </div>
+    <div class="influence-row">
+      <div class="influence-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15.5 0 18M12 3c-2.5 2.5-2.5 15.5 0 18" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="influence-body">
+        <div class="influence-title">Unity — The 7th Principle <span class="influence-tag tag-ethical">Ethical</span></div>
+        <p class="influence-text">Cialdini's 2016 addition: shared identity drives influence more powerfully than any of the other six principles. "We are the same kind of person" is more compelling than any social proof, authority, or liking. The mechanism: when someone perceives genuine shared identity — ethnicity, profession, family, ideology, values — they experience their wellbeing as connected to yours. Ethical unity is based on genuine shared characteristics.</p>
+        <p class="influence-apply">→ Ethical application: Identify genuine shared identity with your audience. Build communities around real common ground. The influence that flows from genuine "we" is the most durable and the most ethical form of all.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert">
+    <div class="alert-head">⚠️ The Ethical Line</div>
+    <p class="alert-text">Cialdini is unequivocal: these principles should only be used when they genuinely serve the other person's interests. <strong>The test: if the other person knew exactly how you were using these principles — would they feel helped or manipulated?</strong> If helped: ethical. If manipulated: not. The short-term gain from manipulative influence is almost always outweighed by the long-term cost of destroyed trust.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── 04: LYING & AVOIDING ─── -->
+<section class="section section-alt" id="lying">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 04</div>
+    <div class="s-meta">
+      <div class="s-cat">Nature Neuroscience · Workplace Strategies · Park Slope Therapy 2025</div>
+      <h2 class="s-title">Why People<br/><span>Lie & Avoid</span></h2>
+      <p class="s-desc">Lying and avoidance are not character flaws. They are threat responses — the brain's attempt to protect the self from rejection, punishment, shame, or loss. Once you understand the fear beneath the behaviour, you can respond to the real issue rather than the surface one — and get dramatically better outcomes in the process.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">Fear</span><span class="s-stat-l">#1 driver of lying — fear of punishment, rejection, or negative consequences</span></div>
+    <div class="s-stat"><span class="s-stat-n">Nature</span><span class="s-stat-l">Neuroscience: the more a person lies, the easier it becomes — a neurological slippery slope</span></div>
+    <div class="s-stat"><span class="s-stat-n">Shame</span><span class="s-stat-l">vs Guilt — shame drives more lying; guilt enables honesty and repair</span></div>
+    <div class="s-stat"><span class="s-stat-n">Coping</span><span class="s-stat-l">lying is most commonly a learned coping mechanism, not a character trait</span></div>
+  </div>
+
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="9" cy="10" r="6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="14" r="6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">Why People Lie — The 6 Real Reasons</div>
+      <p class="col-text">
+        <strong>1. Fear of punishment or negative consequences.</strong> The most common: lying to avoid a predictable bad outcome. The brain calculates that the lie is safer than the truth — and often it's right, which is why the behaviour persists.<br/><br/>
+        <strong>2. Fear of rejection or abandonment.</strong> "If they know this about me, they won't love me / hire me / respect me." Lying to preserve a relationship or status.<br/><br/>
+        <strong>3. To protect another person.</strong> White lies to preserve feelings or relationships. Often genuinely well-intentioned but can erode trust if discovered.<br/><br/>
+        <strong>4. To gain something (material or social).</strong> Deception for direct benefit — rarer than people assume, but the most intentionally manipulative form.<br/><br/>
+        <strong>5. Cognitive dissonance resolution.</strong> After behaving inconsistently with their self-image, people sometimes lie to preserve the coherent story of who they are — even to themselves.<br/><br/>
+        <strong>6. The slippery slope.</strong> A 2016 Nature Neuroscience study found that small lies gradually desensitise the amygdala — the brain's alarm system — to the emotional discomfort of dishonesty. Each lie makes the next one easier.
+      </p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="5" y="3" width="12" height="18" rx="1" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="14" cy="12" r="0.9" fill="#c8943a"/></svg></span>
+      <div class="col-title">Why People Avoid — The Same Fear, Different Coping</div>
+      <p class="col-text">
+        Avoidance is lying's quieter sibling — the strategy of simply not engaging with a problem, conversation, or person rather than confronting or misrepresenting it. Both serve the same core function: threat reduction.<br/><br/>
+        <strong>The most common avoidance patterns:</strong><br/><br/>
+        <strong>Delay avoidance:</strong> "I'll deal with it later" — indefinitely. The task/conversation/decision remains present in working memory as a low-grade stressor while nothing gets resolved.<br/><br/>
+        <strong>Emotional avoidance:</strong> Shutting down, becoming "fine" suddenly, changing the subject, or flooding with work when a difficult feeling arrives.<br/><br/>
+        <strong>Relationship avoidance:</strong> Going quiet, responding with monosyllables, becoming suddenly busy — when direct conversation feels too threatening.<br/><br/>
+        <strong>The cost:</strong> Avoidance provides immediate relief and long-term amplification. The avoided problem grows, the relationship tension increases, and the eventual confrontation becomes larger and harder than the original would have been.
+      </p>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">RESPONSE TOOL 01</div>
+      <span class="card-icon">🌉</span>
+      <div class="card-title">Create Safety Before Expecting Truth</div>
+      <p class="card-text">People lie most when they feel unsafe — when they expect judgment, punishment, or rejection for the truth. The most effective way to get honest information from someone is to make honesty feel less costly than the lie. Workplace Strategies research suggests: "What can I do to make it easier for you to share the full story with me?" signals that you're more interested in understanding than judging. The framing shifts the conversation from interrogation to collaboration — dramatically improving honesty rates.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Safe Environment Formula</div>
+        <p class="card-text">Private setting. Curious (not accusatory) tone. Genuine interest in their experience — not just the facts. Ask about what they were going through, not just what they did. "Help me understand what was happening for you when this occurred" produces more truth than "Why did you do this?"</p>
+      </div>
+      <span class="badge ba">Most Effective</span>
+    </div>
+    <div class="card">
+      <div class="card-num">RESPONSE TOOL 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="1.4" fill="#c8943a"/></svg></span>
+      <div class="card-title">Address the Fear, Not the Lie</div>
+      <p class="card-text">The lie is a symptom. The fear is the disease. When you confront the lie directly — "I know that's not true" — you activate the person's defensive systems and make them more committed to the lie, not less. When you address the underlying fear — "I sense you might be worried about how I'll respond — I want you to know I'm not here to punish you" — you remove the reason for the lie and create space for the truth. This works in parenting, management, partnerships, and most human interactions.</p>
+      <span class="badge ba">Technique</span>
+    </div>
+    <div class="card">
+      <div class="card-num">RESPONSE TOOL 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="10.5" cy="10.5" r="6.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m20 20-4.8-4.8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Catch Avoidance Early</div>
+      <p class="card-text">The window for addressing avoidance without escalation is early — when the topic first appears. The longer avoidance continues, the more charged the eventual conversation becomes. Signs of avoidance: sudden "busyness," monosyllabic responses, topic changes, or "I'm fine" when body language says otherwise. The effective early intervention: name the observation, not the behaviour. "I notice we haven't spoken properly since [X] — I'd like to find time to connect properly." This creates an opening without accusation.</p>
+      <span class="badge bb">Early Detection</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 05: OVERREACTING ─── -->
+<section class="section" id="overreact">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 05</div>
+    <div class="s-meta">
+      <div class="s-cat">Amygdala Hijack · Trauma Research · De-escalation Science</div>
+      <h2 class="s-title">Why People<br/><span>Overreact</span></h2>
+      <p class="s-desc">What looks like overreacting almost never is. The response is proportional — to a history you can't see, a threat you don't understand, or an unmet need that has nothing to do with you. Understanding why people overreact transforms you from a target of their reaction into a compassionate navigator of it.</p>
+    </div>
+  </div>
+
+  <div class="decode-grid">
+    <div class="decode-card">
+      <div class="decode-behaviour">Behaviour 01</div>
+      <div class="decode-what">The Amygdala Hijack</div>
+      <p class="decode-why">The amygdala (the brain's threat-detection system) can override the prefrontal cortex (rational thinking) in milliseconds when it perceives a threat — real or imagined. In this state, the person literally cannot access their capacity for rational thought. They are physiologically flooded — heart rate elevated, stress hormones surging, executive function offline. This is not a choice. It is a biological takeover.</p>
+      <div class="decode-response"><strong>Response:</strong> Don't engage with the content of the outburst. Don't match the energy. Lower your voice, slow your speech, and create space. Say: "I can see this matters a lot to you. I want to understand — can we take a moment?" The nervous system needs 20 minutes to physiologically reset. Request a brief pause if possible.</div>
+    </div>
+    <div class="decode-card">
+      <div class="decode-behaviour">Behaviour 02</div>
+      <div class="decode-what">Triggered by Old Wounds</div>
+      <p class="decode-why">A present stimulus triggers a past emotional wound that was never fully processed. The response is proportional — to the original wound, not the present situation. Someone who responds to mild criticism with a tearful breakdown or defensive explosion is often responding to accumulated experiences of criticism that had real consequences — a critical parent, a dismissive boss, public humiliation. The present moment is the trigger; the past is the fuel.</p>
+      <div class="decode-response"><strong>Response:</strong> Don't make it about the present facts. Acknowledge the emotional reality first: "It sounds like this really landed hard. Help me understand what's coming up for you." This creates permission to access the deeper source rather than arguing about the surface event.</div>
+    </div>
+    <div class="decode-card">
+      <div class="decode-behaviour">Behaviour 03</div>
+      <div class="decode-what">Identity Threat</div>
+      <p class="decode-why">When someone's core identity — their competence, morality, value as a parent/partner/professional — is perceived as under attack, they respond with the intensity of someone defending their survival. Admitting fault often feels like admitting "I am defective" rather than "I made a mistake." The Voices for Mental Health research: "Admitting fault isn't just about honesty — it touches on identity, self-esteem, and even survival instincts."</p>
+      <div class="decode-response"><strong>Response:</strong> Separate the identity from the behaviour. "I know you care deeply about doing this well — that's not what I'm questioning. I want to talk about what happened in this specific instance." This allows them to defend the behaviour without defending the identity — making the conversation infinitely more productive.</div>
+    </div>
+    <div class="decode-card">
+      <div class="decode-behaviour">Behaviour 04</div>
+      <div class="decode-what">Accumulated Grievance</div>
+      <p class="decode-why">A single small incident becomes the tipping point for months of unexpressed frustration. The present offence is 5% of the problem; the accumulated history is 95%. To the observer, the reaction looks wildly disproportionate. From inside the person's experience, it is completely proportional to everything they've been holding without saying. They are not overreacting to the present. They are finally releasing the past.</p>
+      <div class="decode-response"><strong>Response:</strong> Don't dispute the proportionality. Don't say "you're overreacting." Instead: "It sounds like this has been building for a while. I want to understand the full picture — can we talk about everything, not just today?" This gives permission for the real conversation to finally happen.</div>
+    </div>
+    <div class="decode-card">
+      <div class="decode-behaviour">Behaviour 05</div>
+      <div class="decode-what">Unmet Need Speaking</div>
+      <p class="decode-why">The overreaction is a need expressing itself in the only language it has available in the moment — raw emotion. Someone furious about being interrupted in a meeting may actually be expressing a long-unmet need to feel valued and heard. Someone tearful about a minor inconvenience may be expressing exhaustion, overwhelm, or loneliness that has no other outlet.</p>
+      <div class="decode-response"><strong>Response:</strong> Look past the content of the emotion to the need beneath it. "I notice you're carrying a lot right now. Is there something more going on that I can help with?" Often the most effective response to an emotional outburst is not addressing the outburst at all — but the unmet need underneath it.</div>
+    </div>
+    <div class="decode-card">
+      <div class="decode-behaviour">Behaviour 06</div>
+      <div class="decode-what">Social Status Threat</div>
+      <p class="decode-why">Being criticised, corrected, or contradicted in front of others activates the same neural circuits as a physical threat. The Significance driver (Chapter 01) is threatened — and the person responds to protect their social status with the same urgency as a physical survival response. This is why public corrections are almost always counterproductive: the person cannot hear the content because they are physiologically defending their status.</p>
+      <div class="decode-response"><strong>Response:</strong> Never correct, criticise, or challenge in public if you want the content to land. Private, specific, and face-saving — always. Cialdini's rule: "Give a person a reputation to live up to." Give them the status first, then the feedback.</div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-head">✅ The Universal De-escalation Sequence</div>
+    <p class="tip-text">When faced with any overreaction: <strong>(1) Lower your own energy first.</strong> You cannot de-escalate by matching intensity. <strong>(2) Validate the emotion without validating the behaviour.</strong> "I can see this has really affected you" — not "you're right to be furious." <strong>(3) Create a pause.</strong> "Can we take a few minutes and come back to this?" The nervous system needs 20 minutes to physiologically reset. <strong>(4) Return to facts only after regulation.</strong> No productive conversation happens in a flooded nervous system — yours or theirs.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── 06: DARK PATTERNS ─── -->
+<section class="section section-alt" id="darktriad">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 06</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · The Dark Triad · Recognition Before Cost</div>
+      <h2 class="s-title">Dark<br/><span>Personality</span> Patterns</h2>
+      <p class="s-desc">Not all difficult behaviour is driven by unmet needs and unprocessed trauma. Some patterns are more systematic — predictable, repeated, and resistant to normal social correction. Recognising these patterns protects you from significant personal and professional harm.</p>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">DARK PATTERN 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><ellipse cx="12" cy="10" rx="6" ry="7.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 17.5V21M9 21h6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Narcissistic Patterns</div>
+      <div class="card-sec">The Signature Signals</div>
+      <p class="card-text">Grandiosity (an inflated sense of importance and entitlement), a profound need for admiration, a lack of empathy for others' experiences, and a pattern of exploiting relationships for personal gain. The key distinction: occasional self-importance is normal. Narcissistic pattern is persistent, pervasive, and immune to feedback — because feedback threatens the self-image the system is built to protect.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Recognition Signals</div>
+        <p class="card-text">Conversations always return to them. Criticism — however gentle — produces disproportionate defensive reactions or retaliation. Praise produces brief satisfaction followed by escalating need for more. Relationships are valued for what they provide, not for who the person is. Empathy appears situationally — when it serves them — but disappears when it costs them nothing.</p>
+      </div>
+      <span class="badge bc">Recognise & Protect</span>
+    </div>
+    <div class="card">
+      <div class="card-num">DARK PATTERN 02</div>
+      <span class="card-icon">♟️</span>
+      <div class="card-title">Machiavellian Patterns</div>
+      <div class="card-sec">The Calculated Operator</div>
+      <p class="card-text">A strategic, calculating approach to social interaction — using others instrumentally to achieve personal goals. People with high Machiavellianism are skilled at reading social situations, adapting their presentation, and identifying leverage. They are not necessarily aggressive — often they are charming and patient. The pattern: all relationships are instrumental. Kindness is a tactic. Trust is a tool. Loyalty is conditional on utility.</p>
+      <div class="card-sec">Recognition Signals</div>
+      <p class="card-text">Exceptionally charming in high-stakes situations. Relationships that feel warm but produce a nagging sense of being used. Information shared with you strategically rather than genuinely. A pattern of operating in ways that benefit them regardless of the impact on others — without apparent guilt or distress about it.</p>
+      <span class="badge bc">Recognise & Protect</span>
+    </div>
+    <div class="card">
+      <div class="card-num">DARK PATTERN 03</div>
+      <span class="card-icon">🐍</span>
+      <div class="card-title">Gaslighting — The Reality Distortion</div>
+      <div class="card-sec">The Most Dangerous Pattern</div>
+      <p class="card-text">A form of psychological manipulation that causes the target to question their own memory, perception, and sanity. Tactics include: denying events that occurred, reframing what was said, questioning the target's emotional responses as excessive or irrational, and consistently positioning themselves as the reasonable party and the target as unstable. The damage: erosion of self-trust, which makes the target dependent on the gaslighter's version of reality.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 Protection</div>
+        <p class="card-text">Keep written records. Trust your emotional responses — they are data, even when challenged. Seek external reality checks from people outside the relationship. The most reliable signal: if you consistently feel confused, crazy, or irrational in someone's presence — and feel clear and sane when they're not around — that asymmetry is information.</p>
+      </div>
+      <span class="badge bc">Recognise Immediately</span>
+    </div>
+    <div class="card">
+      <div class="card-num">DARK PATTERN 04</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="9" cy="10" r="6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="14" r="6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The DARVO Response</div>
+      <div class="card-sec">Deny. Attack. Reverse Victim and Offender</div>
+      <p class="card-text">DARVO is a manipulation pattern used by those who have caused harm: they Deny the behaviour, Attack the person who brought it up, and Reverse the Victim and Offender — positioning themselves as the real victim of the confrontation. The effect: the person who raised a legitimate concern ends up apologising, while the person who caused harm exits without accountability. Common in abusive dynamics, gaslighting relationships, and certain corporate cultures.</p>
+      <div class="card-sec">Recognition</div>
+      <p class="card-text">You raised a concern → they immediately accused you of something → you're now defending yourself → the original issue is forgotten. If this sequence happens repeatedly with the same person — you are in a DARVO dynamic.</p>
+      <span class="badge bc">Name It to Neutralise It</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 3 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"Understanding people doesn't mean excusing them. It means seeing clearly enough to respond with wisdom rather than with <em>the reaction they were trying to provoke.</em>"</p>
+  <p class="quote-attr">— Viktor Frankl · Man's Search for Meaning · Vienna School of Existential Analysis</p>
+</div>
+
+<!-- ─── 07: EMPATHY AS X-RAY ─── -->
+<section class="section" id="empathy">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 07</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · The Ultimate Decoding Tool</div>
+      <h2 class="s-title">Empathy as<br/>an <span>X-Ray</span></h2>
+      <p class="s-desc">Empathy is not a soft skill. It is a precision instrument — the most powerful tool available for decoding human behaviour, anticipating reactions, defusing conflict, and building the kind of trust that makes people actually tell you the truth. The most influential people in every field are almost universally the most empathically skilled.</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 3v7.5L5.5 17a2 2 0 0 0 1.8 3h9.4a2 2 0 0 0 1.8-3L15 10.5V3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 3h6M6.5 15h11" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">Cognitive vs Affective Empathy</div>
+      <p class="col-text">
+        <strong>Cognitive empathy</strong> (perspective-taking): understanding intellectually what another person is experiencing — their thoughts, goals, fears, and motivations — without necessarily feeling it yourself. This is the empathy of strategy, negotiation, and leadership.<br/><br/>
+        <strong>Affective empathy</strong> (emotional resonance): actually feeling what another person feels. This is the empathy of deep connection, comfort, and emotional support.<br/><br/>
+        The most effective people in high-stakes situations — negotiators, therapists, skilled leaders — use cognitive empathy to understand and affective empathy to connect. Too much affective empathy without cognitive empathy produces "empathy fatigue." Too much cognitive empathy without affective produces technically accurate but emotionally cold responses.
+      </p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="1.4" fill="#c8943a"/></svg></span>
+      <div class="col-title">The Empathy Sequence — Read Anyone</div>
+      <p class="col-text">
+        <strong>Step 1 — Observe without judging.</strong> What is this person's body language, tone, energy, and facial expression communicating beneath the words?<br/><br/>
+        <strong>Step 2 — Identify the driver.</strong> Which of the 6 universal drivers (Chapter 01) is most activated right now?<br/><br/>
+        <strong>Step 3 — Identify the fear.</strong> What threat is this person protecting against? Rejection, judgment, loss, humiliation, irrelevance?<br/><br/>
+        <strong>Step 4 — Name it tentatively.</strong> "It sounds like you might be feeling [X]." The tentative naming gives them permission to either confirm or correct — and either way, it signals that you're paying real attention.<br/><br/>
+        <strong>Step 5 — Follow their lead.</strong> Empathy is not projection. Once you've offered your perception, let them lead. Their correction is more valuable than your initial read.
+      </p>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">EMPATHY TOOL 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="7.5" cy="15.5" r="4.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m11 12 8-8M16 6l2.5 2.5M13.5 8.5 16 11" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Magic Phrase</div>
+      <p class="card-text">Chris Voss (FBI negotiator) identifies the single most effective empathy phrase in high-stakes conversation: <strong style="color:var(--cream)">"It seems like..."</strong> or <strong style="color:var(--cream)">"It sounds like..."</strong> followed by a label of the emotion you observe. "It seems like this has been really frustrating." "It sounds like you're feeling overlooked." This phrase does four things simultaneously: it acknowledges their emotional state, it doesn't make a definitive claim (leaving room to be corrected), it signals that you're paying attention to more than just their words, and it invites elaboration rather than demanding it.</p>
+      <span class="badge ba">Highest ROI Phrase</span>
+    </div>
+    <div class="card">
+      <div class="card-num">EMPATHY TOOL 02</div>
+      <span class="card-icon">🤫</span>
+      <div class="card-title">Strategic Silence</div>
+      <p class="card-text">The most underused empathy tool is silence — a comfortable, interested, non-threatening pause after someone finishes speaking. Most people rush to fill silence because discomfort drives them. Skilled empaths let silence breathe. The result: the speaker almost always adds the most important, most honest, most revealing thing they were going to say — in the space after they thought they'd finished. The silence communicates: "I'm here. I'm listening. There's no rush. I want to hear all of it."</p>
+      <span class="badge ba">Advanced Tool</span>
+    </div>
+    <div class="card">
+      <div class="card-num">EMPATHY TOOL 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M4 20 14 4l6 16z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M9 20h5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Empathy Map</div>
+      <p class="card-text">Before any high-stakes conversation, negotiation, or presentation — map the other person's experience: <strong style="color:var(--cream)">What do they THINK?</strong> (their beliefs and assumptions) <strong style="color:var(--cream)">What do they FEEL?</strong> (their emotional state) <strong style="color:var(--cream)">What do they SEE?</strong> (their context and environment) <strong style="color:var(--cream)">What do they SAY & DO?</strong> (their public behaviour) <strong style="color:var(--cream)">What do they FEAR?</strong> (their pain) <strong style="color:var(--cream)">What do they WANT?</strong> (their gain). Address all six and you will reach people that pure logic never can.</p>
+      <span class="badge bb">Preparation Tool</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 08: MASTER CHEATSHEET ─── -->
+<section class="section" id="cheatsheet">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 08</div>
+    <div class="s-meta">
+      <div class="s-cat">Quick Reference</div>
+      <h2 class="s-title">The Master<br/><span>Cheatsheet</span></h2>
+      <p class="s-desc">Every principle from this guide — one quick-reference table. Build it into your daily interactions and watch your understanding of people transform.</p>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Principle</th><th>The Action / Insight</th><th>Chapter</th><th>Type</th></tr></thead>
+      <tbody>
+        <tr><td class="num-cell">01</td><td class="name-cell">The Diagnostic Question</td><td>"Which of the 6 drivers is this behaviour serving?" — ask before judging anyone's action</td><td>6 Drivers</td><td><span class="badge ba">Always Ask</span></td></tr>
+        <tr><td class="num-cell">02</td><td class="name-cell">Safety Driver</td><td>Resistance to your logical proposal → address the risk, not the logic</td><td>6 Drivers</td><td><span class="badge ba">Application</span></td></tr>
+        <tr><td class="num-cell">03</td><td class="name-cell">Significance Driver</td><td>Someone "winning" an argument irrationally → give them a face-saving exit, they'll agree</td><td>6 Drivers</td><td><span class="badge ba">Application</span></td></tr>
+        <tr><td class="num-cell">04</td><td class="name-cell">Connection Driver</td><td>Inexplicable poor decisions → check if Connection driver is under threat</td><td>6 Drivers</td><td><span class="badge ba">Diagnostic</span></td></tr>
+        <tr><td class="num-cell">05</td><td class="name-cell">Growth Driver</td><td">Successful but miserable → their Growth driver is likely starved. Give them a challenge.</td><td>6 Drivers</td><td><span class="badge ba">Application</span></td></tr>
+        <tr><td class="num-cell">06</td><td class="name-cell">System 1 vs System 2</td><td>Most decisions are fast and unconscious. Don't assume logic governs anyone's choices.</td><td>Biases</td><td><span class="badge bd">Mindset</span></td></tr>
+        <tr><td class="num-cell">07</td><td class="name-cell">Confirmation Bias</td><td>Seek disconfirming evidence deliberately. Ask: "What would change my mind about this?"</td><td>Biases</td><td><span class="badge bd">Counter</span></td></tr>
+        <tr><td class="num-cell">08</td><td class="name-cell">Anchoring</td><td>In negotiations: always set the anchor first. Reframe from an arbitrary first number.</td><td>Biases</td><td><span class="badge ba">Application</span></td></tr>
+        <tr><td class="num-cell">09</td><td class="name-cell">Loss Aversion</td><td>Frame choices around potential losses when you want action. Losses motivate 2× more than gains.</td><td>Biases</td><td><span class="badge ba">Application</span></td></tr>
+        <tr><td class="num-cell">10</td><td class="name-cell">Status Quo Bias</td><td>"If starting fresh today, would I choose this?" — the question that breaks the status quo lock</td><td>Biases</td><td><span class="badge bd">Counter</span></td></tr>
+        <tr><td class="num-cell">11</td><td class="name-cell">Sunk Cost Fallacy</td><td>Decide only on forward-looking logic. The past investment is gone regardless of your decision.</td><td>Biases</td><td><span class="badge bd">Counter</span></td></tr>
+        <tr><td class="num-cell">12</td><td class="name-cell">Framing Effect</td><td>Restate every major decision in both gain and loss frames. Check if your preference changes.</td><td>Biases</td><td><span class="badge bd">Counter</span></td></tr>
+        <tr><td class="num-cell">13</td><td class="name-cell">Overconfidence Bias</td><td>More certainty = more suspicion warranted. Calibrate against your actual track record.</td><td>Biases</td><td><span class="badge bd">Counter</span></td></tr>
+        <tr><td class="num-cell">14</td><td class="name-cell">Ethical Influence Test</td><td>"If they knew exactly how I'm using this principle — would they feel helped or manipulated?"</td><td>Influence</td><td><span class="badge ba">Ethics Test</span></td></tr>
+        <tr><td class="num-cell">15</td><td class="name-cell">Reciprocity</td><td>Lead with genuine value. Give before asking. The obligation to reciprocate is real and powerful.</td><td>Influence</td><td><span class="badge ba">Application</span></td></tr>
+        <tr><td class="num-cell">16</td><td class="name-cell">Social Proof</td><td>Use specific, authentic testimonials from people similar to your audience — not generic numbers.</td><td>Influence</td><td><span class="badge ba">Application</span></td></tr>
+        <tr><td class="num-cell">17</td><td class="name-cell">Unity (7th Principle)</td><td>Genuine shared identity drives influence more powerfully than any other principle.</td><td>Influence</td><td><span class="badge ba">Most Powerful</span></td></tr>
+        <tr><td class="num-cell">18</td><td class="name-cell">Why People Lie</td><td>Lying = fear response. Address the fear beneath the lie, not the lie itself.</td><td>Lying</td><td><span class="badge bd">Insight</span></td></tr>
+        <tr><td class="num-cell">19</td><td class="name-cell">Create Safety for Truth</td><td>"What can I do to make it easier for you to share the full story?" — the honesty unlocking phrase</td><td>Lying</td><td><span class="badge ba">Phrase</span></td></tr>
+        <tr><td class="num-cell">20</td><td class="name-cell">Slippery Slope of Lying</td><td>Small lies desensitise. Catch the pattern early — small dishonesty is the only warning you get.</td><td>Lying</td><td><span class="badge bc">Warning</span></td></tr>
+        <tr><td class="num-cell">21</td><td class="name-cell">Avoidance Cost</td><td>Avoidance provides immediate relief and long-term amplification. Address early, always.</td><td>Lying</td><td><span class="badge bc">Warning</span></td></tr>
+        <tr><td class="num-cell">22</td><td class="name-cell">Amygdala Hijack</td><td>Lower your energy. Create space. Wait 20 minutes for the nervous system to reset before facts.</td><td>Overreact</td><td><span class="badge ba">Protocol</span></td></tr>
+        <tr><td class="num-cell">23</td><td class="name-cell">Identity Threat</td><td>Separate the identity from the behaviour: "I know you care deeply — this is about one instance."</td><td>Overreact</td><td><span class="badge ba">Phrase</span></td></tr>
+        <tr><td class="num-cell">24</td><td class="name-cell">Accumulated Grievance</td><td>Never say "you're overreacting." Say: "It sounds like this has been building — tell me everything."</td><td>Overreact</td><td><span class="badge ba">Response</span></td></tr>
+        <tr><td class="num-cell">25</td><td class="name-cell">Public vs Private Correction</td><td>Never correct, criticise, or challenge in public. The content cannot land when status is threatened.</td><td>Overreact</td><td><span class="badge bc">Rule</span></td></tr>
+        <tr><td class="num-cell">26</td><td class="name-cell">DARVO Recognition</td><td>You raised concern → now defending yourself? → original issue forgotten? = DARVO pattern.</td><td>Dark Patterns</td><td><span class="badge bc">Recognise</span></td></tr>
+        <tr><td class="num-cell">27</td><td class="name-cell">Gaslighting Signal</td><td>Feel confused/irrational WITH them, clear/sane WITHOUT them = gaslighting indicator.</td><td>Dark Patterns</td><td><span class="badge bc">Protect</span></td></tr>
+        <tr><td class="num-cell">28</td><td class="name-cell">The Magic Phrase</td><td>"It seems like..." / "It sounds like..." + emotion label. The most effective empathy opener.</td><td>Empathy</td><td><span class="badge ba">Daily Use</span></td></tr>
+        <tr><td class="num-cell">29</td><td class="name-cell">Strategic Silence</td><td>After someone finishes speaking — pause. The most important thing comes in the space after.</td><td>Empathy</td><td><span class="badge ba">Advanced</span></td></tr>
+        <tr><td class="num-cell">30</td><td class="name-cell">The Empathy Map</td><td>Before high-stakes conversations: map Think/Feel/See/Say-Do/Fear/Want for the other person.</td><td>Empathy</td><td><span class="badge bb">Preparation</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</section>
+
+<footer>
+  <div class="footer-logo">Decode Human Behaviour</div>
+  <p class="footer-sub">Psychology · Behavioural Science · Decision Science · 2025–2026 Edition</p>
+  <p class="footer-sub" style="color:var(--muted);font-size:13px;margin-top:8px">8 Complete Chapters · 30 Core Principles · Research from Kahneman & Tversky, Robert Cialdini, Abraham Maslow, Viktor Frankl, Chris Voss, Jonathan Haidt, Harvard Business School & Nature Neuroscience</p>
+  <p class="footer-tiny">Research compiled May 2026 · Inspired by Parallelogram · Built for students of the human mind</p>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:rgba(200,148,58,.28);margin-top:36px">"Know thyself — and in doing so, know everyone else." — Socrates</p>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const st=document.documentElement.scrollTop;
+  const sh=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('prog').style.width=(st/sh*100)+'%';
+});
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}});
+},{threshold:0.07});
+document.querySelectorAll('.card,.col-card,.driver-card,.bias-card,.influence-row,.decode-card,.s-stat').forEach(el=>{
+  el.style.opacity='0';el.style.transform='translateY(18px)';
+  el.style.transition='opacity .5s ease, transform .5s ease';
+  obs.observe(el);
+});
+</script>
+</body>
+</html>

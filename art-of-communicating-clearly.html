@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>The Art of Communicating Clearly</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07080a;--surface:#0e1014;--card:#13151a;--card2:#181b22;
+  --gold:#c8943a;--gold2:#e8b84b;--golddim:rgba(200,148,58,.13);
+  --cream:#f0e8d5;--muted:#5c5f68;--light:#9a9da8;
+  --border:rgba(200,148,58,.18);--rust:#b84532;
+  --teal:#2c7a72;--slate:#2a4a6b;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--cream);overflow-x:hidden;line-height:1.6}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.5}
+#prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--slate),var(--gold),var(--gold2));width:0%;z-index:2000;transition:width .08s}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:1500;display:flex;align-items:center;justify-content:space-between;padding:14px 48px;background:rgba(7,8,10,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(200,148,58,.1)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
+.nav-links{display:flex;gap:20px;list-style:none}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+@media(max-width:768px){.nav-links{display:none}.hero,.section,.toc-wrap,.quote-block,footer{padding-left:22px!important;padding-right:22px!important}nav{padding:14px 22px}}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px 64px 80px;position:relative;overflow:hidden}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 75% 55% at 92% 8%,rgba(42,74,107,.14) 0%,transparent 55%),radial-gradient(ellipse 55% 70% at 5% 90%,rgba(200,148,58,.1) 0%,transparent 60%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;opacity:.022;background-image:linear-gradient(rgba(200,148,58,1) 1px,transparent 1px),linear-gradient(90deg,rgba(200,148,58,1) 1px,transparent 1px);background-size:68px 68px}
+.hero-inner{position:relative;max-width:1100px}
+.hero-badge{display:inline-flex;align-items:center;background:rgba(42,74,107,.15);border:1px solid rgba(42,74,107,.4);padding:5px 16px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#7aaed8;margin-bottom:22px;opacity:0;animation:fadeup .7s .15s forwards}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:26px;display:flex;align-items:center;gap:14px;opacity:0;animation:fadeup .7s .2s forwards}
+.hero-tag::before{content:'';width:44px;height:1px;background:var(--gold);flex-shrink:0}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(46px,8vw,114px);font-weight:700;line-height:.88;letter-spacing:-4px;margin-bottom:10px;opacity:0;animation:fadeup .8s .4s forwards}
+.hero h1 span{color:var(--gold);font-style:italic}
+.hero h1 .sub{display:block;color:rgba(240,232,213,.2);font-size:clamp(22px,3.6vw,50px);font-weight:400;font-style:italic;letter-spacing:-1px;margin-top:8px}
+.hero-desc{font-size:clamp(15px,1.9vw,18px);color:var(--light);max-width:600px;margin:34px 0 50px;font-weight:300;line-height:1.78;opacity:0;animation:fadeup .8s .6s forwards}
+.hero-stats{display:flex;gap:0;border:1px solid var(--border);width:fit-content;opacity:0;animation:fadeup .8s .8s forwards;flex-wrap:wrap}
+.hstat{padding:18px 32px;border-right:1px solid var(--border);text-align:center}
+.hstat:last-child{border-right:none}
+.hstat-n{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.hstat-l{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-top:4px}
+.scroll-hint{position:absolute;bottom:40px;left:64px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:10px;animation:pulse 2.5s infinite}
+.scroll-hint::before{content:'';width:1px;height:38px;background:var(--gold);opacity:.35}
+@keyframes fadeup{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+
+.toc-wrap{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:56px 64px}
+.toc-inner{max-width:1100px;margin:0 auto}
+.toc-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:36px;display:flex;align-items:center;gap:12px}
+.toc-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px}
+.toc-item{background:var(--card);padding:18px 22px;display:flex;align-items:flex-start;gap:14px;cursor:pointer;transition:background .2s,border-color .2s;border:1px solid transparent;text-decoration:none}
+.toc-item:hover{background:var(--card2);border-color:var(--border)}
+.toc-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);opacity:.55;flex-shrink:0;min-width:26px;margin-top:2px}
+.toc-name{font-size:13.5px;color:var(--light);font-weight:400;transition:color .2s;line-height:1.4}
+.toc-item:hover .toc-name{color:var(--cream)}
+
+.section{padding:96px 64px;position:relative}
+.section-alt{background:var(--surface)}
+.s-inner{max-width:1100px;margin:0 auto}
+.s-head{display:grid;grid-template-columns:90px 1fr;gap:32px;align-items:start;margin-bottom:60px;padding-bottom:44px;border-bottom:1px solid var(--border)}
+.s-num{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;padding-top:8px}
+.s-meta{display:flex;flex-direction:column;gap:10px}
+.s-cat{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:3px;color:var(--rust);text-transform:uppercase}
+.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,60px);font-weight:700;line-height:.92;letter-spacing:-1.5px;color:var(--cream)}
+.s-title span{color:var(--gold);font-style:italic}
+.s-desc{font-size:15.5px;color:var(--light);max-width:660px;font-weight:300;line-height:1.78;margin-top:6px}
+@media(max-width:600px){.s-head{grid-template-columns:1fr;gap:14px}}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:2px}
+@media(max-width:600px){.cards{grid-template-columns:1fr}}
+.card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .25s,background .25s;position:relative;overflow:hidden}
+.card:hover{border-color:var(--border);background:var(--card2)}
+.card::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:linear-gradient(180deg,var(--gold),var(--slate));transition:height .35s}
+.card:hover::before{height:100%}
+.card-num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);opacity:.45;margin-bottom:14px}
+.card-icon{font-size:26px;margin-bottom:11px;display:block}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:700;color:var(--cream);letter-spacing:-.4px;margin-bottom:11px;line-height:1.15}
+.card-sec{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin:16px 0 7px}
+.card-text{font-size:13.5px;color:var(--light);line-height:1.72;font-weight:300}
+.psych{background:rgba(200,148,58,.06);border-left:2px solid var(--gold);padding:15px 18px;margin-top:18px}
+.psych .card-sec{margin-top:0}
+.scibox{background:rgba(42,74,107,.07);border-left:2px solid rgba(42,74,107,.5);padding:15px 18px;margin-top:14px}
+.scibox .card-sec{color:#7aaed8}
+.badge{display:inline-flex;align-items:center;padding:4px 11px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;margin-top:14px}
+.ba{background:rgba(200,148,58,.11);color:var(--gold);border:1px solid var(--border)}
+.bb{background:rgba(44,122,114,.12);color:#4aaa9e;border:1px solid rgba(44,122,114,.3)}
+.bc{background:rgba(184,69,50,.11);color:#d46040;border:1px solid rgba(184,69,50,.28)}
+.bd{background:rgba(42,74,107,.12);color:#7aaed8;border:1px solid rgba(42,74,107,.3)}
+
+.quote-block{background:var(--surface);padding:72px 64px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center}
+.quote-text{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3.2vw,36px);font-weight:600;font-style:italic;color:var(--cream);max-width:880px;margin:0 auto;line-height:1.4}
+.quote-text em{color:var(--gold)}
+.quote-attr{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:24px}
+
+.stat-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:2px;margin:44px 0}
+.s-stat{background:var(--card);padding:26px 22px;text-align:center;border:1px solid transparent;transition:border-color .2s}
+.s-stat:hover{border-color:var(--border)}
+.s-stat-n{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.s-stat-l{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-top:5px}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}}
+.col-card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .2s}
+.col-card:hover{border-color:var(--border)}
+.col-icon{font-size:30px;margin-bottom:14px;display:block}
+.col-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:11px;letter-spacing:-.4px}
+.col-text{font-size:13.5px;color:var(--light);line-height:1.75;font-weight:300}
+.col-text strong{color:var(--cream);font-weight:500}
+
+/* PYRAMID VISUAL */
+.pyramid-visual{background:var(--card);border:1px solid var(--border);padding:36px;margin:36px 0}
+.pyramid-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:24px}
+.pyr-levels{display:flex;flex-direction:column;gap:2px}
+.pyr-level{display:grid;grid-template-columns:auto 1fr;gap:0;background:var(--card2);border:1px solid transparent;transition:border-color .2s;position:relative;overflow:hidden}
+.pyr-level:hover{border-color:var(--border)}
+.pyr-level-label{background:var(--golddim);padding:20px 24px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;min-width:100px;text-align:center}
+.pyr-level-body{padding:20px 26px}
+.pyr-level-title{font-weight:600;color:var(--cream);font-size:14.5px;margin-bottom:5px}
+.pyr-level-text{font-size:13px;color:var(--light);line-height:1.65;font-weight:300}
+
+/* SCQA BLOCKS */
+.scqa-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin:36px 0}
+@media(max-width:640px){.scqa-grid{grid-template-columns:1fr 1fr}}
+.scqa-block{background:var(--card);padding:26px 18px;border:1px solid transparent;transition:border-color .2s,background .2s;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;position:relative}
+.scqa-block:hover{border-color:var(--border);background:var(--card2)}
+.scqa-letter{font-family:'Cormorant Garamond',serif;font-size:60px;font-weight:700;color:var(--gold);opacity:.15;line-height:1;position:absolute;top:8px;right:10px}
+.scqa-label{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;color:var(--gold);text-transform:uppercase}
+.scqa-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--cream)}
+.scqa-text{font-size:12.5px;color:var(--light);line-height:1.5;font-weight:300}
+.scqa-example{font-size:11.5px;color:var(--light);font-style:italic;margin-top:8px;padding:8px 10px;background:rgba(200,148,58,.05);border-left:2px solid rgba(200,148,58,.25);line-height:1.5;text-align:left;width:100%}
+
+/* MESSAGE FORMULA */
+.msg-formula{display:flex;flex-direction:column;gap:2px;margin:36px 0}
+.msg-row{display:grid;grid-template-columns:80px 1fr;gap:0;background:var(--card);border:1px solid transparent;transition:border-color .2s}
+.msg-row:hover{border-color:var(--border)}
+.msg-num{background:var(--golddim);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--gold)}
+.msg-body{padding:18px 24px}
+.msg-title{font-weight:600;color:var(--cream);font-size:14.5px;margin-bottom:4px;display:flex;align-items:center;gap:10px}
+.msg-type{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--gold);background:var(--golddim);padding:3px 8px;border-radius:1px;text-transform:uppercase}
+.msg-text{font-size:13px;color:var(--light);line-height:1.65;font-weight:300}
+
+/* COMPARE */
+.cmp-wrap{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:36px 0}
+@media(max-width:640px){.cmp-wrap{grid-template-columns:1fr}}
+.cmp-side{background:var(--card);padding:28px 26px}
+.cmp-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.cmp-head.bad{color:#d46040}
+.cmp-head.good{color:#4aaa9e}
+.cmp-row{display:flex;gap:10px;margin-bottom:13px;font-size:13px;color:var(--light);line-height:1.6;font-weight:300}
+.cmp-row::before{content:'→';color:var(--gold);flex-shrink:0;font-size:11px;margin-top:3px}
+
+/* DIFFICULT CONV STEPS */
+.conv-steps{display:flex;flex-direction:column;gap:2px;margin:36px 0}
+.conv-step{display:grid;grid-template-columns:64px 1fr;gap:0;background:var(--card);border:1px solid transparent;transition:border-color .2s}
+.conv-step:hover{border-color:var(--border)}
+.conv-step-icon{background:var(--golddim);display:flex;align-items:center;justify-content:center;font-size:22px}
+.conv-step-body{padding:18px 24px}
+.conv-step-title{font-weight:600;color:var(--cream);font-size:14.5px;margin-bottom:4px}
+.conv-step-text{font-size:13px;color:var(--light);line-height:1.65;font-weight:300}
+.conv-step-phrase{font-size:12.5px;color:var(--gold);font-style:italic;margin-top:8px;line-height:1.5}
+
+/* BODY LANGUAGE */
+.bl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:2px;margin:36px 0}
+.bl-card{background:var(--card);padding:24px;border:1px solid transparent;transition:border-color .2s,background .2s}
+.bl-card:hover{border-color:var(--border);background:var(--card2)}
+.bl-icon{font-size:32px;margin-bottom:10px;display:block}
+.bl-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--cream);margin-bottom:6px;letter-spacing:-.3px}
+.bl-text{font-size:13px;color:var(--light);line-height:1.65;font-weight:300}
+.bl-signal{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-top:10px;padding-top:10px;border-top:1px solid rgba(200,148,58,.12)}
+
+/* ALERT / TIP */
+.alert{background:rgba(184,69,50,.07);border:1px solid rgba(184,69,50,.24);padding:22px 26px;margin:28px 0}
+.alert-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:var(--rust);text-transform:uppercase;margin-bottom:9px}
+.alert-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.alert-text strong{color:var(--cream);font-weight:500}
+.tip{background:rgba(44,122,114,.07);border:1px solid rgba(44,122,114,.24);padding:22px 26px;margin:28px 0}
+.tip-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:#4aaa9e;text-transform:uppercase;margin-bottom:9px}
+.tip-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.tip-text strong{color:var(--cream);font-weight:500}
+
+.table-wrap{overflow-x:auto;margin-top:40px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--card2);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);padding:13px 16px;text-align:left;border-bottom:1px solid var(--border)}
+tbody tr{border-bottom:1px solid rgba(200,148,58,.07);transition:background .15s}
+tbody tr:hover{background:var(--card)}
+tbody td{padding:13px 16px;color:var(--light);vertical-align:top;line-height:1.5}
+.num-cell{font-family:'JetBrains Mono',monospace;color:var(--gold);opacity:.55;font-size:11px}
+.name-cell{font-weight:500;color:var(--cream)}
+
+footer{background:var(--bg);border-top:1px solid var(--border);padding:56px 64px 72px;text-align:center}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;letter-spacing:2px;color:var(--gold);margin-bottom:10px}
+.footer-sub{font-size:13.5px;color:var(--muted);margin-bottom:6px}
+.footer-tiny{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(92,95,104,.45);text-transform:uppercase;margin-top:26px}
+
+.pg-hero-art{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:.55;z-index:0}
+.pg-hero-art svg{width:100%;height:100%;display:block}
+[class*="icon"] svg.pg-icon{width:1em;height:1em;display:inline-block;vertical-align:-0.15em}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav>
+  <div class="nav-logo">Communicate Clearly</div>
+  <ul class="nav-links">
+    <li><a href="#pyramid">Pyramid</a></li>
+    <li><a href="#silence">Silence</a></li>
+    <li><a href="#messages">Messages</a></li>
+    <li><a href="#difficult">Difficult Convos</a></li>
+    <li><a href="#listening">Deep Listening</a></li>
+    <li><a href="#bodylang">Body Language</a></li>
+    <li><a href="#adaptation">Adaptation</a></li>
+    <li><a href="#cheatsheet">Cheatsheet</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero"><div class="pg-hero-art" aria-hidden="true"><svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><path d="M579.5 210.2 A231.9 231.9 0 0 1 909.6 61.5" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M664.6 247.0 A124.6 124.6 0 0 1 551.4 320.9" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M147.7 342.1 A160.7 160.7 0 0 1 1.7 416.6" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><line x1="421.2" y1="49.3" x2="492.1" y2="67.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="875.6" y1="250.9" x2="816.1" y2="246.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="473.5" y1="143.5" x2="501.2" y2="201.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="473.5" y1="143.5" x2="492.1" y2="67.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="867.1" y1="167.5" x2="869.1" y2="178.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="770.1" y1="119.8" x2="813.7" y2="187.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="867.1" y1="167.5" x2="770.1" y2="119.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="492.1" y1="67.8" x2="586.5" y2="52.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="473.5" y1="143.5" x2="586.5" y2="52.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="323.1" y1="226.9" x2="252.4" y2="232.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="323.1" y1="226.9" x2="200.2" y2="227.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="869.1" y1="178.6" x2="813.7" y2="187.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="813.7" y1="187.3" x2="816.1" y2="246.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="252.4" y1="232.8" x2="200.2" y2="227.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><circle cx="421.2" cy="49.3" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="421.2" cy="49.3" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="875.6" cy="250.9" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="473.5" cy="143.5" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="492.1" cy="67.8" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="501.2" cy="201.5" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="867.1" cy="167.5" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="867.1" cy="167.5" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="770.1" cy="119.8" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="770.1" cy="119.8" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="869.1" cy="178.6" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="586.5" cy="52.6" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="323.1" cy="226.9" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="813.7" cy="187.3" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="816.1" cy="246.4" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="816.1" cy="246.4" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="252.4" cy="232.8" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="252.4" cy="232.8" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="200.2" cy="227.9" r="1.8" fill="#c8943a" opacity="0.50"/></svg></div>
+  <div class="hero-glow"></div><div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">Social Skills · Communication Science · Rhetoric · 2025–26</div>
+    <div class="hero-tag">The Complete Communication Research Guide · 2025–26 Edition</div>
+    <h1>The Art of<br/><span>Communicating</span><span class="sub">Clearly</span></h1>
+    <p class="hero-desc">The science, frameworks, and hard-won principles behind communication that actually lands — from McKinsey's Pyramid Principle to the neuroscience of silence, from messages that get replied to, to difficult conversations that don't destroy relationships. 8 deep chapters. Every word counts.</p>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-n">86%</span><span class="hstat-l">of workplace failures are attributed to poor communication (PMI)</span></div>
+      <div class="hstat"><span class="hstat-n">Clarity</span><span class="hstat-l">is a professional superpower — the rarest skill in most organisations</span></div>
+      <div class="hstat"><span class="hstat-n">3sec</span><span class="hstat-l">strategic pause activates the default mode network — signals genuine thinking</span></div>
+      <div class="hstat"><span class="hstat-n">Minto</span><span class="hstat-l">Pyramid Principle — Barbara Minto, McKinsey 1960s, still the global standard</span></div>
+    </div>
+  </div>
+  <div class="scroll-hint">Scroll to begin</div>
+</section>
+
+<!-- ─── TOC ─── -->
+<div class="toc-wrap">
+  <div class="toc-inner">
+    <div class="toc-label">Everything Inside This Guide</div>
+    <div class="toc-grid">
+      <a href="#pyramid" class="toc-item"><span class="toc-num">01</span><span class="toc-name">The Pyramid Principle — Start with the answer, not the context (used by McKinsey)</span></a>
+      <a href="#silence" class="toc-item"><span class="toc-num">02</span><span class="toc-name">Silence as Power — Why most people talk too much and say too little</span></a>
+      <a href="#messages" class="toc-item"><span class="toc-num">03</span><span class="toc-name">Write Messages That Get Replied To — Structure, tone & length formula</span></a>
+      <a href="#difficult" class="toc-item"><span class="toc-num">04</span><span class="toc-name">Difficult Conversations — Without losing the relationship or backing down</span></a>
+      <a href="#listening" class="toc-item"><span class="toc-num">05</span><span class="toc-name">Deep Listening — The most underrated communication skill in existence</span></a>
+      <a href="#bodylang" class="toc-item"><span class="toc-num">06</span><span class="toc-name">Body Language — The 55% of communication that happens before you speak</span></a>
+      <a href="#adaptation" class="toc-item"><span class="toc-num">07</span><span class="toc-name">Communication Adaptation — How to adjust your style to every person</span></a>
+      <a href="#cheatsheet" class="toc-item"><span class="toc-num">08</span><span class="toc-name">The Master Cheatsheet — Every principle, one table</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- ─── 01: PYRAMID PRINCIPLE ─── -->
+<section class="section" id="pyramid">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 01</div>
+    <div class="s-meta">
+      <div class="s-cat">Barbara Minto · McKinsey & Company · 1960s – 2026</div>
+      <h2 class="s-title">The <span>Pyramid</span><br/>Principle</h2>
+      <p class="s-desc">Created by Barbara Minto — the first female post-MBA hire at McKinsey — in the 1960s, the Pyramid Principle has become the global standard for executive communication. It inverts how most people naturally communicate: instead of building to your conclusion, you lead with it. Everything else supports it.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">10sec</span><span class="s-stat-l">executive attention spans — don't make your point in the first 10 seconds and you've lost them</span></div>
+    <div class="s-stat"><span class="s-stat-n">Slide 1</span><span class="s-stat-l">the recommendation must be visible on slide 1 — not slide 45 — or executives won't see it</span></div>
+    <div class="s-stat"><span class="s-stat-n">MECE</span><span class="s-stat-l">Mutually Exclusive, Collectively Exhaustive — the logic behind every pyramid argument</span></div>
+    <div class="s-stat"><span class="s-stat-n">Global</span><span class="s-stat-l">Standard: McKinsey, Bain, BCG, and most Fortune 500 communication training programmes</span></div>
+  </div>
+
+  <!-- The Pyramid Structure Visual -->
+  <div class="pyramid-visual">
+    <div class="pyramid-title">The Pyramid — How to Structure Any Communication</div>
+    <div class="pyr-levels">
+      <div class="pyr-level">
+        <div class="pyr-level-label">LEVEL 1<br/>The Answer</div>
+        <div class="pyr-level-body">
+          <div class="pyr-level-title">🔺 Your Main Point — State It First</div>
+          <p class="pyr-level-text">Your recommendation, conclusion, or "so what" — delivered in the opening sentence. Not at the end after 10 slides of context. Not after explaining your methodology. First. This is the single idea you want your audience to take away if they stop reading or listening after 30 seconds. Make it specific. Make it decisive. The Pyramid Principle exists because executives want your destination, not your analytical journey.</p>
+        </div>
+      </div>
+      <div class="pyr-level">
+        <div class="pyr-level-label">LEVEL 2<br/>Key Arguments</div>
+        <div class="pyr-level-body">
+          <div class="pyr-level-title">📊 3 Supporting Arguments — Why Your Answer Is Right</div>
+          <p class="pyr-level-text">Three key reasons that independently support your main point. These must be MECE — Mutually Exclusive (no overlap between them) and Collectively Exhaustive (together they cover the complete argument). The rule of three: executives can hold three arguments in working memory simultaneously. More than three forces cognitive load that works against comprehension. Each argument should stand on its own merits while also reinforcing the central conclusion.</p>
+        </div>
+      </div>
+      <div class="pyr-level">
+        <div class="pyr-level-label">LEVEL 3<br/>Evidence</div>
+        <div class="pyr-level-body">
+          <div class="pyr-level-title">📂 Data, Facts & Analysis — Proof That Each Argument Holds</div>
+          <p class="pyr-level-text">The specific data, research, case studies, and analysis that support each Level 2 argument. This is the base of the pyramid — the most detailed and the most dispensable if your audience is already convinced by Levels 1 and 2. Structure it so that sceptical executives can drill down to the evidence without all audiences being dragged through it. You think bottom-up. You present top-down.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCQA Framework -->
+  <p style="font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:var(--gold);margin-bottom:16px">The SCQA Framework — How to Open Any Communication</p>
+  <div class="scqa-grid">
+    <div class="scqa-block">
+      <div class="scqa-letter">S</div>
+      <div class="scqa-label">Step 1</div>
+      <div class="scqa-title">Situation</div>
+      <p class="scqa-text">The current context — something your audience already knows and agrees with. This establishes shared ground.</p>
+      <div class="scqa-example">"We've grown 20% annually in North America for five years."</div>
+    </div>
+    <div class="scqa-block">
+      <div class="scqa-letter">C</div>
+      <div class="scqa-label">Step 2</div>
+      <div class="scqa-title">Complication</div>
+      <p class="scqa-text">What changed, what's wrong, or what's at stake. The reason this conversation needs to happen now.</p>
+      <div class="scqa-example">"However, North American growth is slowing to 5% as we saturate our core markets."</div>
+    </div>
+    <div class="scqa-block">
+      <div class="scqa-letter">Q</div>
+      <div class="scqa-label">Step 3</div>
+      <div class="scqa-title">Question</div>
+      <p class="scqa-text">The question that naturally arises from the complication. This frames the problem space precisely.</p>
+      <div class="scqa-example">"So — how do we sustain growth over the next 3 years?"</div>
+    </div>
+    <div class="scqa-block">
+      <div class="scqa-letter">A</div>
+      <div class="scqa-label">Step 4</div>
+      <div class="scqa-title">Answer</div>
+      <p class="scqa-text">Your recommendation — the top of the pyramid. Delivered now, before the supporting argument.</p>
+      <div class="scqa-example">"We recommend entering the European market by Q2, starting with Germany and France."</div>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">PYRAMID PRINCIPLE 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M20 11a8 8 0 0 0-14.9-3.5M4 13a8 8 0 0 0 14.9 3.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 4v4h4M19 20v-4h-4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Bottom-Up Thinking, Top-Down Presenting</div>
+      <p class="card-text">The Pyramid Principle describes a fundamental asymmetry in how thinking and communication work. You think from the bottom up: gather data → run analysis → identify patterns → reach conclusion. That's how problems get solved. But that is not how you should present solutions. You present from the top down: conclusion first → supporting arguments → evidence. Executives don't want to follow your analytical journey. They want your destination — and they want it in the first sentence.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Working Memory Reason</div>
+        <p class="card-text">When you start with context and build to a conclusion, you ask your audience to hold accumulating information in working memory while waiting for the point. Working memory is limited and fatigues quickly. When you lead with the answer, subsequent information is processed as confirmation — far less cognitively demanding. Comprehension and retention improve significantly.</p>
+      </div>
+      <span class="badge ba">Core Insight</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PYRAMID PRINCIPLE 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 3h9l5 5v13H5z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M14 3v5h5M8 12h8M8 16h8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Apply It at Every Level</div>
+      <p class="card-text">The beauty of the Pyramid Principle is that it works at every level simultaneously. Your entire presentation can follow it. Each section within your presentation can follow it. Each individual slide can follow it. Each paragraph of a written document can follow it. Each email you write can follow it. Every idea should ladder up neatly to the one above it. When you apply the principle consistently at all levels, readers can exit at any depth and still understand your main argument. Their level of engagement determines how deep they go — not your structure.</p>
+      <span class="badge ba">Universal Application</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PYRAMID PRINCIPLE 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M3 8V6a1 1 0 0 1 1-1h5l2 2h9a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">MECE — The Logic Behind the Pyramid</div>
+      <p class="card-text">MECE (Mutually Exclusive, Collectively Exhaustive) is the quality standard for every level of the pyramid. <strong style="color:var(--cream)">Mutually Exclusive:</strong> your supporting arguments don't overlap. Each one makes a distinct contribution to the main point — if you removed it, something unique would be missing. <strong style="color:var(--cream)">Collectively Exhaustive:</strong> together, your arguments cover the complete case. No significant supporting evidence has been left out. MECE arguments create the logical completeness that makes your pyramid persuasive rather than just organised.</p>
+      <span class="badge ba">Logic Standard</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PYRAMID IN PRACTICE</div>
+      <span class="card-icon">📧</span>
+      <div class="card-title">The Pyramid Email — Before and After</div>
+      <div class="card-sec">❌ How Most People Write Emails</div>
+      <p class="card-text">"I've been looking into the Q3 results and analysing the data from the marketing campaigns we ran over the last quarter. After reviewing the performance metrics, conversion rates, and comparing against industry benchmarks, I wanted to share some thoughts about what we might want to consider going forward..."<br/><br/><em>(Reader bails before the actual point)</em></p>
+      <div class="card-sec">✅ The Pyramid Email</div>
+      <p class="card-text">"<strong style="color:var(--cream)">Recommendation: Double the budget on email campaigns, cut paid social by 40%.</strong> Q3 data shows email delivered 3.2× the conversion rate of paid social at 40% lower cost. Three reasons: [1] [2] [3]. Full analysis attached. Happy to discuss on Thursday."<br/><br/><em>(Point in sentence one. Busy executive keeps reading.)</em></p>
+      <span class="badge ba">Before & After</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 1 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"Most presentations fail not because the ideas are bad, but because the structure is confusing. Lead with the answer. <em>Everything else is supporting evidence.</em>"</p>
+  <p class="quote-attr">— Barbara Minto · The Pyramid Principle · McKinsey & Company · First Female MBA Hire</p>
+</div>
+
+<!-- ─── 02: SILENCE AS POWER ─── -->
+<section class="section section-alt" id="silence">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 02</div>
+    <div class="s-meta">
+      <div class="s-cat">Neuroscience · Default Mode Network · PMC Research 2025</div>
+      <h2 class="s-title">Silence as<br/><span>Power</span></h2>
+      <p class="s-desc">Research consistently shows that the latter group — those who speak less, more thoughtfully — is perceived as more authoritative and competent. This perception advantage stems from the "scarcity principle": when someone speaks less frequently but more thoughtfully, their words carry greater weight. Overtalking, by contrast, undermines authority. Here's the neuroscience.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">3sec</span><span class="s-stat-l">pause after someone finishes speaking signals genuine processing — not weakness</span></div>
+    <div class="s-stat"><span class="s-stat-n">Default</span><span class="s-stat-l">mode network activates in silence — the brain's empathy and insight system</span></div>
+    <div class="s-stat"><span class="s-stat-n">Scarcity</span><span class="s-stat-l">Principle: rare words carry more value. Verbal dilution kills authority.</span></div>
+    <div class="s-stat"><span class="s-stat-n">Silence</span><span class="s-stat-l">is never neutral — it is always communicating something (Irvin Yalom)</span></div>
+  </div>
+
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8A3.5 3.5 0 0 0 8 18a3 3 0 0 0 3-2.5V6a2 2 0 0 0-2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 1 5.8A3.5 3.5 0 0 1 16 18a3 3 0 0 1-3-2.5V6a2 2 0 0 1 2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">The Neuroscience of Silence</div>
+      <p class="col-text">
+        Neuroscience research has shown that moments of silence allow the default mode network (DMN) of the brain to activate, which is critical for introspection, empathy, and memory consolidation. In conversation, a well-timed silence gives both parties the cognitive space to move beyond reactive, surface-level responses.<br/><br/>
+        <strong>The auditory cortex remains engaged during silence.</strong> Social cognition circuits search for meaning in the void. This heightened awareness can make the subsequent words far more impactful — because the silence has prepared the listener to receive them at full attention.<br/><br/>
+        A three-second pause after an employee finishes speaking signals that you are genuinely processing their words, not just waiting for your turn to talk. That small silence communicates respect and attentiveness more powerfully than a hurried "I understand."
+      </p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 3v18M8 21h8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 6h14M5 6l-3 6a3.2 3.2 0 0 0 6 0zM19 6l-3 6a3.2 3.2 0 0 0 6 0z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">Why Most People Talk Too Much</div>
+      <p class="col-text">
+        Communication research reveals two primary mechanisms through which excessive talking diminishes perceived confidence.<br/><br/>
+        <strong>First, it signals insecurity</strong> — a need to fill silence with words to prove value or knowledge. The person who cannot tolerate a pause is perceived as anxious about their own credibility.<br/><br/>
+        <strong>Second, it causes verbal dilution</strong> — important points become lost in a sea of less relevant information. When everything is said, nothing is heard. When key ideas are surrounded by filler, they carry no more weight than the filler does.<br/><br/>
+        <strong>Third, it prevents listening.</strong> Overtalking creates an impression of self-centeredness rather than thoughtful engagement. The most respected communicators are also, almost universally, the most attentive listeners.
+      </p>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">SILENCE TOOL 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="13" r="8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 9v4l3 2M9.5 2.5h5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Strategic 3-Second Pause</div>
+      <div class="card-sec">Before Every Important Statement</div>
+      <p class="card-text">Before making your most important point in any conversation, presentation, or negotiation — pause for 3 full seconds. This serves four functions: it signals that what follows is significant (a prime), it allows residual noise in the room to settle, it activates the listener's attention at precisely the moment you need it, and it gives you one final second to ensure your words are exactly what you intend. The 3-second pause is one of the most reliably effective public speaking tools identified by communication researchers — and one of the most commonly neglected.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 In Sales & Negotiation</div>
+        <p class="card-text">The silence after making a proposal in negotiation is one of the most powerful moments available to any communicator. Research in negotiation science shows that the first person to speak after an offer is made typically concedes. The ability to sit comfortably in silence — to resist the urge to fill the void — is worth thousands of pounds per negotiation.</p>
+      </div>
+      <span class="badge ba">High-Value Technique</span>
+    </div>
+    <div class="card">
+      <div class="card-num">SILENCE TOOL 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="1.4" fill="#c8943a"/></svg></span>
+      <div class="card-title">Speak to Be Heard — Not to Be Busy</div>
+      <div class="card-sec">The Edit Before You Speak</div>
+      <p class="card-text">Before speaking in any meeting or important conversation, apply a rapid mental filter: <strong style="color:var(--cream)">"Would the room be poorer without this contribution?"</strong> If the answer is unclear — don't say it yet. The goal is not to say less overall. It is to say less non-essential content so that your essential contributions are clearly distinguished from background noise. Leaders who apply this filter consistently are perceived as more decisive, more thoughtful, and more authoritative — not because they're smarter, but because their signal-to-noise ratio is better.</p>
+      <span class="badge ba">Daily Practice</span>
+    </div>
+    <div class="card">
+      <div class="card-num">SILENCE TOOL 03</div>
+      <span class="card-icon">🤫</span>
+      <div class="card-title">The Silence That Extracts Truth</div>
+      <div class="card-sec">After a Question, Wait Fully</div>
+      <p class="card-text">After asking a question — especially a direct or potentially difficult one — wait. Don't rephrase it. Don't soften it. Don't add context. Wait. Research on interviewing and therapeutic communication consistently shows that the most valuable, most honest, most revealing information comes in the space after the person believed they had finished. The first answer is often the managed, processed one. The answer that comes in the silence after it is closer to the truth. The silence communicates: "I'm still here. There's more. I want to hear all of it."</p>
+      <span class="badge bb">Interrogation Insight</span>
+    </div>
+    <div class="card">
+      <div class="card-num">SILENCE MYTH</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 5l14 14M19 5 5 19" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">What Silence Is NOT</div>
+      <div class="card-sec">The Confidence Reframe</div>
+      <p class="card-text">In modern management practice, silence is often misunderstood as hesitation or lack of preparation. This interpretation is precisely backwards. Strategic pauses actually accelerate decision-making by creating cognitive space for reflection. When a leader remains silent after posing a challenging question, team members are compelled to think more deeply before responding — leading to higher-quality contributions rather than knee-jerk reactions. Silence is not the absence of communication. It is active communication — often the most precise and powerful kind available.</p>
+      <span class="badge bd">Reframe</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 2 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"Silence is never silent; it is behaviour — and like all other behaviour, it has meaning. <em>The question is never whether to use silence, but whether you're using it consciously.</em>"</p>
+  <p class="quote-attr">— Irvin Yalom · Psychiatrist · Stanford University School of Medicine</p>
+</div>
+
+<!-- ─── 03: MESSAGES ─── -->
+<section class="section" id="messages">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 03</div>
+    <div class="s-meta">
+      <div class="s-cat">Written Communication · Email Science · Digital Clarity</div>
+      <h2 class="s-title">Write Messages<br/>That <span>Get Replied To</span></h2>
+      <p class="s-desc">Most professional messages fail not because of poor intent but because of poor structure. The reader doesn't know what's being asked, when a response is needed, or why this message deserves priority over the other 147 they received today. The formula that changes this is learnable in one sitting and applicable immediately.</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 5l14 14M19 5 5 19" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">Why Most Messages Don't Get Replies</div>
+      <p class="col-text">
+        <strong>No clear ask.</strong> The message provides information but never explicitly states what the reader is supposed to do with it. They read it, feel mild concern, and move on.<br/><br/>
+        <strong>Buried in context.</strong> The request appears in paragraph 4 after extensive background. The reader loses focus before reaching it.<br/><br/>
+        <strong>No deadline.</strong> "When you get a chance" signals low priority. Messages without deadlines get perpetually de-prioritised.<br/><br/>
+        <strong>Too long for the ask.</strong> A simple scheduling request delivered in 300 words signals poor judgment and disrespect for the reader's time.<br/><br/>
+        <strong>Wrong channel.</strong> Urgent requests sent by email, strategic discussions in WhatsApp, sensitive feedback in Slack. Channel mismatch is itself a communication failure.
+      </p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m7.5 12.5 3 3 6-6.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">The Formula for a Message That Gets Read and Replied To</div>
+      <p class="col-text">
+        <strong>Subject line as executive summary.</strong> The subject line should convey the complete message if nothing else is read: "Decision needed: Q4 budget by Friday" not "Some thoughts on Q4."<br/><br/>
+        <strong>Ask in the first sentence.</strong> State what you need before you explain why you need it. Most emails should open with: "I'm writing to ask [specific thing] by [specific date]."<br/><br/>
+        <strong>Context in 2–3 sentences maximum.</strong> Only what the reader needs to say yes or no. Everything else is noise.<br/><br/>
+        <strong>One ask per message.</strong> Multiple asks in a single message are routinely ignored — because the easiest response is to address none of them. One clear, specific ask per message.<br/><br/>
+        <strong>Explicit deadline.</strong> "By end of Wednesday" not "whenever you have a moment."
+      </p>
+    </div>
+  </div>
+
+  <p style="font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:var(--gold);margin:28px 0 16px">The Message Structure Formula — By Type</p>
+  <div class="msg-formula">
+    <div class="msg-row">
+      <div class="msg-num">1</div>
+      <div class="msg-body">
+        <div class="msg-title">📬 The Request Message <span class="msg-type">Any Medium</span></div>
+        <p class="msg-text">Open with the specific ask. One sentence. Then give the minimum context needed to say yes or no (2–3 sentences). Then state the deadline explicitly. Then your name. Total: 5–7 sentences maximum. If it takes more than 7 sentences, you haven't been clear enough about what you actually need.</p>
+        <p style="font-size:12.5px;color:var(--gold);font-style:italic;margin-top:8px;line-height:1.5">"Could you approve the attached proposal by Thursday 5PM? It's the Q4 content plan we discussed — no changes since our last conversation, just needs your sign-off before I brief the team on Friday morning. Let me know if you have any questions."</p>
+      </div>
+    </div>
+    <div class="msg-row">
+      <div class="msg-num">2</div>
+      <div class="msg-body">
+        <div class="msg-title">💡 The Update Message <span class="msg-type">Email / Slack</span></div>
+        <p class="msg-text">Lead with the single most important thing the reader needs to know. Then status (on track / delayed / blocked). Then what you need from them — or explicitly state "no action needed." The cardinal sin of update messages: burying a blocker in paragraph 3 under good news. Always lead with what most affects the reader's decisions.</p>
+        <p style="font-size:12.5px;color:var(--gold);font-style:italic;margin-top:8px;line-height:1.5">"Quick update: the launch is on track for Monday. One thing to note — the app store approval is still pending (submitted Tuesday). No action needed from you — I'll escalate if it isn't resolved by tomorrow afternoon."</p>
+      </div>
+    </div>
+    <div class="msg-row">
+      <div class="msg-num">3</div>
+      <div class="msg-body">
+        <div class="msg-title">🙏 The Ask for Help <span class="msg-type">Any Medium</span></div>
+        <p class="msg-text">Be specific about exactly what you need (not "any thoughts" — but "specifically, I need [X]"). Make it easy to say yes by doing the thinking for them: provide options, a draft, or a first pass. Set realistic expectations on time: "This would take you maybe 10 minutes." Give them an out: "If you're stretched, I completely understand — let me know and I'll find another approach." This structure dramatically increases response rates because it reduces the cognitive cost of helping.</p>
+        <p style="font-size:12.5px;color:var(--gold);font-style:italic;margin-top:8px;line-height:1.5">"Could I get 15 minutes of your time this week? I have a draft investor pitch and would love a sanity check on the financial assumptions — specifically the revenue projections in slides 8–10. I know you've been through this process. No prep needed on your end — I'll send the slides the evening before."</p>
+      </div>
+    </div>
+    <div class="msg-row">
+      <div class="msg-num">4</div>
+      <div class="msg-body">
+        <div class="msg-title">🔴 The Sensitive or Negative Message <span class="msg-type">Email / Face-to-Face</span></div>
+        <p class="msg-text">Never deliver genuinely bad news or sensitive feedback in writing if there's any chance of misinterpretation. The absence of tone, expression, and body language makes written words 4× more likely to be misread negatively than the same words spoken. The rule: if a message could genuinely hurt someone, deliver it in person or by call — then follow up with a written summary. Never deliver bad news on a Friday afternoon when the recipient has 48 hours alone with it before they can talk to anyone.</p>
+        <p style="font-size:12.5px;color:var(--muted);font-style:italic;margin-top:8px;line-height:1.5">The timing, channel, and environment of sensitive communication are as important as the content itself.</p>
+      </div>
+    </div>
+    <div class="msg-row">
+      <div class="msg-num">5</div>
+      <div class="msg-body">
+        <div class="msg-title">✂️ The Message Length Rule <span class="msg-type">Universal</span></div>
+        <p class="msg-text">The appropriate length of any professional message is proportional to the complexity and importance of the ask — not to the amount you want to say. A scheduling request: 3–4 sentences. A project update: 5–7 sentences. A proposal: 1–2 paragraphs plus attachments. A strategic recommendation: 1 paragraph summary + 1-page document. A simple "yes/no" question should rarely require more than two sentences. If you find yourself writing a long message, the problem is usually that you haven't decided exactly what you need yet. Clarity of ask produces brevity of expression.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 04: DIFFICULT CONVERSATIONS ─── -->
+<section class="section section-alt" id="difficult">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 04</div>
+    <div class="s-meta">
+      <div class="s-cat">Douglas Stone · Bruce Patton · Sheila Heen · Harvard Negotiation Project</div>
+      <h2 class="s-title">Navigating<br/><span>Difficult</span> Conversations</h2>
+      <p class="s-desc">Difficult Conversations — the landmark Harvard Negotiation Project book — established that most hard conversations fail not because the people involved are bad at communicating, but because they misdiagnose the conversation they're in. There are always three conversations happening simultaneously. Understanding all three is the prerequisite for navigating any of them.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">3</span><span class="s-stat-l">conversations always happening simultaneously — and most people only address one</span></div>
+    <div class="s-stat"><span class="s-stat-n">Impact</span><span class="s-stat-l">matters more than intent — but most people lead with their intent in hard conversations</span></div>
+    <div class="s-stat"><span class="s-stat-n">Purpose</span><span class="s-stat-l">of a difficult conversation is understanding — not winning or losing</span></div>
+    <div class="s-stat"><span class="s-stat-n">Harvard</span><span class="s-stat-l">Negotiation Project 1999 — still the most rigorous framework for difficult conversations</span></div>
+  </div>
+
+  <div class="conv-steps">
+    <div class="conv-step">
+      <div class="conv-step-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="5" y="4" width="14" height="17" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="9" y="2.5" width="6" height="3.5" rx="1" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.5 12h7M8.5 16h7" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="conv-step-body">
+        <div class="conv-step-title">Step 1 — Identify All Three Conversations</div>
+        <p class="conv-step-text">Every difficult conversation contains three simultaneous conversations. <strong style="color:var(--cream)">The "What Happened" conversation:</strong> Who did what, who's right, who's to blame. <strong style="color:var(--cream)">The Feelings conversation:</strong> The emotional experience of both parties — often unspoken but driving 80% of the difficulty. <strong style="color:var(--cream)">The Identity conversation:</strong> What this situation means about who I am — my competence, values, and whether I am a good person. Most conflicts escalate because people are arguing about "what happened" while the feelings and identity conversations are running unchecked underneath.</p>
+        <p class="conv-step-phrase">Before you start: "Which of the three conversations is actually driving the difficulty here?"</p>
+      </div>
+    </div>
+    <div class="conv-step">
+      <div class="conv-step-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="1.4" fill="#c8943a"/></svg></div>
+      <div class="conv-step-body">
+        <div class="conv-step-title">Step 2 — Start from Curiosity, Not Certainty</div>
+        <p class="conv-step-text">The most common mistake in difficult conversations is entering with a fixed conclusion and trying to convince the other person of it. This triggers defensiveness before the conversation has begun. The alternative: enter with genuine curiosity about their perspective. Assume they have information, context, or experience that would change your view of the situation if you had it. This posture — curious rather than certain — is the prerequisite for any conversation where both parties will feel heard.</p>
+        <p class="conv-step-phrase">"I want to understand what this looked like from your side. Can you help me see what happened from where you were sitting?"</p>
+      </div>
+    </div>
+    <div class="conv-step">
+      <div class="conv-step-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M3 12h4l3-3 3 3 3-3 5 3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 12v5h4v-5M17 12v5h4v-5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="conv-step-body">
+        <div class="conv-step-title">Step 3 — Lead with the Impact, Not the Intent</div>
+        <p class="conv-step-text">When something someone did affected you negatively, the instinct is to say "you did this on purpose" or to explain "I'm sure they didn't mean to." Both miss the point. Impact matters regardless of intent. Lead with the impact — how their actions affected you — before (or instead of) attributing intent. This separates the verifiable (what happened and how it affected you) from the interpretive (why they did it), which is both more accurate and less inflammatory.</p>
+        <p class="conv-step-phrase">"When [specific thing] happened, the impact on me was [specific effect]. I don't know what your intention was — I'd like to understand that. But I wanted you to know the effect."</p>
+      </div>
+    </div>
+    <div class="conv-step">
+      <div class="conv-step-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M20 11a8 8 0 0 0-14.9-3.5M4 13a8 8 0 0 0 14.9 3.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 4v4h4M19 20v-4h-4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="conv-step-body">
+        <div class="conv-step-title">Step 4 — Acknowledge Their Perspective Before Advocating Yours</div>
+        <p class="conv-step-text">In any difficult conversation, the moment the other person feels genuinely heard — their perspective acknowledged without evaluation — the conversation shifts from adversarial to collaborative. This does not mean agreeing with them. It means demonstrating that you understand how the situation looks from their position before asserting your own. Acknowledgement precedes persuasion. Skipping it produces resistance; investing in it produces receptivity.</p>
+        <p class="conv-step-phrase">"It makes sense that you see it that way — from your position, [X] was probably the most visible factor. What I'm seeing from mine is [Y]."</p>
+      </div>
+    </div>
+    <div class="conv-step">
+      <div class="conv-step-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 21v-9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 12C6 12 5 6 5 6s6-1 7 6zM12 12c0-6 6-6.5 6-6.5S18.5 11 12 12z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></div>
+      <div class="conv-step-body">
+        <div class="conv-step-title">Step 5 — Problem-Solve Together, Not Win</div>
+        <p class="conv-step-text">The goal of a difficult conversation is not to prove your point. It is to understand what happened, share your perspective, and — where possible — find a path forward that works for both parties. Reframe from debate (one winner, one loser) to joint problem-solving (what can we both do differently?). "How do we handle this better next time?" is a fundamentally different conversation than "who was wrong here?" The former builds relationship. The latter destroys it, regardless of who wins.</p>
+        <p class="conv-step-phrase">"What could we each do differently so this doesn't happen again? What do you need from me — and what do I need from you?"</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">DIFFICULT CONVO 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M13 2 4 14h6l-1 8 9-12h-6z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Hold Your Ground Skill</div>
+      <div class="card-sec">Stand Firm Without Escalating</div>
+      <p class="card-text">Holding your position in a difficult conversation without attacking the other person or backing down requires two simultaneous skills: firm content delivery and soft relational stance. Firm content: be clear, specific, and consistent about the outcome you need or the point you're making. Soft stance: acknowledge their perspective, validate their feelings, and treat their experience as legitimate even while disagreeing with their conclusion. "I understand this is frustrating — and my position hasn't changed" is the model. One sentence delivers both.</p>
+      <span class="badge ba">Power Skill</span>
+    </div>
+    <div class="card">
+      <div class="card-num">DIFFICULT CONVO 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M8 3h8l5 5v8l-5 5H8l-5-5V8z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M9 9h6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">When to Walk Away</div>
+      <div class="card-sec">The Flooded Conversation</div>
+      <p class="card-text">When either party's nervous system is flooded — heart rate elevated, rational thought impaired — the conversation cannot be productive. Gottman's research on relationships shows that productive dialogue requires both parties to be physiologically regulated. When you notice flooding (in yourself or the other person): request a pause, frame it clearly ("I want to continue this conversation — I need 20 minutes to think clearly"), and honour the commitment to return. Walking away without closing the loop is avoidance. Pausing with an explicit return plan is strategy.</p>
+      <span class="badge bc">Know When</span>
+    </div>
+    <div class="card">
+      <div class="card-num">DIFFICULT CONVO 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 22s7-7.5 7-13a7 7 0 1 0-14 0c0 5.5 7 13 7 13z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><circle cx="12" cy="9" r="2.4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Prepare the Environment</div>
+      <div class="card-sec">Before the Conversation Starts</div>
+      <p class="card-text">The environment of a difficult conversation shapes its outcome as much as the content. Rules: private (no audience creates defensiveness), face-to-face where possible (written text is 4× more likely to be misread negatively), sufficient time (conversations rushed for meetings produce rushed resolutions), and never on a Friday or before a holiday (the person needs access to follow-up, reflection, and support). A difficult conversation prepared with care for environment signals respect — and respect is the precondition for every productive outcome.</p>
+      <span class="badge bb">Preparation</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 05: DEEP LISTENING ─── -->
+<section class="section" id="listening">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 05</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · The Most Underrated Communication Skill</div>
+      <h2 class="s-title">Deep<br/><span>Listening</span></h2>
+      <p class="s-desc">Most people listen to respond — not to understand. Research shows that the average person retains only 25–50% of what they hear. Listening is not a passive state. It is an active cognitive skill — and the difference between surface listening and deep listening is one of the most consequential distinctions in all of communication science.</p>
+    </div>
+  </div>
+
+  <div class="cmp-wrap">
+    <div class="cmp-side">
+      <div class="cmp-head bad">❌ Surface Listening</div>
+      <div class="cmp-row">Waiting for your turn to speak while the other person finishes</div>
+      <div class="cmp-row">Formulating your response before they've finished their thought</div>
+      <div class="cmp-row">Listening for facts and information only — missing the emotion</div>
+      <div class="cmp-row">Looking at your phone or screen while they're speaking</div>
+      <div class="cmp-row">Immediately relating what they said to your own experience</div>
+      <div class="cmp-row">Jumping to problem-solving before fully understanding the problem</div>
+      <div class="cmp-row">Finishing their sentences for them</div>
+    </div>
+    <div class="cmp-side">
+      <div class="cmp-head good">✅ Deep Listening</div>
+      <div class="cmp-row">Listening to understand — suspending your own agenda entirely</div>
+      <div class="cmp-row">Staying fully present in what's being said before forming any response</div>
+      <div class="cmp-row">Listening for feelings AND facts — what is and isn't being said</div>
+      <div class="cmp-row">Full eye contact and open body language — phone face-down, away</div>
+      <div class="cmp-row">Reflecting what you heard before adding your own experience</div>
+      <div class="cmp-row">Asking what they need first — information, advice, or just to be heard</div>
+      <div class="cmp-row">Sitting with what they said before speaking</div>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">LISTENING TOOL 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><ellipse cx="12" cy="10" rx="6" ry="7.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 17.5V21M9 21h6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Reflect Before You Respond Rule</div>
+      <p class="card-text">Before responding to anything of substance, reflect what you heard in your own words. This serves four purposes: it confirms you actually understood correctly, it signals that you were genuinely listening, it gives the speaker a chance to correct any misunderstanding before you respond to it, and it creates a moment of genuine connection that most conversations never produce. The format: "What I'm hearing is [paraphrase in your own words]. Is that right?" Not word-for-word repetition — that's parroting. Your own words — that's genuine processing.</p>
+      <span class="badge ba">Before Every Response</span>
+    </div>
+    <div class="card">
+      <div class="card-num">LISTENING TOOL 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.7 2.2c-.9.5-1.2 1-1.2 2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="17" r="0.9" fill="#c8943a"/></svg></span>
+      <div class="card-title">Ask Before You Advise</div>
+      <p class="card-text">The single most common listening failure between people who care about each other: one person shares a problem and the other immediately offers advice or solutions. The problem: the person may not want advice. They may want to be heard, to process out loud, to feel less alone with something difficult. Before advising: ask. "Do you want me to help think through solutions, or do you mostly want to talk through it?" This one question prevents the majority of "you never listen" conversations — and makes you, paradoxically, a dramatically more effective advisor when advice is actually wanted.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 Research Insight</div>
+        <p class="card-text">Gorman's research on "The Silent Language of Leaders" found that full eye contact and nodding three times encourages people to speak far more and share far more deeply than any verbal encouragement. The body communicates listening before the words do.</p>
+      </div>
+      <span class="badge ba">Relationship Saver</span>
+    </div>
+    <div class="card">
+      <div class="card-num">LISTENING TOOL 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="10.5" cy="10.5" r="6.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m20 20-4.8-4.8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Listen for What Isn't Said</div>
+      <p class="card-text">The most important information in many conversations is what the speaker doesn't say directly. Listen for: hesitations (where the person slows or stops — this is often where the real issue lives), qualifications ("sort of," "kind of," "I guess" — signals of unexpressed uncertainty or disagreement), changes in volume or pace (both indicate emotional significance), and topics conspicuously absent from what should be a comprehensive account. Deep listeners consistently gather more useful information than people who only process the spoken content — because they attend to the full communication, not just the words.</p>
+      <span class="badge bd">Advanced Skill</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 06: BODY LANGUAGE ─── -->
+<section class="section section-alt" id="bodylang">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 06</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · Albert Mehrabian · Nonverbal Communication Science</div>
+      <h2 class="s-title">Body<br/><span>Language</span></h2>
+      <p class="s-desc">Albert Mehrabian's research established the 7-38-55 rule: in emotional communication, 7% of meaning is conveyed by words, 38% by tone of voice, and 55% by body language. You are always communicating two conversations simultaneously. Making sure they say the same thing is one of the most powerful clarity skills available.</p>
+    </div>
+  </div>
+
+  <div class="bl-grid">
+    <div class="bl-card">
+      <span class="bl-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="bl-title">Eye Contact</div>
+      <p class="bl-text">In Western professional contexts, maintaining eye contact for 60–70% of a conversation signals confidence, interest, and trustworthiness. Breaking eye contact while speaking signals uncertainty. Breaking it while listening signals distraction. Making eye contact when delivering important points amplifies their perceived significance by the listener.</p>
+      <div class="bl-signal">Signal: Maintained = Engaged / Avoidant = Dishonest or Nervous</div>
+    </div>
+    <div class="bl-card">
+      <span class="bl-icon">🙏</span>
+      <div class="bl-title">Hands & Gestures</div>
+      <p class="bl-text">Visible hands signal openness and transparency — the evolutionary equivalent of "I'm unarmed." Hands hidden under a table or behind the back trigger subconscious distrust. Purposeful, contained gestures that align with speech amplify message clarity. Random, excessive gesturing distracts from content. Steepled fingers signal confidence and authority.</p>
+      <div class="bl-signal">Signal: Open hands = Transparent / Hidden = Suspicious</div>
+    </div>
+    <div class="bl-card">
+      <span class="bl-icon">🧍</span>
+      <div class="bl-title">Posture & Stance</div>
+      <p class="bl-text">Upright posture signals confidence and competence. Slumped posture signals low energy or low confidence — even when the speaker is neither. In standing presentations, feet shoulder-width apart without swaying signals authority and groundedness. Crossed arms in conversation are often misread as defensive — remove the ambiguity by keeping arms open and relaxed.</p>
+      <div class="bl-signal">Signal: Upright = Confident / Slumped = Uncertain</div>
+    </div>
+    <div class="bl-card">
+      <span class="bl-icon">🪑</span>
+      <div class="bl-title">Mirroring & Rapport</div>
+      <p class="bl-text">Mirroring — subtly matching the body language, pace, and energy of the person you're speaking with — is the most reliable scientifically-documented method for building subconscious rapport. It works because the brain interprets similarity as safety. Use deliberately, not mechanically: mirror posture and pace, not specific gestures. 3–4 second delay is optimal for naturalness.</p>
+      <div class="bl-signal">Signal: Mirror = Rapport / Mismatch = Distance</div>
+    </div>
+    <div class="bl-card">
+      <span class="bl-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M4 5h13a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H9l-5 4v-4H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="bl-title">Voice & Pace</div>
+      <p class="bl-text">Voice pace, volume, and pitch carry 38% of emotional meaning (Mehrabian). Slowing down signals confidence and control — people who speak slowly in important moments are perceived as more authoritative than those who rush. Dropping pitch at the end of sentences signals statement (authority). Rising pitch at the end signals question (uncertainty). The "upspeak" habit undermines credibility even when the content is strong.</p>
+      <div class="bl-signal">Signal: Slow + Low = Authority / Fast + Rising = Uncertainty</div>
+    </div>
+    <div class="bl-card">
+      <span class="bl-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M4 20 14 4l6 16z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M9 20h5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="bl-title">Physical Space & Proximity</div>
+      <p class="bl-text">Edward Hall's proxemics research identified four social distances: intimate (0–0.5m, for close relationships), personal (0.5–1.2m, for conversations), social (1.2–3.5m, for professional interactions), and public (3.5m+, for formal presentations). Violating these unconsciously creates discomfort and distrust. In professional settings, maintaining social distance in new relationships — and only entering personal space when rapport is established — signals social intelligence.</p>
+      <div class="bl-signal">Signal: Appropriate space = Social intelligence / Too close = Discomfort</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 07: ADAPTATION ─── -->
+<section class="section" id="adaptation">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 07</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · Communication Style Adaptation</div>
+      <h2 class="s-title">Communication<br/><span>Adaptation</span></h2>
+      <p class="s-desc">The mark of a truly skilled communicator is not finding their style and forcing it on every situation. It is the flexibility to adjust vocabulary, pace, structure, formality, and directness to match the person they are speaking with — without losing authenticity. The word for this is not code-switching. It is professionalism.</p>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">ADAPTATION SKILL 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M13 2 4 14h6l-1 8 9-12h-6z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Adjust to Expertise Level</div>
+      <p class="card-text">The language you use should match what your audience already knows — not what you know. With experts: use technical vocabulary, skip foundational explanations, engage at a peer level. With novices: use plain language, concrete examples, no jargon, and check understanding frequently. The most common communication failure of intelligent professionals: explaining what they know rather than what their audience needs. The Feynman Test applies here: if you can't explain it simply, you don't understand it well enough to communicate it.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Curse of Knowledge Revisited</div>
+        <p class="card-text">Once you know something deeply, you forget what it was like not to know it. This makes it systematically difficult to calibrate explanations to someone with less expertise. The fix: ask explicitly. "How familiar are you with [concept]?" One question saves 10 minutes of miscalibrated explanation and prevents the condescension of over-explaining to an expert or the confusion of over-assuming with a novice.</p>
+      </div>
+      <span class="badge ba">Universal Skill</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ADAPTATION SKILL 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="1.4" fill="#c8943a"/></svg></span>
+      <div class="card-title">Read the Room — Real-Time Calibration</div>
+      <p class="card-text">The most important real-time communication skill is reading feedback signals and adjusting mid-conversation: furrowed brows → rephrase or simplify. Nodding → continue and develop. Checking a phone → increase engagement or close the loop. Leaning forward → they're interested, go deeper. Leaning back → create more space or check in. Most people ignore these signals and continue broadcasting in their original mode regardless of the audience's response. The communicator who notices and adjusts builds relationships in real time.</p>
+      <span class="badge ba">Real-Time</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ADAPTATION SKILL 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15.5 0 18M12 3c-2.5 2.5-2.5 15.5 0 18" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Direct vs Indirect Communication Cultures</div>
+      <p class="card-text">Some cultures (US, Australia, Germany, Netherlands) favour direct communication — say what you mean, conflict is addressed openly, "no" means no. Others (Japan, UK, India, much of Southeast Asia) favour indirect communication — meaning is embedded in context and tone, conflict is managed through suggestion rather than statement, a polite "that's interesting" may mean "I disagree." Neither is superior. Misreading which mode you're in produces the most common cross-cultural communication failures. When in doubt — observe more, speak less, and ask clarifying questions rather than assuming directness is always the virtue.</p>
+      <span class="badge bd">Cross-Cultural</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ADAPTATION SKILL 04</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="7" y="3" width="10" height="18" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 18h2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Channel Choice Is Communication</div>
+      <p class="card-text">Every channel carries implicit meta-messages about the nature and urgency of your communication. Email says: considered, non-urgent, formal record. Slack/WhatsApp says: casual, quick, low stakes. Phone call says: real-time, personal, somewhat urgent. Video call says: collaborative, relationship-forward. Face-to-face says: important, sensitive, or relationship-critical. Choosing the wrong channel for the content is itself a communication error — and often a significant one. A termination delivered by email. A strategic decision made by WhatsApp voice note. Channel mismatch undermines even excellent content.</p>
+      <span class="badge bb">Daily Decision</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ADAPTATION SKILL 05</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M20 11a8 8 0 0 0-14.9-3.5M4 13a8 8 0 0 0 14.9 3.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 4v4h4M19 20v-4h-4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Adapt to Emotional State — Not Just Context</div>
+      <p class="card-text">The same information communicated to someone who is calm, stressed, excited, or upset requires completely different framing, timing, and delivery. A person in a flooded emotional state cannot process complex information — their cognitive capacity is redirected to managing the emotional experience. A person who is excited needs momentum maintained, not deflated. A person who is grieving needs space and empathy before any practical content. Reading emotional state and adjusting accordingly is the meta-skill that determines whether your message lands or misses — regardless of its quality.</p>
+      <span class="badge ba">Meta-Skill</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ADAPTATION SKILL 06</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M4 5h13a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H9l-5 4v-4H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Vocabulary Mirror</div>
+      <p class="card-text">One of the subtlest and most powerful adaptation tools: use the vocabulary your audience uses to describe their own situation, challenges, and goals — not your vocabulary. When someone describes a problem as "frustrating," mirror back "frustrating." Not "challenging" (your word). Not "difficult" (generic). Their word. This signals that you were actually listening, that you understand their specific experience, and that you inhabit their frame of reference rather than your own. It is the linguistic equivalent of mirroring body language — and it builds rapport at the same depth.</p>
+      <span class="badge ba">Subtle Power</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 3 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"The single biggest problem in communication is the illusion that it has taken place. <em>Clarity is not what you said. It is what they understood.</em>"</p>
+  <p class="quote-attr">— George Bernard Shaw · Playwright · Nobel Prize in Literature 1925</p>
+</div>
+
+<!-- ─── 08: MASTER CHEATSHEET ─── -->
+<section class="section" id="cheatsheet">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 08</div>
+    <div class="s-meta">
+      <div class="s-cat">Quick Reference</div>
+      <h2 class="s-title">The Master<br/><span>Cheatsheet</span></h2>
+      <p class="s-desc">Every principle from this guide — one quick-reference table. Build these into your daily communication and the results compound within weeks.</p>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Principle</th><th>The Action</th><th>Chapter</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td class="num-cell">01</td><td class="name-cell">Pyramid Principle</td><td>Lead with your answer/recommendation first. Every time. No exceptions.</td><td>Pyramid</td><td><span class="badge ba">Non-Negotiable</span></td></tr>
+        <tr><td class="num-cell">02</td><td class="name-cell">SCQA Framework</td><td>Situation → Complication → Question → Answer. Open every important communication this way.</td><td>Pyramid</td><td><span class="badge ba">Framework</span></td></tr>
+        <tr><td class="num-cell">03</td><td class="name-cell">MECE Logic</td><td>Supporting arguments must be Mutually Exclusive (no overlap) + Collectively Exhaustive (complete)</td><td>Pyramid</td><td><span class="badge ba">Logic Standard</span></td></tr>
+        <tr><td class="num-cell">04</td><td class="name-cell">Rule of Three</td><td>Give exactly 3 supporting arguments. More = cognitive overload. Fewer = incomplete case.</td><td>Pyramid</td><td><span class="badge ba">Always</span></td></tr>
+        <tr><td class="num-cell">05</td><td class="name-cell">Pyramid at Every Level</td><td>Apply it to the whole document, each section, each slide, each paragraph, each email.</td><td>Pyramid</td><td><span class="badge ba">Universal</span></td></tr>
+        <tr><td class="num-cell">06</td><td class="name-cell">3-Second Pause</td><td>Before every important point — pause 3 full seconds. This is a priming and authority signal.</td><td>Silence</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">07</td><td class="name-cell">Signal-to-Noise Filter</td><td>"Would the room be poorer without this?" If unclear — don't say it yet.</td><td>Silence</td><td><span class="badge ba">Daily Filter</span></td></tr>
+        <tr><td class="num-cell">08</td><td class="name-cell">Post-Question Silence</td><td>After asking a question — wait fully. Don't rephrase. Don't soften. The best answer comes in the gap.</td><td>Silence</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">09</td><td class="name-cell">Negotiation Silence</td><td>After making a proposal — sit in silence. First person to speak typically concedes.</td><td>Silence</td><td><span class="badge ba">High-Value</span></td></tr>
+        <tr><td class="num-cell">10</td><td class="name-cell">Scarcity of Words</td><td>Rare words carry more value. Verbal dilution kills authority. Speak to be heard, not to be busy.</td><td>Silence</td><td><span class="badge ba">Philosophy</span></td></tr>
+        <tr><td class="num-cell">11</td><td class="name-cell">Ask in the First Sentence</td><td>State what you need before explaining why. Open every professional message with the specific ask.</td><td>Messages</td><td><span class="badge ba">All Messages</span></td></tr>
+        <tr><td class="num-cell">12</td><td class="name-cell">One Ask Per Message</td><td>Multiple asks in one message are routinely ignored. One clear ask, one clear deadline, one message.</td><td>Messages</td><td><span class="badge ba">Hard Rule</span></td></tr>
+        <tr><td class="num-cell">13</td><td class="name-cell">Subject Line = Summary</td><td>"Decision needed: Q4 budget by Friday" not "Some thoughts on Q4." The subject IS the message.</td><td>Messages</td><td><span class="badge ba">Every Email</span></td></tr>
+        <tr><td class="num-cell">14</td><td class="name-cell">Explicit Deadline</td><td>"By end of Wednesday" not "whenever you get a chance." No deadline = no priority.</td><td>Messages</td><td><span class="badge ba">Always</span></td></tr>
+        <tr><td class="num-cell">15</td><td class="name-cell">Channel Choice Matters</td><td>Bad news / sensitive topics: face-to-face or call first, then written follow-up. Never email-first.</td><td>Messages</td><td><span class="badge bc">Critical</span></td></tr>
+        <tr><td class="num-cell">16</td><td class="name-cell">The 3 Conversations</td><td>Identify all three conversations (What Happened, Feelings, Identity) before engaging any of them.</td><td>Difficult</td><td><span class="badge ba">First Step</span></td></tr>
+        <tr><td class="num-cell">17</td><td class="name-cell">Curiosity Over Certainty</td><td>Enter difficult conversations curious, not conclusive. Ask what you don't yet know first.</td><td>Difficult</td><td><span class="badge ba">Posture</span></td></tr>
+        <tr><td class="num-cell">18</td><td class="name-cell">Impact Over Intent</td><td>"When [X] happened, the impact on me was [Y]." Lead with effect, not attribution of motive.</td><td>Difficult</td><td><span class="badge ba">Phrase</span></td></tr>
+        <tr><td class="num-cell">19</td><td class="name-cell">Acknowledge Before Advocating</td><td>Demonstrate you understand their perspective before asserting yours. Acknowledgement ≠ agreement.</td><td>Difficult</td><td><span class="badge ba">Always First</span></td></tr>
+        <tr><td class="num-cell">20</td><td class="name-cell">Hold Your Ground Formula</td><td>"I understand this is frustrating — and my position hasn't changed." Firm content + soft stance.</td><td>Difficult</td><td><span class="badge ba">Power Phrase</span></td></tr>
+        <tr><td class="num-cell">21</td><td class="name-cell">Reflect Before You Respond</td><td>"What I'm hearing is [paraphrase]. Is that right?" — Before every substantive response.</td><td>Listening</td><td><span class="badge ba">Always</span></td></tr>
+        <tr><td class="num-cell">22</td><td class="name-cell">Ask Before Advising</td><td>"Do you want help thinking through solutions — or mostly want to talk through it?" Ask first. Always.</td><td>Listening</td><td><span class="badge ba">Relationship Saver</span></td></tr>
+        <tr><td class="num-cell">23</td><td class="name-cell">Listen for What Isn't Said</td><td>Hesitations, qualifications, topics conspicuously absent — this is often the most important information.</td><td>Listening</td><td><span class="badge bd">Advanced</span></td></tr>
+        <tr><td class="num-cell">24</td><td class="name-cell">7-38-55 Rule</td><td>Words = 7%. Tone = 38%. Body language = 55%. Align all three or your message contradicts itself.</td><td>Body Language</td><td><span class="badge ba">Core Rule</span></td></tr>
+        <tr><td class="num-cell">25</td><td class="name-cell">Voice Pace Signals Authority</td><td">Slow down for important points. Drop pitch at sentence end (statement). Fast + rising = uncertainty.</td><td>Body Language</td><td><span class="badge ba">Always</span></td></tr>
+        <tr><td class="num-cell">26</td><td class="name-cell">The Vocabulary Mirror</td><td>Use their words — not yours — to describe their situation. Signals genuine listening at depth.</td><td>Adaptation</td><td><span class="badge ba">Subtle Power</span></td></tr>
+        <tr><td class="num-cell">27</td><td class="name-cell">Read Emotional State First</td><td>Before communicating any content — read their emotional state and adjust framing, pace, and timing.</td><td>Adaptation</td><td><span class="badge ba">Meta-Skill</span></td></tr>
+        <tr><td class="num-cell">28</td><td class="name-cell">Ask About Expertise Level</td><td>"How familiar are you with [X]?" One question saves 10 minutes of miscalibrated explanation.</td><td>Adaptation</td><td><span class="badge ba">Always</span></td></tr>
+        <tr><td class="num-cell">29</td><td class="name-cell">Clarity Definition</td><td>Clarity is not what you said. It is what they understood. If they didn't get it — you weren't clear.</td><td>All Chapters</td><td><span class="badge ba">Philosophy</span></td></tr>
+        <tr><td class="num-cell">30</td><td class="name-cell">The Communication Standard</td><td>Every communication: right message, right structure, right channel, right moment, right relationship.</td><td>All Chapters</td><td><span class="badge ba">Always</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</section>
+
+<footer>
+  <div class="footer-logo">The Art of Communicating Clearly</div>
+  <p class="footer-sub">Social Skills · Communication Science · Rhetoric · 2025–2026 Edition</p>
+  <p class="footer-sub" style="color:var(--muted);font-size:13px;margin-top:8px">8 Complete Chapters · 30 Core Principles · Research from Barbara Minto, Douglas Stone, Albert Mehrabian, Irvin Yalom, Harvard Negotiation Project, PMC Neuroscience Research & Edward Hall</p>
+  <p class="footer-tiny">Research compiled May 2026 · Inspired by Parallelogram · Built for people who understand that clarity is kindness</p>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:rgba(200,148,58,.28);margin-top:36px">"The single biggest problem in communication is the illusion that it has taken place." — George Bernard Shaw</p>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const st=document.documentElement.scrollTop;
+  const sh=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('prog').style.width=(st/sh*100)+'%';
+});
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}});
+},{threshold:0.07});
+document.querySelectorAll('.card,.col-card,.s-stat,.scqa-block,.conv-step,.bl-card,.msg-row,.pyr-level,.cmp-side').forEach(el=>{
+  el.style.opacity='0';el.style.transform='translateY(18px)';
+  el.style.transition='opacity .5s ease, transform .5s ease';
+  obs.observe(el);
+});
+</script>
+</body>
+</html>

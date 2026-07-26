@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI Skills That Actually Matter in 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07080a;--surface:#0e1014;--card:#13151a;--card2:#181b22;
+  --gold:#c8943a;--gold2:#e8b84b;--golddim:rgba(200,148,58,.13);
+  --cream:#f0e8d5;--muted:#5c5f68;--light:#9a9da8;
+  --border:rgba(200,148,58,.18);--rust:#b84532;
+  --teal:#2c7a72;--violet:#5a2fa8;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--cream);overflow-x:hidden;line-height:1.6}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.5}
+#prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--violet),var(--gold),var(--gold2));width:0%;z-index:2000;transition:width .08s}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:1500;display:flex;align-items:center;justify-content:space-between;padding:14px 48px;background:rgba(7,8,10,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(200,148,58,.1)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
+.nav-links{display:flex;gap:20px;list-style:none}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+@media(max-width:768px){.nav-links{display:none}.hero,.section,.toc-wrap,.quote-block,footer{padding-left:22px!important;padding-right:22px!important}nav{padding:14px 22px}}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px 64px 80px;position:relative;overflow:hidden}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 75% 55% at 92% 8%,rgba(90,47,168,.15) 0%,transparent 55%),radial-gradient(ellipse 55% 70% at 5% 90%,rgba(200,148,58,.1) 0%,transparent 60%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;opacity:.022;background-image:linear-gradient(rgba(200,148,58,1) 1px,transparent 1px),linear-gradient(90deg,rgba(200,148,58,1) 1px,transparent 1px);background-size:68px 68px}
+.hero-inner{position:relative;max-width:1100px}
+.hero-badge{display:inline-flex;align-items:center;background:rgba(90,47,168,.15);border:1px solid rgba(90,47,168,.4);padding:5px 16px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#a98fe8;margin-bottom:22px;opacity:0;animation:fadeup .7s .15s forwards}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:26px;display:flex;align-items:center;gap:14px;opacity:0;animation:fadeup .7s .2s forwards}
+.hero-tag::before{content:'';width:44px;height:1px;background:var(--gold);flex-shrink:0}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(44px,7.5vw,108px);font-weight:700;line-height:.88;letter-spacing:-4px;margin-bottom:10px;opacity:0;animation:fadeup .8s .4s forwards}
+.hero h1 span{color:var(--gold);font-style:italic}
+.hero h1 .sub{display:block;color:rgba(240,232,213,.2);font-size:clamp(20px,3.4vw,48px);font-weight:400;font-style:italic;letter-spacing:-1px;margin-top:8px}
+.hero-desc{font-size:clamp(15px,1.9vw,18px);color:var(--light);max-width:600px;margin:34px 0 50px;font-weight:300;line-height:1.78;opacity:0;animation:fadeup .8s .6s forwards}
+.hero-stats{display:flex;gap:0;border:1px solid var(--border);width:fit-content;opacity:0;animation:fadeup .8s .8s forwards;flex-wrap:wrap}
+.hstat{padding:18px 32px;border-right:1px solid var(--border);text-align:center}
+.hstat:last-child{border-right:none}
+.hstat-n{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.hstat-l{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-top:4px}
+.scroll-hint{position:absolute;bottom:40px;left:64px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:10px;animation:pulse 2.5s infinite}
+.scroll-hint::before{content:'';width:1px;height:38px;background:var(--gold);opacity:.35}
+@keyframes fadeup{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+
+.toc-wrap{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:56px 64px}
+.toc-inner{max-width:1100px;margin:0 auto}
+.toc-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:36px;display:flex;align-items:center;gap:12px}
+.toc-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px}
+.toc-item{background:var(--card);padding:18px 22px;display:flex;align-items:flex-start;gap:14px;cursor:pointer;transition:background .2s,border-color .2s;border:1px solid transparent;text-decoration:none}
+.toc-item:hover{background:var(--card2);border-color:var(--border)}
+.toc-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);opacity:.55;flex-shrink:0;min-width:26px;margin-top:2px}
+.toc-name{font-size:13.5px;color:var(--light);font-weight:400;transition:color .2s;line-height:1.4}
+.toc-item:hover .toc-name{color:var(--cream)}
+
+.section{padding:96px 64px;position:relative}
+.section-alt{background:var(--surface)}
+.s-inner{max-width:1100px;margin:0 auto}
+.s-head{display:grid;grid-template-columns:90px 1fr;gap:32px;align-items:start;margin-bottom:60px;padding-bottom:44px;border-bottom:1px solid var(--border)}
+.s-num{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;padding-top:8px}
+.s-meta{display:flex;flex-direction:column;gap:10px}
+.s-cat{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:3px;color:var(--rust);text-transform:uppercase}
+.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,60px);font-weight:700;line-height:.92;letter-spacing:-1.5px;color:var(--cream)}
+.s-title span{color:var(--gold);font-style:italic}
+.s-desc{font-size:15.5px;color:var(--light);max-width:660px;font-weight:300;line-height:1.78;margin-top:6px}
+@media(max-width:600px){.s-head{grid-template-columns:1fr;gap:14px}}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:2px}
+@media(max-width:600px){.cards{grid-template-columns:1fr}}
+.card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .25s,background .25s;position:relative;overflow:hidden}
+.card:hover{border-color:var(--border);background:var(--card2)}
+.card::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:linear-gradient(180deg,var(--gold),var(--violet));transition:height .35s}
+.card:hover::before{height:100%}
+.card-num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);opacity:.45;margin-bottom:14px}
+.card-icon{font-size:26px;margin-bottom:11px;display:block}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:700;color:var(--cream);letter-spacing:-.4px;margin-bottom:11px;line-height:1.15}
+.card-sec{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin:16px 0 7px}
+.card-text{font-size:13.5px;color:var(--light);line-height:1.72;font-weight:300}
+.psych{background:rgba(200,148,58,.06);border-left:2px solid var(--gold);padding:15px 18px;margin-top:18px}
+.psych .card-sec{margin-top:0}
+.codebox{background:rgba(90,47,168,.08);border-left:2px solid rgba(90,47,168,.5);padding:15px 18px;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#c4b5f8;line-height:1.7}
+.codebox-label{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(196,181,248,.5);margin-bottom:8px;display:block}
+.badge{display:inline-flex;align-items:center;padding:4px 11px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;margin-top:14px}
+.ba{background:rgba(200,148,58,.11);color:var(--gold);border:1px solid var(--border)}
+.bb{background:rgba(44,122,114,.12);color:#4aaa9e;border:1px solid rgba(44,122,114,.3)}
+.bc{background:rgba(184,69,50,.11);color:#d46040;border:1px solid rgba(184,69,50,.28)}
+.bd{background:rgba(90,47,168,.12);color:#a98fe8;border:1px solid rgba(90,47,168,.3)}
+
+.quote-block{background:var(--surface);padding:72px 64px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center}
+.quote-text{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3.2vw,36px);font-weight:600;font-style:italic;color:var(--cream);max-width:880px;margin:0 auto;line-height:1.4}
+.quote-text em{color:var(--gold)}
+.quote-attr{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:24px}
+
+.stat-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:2px;margin:44px 0}
+.s-stat{background:var(--card);padding:26px 22px;text-align:center;border:1px solid transparent;transition:border-color .2s}
+.s-stat:hover{border-color:var(--border)}
+.s-stat-n{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.s-stat-l{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-top:5px}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}}
+.col-card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .2s}
+.col-card:hover{border-color:var(--border)}
+.col-icon{font-size:30px;margin-bottom:14px;display:block}
+.col-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:11px;letter-spacing:-.4px}
+.col-text{font-size:13.5px;color:var(--light);line-height:1.75;font-weight:300}
+.col-text strong{color:var(--cream);font-weight:500}
+
+/* TOOLS GRID */
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2px;margin:36px 0}
+.tool-card{background:var(--card);padding:28px;border:1px solid transparent;transition:border-color .2s,background .2s;position:relative;overflow:hidden}
+.tool-card:hover{border-color:var(--border);background:var(--card2)}
+.tool-category{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+.tool-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:4px;letter-spacing:-.3px}
+.tool-price{display:inline-flex;align-items:center;padding:3px 10px;background:rgba(44,122,114,.12);border:1px solid rgba(44,122,114,.3);font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;color:#4aaa9e;text-transform:uppercase;border-radius:1px;margin-bottom:10px}
+.tool-price.paid{background:rgba(200,148,58,.1);border-color:var(--border);color:var(--gold)}
+.tool-desc{font-size:13px;color:var(--light);line-height:1.65;font-weight:300;margin-bottom:10px}
+.tool-replaces{font-size:12px;color:var(--muted);padding:8px 12px;background:rgba(200,148,58,.04);border-left:2px solid rgba(200,148,58,.2)}
+.tool-replaces strong{color:var(--light)}
+
+/* PROMPT EXAMPLES */
+.prompt-compare{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:36px 0}
+@media(max-width:640px){.prompt-compare{grid-template-columns:1fr}}
+.prompt-side{background:var(--card);padding:28px;border:1px solid transparent;transition:border-color .2s}
+.prompt-side:hover{border-color:var(--border)}
+.prompt-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.prompt-label.bad{color:#d46040}
+.prompt-label.good{color:#4aaa9e}
+.prompt-box{background:rgba(90,47,168,.06);border:1px solid rgba(90,47,168,.2);padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#c4b5f8;line-height:1.7;margin-bottom:14px;border-radius:2px}
+.prompt-why{font-size:12.5px;color:var(--light);line-height:1.6;font-weight:300}
+.prompt-why strong{color:var(--cream);font-weight:500}
+
+/* WORKFLOW TABLE */
+.workflow-table{display:flex;flex-direction:column;gap:2px;margin:36px 0}
+.wf-row{display:grid;grid-template-columns:220px 1fr auto;gap:0;background:var(--card);border:1px solid transparent;transition:border-color .2s;align-items:stretch}
+.wf-row:hover{border-color:var(--border)}
+@media(max-width:640px){.wf-row{grid-template-columns:1fr}}
+.wf-task{padding:18px 20px;font-weight:500;color:var(--cream);font-size:14px;border-right:1px solid rgba(200,148,58,.08)}
+.wf-how{padding:18px 20px;font-size:13px;color:var(--light);line-height:1.6;font-weight:300}
+.wf-time{padding:18px 20px;text-align:center;border-left:1px solid rgba(200,148,58,.08);flex-shrink:0}
+.wf-time-save{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.wf-time-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;display:block;margin-top:2px}
+.wf-head{background:var(--card2);padding:10px 20px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;display:grid;grid-template-columns:220px 1fr auto;gap:0;border:1px solid transparent}
+.wf-head span:last-child{text-align:center;padding-right:8px}
+
+/* AI LADDER */
+.ai-ladder{display:flex;flex-direction:column;gap:2px;margin:36px 0}
+.ladder-rung{display:grid;grid-template-columns:90px 1fr;gap:0;background:var(--card);border:1px solid transparent;transition:border-color .2s}
+.ladder-rung:hover{border-color:var(--border)}
+.ladder-level{background:var(--golddim);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 8px;text-align:center}
+.ladder-level-num{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--gold);line-height:1}
+.ladder-level-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-top:3px}
+.ladder-body{padding:20px 26px}
+.ladder-title{font-weight:600;color:var(--cream);font-size:15px;margin-bottom:4px;display:flex;align-items:center;gap:10px}
+.ladder-tag{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;padding:3px 8px;text-transform:uppercase;border-radius:1px}
+.tag-user{background:rgba(44,122,114,.12);color:#4aaa9e;border:1px solid rgba(44,122,114,.28)}
+.tag-pro{background:rgba(200,148,58,.11);color:var(--gold);border:1px solid var(--border)}
+.tag-expert{background:rgba(90,47,168,.12);color:#a98fe8;border:1px solid rgba(90,47,168,.3)}
+.ladder-text{font-size:13px;color:var(--light);line-height:1.65;font-weight:300}
+
+/* ALERT / TIP */
+.alert{background:rgba(184,69,50,.07);border:1px solid rgba(184,69,50,.24);padding:22px 26px;margin:28px 0}
+.alert-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:var(--rust);text-transform:uppercase;margin-bottom:9px}
+.alert-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.alert-text strong{color:var(--cream);font-weight:500}
+.tip{background:rgba(44,122,114,.07);border:1px solid rgba(44,122,114,.24);padding:22px 26px;margin:28px 0}
+.tip-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:#4aaa9e;text-transform:uppercase;margin-bottom:9px}
+.tip-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.tip-text strong{color:var(--cream);font-weight:500}
+
+.table-wrap{overflow-x:auto;margin-top:40px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--card2);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);padding:13px 16px;text-align:left;border-bottom:1px solid var(--border)}
+tbody tr{border-bottom:1px solid rgba(200,148,58,.07);transition:background .15s}
+tbody tr:hover{background:var(--card)}
+tbody td{padding:13px 16px;color:var(--light);vertical-align:top;line-height:1.5}
+.num-cell{font-family:'JetBrains Mono',monospace;color:var(--gold);opacity:.55;font-size:11px}
+.name-cell{font-weight:500;color:var(--cream)}
+
+footer{background:var(--bg);border-top:1px solid var(--border);padding:56px 64px 72px;text-align:center}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;letter-spacing:2px;color:var(--gold);margin-bottom:10px}
+.footer-sub{font-size:13.5px;color:var(--muted);margin-bottom:6px}
+.footer-tiny{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(92,95,104,.45);text-transform:uppercase;margin-top:26px}
+
+.pg-hero-art{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:.55;z-index:0}
+.pg-hero-art svg{width:100%;height:100%;display:block}
+[class*="icon"] svg.pg-icon{width:1em;height:1em;display:inline-block;vertical-align:-0.15em}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav>
+  <div class="nav-logo">AI Skills 2026</div>
+  <ul class="nav-links">
+    <li><a href="#tools">10 AI Tools</a></li>
+    <li><a href="#prompt">Prompting</a></li>
+    <li><a href="#workflow">3hrs in 30min</a></li>
+    <li><a href="#ladder">AI Ladder</a></li>
+    <li><a href="#irreplaceable">Irreplaceable</a></li>
+    <li><a href="#career">Career Edge</a></li>
+    <li><a href="#ethics">AI Ethics</a></li>
+    <li><a href="#cheatsheet">Cheatsheet</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero"><div class="pg-hero-art" aria-hidden="true"><svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><path d="M367.6 322.9 A200.7 200.7 0 0 1 326.9 -69.8" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M-115.4 161.5 A233.2 233.2 0 0 1 165.4 -147.7" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M296.8 204.3 A177.4 177.4 0 0 1 -27.4 123.3" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><line x1="259.4" y1="117.3" x2="187.0" y2="109.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="425.9" y1="238.7" x2="349.2" y2="159.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="679.1" y1="178.0" x2="639.9" y2="184.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="437.3" y1="91.2" x2="465.3" y2="55.2" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="413.0" y1="44.6" x2="371.0" y2="29.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="371.0" y1="29.4" x2="364.1" y2="21.2" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="498.2" y1="51.8" x2="465.3" y2="55.2" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="594.4" y1="170.8" x2="639.9" y2="184.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="594.4" y1="170.8" x2="625.0" y2="110.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="594.4" y1="170.8" x2="533.2" y2="132.0" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="187.0" y1="109.9" x2="133.1" y2="47.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="625.0" y1="110.4" x2="685.7" y2="60.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="679.1" y1="178.0" x2="685.7" y2="60.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="259.4" y1="117.3" x2="349.2" y2="159.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="413.0" y1="44.6" x2="364.1" y2="21.2" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><circle cx="259.4" cy="117.3" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="425.9" cy="238.7" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="679.1" cy="178.0" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="437.3" cy="91.2" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="413.0" cy="44.6" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="413.0" cy="44.6" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="371.0" cy="29.4" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="371.0" cy="29.4" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="498.2" cy="51.8" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="594.4" cy="170.8" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="625.0" cy="110.4" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="187.0" cy="109.9" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="187.0" cy="109.9" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="639.9" cy="184.8" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="533.2" cy="132.0" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="465.3" cy="55.2" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="465.3" cy="55.2" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="133.1" cy="47.7" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="133.1" cy="47.7" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="685.7" cy="60.7" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="349.2" cy="159.5" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="349.2" cy="159.5" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="364.1" cy="21.2" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="364.1" cy="21.2" r="2.2" fill="#e8b84b" opacity="0.85"/></svg></div>
+  <div class="hero-glow"></div><div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">Creator · Technology · Future of Work · 2026 Research</div>
+    <div class="hero-tag">The Complete AI Skills Research Guide · 2026 Edition</div>
+    <h1>AI Skills That<br/><span>Actually</span><span class="sub">Matter in 2026</span></h1>
+    <p class="hero-desc">The tools replacing thousand-dollar software. The prompting techniques that turn mediocre outputs into brilliant ones. The workflows compressing 3 hours into 30 minutes. And the human skills that AI cannot touch — your greatest career advantage right now. 8 deep chapters. Zero hype. Pure signal.</p>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-n">95%</span><span class="hstat-l">of what cost $1,000+/yr to professionals is now free or freemium</span></div>
+      <div class="hstat"><span class="hstat-n">60%</span><span class="hstat-l">quality improvement from structured prompts vs unstructured ones (research-backed)</span></div>
+      <div class="hstat"><span class="hstat-n">$6.95B</span><span class="hstat-l">prompt engineering is now a billion-dollar discipline</span></div>
+      <div class="hstat"><span class="hstat-n">2026</span><span class="hstat-l">free AI tiers now rival paid alternatives in almost every category</span></div>
+    </div>
+  </div>
+  <div class="scroll-hint">Scroll to begin</div>
+</section>
+
+<!-- ─── TOC ─── -->
+<div class="toc-wrap">
+  <div class="toc-inner">
+    <div class="toc-label">Everything Inside This Guide</div>
+    <div class="toc-grid">
+      <a href="#tools" class="toc-item"><span class="toc-num">01</span><span class="toc-name">The 10 AI Tools — All free or freemium, replacing what used to cost thousands</span></a>
+      <a href="#prompt" class="toc-item"><span class="toc-num">02</span><span class="toc-name">Prompt Engineering — The difference between a bad answer and a brilliant one</span></a>
+      <a href="#workflow" class="toc-item"><span class="toc-num">03</span><span class="toc-name">3 Hours in 30 Minutes — Real AI workflow examples that actually work</span></a>
+      <a href="#ladder" class="toc-item"><span class="toc-num">04</span><span class="toc-name">The AI Skill Ladder — From casual user to professional AI operator</span></a>
+      <a href="#irreplaceable" class="toc-item"><span class="toc-num">05</span><span class="toc-name">What AI Cannot Replace — And why that's your biggest career advantage</span></a>
+      <a href="#career" class="toc-item"><span class="toc-num">06</span><span class="toc-name">Career Positioning — How to be the person who uses AI better than anyone else</span></a>
+      <a href="#ethics" class="toc-item"><span class="toc-num">07</span><span class="toc-name">AI Ethics & Critical Thinking — The skill most AI users have zero of</span></a>
+      <a href="#cheatsheet" class="toc-item"><span class="toc-num">08</span><span class="toc-name">The Master Cheatsheet — Every principle, one table</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- ─── 01: 10 AI TOOLS ─── -->
+<section class="section" id="tools">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 01</div>
+    <div class="s-meta">
+      <div class="s-cat">DataCamp · eWeek · Digitpatrox · Ropewalk · 2026 Research</div>
+      <h2 class="s-title">The 10 <span>AI Tools</span><br/>That Replace Everything</h2>
+      <p class="s-desc">In 2026, the free tier of the most advanced AI tools has become genuinely professional-grade. The days when "free" meant "limited and frustrating" are over in the AI space. Here are the 10 tools — across writing, design, research, audio, video, and code — that cover 95% of professional use cases for £0.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">Free</span><span class="s-stat-l">tiers from OpenAI, Anthropic, Google now ship with the same flagship models as paid</span></div>
+    <div class="s-stat"><span class="s-stat-n">Daily</span><span class="s-stat-l">credit refills — the differentiator that makes free tools actually sustainable</span></div>
+    <div class="s-stat"><span class="s-stat-n">2026</span><span class="s-stat-l">market competition means paid alternatives must justify their cost far more than before</span></div>
+    <div class="s-stat"><span class="s-stat-n">Stack</span><span class="s-stat-l">2–3 tools together to create a completely free "AI superpower workflow"</span></div>
+  </div>
+
+  <div class="tools-grid">
+    <div class="tool-card">
+      <div class="tool-category">Category · Research & Writing</div>
+      <div class="tool-name">Claude (Anthropic)</div>
+      <div class="tool-price">Free Tier Available</div>
+      <p class="tool-desc">The best AI for long-document analysis, nuanced reasoning, and "contract-style" instructions. The free tier handles most professional writing, research synthesis, and complex reasoning tasks. Excels at structured outputs when you give it clear specifications. Preferred by researchers and writers for its tone and accuracy.</p>
+      <div class="tool-replaces"><strong>Replaces:</strong> Research assistant subscriptions, professional writing coaches, document summarisation tools ($200+/yr)</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-category">Category · Search & Research</div>
+      <div class="tool-name">Perplexity AI</div>
+      <div class="tool-price">Free Tier Available</div>
+      <p class="tool-desc">Perplexity reads the top results and synthesizes them into a single, cited summary — making it the primary catalyst for the death of the browser tab. It is the premier tool for verified discovery in 2026. Free tier includes limited Pro searches daily. Perfect for fact-checking, market research, and technical overviews.</p>
+      <div class="tool-replaces"><strong>Replaces:</strong> Research database subscriptions, manual web research (5–10hrs/week saved)</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-category">Category · Design & Visuals</div>
+      <div class="tool-name">Canva AI</div>
+      <div class="tool-price">Free Tier Available</div>
+      <p class="tool-desc">Canva has transformed from a simple design tool into a full-fledged creative platform with AI baked into nearly every feature. The free plan includes Magic Write for generating text, Magic Eraser for removing objects from photos, text-to-image generation, AI-powered presentations, and automatic design suggestions. Zero design experience required.</p>
+      <div class="tool-replaces"><strong>Replaces:</strong> Adobe Creative Suite, graphic designer fees, presentation software ($600+/yr)</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-category">Category · Image Generation</div>
+      <div class="tool-name">Leonardo AI</div>
+      <div class="tool-price">Free Tier Available</div>
+      <p class="tool-desc">Leonardo.Ai offers advanced features usually reserved for paid tools. It is arguably the most generous free tier for high-quality artistic control: you get 150 fast tokens daily, which is enough for roughly 30–70 images depending on settings. Uniquely, you are allowed to use images commercially, even on the free plan. The go-to for creators, marketers, and product teams.</p>
+      <div class="tool-replaces"><strong>Replaces:</strong> Stock photo subscriptions, hired illustrators, Midjourney ($108+/yr)</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-category">Category · Voice & Audio</div>
+      <div class="tool-name">ElevenLabs</div>
+      <div class="tool-price">Free Tier Available</div>
+      <p class="tool-desc">ElevenLabs has become the standard for AI voice for a reason. The free plan gives you 10,000 characters per month (about 10–15 minutes of audio) across a huge library of voices. The new music generator and sound effects tools are also included in the free tier. Used by podcasters, video creators, and educators for professional voice-over.</p>
+      <div class="tool-replaces"><strong>Replaces:</strong> Voice-over artists, podcast editing software, narration subscriptions ($500+/yr)</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-category">Category · Meeting & Notes</div>
+      <div class="tool-name">Otter.ai</div>
+      <div class="tool-price">Free Tier Available</div>
+      <p class="tool-desc">Otter.ai provides AI-powered transcription services with impressive accuracy. The free plan includes 600 minutes monthly, sufficient for most individual users to transcribe meetings, interviews, and lectures. The AI identifies different speakers, creates searchable transcripts, and generates summary highlights. Professionals report saving 5–10 hours weekly by automating note-taking.</p>
+      <div class="tool-replaces"><strong>Replaces:</strong> Manual note-taking, transcription services, meeting summary tools ($300+/yr)</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-category">Category · Research Synthesis</div>
+      <div class="tool-name">Google NotebookLM</div>
+      <div class="tool-price">Free</div>
+      <p class="tool-desc">Upload any document — textbook, research paper, report, transcript — and NotebookLM answers questions about it with pinpoint citations. Ideal for analysing dense textbooks. The Audio Overview feature transforms any document into a podcast-style conversation between two AI hosts. Used by students, consultants, and analysts worldwide as a free research intelligence tool.</p>
+      <div class="tool-replaces"><strong>Replaces:</strong> Document analysis services, research summarisation tools, study aids ($200+/yr)</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-category">Category · Writing Polish</div>
+      <div class="tool-name">Grammarly (Free)</div>
+      <div class="tool-price">Free Tier Available</div>
+      <p class="tool-desc">Grammarly's free tier has expanded well beyond basic spell-checking into genuine AI writing assistance. The free version now catches grammatical errors, suggests clarity improvements, adjusts tone, and provides concise rewriting options. Works across Gmail, Google Docs, social media, and messaging apps through browser extensions. Saves non-native English speakers and professional writers hours per week.</p>
+      <div class="tool-replaces"><strong>Replaces:</strong> Proofreaders, style editors, writing coaching services ($150+/yr)</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-category">Category · Video Editing</div>
+      <div class="tool-name">CapCut AI</div>
+      <div class="tool-price">Free</div>
+      <p class="tool-desc">Auto-captions, background removal, AI voice-over, scene detection, and smart editing — all free, all in one app, available on desktop and mobile. In 2026 it is the most used video editing tool for creators globally. Produces professional results without the learning curve of Premiere Pro or Final Cut. If you make any video content — this is your editing stack.</p>
+      <div class="tool-replaces"><strong>Replaces:</strong> Adobe Premiere, Final Cut Pro, captioning services ($600+/yr)</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-category">Category · Coding Assistant</div>
+      <div class="tool-name">GitHub Copilot / DeepSeek</div>
+      <div class="tool-price">Free Tier Available</div>
+      <p class="tool-desc">DeepSeek is the "Utility King." While it lacks the polished UI of other tools, its generosity allows for massive debugging tasks. During testing, DeepSeek-V3 completed a 4,000-line multi-file debugging session without triggering token throttling. GitHub Copilot's free tier provides inline code suggestions. Both are now essential for any developer or technical professional.</p>
+      <div class="tool-replaces"><strong>Replaces:</strong> Junior developer hours, debugging time, Stack Overflow rabbit holes (10+ hrs/week)</div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-head">✅ The Free AI Superpower Stack — Combine These 3</div>
+    <p class="tip-text"><strong>Claude (free)</strong> for deep thinking, writing, and analysis → <strong>Perplexity (free)</strong> for real-time research with citations → <strong>Canva AI (free)</strong> for turning the output into visuals. Combine 2–3 tools (Claude for writing + Gemini for images + NotebookLM for research) for a completely free "AI superpower stack." This combination covers: research, writing, editing, design, and distribution — at zero cost, at professional quality, starting today.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 1 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"The real question in 2026 isn't whether free AI tools are good enough. <em>The question is whether the paid versions offer enough extra value to justify their cost.</em> For most users, they don't."</p>
+  <p class="quote-attr">— The Daily Xpress · Free AI Tools Analysis · 2026</p>
+</div>
+
+<!-- ─── 02: PROMPT ENGINEERING ─── -->
+<section class="section section-alt" id="prompt">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 02</div>
+    <div class="s-meta">
+      <div class="s-cat">Lushbinary · DigitalOcean · Lakera · Thomas Wiegold 2026</div>
+      <h2 class="s-title">Prompt<br/><span>Engineering</span></h2>
+      <p class="s-desc">The difference between a bad AI answer and a brilliant one is almost always the question. Research-backed techniques improve quality by 20–60%. Chain-of-thought alone improves math and logic by 15–40%. Prompt engineering is now a $6.95B discipline — and most people are still asking AI questions the way they'd Google something in 2018.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">20–60%</span><span class="s-stat-l">quality improvement from research-backed prompt techniques</span></div>
+    <div class="s-stat"><span class="s-stat-n">$6.95B</span><span class="s-stat-l">prompt engineering as a discipline — 2026 market size</span></div>
+    <div class="s-stat"><span class="s-stat-n">Spec</span><span class="s-stat-l">"Prompt engineering became writing clearer specs, not longer prompts" — 2026 shift</span></div>
+    <div class="s-stat"><span class="s-stat-n">Context</span><span class="s-stat-l">Andrej Karpathy: "The LLM is a CPU. The context window is RAM. You are the OS."</span></div>
+  </div>
+
+  <!-- Bad vs Good Prompt -->
+  <p style="font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:var(--gold);margin-bottom:16px">Bad Prompt vs Brilliant Prompt — The Same Task</p>
+  <div class="prompt-compare">
+    <div class="prompt-side">
+      <div class="prompt-label bad">❌ Bad Prompt — Vague, Unstructured</div>
+      <div class="prompt-box">Write me a LinkedIn post about our new product launch.</div>
+      <p class="prompt-why"><strong>Why it fails:</strong> No context about the product, no audience, no tone, no length, no goal, no call to action. The AI must guess at every variable — and its guesses will be generic. Output: a forgettable post nobody would publish.</p>
+    </div>
+    <div class="prompt-side">
+      <div class="prompt-label good">✅ Brilliant Prompt — Spec-Style, Structured</div>
+      <div class="prompt-box">You are a B2B SaaS copywriter with 10 years of LinkedIn experience.<br/><br/>Write a LinkedIn post for the launch of [Product], a time-tracking tool for remote engineering teams.<br/><br/>Audience: CTOs and engineering managers at Series A–C startups.<br/>Tone: Direct, data-led, no fluff.<br/>Format: Hook (1 line) → Problem (2–3 lines) → Solution (3–4 lines) → CTA (1 line).<br/>Length: 150–200 words.<br/>Include: One specific stat about remote team productivity loss.</div>
+      <p class="prompt-why"><strong>Why it works:</strong> Role defined. Audience specified. Tone set. Format provided. Length constrained. Specific element requested. The AI has zero ambiguity — and produces a post ready to publish.</p>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">PROMPT TECHNIQUE 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 4h4v2.2a1.8 1.8 0 0 0 3.4 0V4H20v4h-2.2a1.8 1.8 0 0 0 0 3.4H20V15h-3.6v-2.2a1.8 1.8 0 0 0-3.4 0V15H9v-4H6.8a1.8 1.8 0 0 0 0 3.4H9V20H5v-3.6H2.8a1.8 1.8 0 0 1 0-3.4H5V9h4z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Chain-of-Thought (CoT)</div>
+      <div class="card-sec">For Logic, Math & Complex Reasoning</div>
+      <p class="card-text">Ask the AI to show its reasoning before delivering a final answer. The simplest version is adding "Think step-by-step" to your prompt, which encourages the model to work through the problem rather than jumping straight to a conclusion. Chain-of-thought improves math and logic by 15–40%. It also makes errors easier to spot — if the reasoning goes wrong at step two, you catch it before it compounds.</p>
+      <div class="codebox"><span class="codebox-label">Example</span>"Calculate the optimal pricing strategy for a SaaS tool targeting SMBs. Think step-by-step through: market positioning, competitor pricing, cost structure, and value perception. Then give your recommendation."</div>
+      <span class="badge ba">+15–40% Accuracy</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PROMPT TECHNIQUE 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="9" cy="10" r="6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="14" r="6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Role Prompting</div>
+      <div class="card-sec">For Tone, Perspective & Expertise</div>
+      <p class="card-text">Assign the AI a specific expert identity before your request. Best practices include choosing roles that are realistic and task-relevant, briefly stating the role at the start of the prompt, and pairing the role with clear task instructions. This shifts the model's entire response frame — vocabulary, depth, and emphasis all adjust to match the assigned expertise. Particularly powerful for writing, analysis, and creative tasks.</p>
+      <div class="codebox"><span class="codebox-label">Example</span>"You are a senior McKinsey consultant with 15 years in healthcare strategy. Analyse the key risks in launching a direct-to-consumer telehealth platform in the UK market in 2026."</div>
+      <span class="badge ba">Tone + Depth Control</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PROMPT TECHNIQUE 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="5" y="4" width="14" height="17" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="9" y="2.5" width="6" height="3.5" rx="1" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.5 12h7M8.5 16h7" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Few-Shot Prompting</div>
+      <div class="card-sec">For Format, Style & Consistency</div>
+      <p class="card-text">Few-shot prompting remains one of the highest-ROI techniques available. Three to five diverse examples, wrapped in example tags for Claude. You show the AI what a good output looks like before asking for one. The model learns your desired format, vocabulary, and quality standard from the examples — and applies them to your new request. This is the technique that makes AI actually write the way you want.</p>
+      <div class="codebox"><span class="codebox-label">Structure</span>Here are 3 examples of our brand tone:<br/>Example 1: [your text]<br/>Example 2: [your text]<br/>Example 3: [your text]<br/><br/>Now write a product description for [X] in the same tone.</div>
+      <span class="badge ba">Highest-ROI Technique</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PROMPT TECHNIQUE 04</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M4 20 14 4l6 16z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M9 20h5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Output Contracts</div>
+      <div class="card-sec">The 2026 Standard</div>
+      <p class="card-text">Prompt engineering did not become "writing longer prompts" in 2026. It became writing clearer specs. An output contract specifies exactly what the response must contain: format (table/list/paragraph), length (word or character count), required sections, tone, and what to include when uncertain. Success criteria: What does "done" look like and how will you judge it? Output contract: Format, length, tone, and required sections — make it testable.</p>
+      <div class="codebox"><span class="codebox-label">Template</span>Format: Numbered list<br/>Length: 150–200 words<br/>Tone: Direct, professional, no jargon<br/>Sections: Problem → Solution → Outcome<br/>If uncertain: mark as [UNCERTAIN]<br/>Do not include: generic advice</div>
+      <span class="badge ba">2026 Standard</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PROMPT TECHNIQUE 05</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M20 11a8 8 0 0 0-14.9-3.5M4 13a8 8 0 0 0 14.9 3.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 4v4h4M19 20v-4h-4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Self-Refinement Prompting</div>
+      <div class="card-sec">Let the AI Critique Itself</div>
+      <p class="card-text">After receiving an output, ask the AI to critique its own answer before you do. Self-refinement adds 10–25% quality improvement — because the model catches errors in its own reasoning that it wouldn't catch in yours. The formula: generate → critique → revise. This 3-step process consistently produces better outputs than iterating through human feedback alone. Particularly powerful for code, analysis, and strategic documents.</p>
+      <div class="codebox"><span class="codebox-label">Follow-Up Prompt</span>"Review the answer you just gave me. What are its 3 weakest points — where might you be wrong, incomplete, or making an assumption? Then revise the answer to address those weaknesses."</div>
+      <span class="badge ba">+10–25% Quality</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PROMPT TRAP</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 3 2 20h20z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M12 10v4.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="17.3" r="0.9" fill="#c8943a"/></svg></span>
+      <div class="card-title">What Kills Output Quality</div>
+      <div class="card-sec">The Most Common Mistakes</div>
+      <p class="card-text">Clear structure and context matter more than clever wording — most prompt failures come from ambiguity, not model limitations.<br/><br/><strong style="color:var(--cream)">Vague requests:</strong> "Help me with marketing" → AI must guess the context, goal, and audience. It will guess wrong.<br/><br/><strong style="color:var(--cream)">No format specification:</strong> AI defaults to its own preferred format, which may not be what you need.<br/><br/><strong style="color:var(--cream)">Accepting the first output:</strong> The biggest mistake is accepting the first output. Treat AI like a brilliant but literal-minded intern: be specific, give examples, and iterate.<br/><br/><strong style="color:var(--cream)">Using CoT with reasoning models:</strong> Skip explicit CoT for reasoning models — they already do it internally. Adding "think step by step" is like telling someone who's already thinking to please start thinking.</p>
+      <span class="badge bc">Avoid These</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 2 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"The LLM is a CPU. The context window is RAM. Your job is to be the operating system — loading working memory with <em>exactly the right code and data for each task.</em>"</p>
+  <p class="quote-attr">— Andrej Karpathy · Former Tesla AI Director · OpenAI Co-Founder · 2025</p>
+</div>
+
+<!-- ─── 03: 3 HOURS IN 30 MINUTES ─── -->
+<section class="section" id="workflow">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 03</div>
+    <div class="s-meta">
+      <div class="s-cat">Real Workflow Examples · Tested · 2026 Verified</div>
+      <h2 class="s-title">3 Hours of Work<br/>in <span>30 Minutes</span></h2>
+      <p class="s-desc">These are not theoretical use cases. These are real workflows used daily by professionals across every field — verified in 2026 with actual time measurements. The difference between someone who uses AI and someone who uses AI strategically is approximately 20 hours per week.</p>
+    </div>
+  </div>
+
+  <div class="wf-head">
+    <span>Task</span><span>How — The AI Workflow</span><span>Time Saved</span>
+  </div>
+  <div class="workflow-table">
+    <div class="wf-row">
+      <div class="wf-task">📧 Write + Send Weekly Newsletter</div>
+      <div class="wf-how">Paste 3–5 links into Claude with your niche + audience. Prompt: "Write a 400-word newsletter issue synthesising these sources into actionable insights for [audience]. Format: intro → 3 insight blocks → close. Tone: [your brand voice examples]." Edit lightly. Send. Done.</div>
+      <div class="wf-time"><span class="wf-time-save">2.5hrs</span><span class="wf-time-label">→ 15min</span></div>
+    </div>
+    <div class="wf-row">
+      <div class="wf-task">📊 Research Report on Any Topic</div>
+      <div class="wf-how">Perplexity for current data with citations → NotebookLM to analyse uploaded PDFs → Claude to synthesise into structured report with your specified format. Three tools, zero hallucinations, full citations. Previously required a researcher or 4 hours of manual reading.</div>
+      <div class="wf-time"><span class="wf-time-save">3hrs</span><span class="wf-time-label">→ 25min</span></div>
+    </div>
+    <div class="wf-row">
+      <div class="wf-task">🎨 Social Media Content Calendar</div>
+      <div class="wf-how">Prompt Claude: "Create a 30-post social media content calendar for [niche + audience]. Include: post type, hook line, key message, CTA. Formats: mix of educational, story, engagement, promotional in 3:1 ratio." Export → paste into Canva template → done. One 30-minute session covers an entire month.</div>
+      <div class="wf-time"><span class="wf-time-save">6hrs</span><span class="wf-time-label">→ 30min</span></div>
+    </div>
+    <div class="wf-row">
+      <div class="wf-task">💻 Debug Complex Code</div>
+      <div class="wf-how">Paste the full error + relevant code into DeepSeek or Claude. Prompt: "Debug this error. Explain the root cause, not just the fix. Then show the corrected code with comments explaining each change. List 3 test cases that would confirm the fix worked." It adds 30 seconds to generation time. It saves 3 hours of debugging.</div>
+      <div class="wf-time"><span class="wf-time-save">3hrs</span><span class="wf-time-label">→ 20min</span></div>
+    </div>
+    <div class="wf-row">
+      <div class="wf-task">📝 Meeting Notes → Action Plan</div>
+      <div class="wf-how">Record meeting with Otter.ai (auto-transcribes + identifies speakers). Export transcript → paste into Claude with prompt: "Extract: 1) Decisions made, 2) Action items with owners and deadlines, 3) Open questions, 4) Key points of disagreement. Format as a structured action plan." Done in 3 minutes post-meeting.</div>
+      <div class="wf-time"><span class="wf-time-save">45min</span><span class="wf-time-label">→ 3min</span></div>
+    </div>
+    <div class="wf-row">
+      <div class="wf-task">🎙️ Podcast/Video Script</div>
+      <div class="wf-how">Prompt Claude with topic + audience + length + your speaking style examples. Get a full script with: hook, chapter markers, transition phrases, key data points, and closing CTA. Use ElevenLabs for voice-over if needed. Edit for authenticity. One creator's script writing went from 3 hours to 18 minutes using this workflow.</div>
+      <div class="wf-time"><span class="wf-time-save">3hrs</span><span class="wf-time-label">→ 18min</span></div>
+    </div>
+    <div class="wf-row">
+      <div class="wf-task">📈 Competitive Analysis</div>
+      <div class="wf-how">Perplexity: search for each competitor's recent moves, pricing, product updates. Compile into a document. NotebookLM: upload competitor landing pages, annual reports, press releases. Claude: "Synthesise this into a competitive landscape analysis covering: market position, key differentiators, weaknesses, and opportunities for [your company]." Previously required a strategy consultant.</div>
+      <div class="wf-time"><span class="wf-time-save">4hrs</span><span class="wf-time-label">→ 35min</span></div>
+    </div>
+    <div class="wf-row">
+      <div class="wf-task">✉️ Cold Email Sequence</div>
+      <div class="wf-how">Provide: target audience, product/service, your unique value proposition, 3 objections they'd have, and 2 competitors. Prompt: "Write a 5-email cold email sequence. Each email: different angle, different objection handled. Format: Subject → Opener → Value → CTA. Sequence arc: problem awareness → value proof → social proof → objection → final offer." Produce, then A/B test subject lines.</div>
+      <div class="wf-time"><span class="wf-time-save">2hrs</span><span class="wf-time-label">→ 20min</span></div>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">WORKFLOW PRINCIPLE 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 15 15 9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 6.5 13 4.5a3.5 3.5 0 0 1 5 5l-2 2M13 17.5 11 19.5a3.5 3.5 0 0 1-5-5l2-2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Chain Tools — Don't Use One in Isolation</div>
+      <p class="card-text">The greatest efficiency gains come from chaining AI tools together: Perplexity finds and cites information → Claude analyses and synthesises it → Canva presents it visually. Each tool does what it's best at. None of them does everything. The creator who learns to chain 3 free tools effectively outperforms someone with a $200/month single-tool subscription in almost every professional task. The skill is understanding which tool owns which step of the workflow.</p>
+      <span class="badge ba">Force Multiplier</span>
+    </div>
+    <div class="card">
+      <div class="card-num">WORKFLOW PRINCIPLE 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="1.4" fill="#c8943a"/></svg></span>
+      <div class="card-title">AI First Draft, Human Final Touch</div>
+      <p class="card-text">The most effective professionals in 2026 treat AI as a first-draft machine and themselves as the editor, strategist, and quality controller. AI produces the scaffold — fast, comprehensive, reasonably good. Humans provide the judgment, the lived experience, the nuanced read of the audience, and the final decisions. Fighting this model wastes time. Embracing it multiplies your output by 3–5× without sacrificing quality — because your editing hours are spent on work that AI already made 80% complete.</p>
+      <span class="badge ba">Core Mental Model</span>
+    </div>
+    <div class="card">
+      <div class="card-num">WORKFLOW PRINCIPLE 03</div>
+      <span class="card-icon">📂</span>
+      <div class="card-title">Build Your Prompt Library</div>
+      <p class="card-text">Every great prompt you write should be saved in a personal prompt library (Notion, Google Doc, or a dedicated text file). When you discover a prompt that produces excellent results for a recurring task — save it, refine it, and reuse it. This library becomes your personal AI operating system: a set of reliable, tested prompts that consistently produce high-quality outputs for your most common professional tasks. Within 3 months of consistent saving, your prompt library is one of your most valuable professional assets.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Compound Effect</div>
+        <p class="card-text">A prompt that saves 2 hours this week saves 100 hours over the next year. A library of 20 such prompts represents 2,000 hours of saved work annually — equivalent to a full-time employee's annual productive output. Document them. They compound.</p>
+      </div>
+      <span class="badge bb">Compound Asset</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 04: AI SKILL LADDER ─── -->
+<section class="section section-alt" id="ladder">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 04</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · From Casual User to AI Operator</div>
+      <h2 class="s-title">The <span>AI Skill</span><br/>Ladder</h2>
+      <p class="s-desc">Most people are at Level 1 or 2. Level 5 professionals are already rare — and disproportionately valuable. Each level represents a qualitatively different relationship with AI: different capabilities, different outputs, different career advantages. Where are you now? Where do you need to be?</p>
+    </div>
+  </div>
+
+  <div class="ai-ladder">
+    <div class="ladder-rung">
+      <div class="ladder-level"><div class="ladder-level-num">1</div><div class="ladder-level-label">Passive</div></div>
+      <div class="ladder-body">
+        <div class="ladder-title">The Passive User <span class="ladder-tag tag-user">90% of People</span></div>
+        <p class="ladder-text">Uses AI occasionally. Asks simple questions. Accepts first outputs without critique. Treats it like a smarter Google. No systematic approach to prompting. No saved prompts. No understanding of why some outputs are better than others. Gains: some occasional time savings. Career advantage: minimal — because everyone at this level looks the same.</p>
+      </div>
+    </div>
+    <div class="ladder-rung">
+      <div class="ladder-level"><div class="ladder-level-num">2</div><div class="ladder-level-label">Consistent</div></div>
+      <div class="ladder-body">
+        <div class="ladder-title">The Consistent User <span class="ladder-tag tag-user">Emerging Group</span></div>
+        <p class="ladder-text">Uses AI daily for recurring tasks. Has discovered 3–5 tools that work for their workflow. Starting to notice what makes prompts better or worse. Beginning to save useful prompts. Produces noticeably better work in less time — but hasn't systematised it yet. This is where most "AI-savvy" professionals currently sit. The gap to Level 3 is structured learning and intentional practice.</p>
+      </div>
+    </div>
+    <div class="ladder-rung">
+      <div class="ladder-level"><div class="ladder-level-num">3</div><div class="ladder-level-label">Strategic</div></div>
+      <div class="ladder-body">
+        <div class="ladder-title">The Strategic Operator <span class="ladder-tag tag-pro">Top 10%</span></div>
+        <p class="ladder-text">Has a personal prompt library for their most common tasks. Chains multiple tools together in workflows. Understands the different strengths of Claude vs GPT-4o vs Gemini for different task types. Produces professional-quality outputs in minutes that would take hours manually. Actively learns new AI capabilities as they are released. Clearly more productive than peers — and peers notice.</p>
+      </div>
+    </div>
+    <div class="ladder-rung">
+      <div class="ladder-level"><div class="ladder-level-num">4</div><div class="ladder-level-label">Builder</div></div>
+      <div class="ladder-body">
+        <div class="ladder-title">The AI Builder <span class="ladder-tag tag-pro">Top 3%</span></div>
+        <p class="ladder-text">Uses AI APIs to build tools, automations, and workflows for themselves or their team. Understands system prompts, context engineering, and multi-step AI pipelines. Can build a no-code or low-code AI automation that runs without their involvement. Creates AI-powered products, dashboards, and automated workflows. This level commands significant salary premium — and the supply of people here is still far below demand.</p>
+      </div>
+    </div>
+    <div class="ladder-rung">
+      <div class="ladder-level"><div class="ladder-level-num">5</div><div class="ladder-level-label">Expert</div></div>
+      <div class="ladder-body">
+        <div class="ladder-title">The AI Expert / Architect <span class="ladder-tag tag-expert">Rare & Highly Paid</span></div>
+        <p class="ladder-text">Designs AI systems for organisations. Understands model selection, fine-tuning, RAG systems, agentic workflows, and AI safety considerations. Bridges the gap between what AI can do and what organisations need. Advises on AI strategy. Prompt engineering is now a $6.95B discipline — and its most skilled practitioners are disproportionately rare and disproportionately compensated. This level is accessible to anyone willing to invest 6–12 months in deliberate skill-building.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-head">✅ How to Move Up One Level in 30 Days</div>
+    <p class="tip-text"><strong>Level 1 → 2:</strong> Commit to using AI for at least 3 tasks per workday for 30 days. Document what works. <strong>Level 2 → 3:</strong> Learn and apply 5 prompting techniques from Chapter 02. Build your prompt library to 20 entries. Master tool-chaining for your most common workflows. <strong>Level 3 → 4:</strong> Build one AI automation using Zapier + Claude API or Make + OpenAI. Publish it. Get feedback. <strong>Level 4 → 5:</strong> Deep-dive into RAG systems, fine-tuning, and agentic frameworks. Take one advanced AI engineering course. The ladder is real. Each level is achievable with deliberate practice — not exceptional talent.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── 05: IRREPLACEABLE ─── -->
+<section class="section" id="irreplaceable">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 05</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · What AI Cannot Do</div>
+      <h2 class="s-title">What AI<br/><span>Cannot</span> Replace</h2>
+      <p class="s-desc">Understanding AI's limits is as important as understanding its capabilities. The professionals who will win in an AI-abundant world are not those who do everything AI can do — they are those who do what AI cannot. Here is the definitive list — and why each is your greatest career advantage right now.</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 3v7.5L5.5 17a2 2 0 0 0 1.8 3h9.4a2 2 0 0 0 1.8-3L15 10.5V3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 3h6M6.5 15h11" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">What AI Is Genuinely Bad At — In 2026</div>
+      <p class="col-text">
+        <strong>Real-time judgment with stakes.</strong> AI has no skin in the game. It gives advice without consequences. Human judgment — calibrated by experience, accountability, and emotional stakes — is qualitatively different. A doctor's diagnosis, a lawyer's strategy, a leader's decision in a crisis all require the weight of consequence that AI cannot carry.<br/><br/>
+        <strong>Lived experience and genuine originality.</strong> AI synthesises what exists. It cannot create what has never existed — because it has no experience to draw from. Original ideas, authentic personal stories, and genuinely novel creative directions come from living, not from training data.<br/><br/>
+        <strong>Complex human relationship navigation.</strong> Negotiating a difficult partnership. Managing a team through organisational change. Reading a room. These require emotional intelligence, body language, social capital, and relationship history that AI cannot access.<br/><br/>
+        <strong>Knowing what question to ask.</strong> AI answers questions. It rarely knows which questions are worth asking. Strategic curiosity — knowing what to investigate — is a deeply human skill.
+      </p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M7 4h10v6a5 5 0 0 1-10 0z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M7 6H4a3 3 0 0 0 3 5M17 6h3a3 3 0 0 1-3 5M9.5 18h5M12 15v3M8 21h8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">Your Competitive Advantage — Build These Now</div>
+      <p class="col-text">
+        <strong>Critical thinking and verification.</strong> Every AI output gets three questions: 1) What would make this wrong? 2) What assumptions did the model make? 3) Which specific claim is most likely to be hallucinated? The ability to critically evaluate AI output is now more valuable than the ability to produce it.<br/><br/>
+        <strong>Contextual judgment.</strong> Knowing when AI's answer is technically correct but strategically wrong. When the output is good but the timing is bad. When the information is accurate but the audience isn't ready for it. This judgment layer is entirely human.<br/><br/>
+        <strong>Relationship and trust capital.</strong> Clients, colleagues, and employers extend trust to people — not to AI tools. The relational equity you've built over years cannot be automated.<br/><br/>
+        <strong>Ethical and value-based decisions.</strong> AI can tell you the most efficient path. It cannot tell you whether that path is the right one given your values, your community, and the world you want to live in.
+      </p>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">IRREPLACEABLE 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 3a9 9 0 1 0 0 18c1.2 0 1.8-1 1.2-2-.5-.7-.2-1.7.7-1.9 3.5-.7 6.1-3.6 6.1-7.1A9 9 0 0 0 12 3z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><circle cx="7.5" cy="10.5" r="1.1" fill="#c8943a"/><circle cx="12" cy="7.5" r="1.1" fill="#c8943a"/><circle cx="16" cy="10" r="1.1" fill="#c8943a"/></svg></span>
+      <div class="card-title">Taste — The Scarcest AI-Proof Skill</div>
+      <p class="card-text">AI can generate. It cannot curate. Knowing which of a thousand AI outputs is the excellent one — and why — requires developed aesthetic judgment that no amount of training data can replicate. The professional who generates 50 AI outputs and selects the right one with precision and speed is worth dramatically more than the professional who generates one and publishes it. Taste is the editorial layer that turns AI's abundance into quality. And taste is built by exposure, education, and reflection — not by prompting.</p>
+      <span class="badge bd">Rare Skill</span>
+    </div>
+    <div class="card">
+      <div class="card-num">IRREPLACEABLE 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15.5 0 18M12 3c-2.5 2.5-2.5 15.5 0 18" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Domain Expertise + AI = Unbeatable</div>
+      <p class="card-text">The most dangerous misconception about AI is that it renders expertise obsolete. The opposite is true: AI makes expertise more valuable, not less. A senior doctor using AI diagnostic tools is not replaced by AI — they are amplified by it. Their expertise allows them to know when the AI is wrong, what question to ask next, and what the edge case is that the model hasn't seen. Domain expertise + AI fluency is the most powerful professional combination in 2026. Neither alone is as competitive. Both together is rare and valuable.</p>
+      <span class="badge ba">Your Strongest Position</span>
+    </div>
+    <div class="card">
+      <div class="card-num">IRREPLACEABLE 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M3 12h4l3-3 3 3 3-3 5 3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 12v5h4v-5M17 12v5h4v-5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Human Bridge</div>
+      <p class="card-text">The person who can translate between what AI can do and what organisations need — who speaks both the language of business strategy and the language of AI capability — is among the most sought-after professionals in 2026. They are not necessarily the best AI engineer. They are the person who understands the human side of a problem well enough to know which AI solution actually fits. This role — AI translator, AI strategist, AI change manager — is proliferating across every industry. And almost nobody is being trained for it deliberately.</p>
+      <span class="badge bb">Career Opportunity</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 3 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"AI will not replace humans. But humans who use AI will replace humans who don't. And humans who use AI <em>wisely</em> will replace humans who use it naively."</p>
+  <p class="quote-attr">— Ethan Mollick · Wharton School · Co-Intelligence: Living and Working with AI · 2025</p>
+</div>
+
+<!-- ─── 06: CAREER POSITIONING ─── -->
+<section class="section section-alt" id="career">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 06</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · How to Win in an AI-Abundant World</div>
+      <h2 class="s-title">Career<br/><span>Positioning</span></h2>
+      <p class="s-desc">Most professionals are waiting for AI to affect their career. The ones who will thrive are designing for it deliberately — developing AI fluency, repositioning their value, and identifying where the new leverage points are. Here's the playbook.</p>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">CAREER MOVE 01</div>
+      <span class="card-icon">📣</span>
+      <div class="card-title">Make Your AI Skills Visible</div>
+      <p class="card-text">Most people use AI privately. The professionals who win do the opposite: they document their AI workflows, share them publicly, and build a reputation for AI-augmented productivity before it becomes table stakes. A LinkedIn post showing how you compressed a 4-hour task into 20 minutes using AI + your expertise signals exactly what employers and clients are looking for in 2026. Visibility of your AI fluency is a career asset — not a threat. The person who publicly demonstrates expertise is positioned ahead of the one who quietly possesses it.</p>
+      <span class="badge ba">Career Leverage</span>
+    </div>
+    <div class="card">
+      <div class="card-num">CAREER MOVE 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="7.5" cy="15.5" r="4.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m11 12 8-8M16 6l2.5 2.5M13.5 8.5 16 11" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Reframe Your Value Proposition</div>
+      <p class="card-text">The question is not "Can AI do my job?" The question is "What can I do with AI that I couldn't do before?" A marketer who used AI to run 10× more campaigns at the same quality, the analyst who now delivers reports in 2 hours that used to take 2 days, the consultant who synthesises 50 source documents into a strategy in an afternoon — these people are not replaced. They are promoted. Reframe your value from "what I produce" to "what I can produce with AI." The output multiplier is your new CV.</p>
+      <span class="badge ba">New Value Proposition</span>
+    </div>
+    <div class="card">
+      <div class="card-num">CAREER MOVE 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M4 4.5h4a2 2 0 0 1 2 2V20a1.7 1.7 0 0 0-2-1.5H4zM20 4.5h-4a2 2 0 0 0-2 2V20a1.7 1.7 0 0 1 2-1.5h4z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Pick an AI Specialisation</div>
+      <p class="card-text">The broadest career opportunity in AI is not being the best at using every tool. It's being the definitive expert at AI applied to one specific domain: AI in healthcare operations, AI in legal research, AI in architecture and design, AI in financial modelling. Your existing domain expertise is the moat. AI fluency is the amplifier. Together, they create a specialisation that is genuinely rare — because most domain experts haven't developed AI fluency, and most AI-fluent professionals don't have deep domain expertise. The intersection is where the highest value sits.</p>
+      <span class="badge bb">Specialisation Strategy</span>
+    </div>
+    <div class="card">
+      <div class="card-num">CAREER MOVE 04</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M14.5 6.5a4 4 0 0 1-5 5L4 17l3 3 5.5-5.5a4 4 0 0 1 5-5l-2.7 2.7-2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Build the Thing — Don't Just Advise</div>
+      <p class="card-text">The fastest path to career leverage in AI is creating something demonstrable: a tool, a workflow, an automated pipeline, a publicly shared use case. Advising that "AI can help with X" is worth very little. Building a prototype that shows exactly how — and sharing it — is worth enormously more. One publicly shared AI workflow on LinkedIn, GitHub, or a blog post can build more credibility in a week than three months of talking about AI in meetings. In an attention economy, demonstrations outperform descriptions.</p>
+      <span class="badge ba">Action Over Advice</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 07: AI ETHICS ─── -->
+<section class="section" id="ethics">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 07</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · The Skill Most AI Users Have Zero Of</div>
+      <h2 class="s-title">AI Ethics &<br/><span>Critical Thinking</span></h2>
+      <p class="s-desc">Speed is not the only AI advantage that matters. The other one is accuracy — and most AI users have no reliable system for evaluating it. In an era of AI-generated content, the professional who can critically evaluate AI output is rarer and more valuable than the one who generates it fastest.</p>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">CRITICAL SKILL 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="10.5" cy="10.5" r="6.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m20 20-4.8-4.8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Hallucination Problem — And Your Mitigation</div>
+      <p class="card-text">When you write something yourself, you know where the weaknesses are. When AI writes it, you get brain fry trying to spot the subtle lies. Every AI output gets three questions: 1) What would make this wrong? 2) What assumptions did the model make? 3) Which specific claim is most likely to be hallucinated? Don't ask the AI these questions. Ask yourself. If you can't answer them, you don't understand the output well enough to use it. Period.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Verification Protocol</div>
+        <p class="card-text">For any AI output you plan to publish, present, or act on: verify the 3 most specific claims using an independent source. Treat statistics, names, dates, and quotes with particular suspicion — these are the most frequent hallucination targets. A confident AI output is not more reliable than an uncertain one. The model generates the same probability for a correct answer and a confident hallucination.</p>
+      </div>
+      <span class="badge bc">Non-Negotiable</span>
+    </div>
+    <div class="card">
+      <div class="card-num">CRITICAL SKILL 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 3v18M8 21h8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 6h14M5 6l-3 6a3.2 3.2 0 0 0 6 0zM19 6l-3 6a3.2 3.2 0 0 0 6 0z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">When Not to Use AI</div>
+      <p class="card-text">The most under-discussed AI skill is knowing when not to use it. Situations where AI assistance is inappropriate or risky: highly personalised communication where authenticity matters (a condolence letter, a genuine apology), confidential client or IP information (cloud AI processes your data), decisions requiring current real-world data (prices, regulations, people's availability), and situations where the relationship is built on personal trust. If you deal with confidential IP, cloud-based AI is a liability. Know the line. Cross it deliberately, not accidentally.</p>
+      <span class="badge bc">Know the Limits</span>
+    </div>
+    <div class="card">
+      <div class="card-num">CRITICAL SKILL 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15.5 0 18M12 3c-2.5 2.5-2.5 15.5 0 18" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">AI Bias — Real and Consequential</div>
+      <p class="card-text">AI models reflect the biases present in their training data — which means they systematically underrepresent certain perspectives, overconfidently present others, and may produce outputs that are subtly skewed in ways that are difficult to detect without critical awareness. The professional who understands this doesn't avoid AI — they compensate for it. They specifically seek out perspectives the AI might underweight, verify claims from underrepresented fields, and never use AI output as the only source for an important decision. Awareness of bias is not a reason to avoid AI. It's a reason to use it more carefully.</p>
+      <span class="badge bd">Awareness</span>
+    </div>
+    <div class="card">
+      <div class="card-num">CRITICAL SKILL 04</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="9" cy="10" r="6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="14" r="6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Attribution and Authenticity</div>
+      <p class="card-text">The question of whether to disclose AI use is increasingly context-dependent — and increasingly consequential. Academic settings: disclosure is often required and non-disclosure is academic misconduct. Professional settings: disclosure norms vary by organisation and client relationship. Publishing/media: emerging standards exist but are inconsistently applied. Creative work: a genuine ethical debate. The guiding principle: never allow AI-generated content to be mistaken for your own lived experience, unique expertise, or original research when it is not. The trust that professional relationships are built on depends on this distinction.</p>
+      <span class="badge ba">Ethical Compass</span>
+    </div>
+    <div class="card">
+      <div class="card-num">CRITICAL SKILL 05</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="5" y="11" width="14" height="10" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Data Privacy — The Invisible Risk</div>
+      <p class="card-text">Every prompt you send to a cloud-based AI tool is processed by servers you don't control, under privacy policies you probably haven't read. In professional contexts, this means: never paste client names, financial data, unreleased product details, personal medical information, or any information covered by NDA into a public AI tool. LM Studio allows you to run models directly on your desktop with zero data leakage — a critical step for AI cybersecurity in 2026. For sensitive work: local models or enterprise AI agreements with explicit data handling clauses are the minimum standard.</p>
+      <span class="badge bc">Security First</span>
+    </div>
+    <div class="card">
+      <div class="card-num">CRITICAL SKILL 06</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8A3.5 3.5 0 0 0 8 18a3 3 0 0 0 3-2.5V6a2 2 0 0 0-2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 1 5.8A3.5 3.5 0 0 1 16 18a3 3 0 0 1-3-2.5V6a2 2 0 0 1 2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Preserve Your Own Thinking</div>
+      <p class="card-text">The deepest risk of AI fluency is the atrophy of independent thinking. When every problem gets immediately passed to an AI for a first answer, the muscle of original reasoning weakens from disuse. The most effective AI users in 2026 describe a deliberate practice: thinking through problems themselves first, forming their own hypothesis or solution, and then using AI to challenge, stress-test, or expand that thinking — not to replace it. AI that supplements your thinking makes you smarter. AI that replaces it makes you weaker — and replaceable.</p>
+      <span class="badge ba">Long-Term Advantage</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 08: MASTER CHEATSHEET ─── -->
+<section class="section" id="cheatsheet">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 08</div>
+    <div class="s-meta">
+      <div class="s-cat">Quick Reference</div>
+      <h2 class="s-title">The Master<br/><span>Cheatsheet</span></h2>
+      <p class="s-desc">Every principle from this guide — one quick-reference table. Your AI operating system for 2026.</p>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Skill / Tool</th><th>The Action</th><th>Chapter</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td class="num-cell">01</td><td class="name-cell">The Free AI Stack</td><td>Claude (writing/analysis) + Perplexity (research) + Canva (design) = complete professional toolkit at £0.</td><td>Tools</td><td><span class="badge ba">Start Today</span></td></tr>
+        <tr><td class="num-cell">02</td><td class="name-cell">Claude (Anthropic)</td><td>Best for: long-document analysis, structured output, nuanced reasoning. Use free tier daily.</td><td>Tools</td><td><span class="badge ba">Core Tool</span></td></tr>
+        <tr><td class="num-cell">03</td><td class="name-cell">Perplexity AI</td><td>Best for: real-time research with citations. Replace Google Search for any research task.</td><td>Tools</td><td><span class="badge ba">Core Tool</span></td></tr>
+        <tr><td class="num-cell">04</td><td class="name-cell">Canva AI (Free)</td><td>Design, presentations, social content, image generation. Zero design skills needed.</td><td>Tools</td><td><span class="badge ba">Core Tool</span></td></tr>
+        <tr><td class="num-cell">05</td><td class="name-cell">NotebookLM</td><td>Upload any document. Ask questions. Get cited answers. Free. Best document analysis tool available.</td><td>Tools</td><td><span class="badge ba">Research</span></td></tr>
+        <tr><td class="num-cell">06</td><td class="name-cell">ElevenLabs</td><td>10,000 characters/month free. Professional voice-over for videos, podcasts, explainers.</td><td>Tools</td><td><span class="badge ba">Audio</span></td></tr>
+        <tr><td class="num-cell">07</td><td class="name-cell">CapCut AI</td><td>Free video editing: auto-captions, AI voice-over, background removal, scene detection.</td><td>Tools</td><td><span class="badge ba">Video</span></td></tr>
+        <tr><td class="num-cell">08</td><td class="name-cell">Otter.ai</td><td>600 min/month free transcription. Record meetings → transcript → Claude for action plan.</td><td>Tools</td><td><span class="badge bb">Meetings</span></td></tr>
+        <tr><td class="num-cell">09</td><td class="name-cell">Output Contract Prompting</td><td>Specify: format, length, tone, required sections, what to do when uncertain. Always. No exceptions.</td><td>Prompting</td><td><span class="badge ba">Non-Negotiable</span></td></tr>
+        <tr><td class="num-cell">10</td><td class="name-cell">Role Prompting</td><td>Start every professional prompt: "You are a [specific expert] with [X years] in [specific domain]."</td><td>Prompting</td><td><span class="badge ba">Every Prompt</span></td></tr>
+        <tr><td class="num-cell">11</td><td class="name-cell">Chain-of-Thought</td><td>For logic/math/analysis: "Think step-by-step before giving your final answer." +15–40% accuracy.</td><td>Prompting</td><td><span class="badge ba">For Complex Tasks</span></td></tr>
+        <tr><td class="num-cell">12</td><td class="name-cell">Few-Shot Prompting</td><td>Provide 3–5 examples of your desired output format before asking for the real output.</td><td>Prompting</td><td><span class="badge ba">Format Control</span></td></tr>
+        <tr><td class="num-cell">13</td><td class="name-cell">Self-Refinement</td><td>After every output: "What are your 3 weakest points? Revise to address them." +10–25% quality.</td><td>Prompting</td><td><span class="badge ba">Quality Boost</span></td></tr>
+        <tr><td class="num-cell">14</td><td class="name-cell">Never Accept First Output</td><td>Iterate always. AI is a first-draft machine. You are the editor, strategist, and quality controller.</td><td>Prompting</td><td><span class="badge ba">Always</span></td></tr>
+        <tr><td class="num-cell">15</td><td class="name-cell">Chain Tools Together</td><td>Perplexity → Claude → Canva. Each tool does its best task. Never use one tool for everything.</td><td>Workflow</td><td><span class="badge ba">Force Multiplier</span></td></tr>
+        <tr><td class="num-cell">16</td><td class="name-cell">Build Your Prompt Library</td><td>Save every great prompt. 20 prompts = 2,000 hours saved annually. Document them. They compound.</td><td>Workflow</td><td><span class="badge ba">Compound Asset</span></td></tr>
+        <tr><td class="num-cell">17</td><td class="name-cell">AI First Draft Protocol</td><td>AI generates scaffold → you edit, judge, verify, and finalise. This multiplies output by 3–5×.</td><td>Workflow</td><td><span class="badge ba">Core Mental Model</span></td></tr>
+        <tr><td class="num-cell">18</td><td class="name-cell">Know Your AI Ladder Level</td><td>Honestly assess: 1-Passive, 2-Consistent, 3-Strategic, 4-Builder, 5-Expert. Move up one level in 30 days.</td><td>AI Ladder</td><td><span class="badge ba">Diagnostic</span></td></tr>
+        <tr><td class="num-cell">19</td><td class="name-cell">Level 3 Priority Actions</td><td>Build prompt library to 20. Master tool-chaining. Learn 5 prompting techniques. Apply daily.</td><td>AI Ladder</td><td><span class="badge ba">Goal</span></td></tr>
+        <tr><td class="num-cell">20</td><td class="name-cell">Domain + AI = Unbeatable</td><td>Your existing expertise is the moat. AI fluency is the amplifier. Together = rare and valuable.</td><td>Irreplaceable</td><td><span class="badge bb">Career Insight</span></td></tr>
+        <tr><td class="num-cell">21</td><td class="name-cell">Develop Taste</td><td>AI generates. You curate. Train your judgment on what excellent output looks like. This is irreplaceable.</td><td>Irreplaceable</td><td><span class="badge bb">Rare Skill</span></td></tr>
+        <tr><td class="num-cell">22</td><td class="name-cell">3 Hallucination Questions</td><td>"What would make this wrong? What assumptions did the model make? Which claim is most likely false?"</td><td>Irreplaceable</td><td><span class="badge bc">Always Verify</span></td></tr>
+        <tr><td class="num-cell">23</td><td class="name-cell">Make AI Skills Visible</td><td>Document and share your AI workflows publicly. Visibility of AI fluency is a career asset in 2026.</td><td>Career</td><td><span class="badge ba">Positioning</span></td></tr>
+        <tr><td class="num-cell">24</td><td class="name-cell">Pick an AI Specialisation</td><td>AI applied to your specific domain = rare. Most domain experts haven't developed AI fluency yet.</td><td>Career</td><td><span class="badge ba">Strategy</span></td></tr>
+        <tr><td class="num-cell">25</td><td class="name-cell">Build Something Demonstrable</td><td>One public AI workflow/tool > 3 months of talking about AI in meetings. Build. Share. Win.</td><td>Career</td><td><span class="badge ba">Action</span></td></tr>
+        <tr><td class="num-cell">26</td><td class="name-cell">Reframe Value: Output × Multiplier</td><td>Your value = what you produce × your AI multiplier. Make the multiplier visible in your work.</td><td>Career</td><td><span class="badge ba">New CV</span></td></tr>
+        <tr><td class="num-cell">27</td><td class="name-cell">Never Paste Confidential Data</td><td>Client names, financial data, IP, NDA content → never into public AI tools. Use local models for sensitive work.</td><td>Ethics</td><td><span class="badge bc">Security</span></td></tr>
+        <tr><td class="num-cell">28</td><td class="name-cell">Know When NOT to Use AI</td><td>Condolence letters. Genuine apologies. Decisions needing real-time data. Trust-based relationships. Know the line.</td><td>Ethics</td><td><span class="badge bc">Judgment</span></td></tr>
+        <tr><td class="num-cell">29</td><td class="name-cell">Think First, AI Second</td><td">Form your own hypothesis first. Then use AI to challenge, stress-test, and expand. Never the reverse.</td><td>Ethics</td><td><span class="badge ba">Long-Term Edge</span></td></tr>
+        <tr><td class="num-cell">30</td><td class="name-cell">The 2026 Formula</td><td>Deep domain expertise + AI fluency + critical thinking + visible output = the most valuable professional in any room.</td><td>All</td><td><span class="badge ba">The Goal</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</section>
+
+<footer>
+  <div class="footer-logo">AI Skills That Actually Matter in 2026</div>
+  <p class="footer-sub">Creator · Technology · Future of Work · 2026 Research Edition</p>
+  <p class="footer-sub" style="color:var(--muted);font-size:13px;margin-top:8px">8 Complete Chapters · 30 Core Skills · Research from Lushbinary, DataCamp, eWeek, Digitpatrox, DigitalOcean, Thomas Wiegold, Lakera, Andrej Karpathy & Ethan Mollick</p>
+  <p class="footer-tiny">Research compiled May 2026 · Inspired by Parallelogram · Built for professionals who want to stay ahead, not catch up</p>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:rgba(200,148,58,.28);margin-top:36px">"The future belongs to those who learn, apply, and think — not just those who use the tools." </p>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const st=document.documentElement.scrollTop;
+  const sh=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('prog').style.width=(st/sh*100)+'%';
+});
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}});
+},{threshold:0.07});
+document.querySelectorAll('.card,.col-card,.s-stat,.tool-card,.ladder-rung,.wf-row,.prompt-side').forEach(el=>{
+  el.style.opacity='0';el.style.transform='translateY(18px)';
+  el.style.transition='opacity .5s ease, transform .5s ease';
+  obs.observe(el);
+});
+</script>
+</body>
+</html>

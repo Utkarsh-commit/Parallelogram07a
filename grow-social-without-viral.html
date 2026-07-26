@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Grow Without Going Viral</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07080a;--surface:#0e1014;--card:#13151a;--card2:#181b22;
+  --gold:#c8943a;--gold2:#e8b84b;--golddim:rgba(200,148,58,.13);
+  --cream:#f0e8d5;--muted:#5c5f68;--light:#9a9da8;
+  --border:rgba(200,148,58,.18);--rust:#b84532;
+  --teal:#2c7a72;--slate:#1a3a5c;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--cream);overflow-x:hidden;line-height:1.6}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.5}
+#prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--slate),var(--gold),var(--gold2));width:0%;z-index:2000;transition:width .08s}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:1500;display:flex;align-items:center;justify-content:space-between;padding:14px 48px;background:rgba(7,8,10,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(200,148,58,.1)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
+.nav-links{display:flex;gap:20px;list-style:none}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+@media(max-width:768px){.nav-links{display:none}.hero,.section,.toc-wrap,.quote-block,footer{padding-left:22px!important;padding-right:22px!important}nav{padding:14px 22px}}
+
+/* HERO */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr auto;align-items:center;gap:48px;padding:120px 64px 80px;position:relative;overflow:hidden}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.hero-chart-visual{display:none}}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 75% 55% at 92% 8%,rgba(26,58,92,.14) 0%,transparent 55%),radial-gradient(ellipse 55% 70% at 5% 90%,rgba(200,148,58,.1) 0%,transparent 60%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;opacity:.022;background-image:linear-gradient(rgba(200,148,58,1) 1px,transparent 1px),linear-gradient(90deg,rgba(200,148,58,1) 1px,transparent 1px);background-size:68px 68px}
+.hero-inner{position:relative;max-width:680px}
+.hero-badge{display:inline-flex;align-items:center;background:rgba(26,58,92,.18);border:1px solid rgba(26,58,92,.45);padding:5px 16px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#7aaed8;margin-bottom:22px;opacity:0;animation:fadeup .7s .15s forwards}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:26px;display:flex;align-items:center;gap:14px;opacity:0;animation:fadeup .7s .2s forwards}
+.hero-tag::before{content:'';width:44px;height:1px;background:var(--gold);flex-shrink:0}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(44px,7.5vw,108px);font-weight:700;line-height:.88;letter-spacing:-4px;margin-bottom:10px;opacity:0;animation:fadeup .8s .4s forwards}
+.hero h1 span{color:var(--gold);font-style:italic}
+.hero h1 .sub{display:block;color:rgba(240,232,213,.2);font-size:clamp(20px,3.4vw,48px);font-weight:400;font-style:italic;letter-spacing:-1px;margin-top:8px}
+.hero-desc{font-size:clamp(15px,1.9vw,18px);color:var(--light);max-width:520px;margin:34px 0 50px;font-weight:300;line-height:1.78;opacity:0;animation:fadeup .8s .6s forwards}
+.hero-stats{display:flex;gap:0;border:1px solid var(--border);width:fit-content;opacity:0;animation:fadeup .8s .8s forwards;flex-wrap:wrap}
+.hstat{padding:16px 26px;border-right:1px solid var(--border);text-align:center}
+.hstat:last-child{border-right:none}
+.hstat-n{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.hstat-l{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-top:4px}
+.scroll-hint{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-top:32px;opacity:.4}
+.scroll-hint::before{content:'';width:1px;height:28px;background:var(--gold);opacity:.35}
+@keyframes fadeup{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+@keyframes growbar{from{height:0}to{height:var(--h)}}
+
+/* TOC */
+.toc-wrap{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:56px 64px}
+.toc-inner{max-width:1100px;margin:0 auto}
+.toc-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:36px;display:flex;align-items:center;gap:12px}
+.toc-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px}
+.toc-item{background:var(--card);padding:18px 22px;display:flex;align-items:flex-start;gap:14px;cursor:pointer;transition:background .2s,border-color .2s;border:1px solid transparent;text-decoration:none}
+.toc-item:hover{background:var(--card2);border-color:var(--border)}
+.toc-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);opacity:.55;flex-shrink:0;min-width:26px;margin-top:2px}
+.toc-name{font-size:13.5px;color:var(--light);font-weight:400;transition:color .2s;line-height:1.4}
+.toc-item:hover .toc-name{color:var(--cream)}
+
+/* SECTIONS */
+.section{padding:96px 64px;position:relative}
+.section-alt{background:var(--surface)}
+.s-inner{max-width:1100px;margin:0 auto}
+.s-head-visual{display:grid;grid-template-columns:1fr auto;gap:48px;align-items:start;margin-bottom:60px;padding-bottom:44px;border-bottom:1px solid var(--border)}
+@media(max-width:768px){.s-head-visual{grid-template-columns:1fr}.s-aside{display:none}}
+.s-head{display:grid;grid-template-columns:90px 1fr;gap:32px;align-items:start}
+.s-num{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;padding-top:8px}
+.s-meta{display:flex;flex-direction:column;gap:10px}
+.s-cat{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:3px;color:var(--rust);text-transform:uppercase}
+.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,60px);font-weight:700;line-height:.92;letter-spacing:-1.5px;color:var(--cream)}
+.s-title span{color:var(--gold);font-style:italic}
+.s-desc{font-size:15.5px;color:var(--light);max-width:620px;font-weight:300;line-height:1.78;margin-top:6px}
+.s-aside{display:flex;flex-direction:column;align-items:center;gap:12px;flex-shrink:0}
+.s-aside-label{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2.5px;color:var(--muted);text-transform:uppercase;text-align:center}
+@media(max-width:600px){.s-head{grid-template-columns:1fr;gap:14px}}
+
+/* CARDS */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:2px}
+@media(max-width:600px){.cards{grid-template-columns:1fr}}
+.card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .25s,background .25s;position:relative;overflow:hidden}
+.card:hover{border-color:var(--border);background:var(--card2)}
+.card::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:linear-gradient(180deg,var(--gold),var(--slate));transition:height .35s}
+.card:hover::before{height:100%}
+.card-num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);opacity:.45;margin-bottom:14px}
+.card-icon{font-size:26px;margin-bottom:11px;display:block}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:700;color:var(--cream);letter-spacing:-.4px;margin-bottom:11px;line-height:1.15}
+.card-sec{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin:16px 0 7px}
+.card-text{font-size:13.5px;color:var(--light);line-height:1.72;font-weight:300}
+.psych{background:rgba(200,148,58,.06);border-left:2px solid var(--gold);padding:15px 18px;margin-top:18px}
+.psych .card-sec{margin-top:0}
+.databox{background:rgba(26,58,92,.07);border-left:2px solid rgba(26,58,92,.5);padding:15px 18px;margin-top:14px}
+.databox .card-sec{color:#7aaed8}
+.badge{display:inline-flex;align-items:center;padding:4px 11px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;margin-top:14px}
+.ba{background:rgba(200,148,58,.11);color:var(--gold);border:1px solid var(--border)}
+.bb{background:rgba(44,122,114,.12);color:#4aaa9e;border:1px solid rgba(44,122,114,.3)}
+.bc{background:rgba(184,69,50,.11);color:#d46040;border:1px solid rgba(184,69,50,.28)}
+.bd{background:rgba(26,58,92,.12);color:#7aaed8;border:1px solid rgba(26,58,92,.3)}
+
+/* QUOTE */
+.quote-block{background:var(--surface);padding:72px 64px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center}
+.quote-text{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3.2vw,36px);font-weight:600;font-style:italic;color:var(--cream);max-width:880px;margin:0 auto;line-height:1.4}
+.quote-text em{color:var(--gold)}
+.quote-attr{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:24px}
+
+/* STAT ROW */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:2px;margin:44px 0}
+.s-stat{background:var(--card);padding:26px 22px;text-align:center;border:1px solid transparent;transition:border-color .2s}
+.s-stat:hover{border-color:var(--border)}
+.s-stat-n{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.s-stat-l{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-top:5px}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}}
+.col-card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .2s}
+.col-card:hover{border-color:var(--border)}
+.col-icon{font-size:30px;margin-bottom:14px;display:block}
+.col-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:11px;letter-spacing:-.4px}
+.col-text{font-size:13.5px;color:var(--light);line-height:1.75;font-weight:300}
+.col-text strong{color:var(--cream);font-weight:500}
+
+/* 50/30/20 Visual */
+.budget-visual{background:var(--card);border:1px solid var(--border);padding:36px;margin:36px 0;display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center}
+@media(max-width:640px){.budget-visual{grid-template-columns:1fr}}
+.budget-bars{display:flex;align-items:flex-end;gap:12px;height:160px;padding:0 8px}
+.budget-bar-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;flex:1}
+.budget-bar{width:100%;background:linear-gradient(180deg,var(--gold2),var(--gold));border-radius:2px 2px 0 0;position:relative;transition:height .5s ease}
+.budget-bar.needs{background:linear-gradient(180deg,#7aaed8,#1a3a5c)}
+.budget-bar.wants{background:linear-gradient(180deg,var(--gold2),var(--gold))}
+.budget-bar.savings{background:linear-gradient(180deg,#7aaa88,#2a6b3a)}
+.budget-bar-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;text-align:center}
+.budget-bar-pct{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--gold)}
+.budget-breakdown{display:flex;flex-direction:column;gap:14px}
+.budget-row{display:flex;align-items:center;gap:14px}
+.budget-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.budget-dot.n{background:#1a3a5c}
+.budget-dot.w{background:var(--gold)}
+.budget-dot.s{background:#2a6b3a}
+.budget-row-text{flex:1}
+.budget-row-title{font-weight:600;color:var(--cream);font-size:14px;margin-bottom:2px}
+.budget-row-desc{font-size:12.5px;color:var(--light);font-weight:300;line-height:1.5}
+.budget-row-pct{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--gold);flex-shrink:0}
+
+/* TRAP CARDS */
+.trap-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2px;margin:36px 0}
+.trap-card{background:var(--card);padding:28px;border:1px solid transparent;transition:border-color .2s,background .2s;position:relative;overflow:hidden}
+.trap-card:hover{border-color:var(--border);background:var(--card2)}
+.trap-num{font-family:'Cormorant Garamond',serif;font-size:72px;font-weight:700;color:var(--gold);opacity:.07;position:absolute;top:6px;right:12px;line-height:1}
+.trap-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--rust);text-transform:uppercase;margin-bottom:6px}
+.trap-title{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:700;color:var(--cream);margin-bottom:8px;letter-spacing:-.3px}
+.trap-desc{font-size:13.5px;color:var(--light);line-height:1.7;font-weight:300;margin-bottom:10px}
+.trap-escape{background:rgba(44,122,114,.06);border-left:2px solid rgba(44,122,114,.4);padding:10px 14px;font-size:12.5px;color:var(--light);line-height:1.55}
+.trap-escape strong{color:#4aaa9e;font-weight:500}
+
+/* COMPOUND INTEREST TABLE */
+.compound-table{margin:36px 0;overflow-x:auto}
+.compound-visual{background:var(--card);border:1px solid var(--border);padding:28px;margin-bottom:2px}
+.compound-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--cream);margin-bottom:20px}
+.compound-bars{display:flex;align-items:flex-end;gap:8px;height:120px}
+.compound-bar-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1}
+.compound-bar-total{display:flex;flex-direction:column;align-items:stretch;width:100%}
+.compound-bar-invested{border-radius:0}
+.compound-bar-growth{border-radius:2px 2px 0 0}
+.compound-bar-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--muted);text-transform:uppercase;text-align:center;letter-spacing:1px}
+.compound-bar-value{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;color:var(--gold)}
+.compound-legend{display:flex;gap:20px;margin-top:14px}
+.compound-legend-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--light);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px}
+.legend-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+/* SAVINGS RATE STEPS */
+.savings-steps{display:flex;flex-direction:column;gap:2px;margin:36px 0}
+.savings-step{display:grid;grid-template-columns:80px 1fr;gap:0;background:var(--card);border:1px solid transparent;transition:border-color .2s}
+.savings-step:hover{border-color:var(--border)}
+.savings-pct{background:var(--golddim);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 8px;text-align:center}
+.savings-pct-num{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--gold);line-height:1}
+.savings-pct-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-top:2px}
+.savings-body{padding:18px 24px}
+.savings-title{font-weight:600;color:var(--cream);font-size:14.5px;margin-bottom:4px}
+.savings-text{font-size:13px;color:var(--light);line-height:1.65;font-weight:300}
+
+/* DEBT STRATEGY */
+.debt-compare{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:36px 0}
+@media(max-width:640px){.debt-compare{grid-template-columns:1fr}}
+.debt-side{background:var(--card);padding:28px;border:1px solid transparent;transition:border-color .2s}
+.debt-side:hover{border-color:var(--border)}
+.debt-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:3px;text-transform:uppercase;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.debt-head.avalanche{color:#7aaed8}
+.debt-head.snowball{color:var(--gold)}
+.debt-item{margin-bottom:12px;font-size:13.5px;color:var(--light);line-height:1.6;font-weight:300;display:flex;gap:10px}
+.debt-item::before{content:'→';color:var(--gold);flex-shrink:0;font-size:11px;margin-top:3px}
+
+/* ALERT / TIP */
+.alert{background:rgba(184,69,50,.07);border:1px solid rgba(184,69,50,.24);padding:22px 26px;margin:28px 0}
+.alert-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:var(--rust);text-transform:uppercase;margin-bottom:9px}
+.alert-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.alert-text strong{color:var(--cream);font-weight:500}
+.tip{background:rgba(44,122,114,.07);border:1px solid rgba(44,122,114,.24);padding:22px 26px;margin:28px 0}
+.tip-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:#4aaa9e;text-transform:uppercase;margin-bottom:9px}
+.tip-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.tip-text strong{color:var(--cream);font-weight:500}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;margin-top:40px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--card2);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);padding:13px 16px;text-align:left;border-bottom:1px solid var(--border)}
+tbody tr{border-bottom:1px solid rgba(200,148,58,.07);transition:background .15s}
+tbody tr:hover{background:var(--card)}
+tbody td{padding:13px 16px;color:var(--light);vertical-align:top;line-height:1.5}
+.num-cell{font-family:'JetBrains Mono',monospace;color:var(--gold);opacity:.55;font-size:11px}
+.name-cell{font-weight:500;color:var(--cream)}
+
+/* FOOTER */
+footer{background:var(--bg);border-top:1px solid var(--border);padding:56px 64px 72px;text-align:center}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;letter-spacing:2px;color:var(--gold);margin-bottom:10px}
+.footer-sub{font-size:13.5px;color:var(--muted);margin-bottom:6px}
+.footer-tiny{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(92,95,104,.45);text-transform:uppercase;margin-top:26px}
+
+.pg-hero-art{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:.55;z-index:0}
+.pg-hero-art svg{width:100%;height:100%;display:block}
+[class*="icon"] svg.pg-icon{width:1em;height:1em;display:inline-block;vertical-align:-0.15em}
+</style>
+</head>
+<body>
+
+
+<div id="prog"></div>
+<nav>
+  <div class="nav-logo">Grow Without Going Viral</div>
+  <ul class="nav-links">
+    <li><a href="#trap">The Viral Trap</a></li>
+    <li><a href="#compound">Consistency</a></li>
+    <li><a href="#niche">Niche First</a></li>
+    <li><a href="#pillars">Content Pillars</a></li>
+    <li><a href="#engagement">Real Engagement</a></li>
+    <li><a href="#systems">Systems</a></li>
+    <li><a href="#cheatsheet">Cheatsheet</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero"><div class="pg-hero-art" aria-hidden="true"><svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><path d="M708.0 350.0 A171.7 171.7 0 0 1 635.7 24.2" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M1026.4 -102.7 A185.1 185.1 0 0 1 911.6 189.7" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M366.8 177.2 A127.7 127.7 0 0 1 229.8 86.8" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><line x1="322.3" y1="185.9" x2="369.1" y2="212.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="564.9" y1="210.8" x2="631.5" y2="206.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="663.9" y1="73.0" x2="675.6" y2="77.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="238.6" y1="134.4" x2="173.4" y2="138.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="322.3" y1="185.9" x2="238.6" y2="134.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="173.4" y1="138.9" x2="116.6" y2="114.2" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="797.6" y1="201.7" x2="778.3" y2="87.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="797.6" y1="201.7" x2="648.3" y2="146.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="648.3" y1="146.8" x2="631.5" y2="206.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="430.5" y1="236.9" x2="369.1" y2="212.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="778.3" y1="87.7" x2="675.6" y2="77.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="116.6" y1="114.2" x2="83.3" y2="138.0" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="648.3" y1="146.8" x2="675.6" y2="77.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="115.4" y1="240.9" x2="83.3" y2="138.0" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><circle cx="322.3" cy="185.9" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="322.3" cy="185.9" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="564.9" cy="210.8" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="564.9" cy="210.8" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="663.9" cy="73.0" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="238.6" cy="134.4" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="238.6" cy="134.4" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="173.4" cy="138.9" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="797.6" cy="201.7" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="648.3" cy="146.8" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="430.5" cy="236.9" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="778.3" cy="87.7" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="116.6" cy="114.2" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="116.6" cy="114.2" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="675.6" cy="77.6" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="115.4" cy="240.9" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="115.4" cy="240.9" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="369.1" cy="212.7" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="369.1" cy="212.7" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="83.3" cy="138.0" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="83.3" cy="138.0" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="631.5" cy="206.4" r="1.4" fill="#c8943a" opacity="0.50"/></svg></div>
+  <div class="hero-glow"></div><div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">Creator · Social Media · Audience Growth · 2025–26</div>
+    <div class="hero-tag">The Complete Creator Research Guide · 2025–26</div>
+    <h1>Grow Without<br/><span>Going Viral</span><span class="sub">The Consistency System</span></h1>
+    <p class="hero-desc">Virality is a lottery ticket — exciting when it happens, unpredictable, and mostly useless for building something durable. This guide is about the alternative that actually compounds: consistent, niche-focused, systems-driven growth that produces a smaller but far more loyal and monetizable audience than a single viral spike ever does.</p>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-n"><1%</span><span class="hstat-l">of posts ever go meaningfully viral — building a strategy around it means betting against yourself</span></div>
+      <div class="hstat"><span class="hstat-n">5–10%</span><span class="hstat-l">monthly audience growth from consistent posting compounds to 1.6–2.6× in a year alone</span></div>
+      <div class="hstat"><span class="hstat-n">60%</span><span class="hstat-l">of viral-spike followers are estimated to unfollow or go dormant within weeks of the spike</span></div>
+      <div class="hstat"><span class="hstat-n">3–5</span><span class="hstat-l">core content pillars is the range most sustainable creator strategies converge on</span></div>
+    </div>
+    <div class="scroll-hint">Scroll to begin</div>
+  </div>
+</section>
+
+<!-- ─── TOC ─── -->
+<div class="toc-wrap">
+  <div class="toc-inner">
+    <div class="toc-label">Everything Inside This Guide</div>
+    <div class="toc-grid">
+      <a href="#trap" class="toc-item"><span class="toc-num">01</span><span class="toc-name">Why Virality Is a Trap — The lottery-ticket problem with chasing spikes</span></a>
+      <a href="#compound" class="toc-item"><span class="toc-num">02</span><span class="toc-name">The Consistency Compound — Why steady growth outperforms spikes over time</span></a>
+      <a href="#niche" class="toc-item"><span class="toc-num">03</span><span class="toc-name">Niche Before Reach — Why specific beats broad, especially early</span></a>
+      <a href="#pillars" class="toc-item"><span class="toc-num">04</span><span class="toc-name">The Content Pillar System — 3–5 recurring topics that make you unmissable</span></a>
+      <a href="#engagement" class="toc-item"><span class="toc-num">05</span><span class="toc-name">Engagement Over Impressions — Comments and saves over raw view counts</span></a>
+      <a href="#systems" class="toc-item"><span class="toc-num">06</span><span class="toc-name">Building Systems, Not Chasing Trends — Sustainable habits that outlast motivation</span></a>
+      <a href="#cheatsheet" class="toc-item"><span class="toc-num">07</span><span class="toc-name">Creator Growth Principles — Every rule, one table</span></a>
+    </div>
+  </div>
+</div>
+
+<section class="section" id="trap">
+<div class="s-inner">
+  <div class="s-head-visual">
+    <div class="s-head">
+      <div class="s-num">Chapter 01</div>
+      <div class="s-meta">
+        <div class="s-cat">Creator Economy Research · Platform Algorithm Studies · 2025–26</div>
+        <h2 class="s-title">Why Virality<br/><span>Is a Trap</span></h2>
+        <p class="s-desc">Fewer than 1% of posts on any major platform ever reach what would reasonably be called viral — and chasing that outcome as a strategy means optimizing for something almost entirely outside your control, at the expense of the things that are. Worse, when a spike does happen, a large share of the followers it brings are estimated to unfollow or go dormant within weeks, because they came for one moment, not for you.</p>
+      </div>
+    </div>
+  </div>
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n"><1%</span><span class="s-stat-l">of posts on any major platform reach genuinely viral-scale distribution</span></div>
+    <div class="s-stat"><span class="s-stat-n">60%</span><span class="s-stat-l">estimated share of viral-spike followers who unfollow or go dormant within weeks</span></div>
+    <div class="s-stat"><span class="s-stat-n">0</span><span class="s-stat-l">control a creator has over whether any individual post “goes viral” — it’s substantially algorithmic luck</span></div>
+    <div class="s-stat"><span class="s-stat-n">100%</span><span class="s-stat-l">control a creator retains over posting consistency, niche focus, and content quality — the things that compound</span></div>
+  </div>
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 5l14 14M19 5 5 19" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">What Chasing Virality Looks Like</div>
+      <p class="col-text">Constantly jumping between trending topics and formats with no consistent thread. Measuring success purely by view count on individual posts. Feeling like each post is a fresh gamble instead of a brick in something larger.</p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m7.5 12.5 3 3 6-6.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">What the Alternative Looks Like</div>
+      <p class="col-text">A recognizable set of topics you're known for. Success measured by trend lines across months, not any single post. Each piece of content building on what came before it — a body of work, not a slot machine.</p>
+    </div>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">PRINCIPLE 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="1.4" fill="#c8943a"/></svg></span>
+      <div class="card-title">Redefine What “Success” Means Per Post</div>
+      <p class="card-text">Judge individual posts by whether they served your content pillars and earned real engagement — not by whether they went viral. This single mindset shift changes what you make and how sustainable making it feels.</p>
+      <span class="badge ba">Reframe</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PRINCIPLE 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="m4 8 5 5 4-3 7 8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 18h5v-5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Expect Spike Followers to Churn</div>
+      <p class="card-text">If a post does unexpectedly take off, plan for a meaningful share of the resulting followers to disappear within weeks. Don't mistake a spike in follower count for a spike in genuine audience.</p>
+      <span class="badge bc">Expectation</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PRINCIPLE 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M2 12c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 18c2-2 4-2 6 0s4 2 6 0 4-2 6 0" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Treat Virality as a Bonus, Not a Plan</div>
+      <p class="card-text">If something you make happens to spread widely, great — but it should never be the metric your content calendar is built around. Build for the 99% outcome, not the <1% one.</p>
+      <span class="badge ba">Strategy</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE ─── -->
+<div class="quote-block">
+  <p class="quote-text">"Virality is random. <em>Consistent audience growth is a system — and only one of those two things can actually be built on purpose.</em>"</p>
+  <p class="quote-attr">— Creator Economy Research · 2025–26</p>
+</div>
+
+<section class="section section-alt" id="compound">
+<div class="s-inner">
+  <div class="s-head-visual">
+    <div class="s-head">
+      <div class="s-num">Chapter 02</div>
+      <div class="s-meta">
+        <div class="s-cat">Creator Growth Research · Audience Retention Studies · 2025–26</div>
+        <h2 class="s-title">The<br/><span>Consistency Compound</span></h2>
+        <p class="s-desc">A creator gaining a steady 5–10% of their audience per month doesn't look impressive in any single week — but compounded over a year, that's a 1.6× to 2.6× audience increase, built from people who followed because of a genuine pattern of value, not a single lucky post. This is the unglamorous math that actually builds a durable audience.</p>
+      </div>
+    </div>
+  </div>
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">5–10%</span><span class="s-stat-l">realistic monthly growth rate for a creator posting consistently in a defined niche</span></div>
+    <div class="s-stat"><span class="s-stat-n">1.6–2.6×</span><span class="s-stat-l">the compounded one-year audience growth from that same steady monthly rate</span></div>
+    <div class="s-stat"><span class="s-stat-n">90%</span><span class="s-stat-l">estimated retention rate of audience built through consistent value, vs the ~40% retention of spike-driven followers</span></div>
+    <div class="s-stat"><span class="s-stat-n">12+</span><span class="s-stat-l">months is a realistic timeline before consistency-based growth feels obviously worth it — patience is the actual skill</span></div>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">PRINCIPLE 04</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="m4 16 5-5 4 3 7-8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 6h5v5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Track Trend Lines, Not Single Posts</div>
+      <p class="card-text">Review your growth monthly, not daily. A single underperforming post means nothing; a 3-month declining trend means something. Zooming out is what makes consistency-based growth visible at all.</p>
+      <span class="badge ba">Measurement</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PRINCIPLE 05</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 21v-9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 12C6 12 5 6 5 6s6-1 7 6zM12 12c0-6 6-6.5 6-6.5S18.5 11 12 12z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Trust Slow Growth Isn’t Failure</div>
+      <p class="card-text">The first 3–6 months of consistent posting often feel like nothing is working. This is the same period where the compound growth curve is quietly building its base — the visible payoff comes later than most people expect.</p>
+      <span class="badge bc">Mindset</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PRINCIPLE 06</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M20 11a8 8 0 0 0-14.9-3.5M4 13a8 8 0 0 0 14.9 3.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 4v4h4M19 20v-4h-4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Protect the Habit More Than Any Single Post</div>
+      <p class="card-text">Missing a week of posting costs more than any individual post's quality, because it breaks the pattern the algorithm and your audience are both learning to expect from you. Consistency is the actual product.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 Why This Compounds</div>
+        <p class="card-text">Each piece of consistent content does double duty: it serves the immediate audience and it signals reliability to the platform's distribution system and to new potential followers evaluating whether to commit. A single viral post can't do either of those things — it's a one-time event, not a signal.</p>
+      </div>
+      <span class="badge ba">Priority</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE ─── -->
+<div class="quote-block">
+  <p class="quote-text">"Slow and steady doesn’t just win the race — <em>on social platforms, it’s often the only strategy that survives long enough to compound at all.</em>"</p>
+  <p class="quote-attr">— Creator Growth Research Synthesis · 2025–26</p>
+</div>
+
+<section class="section" id="niche">
+<div class="s-inner">
+  <div class="s-head-visual">
+    <div class="s-head">
+      <div class="s-num">Chapter 03</div>
+      <div class="s-meta">
+        <div class="s-cat">Audience Research · Creator Positioning Studies · 2025–26</div>
+        <h2 class="s-title">Niche<br/><span>Before Reach</span></h2>
+        <p class="s-desc">Trying to appeal to everyone is, paradoxically, one of the most reliable ways to build an audience that engages with almost nothing you post. A specific, well-defined niche produces a smaller potential audience on paper but a dramatically more engaged one in practice — and engagement, not raw reach, is what platforms increasingly reward.</p>
+      </div>
+    </div>
+  </div>
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">3–5×</span><span class="s-stat-l">higher engagement rate typically reported by niche-focused creators vs broad generalist accounts</span></div>
+    <div class="s-stat"><span class="s-stat-n">1</span><span class="s-stat-l">clearly defined audience beats three vaguely defined ones — specificity is what makes content feel made for someone</span></div>
+    <div class="s-stat"><span class="s-stat-n">73%</span><span class="s-stat-l">of consumers say they engage more with content that feels specifically relevant to their interests</span></div>
+    <div class="s-stat"><span class="s-stat-n">6–12 mo</span><span class="s-stat-l">a realistic window for a niche focus to visibly outperform a broad one, as the algorithm learns your audience</span></div>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">PRINCIPLE 07</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="10.5" cy="10.5" r="6.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m20 20-4.8-4.8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Get Uncomfortably Specific</div>
+      <p class="card-text">“Fitness content” is not a niche. “Strength training for people over 40 returning after injury” is. The more specific your positioning, the easier it is for the right people to recognize themselves in your content immediately.</p>
+      <span class="badge ba">Core Skill</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PRINCIPLE 08</div>
+      <span class="card-icon">🧲</span>
+      <div class="card-title">Let the Niche Repel the Wrong Audience on Purpose</div>
+      <p class="card-text">A well-defined niche should make some people scroll past. That's not a flaw — it's the mechanism that makes the people who do stop feel like the content was made specifically for them.</p>
+      <span class="badge bc">Counterintuitive</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PRINCIPLE 09</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M4 20 14 4l6 16z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M9 20h5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Expand Gradually, Not Immediately</div>
+      <p class="card-text">Once a niche audience is established and engaged, you can widen scope carefully — but starting broad and narrowing later almost never works as well as starting narrow and expanding from a position of proven trust.</p>
+      <span class="badge ba">Sequencing</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE ─── -->
+<div class="quote-block">
+  <p class="quote-text">"The riches are in the niches. <em>A smaller, specific audience that actually cares outperforms a large, vague one that scrolls past — on every metric that leads to monetization.</em>"</p>
+  <p class="quote-attr">— Creator Positioning Research · 2025–26</p>
+</div>
+
+<section class="section section-alt" id="pillars">
+<div class="s-inner">
+  <div class="s-head-visual">
+    <div class="s-head">
+      <div class="s-num">Chapter 04</div>
+      <div class="s-meta">
+        <div class="s-cat">Content Strategy Research · Creator Case Studies · 2025–26</div>
+        <h2 class="s-title">The Content<br/><span>Pillar System</span></h2>
+        <p class="s-desc">Content pillars — 3 to 5 recurring topics you consistently return to — are what make a niche operational rather than just a nice idea. Without them, even a well-defined niche can feel scattered post to post. With them, every piece of content reinforces the same handful of themes your audience came to expect and associate with you specifically.</p>
+      </div>
+    </div>
+  </div>
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">3–5</span><span class="s-stat-l">pillars is the range most sustainable creator strategies converge on — fewer feels repetitive, more feels scattered</span></div>
+    <div class="s-stat"><span class="s-stat-n">80%</span><span class="s-stat-l">a rough share of content that should map to your defined pillars, leaving room for timely or experimental posts</span></div>
+    <div class="s-stat"><span class="s-stat-n">2–3</span><span class="s-stat-l">different formats per pillar keeps a single topic from feeling stale across weeks of posting</span></div>
+    <div class="s-stat"><span class="s-stat-n">30 days</span><span class="s-stat-l">a reasonable interval to review whether your pillars still match what’s actually resonating</span></div>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">PRINCIPLE 10</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="5" y="4" width="14" height="17" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="9" y="2.5" width="6" height="3.5" rx="1" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.5 12h7M8.5 16h7" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Choose Pillars You Can Sustain for a Year</div>
+      <p class="card-text">Pick topics you have enough genuine knowledge or interest in to keep producing fresh content on for months, not weeks. Pillar burnout from an over-narrow topic is a common, avoidable failure mode.</p>
+      <span class="badge ba">Sustainability</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PRINCIPLE 11</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M20 11a8 8 0 0 0-14.9-3.5M4 13a8 8 0 0 0 14.9 3.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 4v4h4M19 20v-4h-4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Rotate Formats Within Each Pillar</div>
+      <p class="card-text">The same pillar can produce a how-to, a personal story, a myth-busting post, and a quick tip — keeping the topic from feeling repetitive even as you return to it constantly.</p>
+      <span class="badge bc">Variety</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PRINCIPLE 12</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 20V10M12 20V4M19 20v-7" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 20h18" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Track Which Pillar Performs Best, Then Lean In</div>
+      <p class="card-text">After a few months, one or two pillars will typically outperform the others. That's a genuine signal from your specific audience — lean into it rather than treating all pillars as permanently equal.</p>
+      <span class="badge ba">Data-Driven</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE ─── -->
+<div class="quote-block">
+  <p class="quote-text">"The “content pillar” method — 3 topics that make your page impossible to ignore or unfollow — <em>is the structural difference between a content calendar and a random idea generator.</em>"</p>
+  <p class="quote-attr">— Creator Content Strategy Research · 2025–26</p>
+</div>
+
+<section class="section" id="engagement">
+<div class="s-inner">
+  <div class="s-head-visual">
+    <div class="s-head">
+      <div class="s-num">Chapter 05</div>
+      <div class="s-meta">
+        <div class="s-cat">Platform Algorithm Research · Creator Monetization Studies · 2025–26</div>
+        <h2 class="s-title">Engagement Over<br/><span>Impressions</span></h2>
+        <p class="s-desc">Raw view or impression counts are the easiest metric to obsess over and one of the least useful ones in isolation. Comments, saves, and shares are consistently stronger indicators of real audience value — both for algorithmic distribution and, eventually, for monetization, since an engaged smaller audience converts far better than a passive larger one.</p>
+      </div>
+    </div>
+  </div>
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">Saves > Shares > Comments > Likes</span><span class="s-stat-l">the rough value hierarchy most platforms currently weight toward</span></div>
+    <div class="s-stat"><span class="s-stat-n">4–10×</span><span class="s-stat-l">typical difference in monetization value between a highly-engaged niche audience and a passive broad one</span></div>
+    <div class="s-stat"><span class="s-stat-n">20–30%</span><span class="s-stat-l">a strong comment-to-like ratio benchmark for genuinely engaged niche content</span></div>
+    <div class="s-stat"><span class="s-stat-n">0</span><span class="s-stat-l">the useful information a raw view count gives you about whether the content actually resonated</span></div>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">PRINCIPLE 13</div>
+      <span class="card-icon">💾</span>
+      <div class="card-title">Design Content Worth Saving</div>
+      <p class="card-text">Saves happen when content has lasting reference value — a framework, a checklist, a resource. Building at least some content explicitly designed to be saved, not just glanced at once, measurably improves this signal.</p>
+      <span class="badge ba">Design Choice</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PRINCIPLE 14</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M4 5h13a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H9l-5 4v-4H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">End Posts With a Real Question, Not a Bait One</div>
+      <p class="card-text">A specific, genuine question relevant to the content earns real comments. Generic engagement bait (“comment YES”) is increasingly recognized and devalued by both audiences and platforms.</p>
+      <span class="badge bc">Technique</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PRINCIPLE 15</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="m4 16 5-5 4 3 7-8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 6h5v5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Review Engagement Rate, Not Just Follower Count</div>
+      <p class="card-text">A smaller account with a 8% engagement rate is healthier and more valuable than a larger one at 0.5%. Track this ratio monthly — it's a far better health indicator than raw growth alone.</p>
+      <span class="badge ba">Metric</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE ─── -->
+<div class="quote-block">
+  <p class="quote-text">"A view is a glance. <em>A save is a decision that this was worth coming back to — and that decision is what platforms and brands both actually want to find more of.</em>"</p>
+  <p class="quote-attr">— Platform Algorithm Research · 2025–26</p>
+</div>
+
+<section class="section section-alt" id="systems">
+<div class="s-inner">
+  <div class="s-head-visual">
+    <div class="s-head">
+      <div class="s-num">Chapter 06</div>
+      <div class="s-meta">
+        <div class="s-cat">Creator Sustainability Research · Burnout Studies · 2025–26</div>
+        <h2 class="s-title">Building Systems,<br/><span>Not Chasing Trends</span></h2>
+        <p class="s-desc">Trend-chasing is exhausting and structurally unsustainable — by the time you've noticed a trend, produced content around it, and posted, the window has often already closed, and you're right back to searching for the next one. A content system, built once and run repeatedly, replaces that constant scramble with a sustainable weekly rhythm.</p>
+      </div>
+    </div>
+  </div>
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">63%</span><span class="s-stat-l">of creators report burnout as a primary reason for reducing or stopping content production</span></div>
+    <div class="s-stat"><span class="s-stat-n">1</span><span class="s-stat-l">planning session per week is enough to remove the daily “what do I post” scramble entirely</span></div>
+    <div class="s-stat"><span class="s-stat-n">3–5</span><span class="s-stat-l">pillars plus a simple weekly template is functionally a complete content system</span></div>
+    <div class="s-stat"><span class="s-stat-n">12+ mo</span><span class="s-stat-l">the realistic point at which a sustainable system clearly outperforms sporadic trend-chasing on total output</span></div>
+  </div>
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 5l14 14M19 5 5 19" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">The Trend-Chasing Cycle</div>
+      <p class="col-text">Constantly monitoring what's trending, scrambling to produce something relevant before the window closes, posting something that doesn't reflect your actual niche, then repeating the cycle with no accumulated body of work to show for it.</p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m7.5 12.5 3 3 6-6.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">The System-Based Cycle</div>
+      <p class="col-text">One weekly planning session mapped to your 3–5 pillars, batch-created content, a consistent posting cadence, and a monthly review of what's working. Sustainable, repeatable, and building toward something recognizable over time.</p>
+    </div>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">PRINCIPLE 16</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="3.5" y="5" width="17" height="15" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 10h17M8 3v4M16 3v4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Run a Weekly Planning Session</div>
+      <p class="card-text">One hour, once a week, mapping the week's posts to your content pillars. This single habit eliminates most of the daily decision fatigue that leads to inconsistent posting or trend-chasing out of desperation.</p>
+      <span class="badge ba">Core Habit</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PRINCIPLE 17</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M3 8V6a1 1 0 0 1 1-1h5l2 2h9a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Batch Create When Possible</div>
+      <p class="card-text">Producing several pieces of content in one sitting is typically faster per-piece than producing them one at a time daily, and it protects your posting cadence during busy weeks.</p>
+      <span class="badge bc">Efficiency</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PRINCIPLE 18</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 3 5 6v6c0 5 3 8 7 9 4-1 7-4 7-9V6z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Protect Against Burnout Deliberately</div>
+      <p class="card-text">Build in a sustainable pace from the start rather than sprinting until you crash. A slightly lower but sustained posting frequency beats an intense one that collapses after two months.</p>
+      <span class="badge ba">Sustainability</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE ─── -->
+<div class="quote-block">
+  <p class="quote-text">"Systems don’t rely on motivation. <em>That’s exactly why they outlast it — and outlasting is the entire game on a platform that rewards consistency over any single moment of inspiration.</em>"</p>
+  <p class="quote-attr">— Creator Sustainability Research · 2025–26</p>
+</div>
+
+<section class="section" id="cheatsheet">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 07</div>
+    <div class="s-meta">
+      <div class="s-cat">Quick Reference</div>
+      <h2 class="s-title">Creator Growth<br/><span>Principles</span></h2>
+      <p class="s-desc">Every rule from this guide — condensed into your complete sustainable-growth reference.</p>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Principle</th><th>The Action</th><th>Chapter</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td class="num-cell">01</td><td class="name-cell">Redefine success per post</td><td>Judge posts by pillar fit and real engagement, not viral odds.</td><td>Viral Trap</td><td><span class="badge ba">Core</span></td></tr>
+        <tr><td class="num-cell">02</td><td class="name-cell">Expect spike followers to churn</td><td>A large share of viral-driven followers disappear within weeks.</td><td>Viral Trap</td><td><span class="badge bc">Situational</span></td></tr>
+        <tr><td class="num-cell">03</td><td class="name-cell">Treat virality as a bonus, not a plan</td><td>Build your calendar around the 99% outcome, not the <1% one.</td><td>Viral Trap</td><td><span class="badge ba">Core</span></td></tr>
+        <tr><td class="num-cell">04</td><td class="name-cell">Track trend lines, not single posts</td><td>Review growth monthly — a single post means little on its own.</td><td>Consistency</td><td><span class="badge ba">Core</span></td></tr>
+        <tr><td class="num-cell">05</td><td class="name-cell">Trust that slow growth isn’t failure</td><td>The first 3–6 months often feel like nothing’s working. It is.</td><td>Consistency</td><td><span class="badge bc">Situational</span></td></tr>
+        <tr><td class="num-cell">06</td><td class="name-cell">Protect the habit over any single post</td><td>Missing weeks costs more than one post’s quality ever does.</td><td>Consistency</td><td><span class="badge ba">Core</span></td></tr>
+        <tr><td class="num-cell">07</td><td class="name-cell">Get uncomfortably specific with your niche</td><td>“Fitness content” isn’t a niche. A precise audience is.</td><td>Niche First</td><td><span class="badge ba">Core</span></td></tr>
+        <tr><td class="num-cell">08</td><td class="name-cell">Let your niche repel the wrong audience</td><td>If nobody scrolls past, your positioning probably isn’t specific enough.</td><td>Niche First</td><td><span class="badge bc">Situational</span></td></tr>
+        <tr><td class="num-cell">09</td><td class="name-cell">Expand gradually, not immediately</td><td>Start narrow and earn the right to widen scope later.</td><td>Niche First</td><td><span class="badge ba">Core</span></td></tr>
+        <tr><td class="num-cell">10</td><td class="name-cell">Choose pillars sustainable for a year</td><td>Avoid topics you’ll run out of things to say about within weeks.</td><td>Pillars</td><td><span class="badge ba">Core</span></td></tr>
+        <tr><td class="num-cell">11</td><td class="name-cell">Rotate formats within each pillar</td><td>How-to, story, myth-bust, quick tip — same topic, fresh angles.</td><td>Pillars</td><td><span class="badge bc">Situational</span></td></tr>
+        <tr><td class="num-cell">12</td><td class="name-cell">Double down on your best-performing pillar</td><td>After a few months, let real data guide where you lean in.</td><td>Pillars</td><td><span class="badge ba">Core</span></td></tr>
+        <tr><td class="num-cell">13</td><td class="name-cell">Design some content explicitly to be saved</td><td>Frameworks and checklists earn saves — glances don’t.</td><td>Engagement</td><td><span class="badge ba">Core</span></td></tr>
+        <tr><td class="num-cell">14</td><td class="name-cell">Ask real questions, not engagement bait</td><td>Generic bait phrases are increasingly recognized and devalued.</td><td>Engagement</td><td><span class="badge bc">Situational</span></td></tr>
+        <tr><td class="num-cell">15</td><td class="name-cell">Track engagement rate, not raw followers</td><td>An 8% engaged small account beats a 0.5% engaged large one.</td><td>Engagement</td><td><span class="badge ba">Core</span></td></tr>
+        <tr><td class="num-cell">16</td><td class="name-cell">Run one weekly planning session</td><td>An hour a week removes daily decision fatigue entirely.</td><td>Systems</td><td><span class="badge ba">Core</span></td></tr>
+        <tr><td class="num-cell">17</td><td class="name-cell">Batch-create when you can</td><td>Faster per-piece, and it protects cadence during busy weeks.</td><td>Systems</td><td><span class="badge bc">Situational</span></td></tr>
+        <tr><td class="num-cell">18</td><td class="name-cell">Pace yourself against burnout on purpose</td><td>A sustained moderate pace beats a sprint that collapses at month two.</td><td>Systems</td><td><span class="badge ba">Core</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</section>
+
+<footer>
+  <div class="footer-logo">Grow on Social Media Without Going Viral</div>
+  <p class="footer-sub">Creator · Social Media · Audience Growth · 2025–2026 Edition</p>
+  <p class="footer-sub" style="color:var(--muted);font-size:13px;margin-top:8px">7 Complete Chapters · 18 Core Principles · Research from Creator Economy Report 2025–26, Platform Algorithm Studies, Creator Sustainability & Burnout Research</p>
+  <p class="footer-tiny">Research compiled July 2026 · Inspired by Parallelogram · Built for creators who want an audience that stays, not a spike that leaves</p>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:rgba(200,148,58,.28);margin-top:36px">"Nobody remembers your best week. They remember whether you showed up in the ones after it." — Creator research synthesis, 2025–26</p>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const st=document.documentElement.scrollTop;
+  const sh=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('prog').style.width=(st/sh*100)+'%';
+});
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}});
+},{threshold:0.07});
+document.querySelectorAll('.card,.col-card,.s-stat').forEach(el=>{
+  el.style.opacity='0';el.style.transform='translateY(18px)';
+  el.style.transition='opacity .5s ease, transform .5s ease';
+  obs.observe(el);
+});
+</script>
+</body>
+</html>

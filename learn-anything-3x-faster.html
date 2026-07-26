@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Learn Anything 3× Faster</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07080a;--surface:#0e1014;--card:#13151a;--card2:#181b22;
+  --gold:#c8943a;--gold2:#e8b84b;--golddim:rgba(200,148,58,.13);
+  --cream:#f0e8d5;--muted:#5c5f68;--light:#9a9da8;
+  --border:rgba(200,148,58,.18);--rust:#b84532;
+  --teal:#2c7a72;--violet:#4a2fa8;--white:#faf9f6;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--cream);overflow-x:hidden;line-height:1.6}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.5}
+#prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--violet),var(--gold),var(--gold2));width:0%;z-index:2000;transition:width .08s}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:1500;display:flex;align-items:center;justify-content:space-between;padding:14px 48px;background:rgba(7,8,10,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(200,148,58,.1)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
+.nav-links{display:flex;gap:20px;list-style:none}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+@media(max-width:768px){.nav-links{display:none}.hero,.section,.toc-wrap,.quote-block,footer{padding-left:22px!important;padding-right:22px!important}nav{padding:14px 22px}}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px 64px 80px;position:relative;overflow:hidden}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 75% 55% at 92% 8%,rgba(74,47,168,.14) 0%,transparent 55%),radial-gradient(ellipse 55% 70% at 5% 90%,rgba(200,148,58,.1) 0%,transparent 60%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;opacity:.022;background-image:linear-gradient(rgba(200,148,58,1) 1px,transparent 1px),linear-gradient(90deg,rgba(200,148,58,1) 1px,transparent 1px);background-size:68px 68px}
+.hero-inner{position:relative;max-width:1100px}
+.hero-badge{display:inline-flex;align-items:center;background:rgba(74,47,168,.15);border:1px solid rgba(74,47,168,.4);padding:5px 16px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#9b8fe8;margin-bottom:22px;opacity:0;animation:fadeup .7s .15s forwards}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:26px;display:flex;align-items:center;gap:14px;opacity:0;animation:fadeup .7s .2s forwards}
+.hero-tag::before{content:'';width:44px;height:1px;background:var(--gold);flex-shrink:0}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(48px,9vw,126px);font-weight:700;line-height:.88;letter-spacing:-4px;margin-bottom:10px;opacity:0;animation:fadeup .8s .4s forwards}
+.hero h1 span{color:var(--gold);font-style:italic}
+.hero h1 .sub{display:block;color:rgba(240,232,213,.2);font-size:clamp(22px,3.8vw,54px);font-weight:400;font-style:italic;letter-spacing:-1px;margin-top:8px}
+.hero-desc{font-size:clamp(15px,1.9vw,18px);color:var(--light);max-width:600px;margin:34px 0 50px;font-weight:300;line-height:1.78;opacity:0;animation:fadeup .8s .6s forwards}
+.hero-stats{display:flex;gap:0;border:1px solid var(--border);width:fit-content;opacity:0;animation:fadeup .8s .8s forwards;flex-wrap:wrap}
+.hstat{padding:18px 32px;border-right:1px solid var(--border);text-align:center}
+.hstat:last-child{border-right:none}
+.hstat-n{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.hstat-l{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-top:4px}
+.scroll-hint{position:absolute;bottom:40px;left:64px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:10px;animation:pulse 2.5s infinite}
+.scroll-hint::before{content:'';width:1px;height:38px;background:var(--gold);opacity:.35}
+@keyframes fadeup{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+
+.toc-wrap{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:56px 64px}
+.toc-inner{max-width:1100px;margin:0 auto}
+.toc-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:36px;display:flex;align-items:center;gap:12px}
+.toc-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px}
+.toc-item{background:var(--card);padding:18px 22px;display:flex;align-items:flex-start;gap:14px;cursor:pointer;transition:background .2s,border-color .2s;border:1px solid transparent;text-decoration:none}
+.toc-item:hover{background:var(--card2);border-color:var(--border)}
+.toc-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);opacity:.55;flex-shrink:0;min-width:26px;margin-top:2px}
+.toc-name{font-size:13.5px;color:var(--light);font-weight:400;transition:color .2s;line-height:1.4}
+.toc-item:hover .toc-name{color:var(--cream)}
+
+.section{padding:96px 64px;position:relative}
+.section-alt{background:var(--surface)}
+.s-inner{max-width:1100px;margin:0 auto}
+.s-head{display:grid;grid-template-columns:90px 1fr;gap:32px;align-items:start;margin-bottom:60px;padding-bottom:44px;border-bottom:1px solid var(--border)}
+.s-num{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;padding-top:8px}
+.s-meta{display:flex;flex-direction:column;gap:10px}
+.s-cat{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:3px;color:var(--rust);text-transform:uppercase}
+.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,60px);font-weight:700;line-height:.92;letter-spacing:-1.5px;color:var(--cream)}
+.s-title span{color:var(--gold);font-style:italic}
+.s-desc{font-size:15.5px;color:var(--light);max-width:660px;font-weight:300;line-height:1.78;margin-top:6px}
+@media(max-width:600px){.s-head{grid-template-columns:1fr;gap:14px}}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:2px}
+@media(max-width:600px){.cards{grid-template-columns:1fr}}
+.card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .25s,background .25s;position:relative;overflow:hidden}
+.card:hover{border-color:var(--border);background:var(--card2)}
+.card::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:linear-gradient(180deg,var(--gold),var(--violet));transition:height .35s}
+.card:hover::before{height:100%}
+.card-num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);opacity:.45;margin-bottom:14px}
+.card-icon{font-size:26px;margin-bottom:11px;display:block}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:700;color:var(--cream);letter-spacing:-.4px;margin-bottom:11px;line-height:1.15}
+.card-sec{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin:16px 0 7px}
+.card-text{font-size:13.5px;color:var(--light);line-height:1.72;font-weight:300}
+.psych{background:rgba(200,148,58,.06);border-left:2px solid var(--gold);padding:15px 18px;margin-top:18px}
+.psych .card-sec{margin-top:0}
+.scibox{background:rgba(74,47,168,.07);border-left:2px solid rgba(74,47,168,.5);padding:15px 18px;margin-top:14px}
+.scibox .card-sec{color:#9b8fe8}
+.badge{display:inline-flex;align-items:center;padding:4px 11px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;margin-top:14px}
+.ba{background:rgba(200,148,58,.11);color:var(--gold);border:1px solid var(--border)}
+.bb{background:rgba(44,122,114,.12);color:#4aaa9e;border:1px solid rgba(44,122,114,.3)}
+.bc{background:rgba(184,69,50,.11);color:#d46040;border:1px solid rgba(184,69,50,.28)}
+.bd{background:rgba(74,47,168,.12);color:#9b8fe8;border:1px solid rgba(74,47,168,.3)}
+
+.quote-block{background:var(--surface);padding:72px 64px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center}
+.quote-text{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3.2vw,36px);font-weight:600;font-style:italic;color:var(--cream);max-width:880px;margin:0 auto;line-height:1.4}
+.quote-text em{color:var(--gold)}
+.quote-attr{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:24px}
+
+.stat-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:2px;margin:44px 0}
+.s-stat{background:var(--card);padding:26px 22px;text-align:center;border:1px solid transparent;transition:border-color .2s}
+.s-stat:hover{border-color:var(--border)}
+.s-stat-n{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.s-stat-l{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-top:5px}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}}
+.col-card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .2s}
+.col-card:hover{border-color:var(--border)}
+.col-icon{font-size:30px;margin-bottom:14px;display:block}
+.col-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:11px;letter-spacing:-.4px}
+.col-text{font-size:13.5px;color:var(--light);line-height:1.75;font-weight:300}
+.col-text strong{color:var(--cream);font-weight:500}
+
+/* FEYNMAN STEPS */
+.feynman-steps{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;margin:36px 0}
+@media(max-width:640px){.feynman-steps{grid-template-columns:1fr}}
+.fstep{background:var(--card);padding:30px;border:1px solid transparent;transition:border-color .2s,background .2s;position:relative;overflow:hidden}
+.fstep:hover{border-color:var(--border);background:var(--card2)}
+.fstep-num{font-family:'Cormorant Garamond',serif;font-size:80px;font-weight:700;color:var(--gold);opacity:.08;position:absolute;top:8px;right:14px;line-height:1}
+.fstep-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+.fstep-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--cream);margin-bottom:12px}
+.fstep-text{font-size:13.5px;color:var(--light);line-height:1.7;font-weight:300}
+.fstep-ex{margin-top:14px;background:rgba(200,148,58,.05);border-left:2px solid rgba(200,148,58,.3);padding:10px 14px;font-size:12.5px;color:var(--light);font-style:italic;line-height:1.55}
+
+/* FORGETTING CURVE VISUAL */
+.curve-visual{background:var(--card);border:1px solid var(--border);padding:32px;margin:36px 0;position:relative;overflow:hidden}
+.curve-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:20px}
+.curve-bars{display:flex;gap:4px;align-items:flex-end;height:120px;margin-bottom:16px}
+.cbar{flex:1;background:linear-gradient(180deg,var(--gold),rgba(200,148,58,.3));border-radius:2px 2px 0 0;position:relative;transition:opacity .3s}
+.cbar:hover{opacity:.8}
+.cbar-label{position:absolute;bottom:-24px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--muted);white-space:nowrap;letter-spacing:1px}
+.cbar-val{position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);white-space:nowrap}
+.curve-note{font-size:13px;color:var(--light);line-height:1.6;margin-top:32px;font-weight:300}
+
+/* SPACED REPETITION SCHEDULE */
+.sr-schedule{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:2px;margin:36px 0}
+.sr-day{background:var(--card);padding:20px 16px;text-align:center;border:1px solid transparent;transition:border-color .2s}
+.sr-day:hover{border-color:var(--border)}
+.sr-day-num{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.sr-day-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-top:4px}
+.sr-day-action{font-size:12px;color:var(--light);margin-top:8px;line-height:1.4;font-weight:300}
+
+/* INTERLEAVING TABLE */
+.table-wrap{overflow-x:auto;margin-top:36px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--card2);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);padding:13px 16px;text-align:left;border-bottom:1px solid var(--border)}
+tbody tr{border-bottom:1px solid rgba(200,148,58,.07);transition:background .15s}
+tbody tr:hover{background:var(--card)}
+tbody td{padding:13px 16px;color:var(--light);vertical-align:top;line-height:1.5}
+.num-cell{font-family:'JetBrains Mono',monospace;color:var(--gold);opacity:.55;font-size:11px}
+.name-cell{font-weight:500;color:var(--cream)}
+
+/* READING PLAN */
+.reading-steps{display:flex;flex-direction:column;gap:2px;margin:36px 0}
+.rs{display:grid;grid-template-columns:64px 1fr;gap:0;background:var(--card);border:1px solid transparent;transition:border-color .2s}
+.rs:hover{border-color:var(--border)}
+.rs-num{background:var(--golddim);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--gold)}
+.rs-body{padding:20px 26px}
+.rs-title{font-weight:600;color:var(--cream);font-size:15px;margin-bottom:5px;display:flex;align-items:center;gap:10px}
+.rs-time{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:2px;background:var(--golddim);padding:3px 8px;border-radius:1px}
+.rs-text{font-size:13px;color:var(--light);line-height:1.65;font-weight:300}
+
+/* ALERT / TIP */
+.alert{background:rgba(184,69,50,.07);border:1px solid rgba(184,69,50,.24);padding:22px 26px;margin:28px 0}
+.alert-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:var(--rust);text-transform:uppercase;margin-bottom:9px}
+.alert-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.alert-text strong{color:var(--cream);font-weight:500}
+.tip{background:rgba(44,122,114,.07);border:1px solid rgba(44,122,114,.24);padding:22px 26px;margin:28px 0}
+.tip-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:#4aaa9e;text-transform:uppercase;margin-bottom:9px}
+.tip-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.tip-text strong{color:var(--cream);font-weight:500}
+
+footer{background:var(--bg);border-top:1px solid var(--border);padding:56px 64px 72px;text-align:center}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;letter-spacing:2px;color:var(--gold);margin-bottom:10px}
+.footer-sub{font-size:13.5px;color:var(--muted);margin-bottom:6px}
+.footer-tiny{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(92,95,104,.45);text-transform:uppercase;margin-top:26px}
+
+.pg-hero-art{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:.55;z-index:0}
+.pg-hero-art svg{width:100%;height:100%;display:block}
+[class*="icon"] svg.pg-icon{width:1em;height:1em;display:inline-block;vertical-align:-0.15em}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav>
+  <div class="nav-logo">Learn 3× Faster</div>
+  <ul class="nav-links">
+    <li><a href="#feynman">Feynman</a></li>
+    <li><a href="#spaced">Spaced Rep</a></li>
+    <li><a href="#reading">Speed Reading</a></li>
+    <li><a href="#interleaving">Interleaving</a></li>
+    <li><a href="#recall">Active Recall</a></li>
+    <li><a href="#sleep">Sleep & Learning</a></li>
+    <li><a href="#mindmap">Mind Mapping</a></li>
+    <li><a href="#cheatsheet">Cheatsheet</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero"><div class="pg-hero-art" aria-hidden="true"><svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><path d="M620.6 178.9 A170.2 170.2 0 0 1 547.7 -83.5" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M164.0 345.3 A176.1 176.1 0 0 1 16.5 46.0" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><line x1="431.9" y1="235.4" x2="391.0" y2="235.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="431.9" y1="235.4" x2="409.5" y2="198.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="805.1" y1="169.2" x2="781.9" y2="178.2" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="20.9" y1="183.0" x2="91.2" y2="45.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="20.9" y1="183.0" x2="164.2" y2="121.0" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="747.0" y1="238.8" x2="786.6" y2="250.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="191.3" y1="162.4" x2="184.4" y2="122.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="781.9" y1="178.2" x2="756.3" y2="187.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="805.1" y1="169.2" x2="756.3" y2="187.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="164.2" y1="121.0" x2="184.4" y2="122.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="409.5" y1="198.4" x2="391.0" y2="235.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="612.4" y1="37.6" x2="682.9" y2="34.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="164.2" y1="121.0" x2="91.2" y2="45.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="184.4" y1="122.3" x2="91.2" y2="45.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="191.3" y1="162.4" x2="251.2" y2="227.2" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="184.4" y1="122.3" x2="313.2" y2="58.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="191.3" y1="162.4" x2="313.2" y2="58.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><circle cx="431.9" cy="235.4" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="805.1" cy="169.2" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="805.1" cy="169.2" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="20.9" cy="183.0" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="747.0" cy="238.8" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="786.6" cy="250.7" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="191.3" cy="162.4" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="781.9" cy="178.2" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="756.3" cy="187.4" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="756.3" cy="187.4" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="164.2" cy="121.0" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="164.2" cy="121.0" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="409.5" cy="198.4" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="409.5" cy="198.4" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="184.4" cy="122.3" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="612.4" cy="37.6" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="612.4" cy="37.6" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="91.2" cy="45.9" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="91.2" cy="45.9" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="391.0" cy="235.5" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="251.2" cy="227.2" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="682.9" cy="34.6" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="313.2" cy="58.3" r="1.4" fill="#c8943a" opacity="0.50"/></svg></div>
+  <div class="hero-glow"></div><div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">Academics · Neuroscience · Learning Science · 2025–26</div>
+    <div class="hero-tag">The Complete Accelerated Learning Research Guide · 2025–26 Edition</div>
+    <h1>Learn<br/><span>Anything</span><span class="sub">3× Faster</span></h1>
+    <p class="hero-desc">The neuroscience and cognitive science behind elite learning — what Nobel Prize winners, top students, and memory champions do that most people never discover. 8 deep chapters. Zero passive study. Pure acceleration.</p>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-n">70%</span><span class="hstat-l">of new information forgotten within 24hrs without reinforcement</span></div>
+      <div class="hstat"><span class="hstat-n">3×</span><span class="hstat-l">better retention from active recall vs passive re-reading</span></div>
+      <div class="hstat"><span class="hstat-n">700</span><span class="hstat-l">WPM — trained readers vs 250 WPM average untrained</span></div>
+      <div class="hstat"><span class="hstat-n">+22%</span><span class="hstat-l">retention boost from interleaving vs blocked practice (UCLA)</span></div>
+    </div>
+  </div>
+  <div class="scroll-hint">Scroll to begin</div>
+</section>
+
+<!-- ─── TOC ─── -->
+<div class="toc-wrap">
+  <div class="toc-inner">
+    <div class="toc-label">Everything Inside This Guide</div>
+    <div class="toc-grid">
+      <a href="#feynman" class="toc-item"><span class="toc-num">01</span><span class="toc-name">The Feynman Technique — If you can't explain it simply, you don't understand it yet</span></a>
+      <a href="#spaced" class="toc-item"><span class="toc-num">02</span><span class="toc-name">Spaced Repetition Science — Why cramming erases memory instead of building it</span></a>
+      <a href="#reading" class="toc-item"><span class="toc-num">03</span><span class="toc-name">Read a 300-Page Book in 2 Hours — And recall 80% of it a week later</span></a>
+      <a href="#interleaving" class="toc-item"><span class="toc-num">04</span><span class="toc-name">The Interleaving Method — The counterintuitive study approach top students use</span></a>
+      <a href="#recall" class="toc-item"><span class="toc-num">05</span><span class="toc-name">Active Recall — The single most validated learning technique in cognitive science</span></a>
+      <a href="#sleep" class="toc-item"><span class="toc-num">06</span><span class="toc-name">Sleep & Learning — Why what you do after you study matters more than the studying</span></a>
+      <a href="#mindmap" class="toc-item"><span class="toc-num">07</span><span class="toc-name">Mind Mapping & Mental Models — Build the architecture knowledge sticks to</span></a>
+      <a href="#cheatsheet" class="toc-item"><span class="toc-num">08</span><span class="toc-name">The Master Cheatsheet — Every principle, one table</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- ─── 01: FEYNMAN TECHNIQUE ─── -->
+<section class="section" id="feynman">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 01</div>
+    <div class="s-meta">
+      <div class="s-cat">Richard Feynman · Nobel Prize Physics · "The Great Explainer"</div>
+      <h2 class="s-title">The <span>Feynman</span><br/>Technique</h2>
+      <p class="s-desc">Nobel Prize-winning physicist Richard Feynman — declared "The Smartest Man in the World" by Omni Magazine — had one core belief: if you can't explain something simply, you don't understand it yet. This 4-step method forces true comprehension over shallow memorisation — and it works on any subject, at any level.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">10%</span><span class="s-stat-l">retention from passive reading alone</span></div>
+    <div class="s-stat"><span class="s-stat-n">90%</span><span class="s-stat-l">retention when you teach what you've learned to someone else</span></div>
+    <div class="s-stat"><span class="s-stat-n">"Great</span><span class="s-stat-l">Explainer" — Feynman's nickname. His gift: complexity into clarity.</span></div>
+    <div class="s-stat"><span class="s-stat-n">100%</span><span class="s-stat-l">subjects this works on — science, finance, history, languages, coding, law</span></div>
+  </div>
+
+  <div class="feynman-steps">
+    <div class="fstep">
+      <div class="fstep-num">1</div>
+      <div class="fstep-label">Step 1 · Choose</div>
+      <div class="fstep-title">Choose a Concept</div>
+      <p class="fstep-text">Write the name of the topic at the top of a blank page. Be specific — not "quantum mechanics" but "what wave-particle duality actually means." The more specific your subject, the clearer your gaps will become. Start with foundational concepts and build complexity. One concept per session. Not a whole chapter.</p>
+      <div class="fstep-ex">Write "Compound Interest" at the top of the page. Not "Finance" or "Money." One concept. One page. Full focus.</div>
+    </div>
+    <div class="fstep">
+      <div class="fstep-num">2</div>
+      <div class="fstep-label">Step 2 · Teach</div>
+      <div class="fstep-title">Explain It to a Child</div>
+      <p class="fstep-text">Write everything you know about this concept as if explaining it to a 12-year-old. No jargon. No technical language. Plain words, simple sentences, concrete examples. This is where the magic happens: where you reach for a technical term because you can't explain it simply — that is your knowledge gap. Circle it. That's exactly what you need to study next.</p>
+      <div class="fstep-ex">"Compound interest means your money earns extra money — and then that extra money earns even more money. It's like a snowball rolling downhill — it gets bigger the longer it rolls."</div>
+    </div>
+    <div class="fstep">
+      <div class="fstep-num">3</div>
+      <div class="fstep-label">Step 3 · Identify Gaps</div>
+      <div class="fstep-title">Find What You Don't Know</div>
+      <p class="fstep-text">Review your explanation. Where did you get stuck? Where did you revert to jargon? Where is the logic fuzzy? These are your knowledge gaps — and they are infinitely more valuable than what you already know. Go back to the source material specifically for these gaps. Not the whole chapter. Not the whole book. Just the gap. Then rewrite that section of your explanation until it's simple, clear, and gapless.</p>
+      <div class="fstep-ex">Feynman kept a notebook titled "Things I Don't Know About." This radical honesty about the boundaries of his understanding is what made his understanding so extraordinarily deep.</div>
+    </div>
+    <div class="fstep">
+      <div class="fstep-num">4</div>
+      <div class="fstep-label">Step 4 · Simplify & Repeat</div>
+      <div class="fstep-title">Refine Until It's Obvious</div>
+      <p class="fstep-text">Once you've closed all gaps, simplify the explanation further. Strip every unnecessary word. Create analogies that feel completely intuitive. Build a narrative that flows. Then explain it again — to yourself, out loud, or to an actual person. The test: can someone who knows nothing about this topic follow your explanation without confusion? If yes — you have mastered it. If not — you have more gaps to close.</p>
+      <div class="fstep-ex">"I couldn't reduce it to the freshman level. That means we really don't understand it." — Richard Feynman</div>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">FEYNMAN PRINCIPLE 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8A3.5 3.5 0 0 0 8 18a3 3 0 0 0 3-2.5V6a2 2 0 0 0-2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 1 5.8A3.5 3.5 0 0 1 16 18a3 3 0 0 1-3-2.5V6a2 2 0 0 1 2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Why It Works: The Neuroscience</div>
+      <p class="card-text">The Feynman Technique works through four simultaneous mechanisms: <strong style="color:var(--cream)">Active Recall</strong> — retrieving from memory, not re-reading, which strengthens neural connections. <strong style="color:var(--cream)">Elaboration</strong> — connecting new knowledge to existing frameworks. <strong style="color:var(--cream)">Metacognition</strong> — thinking about your own thinking, which is the highest-order cognitive process. <strong style="color:var(--cream)">Chunking</strong> — breaking complexity into digestible pieces that reduce cognitive load. These four processes together produce learning that is 6–10× more durable than passive re-reading.</p>
+      <div class="scibox">
+        <div class="card-sec">🔬 Bill Gates Called Him</div>
+        <p class="card-text">"The greatest teacher I never had." When Albert Einstein attended Feynman's graduate lecture, he said exactly what the Feynman Technique teaches: if the explanation is too complex, you don't know it well enough yet.</p>
+      </div>
+      <span class="badge ba">Core Science</span>
+    </div>
+    <div class="card">
+      <div class="card-num">FEYNMAN PRINCIPLE 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="9" cy="10" r="6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="14" r="6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Curse of Knowledge</div>
+      <p class="card-text">The biggest enemy of deep understanding is what cognitive scientists call the "Curse of Knowledge" — the moment you learn something, you forget what it's like not to know it. Experts systematically overestimate how much their audience understands — because they've forgotten their own confusion. The Feynman Technique deliberately reverses this: it forces you to see your knowledge from the outside — which is where genuine mastery begins.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Illusion of Knowing</div>
+        <p class="card-text">Research shows most students dramatically overestimate their own comprehension when they reread notes or highlight text. The feeling of familiarity mimics the feeling of understanding — but they are completely different things. The Feynman Technique is the only study method that reliably distinguishes between the two.</p>
+      </div>
+      <span class="badge bc">Hidden Trap</span>
+    </div>
+    <div class="card">
+      <div class="card-num">FEYNMAN APPLICATION</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15.5 0 18M12 3c-2.5 2.5-2.5 15.5 0 18" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Beyond Studying — Real World Applications</div>
+      <p class="card-text"><strong style="color:var(--cream)">In meetings:</strong> Before presenting any idea, explain it to yourself as if explaining to someone with no context. If you can't — rework the idea until you can.<br/><br/><strong style="color:var(--cream)">In writing:</strong> Every piece of writing should pass the "12-year-old test" — can someone that age follow the logic?<br/><br/><strong style="color:var(--cream)">In sales/pitches:</strong> Your prospect understands their problem. They don't understand your solution. Explain it as if they're new to the domain — because they are.<br/><br/><strong style="color:var(--cream)">In leadership:</strong> The fastest way to identify what your team doesn't understand: ask them to explain it back without notes. The gaps appear immediately.</p>
+      <span class="badge bb">Applied</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 1 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"If you can't explain it simply, you <em>don't understand it well enough.</em> The person who says he knows what he thinks but cannot express it usually does not know what he thinks."</p>
+  <p class="quote-attr">— Richard Feynman · Nobel Prize in Physics 1965</p>
+</div>
+
+<!-- ─── 02: SPACED REPETITION ─── -->
+<section class="section section-alt" id="spaced">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 02</div>
+    <div class="s-meta">
+      <div class="s-cat">Hermann Ebbinghaus · The Forgetting Curve · 1885–2026</div>
+      <h2 class="s-title">Spaced<br/><span>Repetition</span> Science</h2>
+      <p class="s-desc">In 1885, Hermann Ebbinghaus discovered the most important — and most ignored — fact in all of learning science: memory decays exponentially after learning. Within 20 minutes you've lost 42%. Within 24 hours, 70% is gone. Cramming doesn't build memory. It temporarily inflates it — and then accelerates its collapse.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">42%</span><span class="s-stat-l">of new information lost within 20 minutes (Ebbinghaus 1885)</span></div>
+    <div class="s-stat"><span class="s-stat-n">70%</span><span class="s-stat-l">forgotten within 24 hours without reinforcement</span></div>
+    <div class="s-stat"><span class="s-stat-n">90%</span><span class="s-stat-l">forgotten within one week with no active review</span></div>
+    <div class="s-stat"><span class="s-stat-n">5×</span><span class="s-stat-l">better long-term retention from spaced vs massed practice</span></div>
+  </div>
+
+  <!-- FORGETTING CURVE VISUAL -->
+  <div class="curve-visual">
+    <div class="curve-title">The Forgetting Curve — Without Spaced Repetition</div>
+    <div class="curve-bars">
+      <div class="cbar" style="height:100%"><span class="cbar-val">100%</span><span class="cbar-label">0min</span></div>
+      <div class="cbar" style="height:58%"><span class="cbar-val">58%</span><span class="cbar-label">20min</span></div>
+      <div class="cbar" style="height:44%"><span class="cbar-val">44%</span><span class="cbar-label">1hr</span></div>
+      <div class="cbar" style="height:34%"><span class="cbar-val">34%</span><span class="cbar-label">9hrs</span></div>
+      <div class="cbar" style="height:28%"><span class="cbar-val">28%</span><span class="cbar-label">24hrs</span></div>
+      <div class="cbar" style="height:25%"><span class="cbar-val">25%</span><span class="cbar-label">2days</span></div>
+      <div class="cbar" style="height:21%"><span class="cbar-val">21%</span><span class="cbar-label">6days</span></div>
+      <div class="cbar" style="height:18%"><span class="cbar-val">18%</span><span class="cbar-label">31days</span></div>
+    </div>
+    <p class="curve-note">Each bar shows percentage of information retained without active reinforcement. The steep drop within the first hour is why cramming the night before an exam creates the illusion of learning — and why 80% of it is gone 6 days later. Spaced repetition restructures this curve entirely: each review session at the right interval flattens the decay, making the curve progressively shallower until the memory becomes near-permanent.</p>
+  </div>
+
+  <p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:var(--gold);margin-bottom:16px;">The Optimal Spaced Repetition Schedule</p>
+  <div class="sr-schedule">
+    <div class="sr-day"><span class="sr-day-num">Day 1</span><span class="sr-day-label">First Study</span><div class="sr-day-action">Learn the concept. Use active recall. Write it out or explain it.</div></div>
+    <div class="sr-day"><span class="sr-day-num">Day 2</span><span class="sr-day-label">First Review</span><div class="sr-day-action">Review without notes first. Then check. This doubles retention at 24-hour mark.</div></div>
+    <div class="sr-day"><span class="sr-day-num">Day 4</span><span class="sr-day-label">Second Review</span><div class="sr-day-action">Space widening. Test yourself again — quiz, flashcard, or explanation from scratch.</div></div>
+    <div class="sr-day"><span class="sr-day-num">Day 8</span><span class="sr-day-label">Third Review</span><div class="sr-day-action">One week after initial learning. Memory should feel solid but slightly effortful.</div></div>
+    <div class="sr-day"><span class="sr-day-num">Day 21</span><span class="sr-day-label">Fourth Review</span><div class="sr-day-action">2 weeks after last review. Intervals get longer as memories strengthen.</div></div>
+    <div class="sr-day"><span class="sr-day-num">Day 45</span><span class="sr-day-label">Fifth Review</span><div class="sr-day-action">Monthly. By this point retention is approaching near-permanent long-term storage.</div></div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">SPACED REP TOOL 01</div>
+      <span class="card-icon">🃏</span>
+      <div class="card-title">Anki — The Most Powerful Free Learning Tool</div>
+      <p class="card-text">Anki is a flashcard app that uses an algorithm (SM-2, now updated to FSRS) to show you cards at precisely the right moment — just as you're about to forget them. Every card you review gets its next review date calculated based on how confidently you answered. The result: you study the things you're about to forget and skip the things you know well. Medical students use Anki to memorise over 20,000 facts for licensing exams. Lawyers use it for case law. Language learners use it for vocabulary. It works universally.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Algorithm Advantage</div>
+        <p class="card-text">A study tracking medical students found those using spaced repetition (Anki) scored an average of 11% higher on standardised exams than those using traditional study methods — with significantly less total study time. The algorithm does what your intuition can't: it schedules precisely when forgetting is about to happen.</p>
+      </div>
+      <span class="badge ba">Best Tool</span>
+    </div>
+    <div class="card">
+      <div class="card-num">SPACED REP TRUTH</div>
+      <span class="card-icon">🚨</span>
+      <div class="card-title">Why Cramming Destroys Memory</div>
+      <p class="card-text">Cramming works — for 24 hours. You can hold information in working memory through repeated exposure in a single session. But working memory and long-term memory are different systems. Cramming bypasses the consolidation process that creates durable memories. Worse: the brain interprets massed repetition in one session as one learning event — not many. Spaced repetition creates multiple distinct retrieval events, each of which strengthens the memory trace independently. The difference in 30-day retention: 5× better with spaced practice.</p>
+      <span class="badge bc">Critical Truth</span>
+    </div>
+    <div class="card">
+      <div class="card-num">SPACED REP PRINCIPLE</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="7.5" cy="15.5" r="4.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m11 12 8-8M16 6l2.5 2.5M13.5 8.5 16 11" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Desirable Difficulty Effect</div>
+      <p class="card-text">Robert Bjork's research identified a paradox: the best learning conditions feel harder and less fluent than less effective ones. When recall requires effort — when you struggle slightly before remembering — the memory trace is strengthened more powerfully than when recall is effortless. This is why Anki shows you cards just as you're about to forget them, not when you easily remember them. The struggle is the point. Easy recall = no learning happening. Effortful recall = deep encoding occurring.</p>
+      <div class="scibox">
+        <div class="card-sec">🔬 The Implication</div>
+        <p class="card-text">If studying feels easy and smooth, you're probably not learning as much as you think. The feeling of fluency creates an illusion of mastery. The best learning always involves a degree of productive struggle — and spaced repetition is engineered to keep you in that productive zone.</p>
+      </div>
+      <span class="badge bd">Learning Science</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 2 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"Memory is not a warehouse. It is a living process, constantly subject to forces of decay and reconstruction. <em>Forgetting is the default. Remembering must be engineered.</em>"</p>
+  <p class="quote-attr">— Endel Tulving · Elements of Episodic Memory · Expanded by Ebbinghaus Research</p>
+</div>
+
+<!-- ─── 03: SPEED READING ─── -->
+<section class="section" id="reading">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 03</div>
+    <div class="s-meta">
+      <div class="s-cat">Tim Ferriss · Peripheral Vision · Active Reading System</div>
+      <h2 class="s-title">Read a <span>300-Page</span><br/>Book in 2 Hours</h2>
+      <p class="s-desc">The average adult reads at 250–300 words per minute. Trained readers process 600–1,000 WPM with equal or better comprehension. At 700 WPM — a realistic trained target — a 300-page book takes just over 2 hours. Here's the complete system to get there and retain 80% a week later.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">250</span><span class="s-stat-l">WPM average untrained adult reading speed</span></div>
+    <div class="s-stat"><span class="s-stat-n">700</span><span class="s-stat-l">WPM achievable with pointer technique training in 3 weeks</span></div>
+    <div class="s-stat"><span class="s-stat-n">62%</span><span class="s-stat-l">reduction in regressions with pointer technique (UC 2019)</span></div>
+    <div class="s-stat"><span class="s-stat-n">80%</span><span class="s-stat-l">of book content delivered by 20% of its pages (Pareto principle)</span></div>
+  </div>
+
+  <div class="reading-steps">
+    <div class="rs">
+      <div class="rs-num">1</div>
+      <div class="rs-body">
+        <div class="rs-title">🎯 Define Your Purpose — Before Page 1 <span class="rs-time">5 MIN</span></div>
+        <p class="rs-text">Before reading a single word, answer: "Why am I reading this? What specific question do I want answered?" A clearly defined purpose focuses your brain's attention filter (the reticular activating system) to extract relevant information and discard noise. Readers with an explicit purpose retain 40–60% more than readers who just "start reading." Write your purpose in one sentence on a sticky note. Look at it before you start.</p>
+      </div>
+    </div>
+    <div class="rs">
+      <div class="rs-num">2</div>
+      <div class="rs-body">
+        <div class="rs-title">🗺️ Preview the Architecture — Before Deep Reading <span class="rs-time">10–15 MIN</span></div>
+        <p class="rs-text">Spend 10–15 minutes previewing the entire book before reading it. Read: Table of Contents. Introduction fully. Chapter headings and subheadings. First and last paragraphs of each chapter. Conclusion fully. This creates a mental scaffolding — a framework your brain can attach new information to as you read. Without this scaffolding, information enters and exits working memory without ever consolidating. With it, every new detail has a home.</p>
+      </div>
+    </div>
+    <div class="rs">
+      <div class="rs-num">3</div>
+      <div class="rs-body">
+        <div class="rs-title">👆 The Pointer Technique — Train Your Eyes <span class="rs-time">Ongoing</span></div>
+        <p class="rs-text">Your eyes naturally make backward regressions (re-reading words you've already seen) — consuming 25–30% of your reading time on content you've already processed. The pointer technique eliminates this: use your finger, pen, or stylus as a visual guide, moving it under each line at a consistent pace. Your eyes follow the pointer, eliminating regressions entirely. Start at your natural speed. Each session, increase pace by 10%. A UC study found pointer users doubled reading speed in 3 weeks with a 62% reduction in regressions.</p>
+      </div>
+    </div>
+    <div class="rs">
+      <div class="rs-num">4</div>
+      <div class="rs-body">
+        <div class="rs-title">🔇 Eliminate Subvocalization — The Speed Brake <span class="rs-time">Training Required</span></div>
+        <p class="rs-text">Subvocalization is the inner voice that "pronounces" each word as you read — a habit formed in elementary school that caps reading speed at speaking speed (roughly 150–200 WPM). To reduce it: hum a simple tune while reading, count silently (1,2,3), or chew gum. These occupy the motor cortex circuits responsible for subvocalization without impairing comprehension. With training, your brain learns to process written language visually without the phonological translation step — unlocking significantly higher speeds.</p>
+      </div>
+    </div>
+    <div class="rs">
+      <div class="rs-num">5</div>
+      <div class="rs-body">
+        <div class="rs-title">📍 Apply the 80/20 Rule — Read What Matters <span class="rs-time">Always</span></div>
+        <p class="rs-text">Pareto's principle applies to every non-fiction book: 20% of the content delivers 80% of the value. Focus your deepest reading on: Chapter introductions and conclusions. Bolded terms and italicised phrases (authors signal importance this way). First and last sentences of every paragraph (contain the core idea). Case studies and examples (where abstract ideas become concrete). The remaining 80% of text is elaboration, anecdote, and qualification — skim it for what's new, read deeply where it's critical.</p>
+      </div>
+    </div>
+    <div class="rs">
+      <div class="rs-num">6</div>
+      <div class="rs-body">
+        <div class="rs-title">✍️ Active Recall After Every Chapter — Lock It In <span class="rs-time">10 MIN/CHAPTER</span></div>
+        <p class="rs-text">After each chapter: close the book. Write down everything you can remember without looking. Not what the chapter said — what you think the author was trying to say. This single habit changes reading from a passive receipt of information to active construction of knowledge. Research shows this post-chapter recall exercise improves long-term retention by 50% compared to reading and moving on. Then — and only then — re-open the book and check what you missed.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-head">✅ The Note-Taking System That Builds Lasting Knowledge</div>
+    <p class="tip-text">Use a 3-column note system: <strong>Column 1 (narrow):</strong> Main idea or concept from the page. <strong>Column 2 (wide):</strong> Your explanation in your own words. <strong>Column 3 (narrow, folded over):</strong> Questions this raises. The act of translating what you read into your own words in Column 2 is a micro-Feynman Technique applied to every page — and it's the single biggest driver of retention improvement in active reading research.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── 04: INTERLEAVING ─── -->
+<section class="section section-alt" id="interleaving">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 04</div>
+    <div class="s-meta">
+      <div class="s-cat">Robert Bjork · UCLA · The Counterintuitive Study Method</div>
+      <h2 class="s-title">The<br/><span>Interleaving</span> Method</h2>
+      <p class="s-desc">Most students study by blocking — completing all of Topic A before moving to Topic B. Interleaving reverses this: mixing different topics or problem types within the same study session. It feels harder. It feels less efficient. Studies consistently show it produces 22–43% better long-term retention and transfer. The discomfort is the mechanism.</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 5l14 14M19 5 5 19" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">Blocked Practice (What Most People Do)</div>
+      <p class="col-text">
+        <strong>Monday:</strong> Study all of Chapter 3 (photosynthesis). Feel like you've mastered it.<br/><br/>
+        <strong>Tuesday:</strong> Study all of Chapter 4 (cell respiration). Feel fluent.<br/><br/>
+        <strong>Wednesday:</strong> Study all of Chapter 5 (ecosystems). Satisfying progress.<br/><br/>
+        <strong>Result:</strong> On the exam, you confuse photosynthesis with cell respiration, can't identify which formula applies when, and struggle with mixed questions that combine topics.<br/><br/>
+        Blocked practice produces strong short-term performance and weak long-term retention. The brain uses shortcuts to pattern-match within a block, never learning to discriminate between concepts under pressure.
+      </p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m7.5 12.5 3 3 6-6.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">Interleaving (What Top Students Do)</div>
+      <p class="col-text">
+        <strong>Monday:</strong> 20 min photosynthesis → 20 min cell respiration → 20 min ecosystems.<br/><br/>
+        <strong>Tuesday:</strong> 20 min ecosystems → 20 min photosynthesis → 20 min cell respiration.<br/><br/>
+        <strong>Wednesday:</strong> 20 min cell respiration → 20 min ecosystems → 20 min photosynthesis.<br/><br/>
+        <strong>Result:</strong> On the exam, you can instantly identify which concept applies to each question, transfer learning to novel problems, and perform 22–43% better on retention tests 1 month later.<br/><br/>
+        Interleaving forces the brain to reload each concept from scratch every time — which is harder, slower, and builds vastly more durable understanding.
+      </p>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">INTERLEAVING SCIENCE</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 3v7.5L5.5 17a2 2 0 0 0 1.8 3h9.4a2 2 0 0 0 1.8-3L15 10.5V3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 3h6M6.5 15h11" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Why the Difficulty Is the Point</div>
+      <p class="card-text">Robert Bjork coined the term "desirable difficulties" specifically to describe interleaving. The brain interprets each context shift as a retrieval challenge — it must reconstruct the relevant framework from scratch rather than continuing an established pattern. This reconstruction is cognitively expensive — and that expense is exactly what creates durable memory traces. The discomfort during interleaved study is not a sign that you're learning less. It is a sign that you're learning more deeply.</p>
+      <div class="scibox">
+        <div class="card-sec">📊 The UCLA Study</div>
+        <p class="card-text">Rohrer & Taylor (2007) at UCLA showed that students who interleaved practice problems performed 22% better on a one-month retention test compared to students who used blocked practice — even though during the study sessions the blocked students performed significantly better. Short-term performance is a poor predictor of long-term retention.</p>
+      </div>
+      <span class="badge bd">Research</span>
+    </div>
+    <div class="card">
+      <div class="card-num">INTERLEAVING APPLICATION</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M4 20 14 4l6 16z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M9 20h5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">How to Apply It to Any Subject</div>
+      <p class="card-text"><strong style="color:var(--cream)">Mathematics:</strong> Mix problem types. Don't do all algebra, then all geometry. Alternate equation types within the same session.<br/><br/><strong style="color:var(--cream)">Language learning:</strong> Mix vocabulary, grammar, and conversation practice in every session rather than isolating each skill.<br/><br/><strong style="color:var(--cream)">Professional skills:</strong> Mix presentation practice with writing practice with strategic thinking in the same development session.<br/><br/><strong style="color:var(--cream)">Programming:</strong> Mix data structures, algorithms, and debugging within a session rather than drilling one skill type exhaustively.</p>
+      <span class="badge ba">Applied</span>
+    </div>
+    <div class="card">
+      <div class="card-num">INTERLEAVING WARNING</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 3 2 20h20z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M12 10v4.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="17.3" r="0.9" fill="#c8943a"/></svg></span>
+      <div class="card-title">When Not to Interleave</div>
+      <p class="card-text">Interleaving is most powerful for topics that are conceptually related — where the brain needs to learn to discriminate between similar concepts. For completely unrelated subjects, blocked practice is fine. Also: interleaving requires you to have at least basic familiarity with each concept before mixing them. Trying to interleave concepts you've never encountered before creates overwhelming cognitive load rather than desirable difficulty. Learn the basics of each concept first. Then interleave.</p>
+      <span class="badge bc">Important Caveat</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 3 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"The best learning often doesn't feel like learning. The conditions that make learning feel easy and fluent are <em>often the least effective</em> for durable long-term retention."</p>
+  <p class="quote-attr">— Robert Bjork · UCLA Cognitive Psychology · Creator of "Desirable Difficulties"</p>
+</div>
+
+<!-- ─── 05: ACTIVE RECALL ─── -->
+<section class="section" id="recall">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 05</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · The Most Validated Technique in Cognitive Science</div>
+      <h2 class="s-title">Active<br/><span>Recall</span></h2>
+      <p class="s-desc">If there is one single learning technique supported by more research than any other, it is active recall — testing yourself rather than restudying. A 2006 meta-analysis of 700+ studies confirmed it. The testing effect is real, massive, and universally applicable. The problem: almost nobody does it.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">3×</span><span class="s-stat-l">better recall from testing vs re-reading (Roediger & Karpicke)</span></div>
+    <div class="s-stat"><span class="s-stat-n">50%</span><span class="s-stat-l">more retained after a week from post-chapter self-testing vs passive review</span></div>
+    <div class="s-stat"><span class="s-stat-n">10%</span><span class="s-stat-l">retention from passive reading alone after 1 week</span></div>
+    <div class="s-stat"><span class="s-stat-n">700+</span><span class="s-stat-l">studies confirming the testing effect (Roediger meta-analysis 2006)</span></div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">RECALL TOOL 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 3h9l5 5v13H5z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M14 3v5h5M8 12h8M8 16h8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Blank Page Method</div>
+      <p class="card-text">After studying a topic, close all notes and books. Take a blank page. Write everything you can remember about the topic — from scratch, in your own words. No looking. No checking. Just retrieval. Then open your notes and check what you missed. The gaps you identify are your precise study targets. This is the Feynman Technique applied to daily study — and it is the single most effective 15-minute study session you can have.</p>
+      <span class="badge ba">Highest ROI</span>
+    </div>
+    <div class="card">
+      <div class="card-num">RECALL TOOL 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.7 2.2c-.9.5-1.2 1-1.2 2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="17" r="0.9" fill="#c8943a"/></svg></span>
+      <div class="card-title">The Question-Based Note System</div>
+      <p class="card-text">Transform all your notes into questions. Instead of writing "The mitochondria generates ATP through cellular respiration," write "What does the mitochondria generate, and how?" When you review, cover the answers and test yourself on the questions. This converts passive notes into active recall tools — a system used by top medical students globally. Every note you ever take should be in question form. If you can't formulate a question from a piece of information, it probably wasn't important enough to write down.</p>
+      <span class="badge ba">Note System</span>
+    </div>
+    <div class="card">
+      <div class="card-num">RECALL TOOL 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M4 5h13a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H9l-5 4v-4H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Teach It Out Loud</div>
+      <p class="card-text">The Protégé Effect: research shows that students who expect to teach material learn it more thoroughly and retain it more durably than those who only expect to be tested on it. You don't even need to actually teach anyone — the expectation alone changes how you encode information. But if you can teach it (to a friend, a rubber duck, your phone camera), retention improves further. Speaking activates different memory pathways than writing or reading, creating multiple retrieval routes for the same information.</p>
+      <span class="badge bb">Protégé Effect</span>
+    </div>
+    <div class="card">
+      <div class="card-num">RECALL TRAP</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m6 6 12 12" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Highlighting Is Almost Useless</div>
+      <p class="card-text">Research is definitive: highlighting text produces minimal learning benefit. It creates the illusion of engagement while producing almost no active recall. The same applies to re-reading — it feels productive because the material feels familiar. But familiarity is not the same as retrievability. The critical question is not "Do I recognise this?" but "Can I recall this when I need it — without seeing it?" Only active recall answers that question. Stop highlighting. Start testing yourself.</p>
+      <span class="badge bc">Stop Doing This</span>
+    </div>
+    <div class="card">
+      <div class="card-num">RECALL TOOL 04</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="13" r="8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 9v4l3 2M9.5 2.5h5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The 5-Minute End-of-Day Knowledge Review</div>
+      <p class="card-text">At the end of every study session or workday, spend 5 minutes answering: "What were the 3 most important things I learned or understood today?" Write them from memory. No notes. This daily retrieval exercise compounds dramatically over months — creating a searchable mental database of real knowledge rather than the vague residue that passive learning leaves behind. Combined with a spaced repetition schedule, this 5-minute practice is responsible for a disproportionate amount of long-term retention.</p>
+      <span class="badge ba">Daily Habit</span>
+    </div>
+    <div class="card">
+      <div class="card-num">RECALL SCIENCE</div>
+      <span class="card-icon">🧬</span>
+      <div class="card-title">What's Actually Happening in the Brain</div>
+      <p class="card-text">Every time you retrieve a memory, you reconstruct it — and in the process, strengthen the neural pathway that leads to it. This is called reconsolidation: each retrieval event makes the next retrieval easier and faster. Passive re-reading activates recognition circuits, not recall circuits. Recognition and recall are different neural systems. Exams test recall. Life tests recall. Recognition (the feeling of familiarity) is useless when you need to produce information under pressure — but it's what most passive study methods build.</p>
+      <span class="badge bd">Neuroscience</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 06: SLEEP & LEARNING ─── -->
+<section class="section section-alt" id="sleep">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 06</div>
+    <div class="s-meta">
+      <div class="s-cat">Matthew Walker · Added Research Chapter · Why Sleep Is the Real Study Session</div>
+      <h2 class="s-title">Sleep &<br/><span>Learning</span></h2>
+      <p class="s-desc">Matthew Walker's research at UC Berkeley established what no study tip can replace: sleep is not recovery from learning. Sleep IS learning. Memory consolidation — the process of transferring information from short-term to long-term storage — happens almost exclusively during sleep. What you do after studying matters more than the studying itself.</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">What Happens During Sleep</div>
+      <p class="col-text">
+        <strong>NREM Sleep (Slow-Wave):</strong> The hippocampus (short-term memory store) "replays" the day's learning to the cortex (long-term storage). This transfer process is called memory consolidation and it cannot be replicated by any other process. Studying the same material twice produces far less benefit than studying it once and sleeping well.<br/><br/>
+        <strong>REM Sleep:</strong> The brain identifies patterns and connections across information — linking new knowledge to existing frameworks and generating creative insights. REM sleep is why you often "sleep on a problem" and wake up with the solution.<br/><br/>
+        <strong>The Sleep Window:</strong> Memory consolidation is strongest in the final 2 hours of sleep (typically REM). Cutting sleep from 8 to 6 hours eliminates 25–30% of total consolidation time.
+      </p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 3 2 20h20z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M12 10v4.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="17.3" r="0.9" fill="#c8943a"/></svg></span>
+      <div class="col-title">The Sleep Deprivation Learning Penalty</div>
+      <p class="col-text">
+        Walker's research found that sleep-deprived students showed a 40% deficit in forming new memories compared to fully rested students. This is the most dramatic impairment ever documented in a healthy population.<br/><br/>
+        <strong>All-nighters before exams:</strong> Counterproductive. You study material that your sleep-deprived brain cannot encode effectively, then attempt to retrieve it from a brain running at 40% memory capacity. Worse: the pre-exam cramming displaces the sleep that would have consolidated everything learned in the weeks prior.<br/><br/>
+        <strong>The rule:</strong> Study → Sleep → Test performs better than Study → More Study → Less Sleep → Test. Without exception.
+      </p>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">SLEEP PROTOCOL 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M4 4.5h4a2 2 0 0 1 2 2V20a1.7 1.7 0 0 0-2-1.5H4zM20 4.5h-4a2 2 0 0 0-2 2V20a1.7 1.7 0 0 1 2-1.5h4z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Study Before Sleep — The Timing Advantage</div>
+      <p class="card-text">The most strategic time to study difficult material is 60–90 minutes before sleep. The brain enters its consolidation window within the first sleep cycle — and the most recently learned material gets priority in the replay process. This means studying immediately before sleep can produce significantly better consolidation than studying the same material at any other time of day. Combine this with the 5-minute active recall review just before bed, and you've created the optimal conditions for durable memory formation.</p>
+      <span class="badge ba">Timing Strategy</span>
+    </div>
+    <div class="card">
+      <div class="card-num">SLEEP PROTOCOL 02</div>
+      <span class="card-icon">💤</span>
+      <div class="card-title">The 20-Minute Learning Nap</div>
+      <p class="card-text">A 20-minute nap after a learning session produces measurable improvements in memory consolidation — equivalent to a full night's additional sleep for material studied just before the nap. NASA studies on astronauts and pilots found 26-minute naps improved performance by 34% and alertness by 100%. The mechanism: even a brief NREM sleep episode initiates partial consolidation and clears hippocampal storage space for new learning. The practical implication: if you have back-to-back study sessions, a 20-minute nap between them significantly improves the second session's retention.</p>
+      <span class="badge bb">Powerful Tool</span>
+    </div>
+    <div class="card">
+      <div class="card-num">SLEEP PROTOCOL 03</div>
+      <span class="card-icon">🧘</span>
+      <div class="card-title">Protect the Sleep Window Before Exams</div>
+      <p class="card-text">The most actionable rule from Walker's research: never sacrifice sleep in the final 3 days before any important test, presentation, or performance. The information you've studied over weeks consolidates in those final nights of good sleep. An all-nighter before an exam doesn't just fail to add learning — it actively undoes consolidation that was already in progress. Rule: stop adding new material 24 hours before the exam. Sleep instead. Let the brain finish its work.</p>
+      <span class="badge bc">Critical Rule</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 07: MIND MAPPING ─── -->
+<section class="section" id="mindmap">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 07</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · Tony Buzan · Knowledge Architecture</div>
+      <h2 class="s-title">Mind Mapping &<br/><span>Mental Models</span></h2>
+      <p class="s-desc">Information doesn't stick in isolation. It sticks when it connects to something you already know. Tony Buzan's mind mapping and Charlie Munger's lattice of mental models are both applications of the same principle: knowledge needs architecture to be retrievable. Here's how to build it.</p>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">MIND MAP PRINCIPLE 01</div>
+      <span class="card-icon">🕸️</span>
+      <div class="card-title">Why the Brain Loves Non-Linear Structure</div>
+      <p class="card-text">The brain stores memory associatively — through webs of connections, not linear lists. A mind map mirrors this architecture: a central concept with branching associations, sub-associations, and connections. Research by Farrand et al. (2002) found medical students using mind maps retained 10% more information after one week than those using conventional linear notes — and reported higher confidence in applying the knowledge. The key: the process of drawing the map, not the map itself, is where the learning happens.</p>
+      <span class="badge ba">Foundation</span>
+    </div>
+    <div class="card">
+      <div class="card-num">MIND MAP PRINCIPLE 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 15 15 9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 6.5 13 4.5a3.5 3.5 0 0 1 5 5l-2 2M13 17.5 11 19.5a3.5 3.5 0 0 1-5-5l2-2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Connect New to Known — The Elaborative Interrogation</div>
+      <p class="card-text">Before adding any new concept to your knowledge base, ask: "How does this connect to something I already understand?" The technique is called elaborative interrogation — and it is one of the most powerful encoding strategies in learning science. When you genuinely connect new information to existing mental models, you create multiple retrieval pathways to the same concept. More retrieval pathways = easier recall = more durable retention. Never learn in isolation if you can learn in context.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 Ausubel's Principle</div>
+        <p class="card-text">"The most important factor influencing learning is what the learner already knows. Ascertain this and teach accordingly." — David Ausubel. Every excellent teacher and every excellent learner applies this principle intuitively.</p>
+      </div>
+      <span class="badge ba">Core Principle</span>
+    </div>
+    <div class="card">
+      <div class="card-num">MIND MAP PRINCIPLE 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M4 21h16M5 21V10M19 21V10M3 10l9-6 9 6M7 10v11M11 10v11M13 10v11M17 10v11" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Memory Palace — Spatial Encoding</div>
+      <p class="card-text">The Method of Loci (Memory Palace) is the world's oldest memory technique — dating to ancient Greece. Assign pieces of information to specific locations in a familiar space (your home, a route you walk, a building you know). To recall, mentally walk the route. Spatial memory is among the brain's most powerful systems — evolved over millions of years of navigation. Memory champions use this technique to memorise the order of 10 shuffled decks of cards. It works for any information that can be visualised and placed in space.</p>
+      <span class="badge bd">Memory Champion Tool</span>
+    </div>
+    <div class="card">
+      <div class="card-num">MIND MAP TOOL</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 20V10M12 20V4M19 20v-7" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 20h18" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Knowledge Map Protocol</div>
+      <p class="card-text">At the end of every chapter, course, or learning session: draw a knowledge map from scratch on a blank page. Central concept in the middle. Branch out to the 5–7 most important sub-concepts. Connect them with lines showing relationships. Add analogies at the edges. Use colour. The act of constructing the map from memory is itself the recall exercise. The finished map is a visual representation of how your understanding is structured — which makes revising for exams dramatically more efficient than re-reading linear notes.</p>
+      <span class="badge bb">Practice Tool</span>
+    </div>
+    <div class="card">
+      <div class="card-num">LATTICEWORK PRINCIPLE</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="11" r="6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 19h10" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Charlie Munger's Latticework of Mental Models</div>
+      <p class="card-text">Munger's approach to lifelong learning: build a "latticework" of mental models drawn from every major discipline — mathematics, physics, biology, psychology, economics, history. When new information arrives, it gets placed in this lattice — connected to multiple existing frameworks. The result: faster learning (new information has many anchors), deeper understanding (multiple frameworks illuminate the same concept from different angles), and better judgment (you recognise patterns across domains that single-discipline thinkers miss).</p>
+      <span class="badge bd">Lifelong Learning</span>
+    </div>
+    <div class="card">
+      <div class="card-num">TRANSFER PRINCIPLE</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M13 2 4 14h6l-1 8 9-12h-6z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Learning Transfer — The Real Goal</div>
+      <p class="card-text">The ultimate test of real learning is not performance on a test. It's transfer — the ability to apply knowledge to novel problems in contexts different from where you learned it. Transfer is what separates genuine understanding from pattern-matching. It requires: deep conceptual understanding (not just procedure), varied practice contexts (not just one format), and explicit connections between concepts (not isolated facts). The Feynman Technique, interleaving, active recall, and mind mapping all build transfer — passive reading almost never does.</p>
+      <span class="badge ba">The Real Goal</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 08: MASTER CHEATSHEET ─── -->
+<section class="section" id="cheatsheet">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 08</div>
+    <div class="s-meta">
+      <div class="s-cat">Quick Reference</div>
+      <h2 class="s-title">The Master<br/><span>Cheatsheet</span></h2>
+      <p class="s-desc">Every principle from this guide — in one quick-reference table. Build this into your study system and you will never study the same inefficient way again.</p>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Principle</th><th>The Action</th><th>Chapter</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td class="num-cell">01</td><td class="name-cell">Feynman Step 1</td><td>Write concept name on blank page. Specific, not broad. One concept per session.</td><td>Feynman</td><td><span class="badge ba">Always First</span></td></tr>
+        <tr><td class="num-cell">02</td><td class="name-cell">Feynman Step 2</td><td>Explain it to a 12-year-old. No jargon. Circle every place you get stuck.</td><td>Feynman</td><td><span class="badge ba">Core Step</span></td></tr>
+        <tr><td class="num-cell">03</td><td class="name-cell">Feynman Step 3</td><td>Return to source only for gaps you circled. Not the whole chapter — just the gap.</td><td>Feynman</td><td><span class="badge ba">Targeted</span></td></tr>
+        <tr><td class="num-cell">04</td><td class="name-cell">Feynman Step 4</td><td>Simplify until it's obvious. Create an analogy. Teach it to an actual person.</td><td>Feynman</td><td><span class="badge ba">Mastery Test</span></td></tr>
+        <tr><td class="num-cell">05</td><td class="name-cell">Ebbinghaus Schedule</td><td>Review on: Day 2, Day 4, Day 8, Day 21, Day 45 after initial learning.</td><td>Spaced Rep</td><td><span class="badge ba">Non-Negotiable</span></td></tr>
+        <tr><td class="num-cell">06</td><td class="name-cell">Use Anki</td><td>Input all key concepts as flashcards. Review daily for 15 minutes. Trust the algorithm.</td><td>Spaced Rep</td><td><span class="badge ba">Best Tool</span></td></tr>
+        <tr><td class="num-cell">07</td><td class="name-cell">Never Cram</td><td>Cramming builds 24hr memory. Space repetitions instead. Always.</td><td>Spaced Rep</td><td><span class="badge bc">Hard Rule</span></td></tr>
+        <tr><td class="num-cell">08</td><td class="name-cell">Desirable Difficulty</td><td>If recall feels easy, you're not learning. Seek effortful retrieval — that's the signal.</td><td>Spaced Rep</td><td><span class="badge bd">Mindset</span></td></tr>
+        <tr><td class="num-cell">09</td><td class="name-cell">Define Purpose Before Reading</td><td>Write your reading purpose in one sentence before opening any book.</td><td>Reading</td><td><span class="badge ba">Always</span></td></tr>
+        <tr><td class="num-cell">10</td><td class="name-cell">Preview Architecture</td><td>10–15 min: ToC, intro, headings, first/last paragraphs, conclusion. Before deep reading.</td><td>Reading</td><td><span class="badge ba">Before Reading</span></td></tr>
+        <tr><td class="num-cell">11</td><td class="name-cell">Pointer Technique</td><td>Use finger/pen as visual guide under each line. Eliminate regressions. +10% speed/week.</td><td>Reading</td><td><span class="badge ba">Speed Tool</span></td></tr>
+        <tr><td class="num-cell">12</td><td class="name-cell">Reduce Subvocalization</td><td>Hum or count while reading. Occupies motor cortex. Breaks the speaking-speed ceiling.</td><td>Reading</td><td><span class="badge bb">Training</span></td></tr>
+        <tr><td class="num-cell">13</td><td class="name-cell">80/20 Reading</td><td>Focus on chapter intros/conclusions, bolded terms, first/last sentences of paragraphs.</td><td>Reading</td><td><span class="badge ba">Efficiency</span></td></tr>
+        <tr><td class="num-cell">14</td><td class="name-cell">Post-Chapter Recall</td><td>Close book. Write everything you remember from the chapter. Then check.</td><td>Reading</td><td><span class="badge ba">Highest ROI</span></td></tr>
+        <tr><td class="num-cell">15</td><td class="name-cell">Interleave Topics</td><td>Mix 3 related topics in every study session. Never complete one before moving to the next.</td><td>Interleaving</td><td><span class="badge ba">Strategy</span></td></tr>
+        <tr><td class="num-cell">16</td><td class="name-cell">Trust the Difficulty</td><td>Interleaving feels slower and harder than blocking. That feeling is the learning happening.</td><td>Interleaving</td><td><span class="badge bd">Mindset</span></td></tr>
+        <tr><td class="num-cell">17</td><td class="name-cell">Blank Page Method</td><td>After studying: close everything. Recall the entire topic from scratch on blank paper.</td><td>Active Recall</td><td><span class="badge ba">Daily Habit</span></td></tr>
+        <tr><td class="num-cell">18</td><td class="name-cell">Question-Based Notes</td><td>Every note you write should be in question form. Answers covered during review.</td><td>Active Recall</td><td><span class="badge ba">Note System</span></td></tr>
+        <tr><td class="num-cell">19</td><td class="name-cell">Stop Highlighting</td><td>Highlighting = illusion of learning. Replace with: question-based notes + blank-page recall.</td><td>Active Recall</td><td><span class="badge bc">Stop This</span></td></tr>
+        <tr><td class="num-cell">20</td><td class="name-cell">Teach Out Loud</td><td>Explain what you learned today out loud — to anyone, or to yourself. The Protégé Effect.</td><td>Active Recall</td><td><span class="badge bb">Daily</span></td></tr>
+        <tr><td class="num-cell">21</td><td class="name-cell">Study Before Sleep</td><td>Most strategic study window: 60–90 minutes before sleep. Consolidation starts immediately.</td><td>Sleep</td><td><span class="badge ba">Timing</span></td></tr>
+        <tr><td class="num-cell">22</td><td class="name-cell">Never All-Nighter</td><td>Sleep before exams consolidates weeks of learning. All-nighters destroy consolidation.</td><td>Sleep</td><td><span class="badge bc">Hard Rule</span></td></tr>
+        <tr><td class="num-cell">23</td><td class="name-cell">20-Min Learning Nap</td><td>Nap between study sessions. Clears hippocampal storage. Improves 2nd session retention.</td><td>Sleep</td><td><span class="badge bb">Advanced</span></td></tr>
+        <tr><td class="num-cell">24</td><td class="name-cell">Protect Final 3 Days</td><td>No new material 24hrs before exam. Sleep instead. Let the brain finish consolidating.</td><td>Sleep</td><td><span class="badge bc">Critical</span></td></tr>
+        <tr><td class="num-cell">25</td><td class="name-cell">Knowledge Map After Study</td><td>Draw from scratch after every session: central concept → branches → connections.</td><td>Mind Map</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">26</td><td class="name-cell">Connect New to Known</td><td">Before any new concept: "How does this connect to something I already understand?"</td><td>Mind Map</td><td><span class="badge ba">Always Ask</span></td></tr>
+        <tr><td class="num-cell">27</td><td class="name-cell">Build the Memory Palace</td><td>Assign information to locations in a space you know well. Walk the space to recall.</td><td>Mind Map</td><td><span class="badge bd">Power Tool</span></td></tr>
+        <tr><td class="num-cell">28</td><td class="name-cell">5-Min Daily Knowledge Review</td><td>"What are the 3 most important things I learned today?" Write them from memory. Every day.</td><td>Active Recall</td><td><span class="badge ba">Compounds</span></td></tr>
+        <tr><td class="num-cell">29</td><td class="name-cell">Latticework Building</td><td>Learn across disciplines. Ask: "How does this connect to what I know from another field?"</td><td>Mind Map</td><td><span class="badge bd">Lifelong</span></td></tr>
+        <tr><td class="num-cell">30</td><td class="name-cell">Test for Transfer</td><td>True mastery = applying knowledge to novel problems you've never seen. That's the standard.</td><td>All Chapters</td><td><span class="badge ba">The Real Goal</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</section>
+
+<footer>
+  <div class="footer-logo">Learn Anything 3× Faster</div>
+  <p class="footer-sub">Academics · Neuroscience · Learning Science · 2025–2026 Edition</p>
+  <p class="footer-sub" style="color:var(--muted);font-size:13px;margin-top:8px">8 Complete Chapters · 30 Core Principles · Research from Richard Feynman, Hermann Ebbinghaus, Robert Bjork, Matthew Walker, Roediger & Karpicke, Tim Ferriss, Tony Buzan & Charlie Munger</p>
+  <p class="footer-tiny">Research compiled May 2026 · Inspired by Parallelogram · Built for relentless learners</p>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:rgba(200,148,58,.28);margin-top:36px">"An investment in knowledge pays the best interest." — Benjamin Franklin</p>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const st=document.documentElement.scrollTop;
+  const sh=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('prog').style.width=(st/sh*100)+'%';
+});
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}});
+},{threshold:0.07});
+document.querySelectorAll('.card,.col-card,.fstep,.s-stat,.sr-day,.rs,.cbar').forEach(el=>{
+  el.style.opacity='0';el.style.transform='translateY(18px)';
+  el.style.transition='opacity .5s ease, transform .5s ease';
+  obs.observe(el);
+});
+</script>
+</body>
+</html>

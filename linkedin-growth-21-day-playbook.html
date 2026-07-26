@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LinkedIn Growth: 21 Days</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07080a;--surface:#0e1014;--card:#13151a;--card2:#181b22;
+  --gold:#c8943a;--gold2:#e8b84b;--golddim:rgba(200,148,58,.13);
+  --cream:#f0e8d5;--muted:#5c5f68;--light:#9a9da8;
+  --border:rgba(200,148,58,.18);--rust:#b84532;
+  --teal:#2c7a72;--slate:#1a3a5c;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--cream);overflow-x:hidden;line-height:1.6}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.5}
+#prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--slate),var(--gold),var(--gold2));width:0%;z-index:2000;transition:width .08s}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:1500;display:flex;align-items:center;justify-content:space-between;padding:14px 48px;background:rgba(7,8,10,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(200,148,58,.1)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
+.nav-links{display:flex;gap:20px;list-style:none}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+@media(max-width:768px){.nav-links{display:none}.hero,.section,.toc-wrap,.quote-block,footer{padding-left:22px!important;padding-right:22px!important}nav{padding:14px 22px}}
+
+/* HERO */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr auto;align-items:center;gap:48px;padding:120px 64px 80px;position:relative;overflow:hidden}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.hero-chart-visual{display:none}}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 75% 55% at 92% 8%,rgba(26,58,92,.14) 0%,transparent 55%),radial-gradient(ellipse 55% 70% at 5% 90%,rgba(200,148,58,.1) 0%,transparent 60%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;opacity:.022;background-image:linear-gradient(rgba(200,148,58,1) 1px,transparent 1px),linear-gradient(90deg,rgba(200,148,58,1) 1px,transparent 1px);background-size:68px 68px}
+.hero-inner{position:relative;max-width:680px}
+.hero-badge{display:inline-flex;align-items:center;background:rgba(26,58,92,.18);border:1px solid rgba(26,58,92,.45);padding:5px 16px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#7aaed8;margin-bottom:22px;opacity:0;animation:fadeup .7s .15s forwards}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:26px;display:flex;align-items:center;gap:14px;opacity:0;animation:fadeup .7s .2s forwards}
+.hero-tag::before{content:'';width:44px;height:1px;background:var(--gold);flex-shrink:0}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(44px,7.5vw,108px);font-weight:700;line-height:.88;letter-spacing:-4px;margin-bottom:10px;opacity:0;animation:fadeup .8s .4s forwards}
+.hero h1 span{color:var(--gold);font-style:italic}
+.hero h1 .sub{display:block;color:rgba(240,232,213,.2);font-size:clamp(20px,3.4vw,48px);font-weight:400;font-style:italic;letter-spacing:-1px;margin-top:8px}
+.hero-desc{font-size:clamp(15px,1.9vw,18px);color:var(--light);max-width:520px;margin:34px 0 50px;font-weight:300;line-height:1.78;opacity:0;animation:fadeup .8s .6s forwards}
+.hero-stats{display:flex;gap:0;border:1px solid var(--border);width:fit-content;opacity:0;animation:fadeup .8s .8s forwards;flex-wrap:wrap}
+.hstat{padding:16px 26px;border-right:1px solid var(--border);text-align:center}
+.hstat:last-child{border-right:none}
+.hstat-n{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.hstat-l{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-top:4px}
+.scroll-hint{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-top:32px;opacity:.4}
+.scroll-hint::before{content:'';width:1px;height:28px;background:var(--gold);opacity:.35}
+@keyframes fadeup{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+@keyframes growbar{from{height:0}to{height:var(--h)}}
+
+/* TOC */
+.toc-wrap{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:56px 64px}
+.toc-inner{max-width:1100px;margin:0 auto}
+.toc-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:36px;display:flex;align-items:center;gap:12px}
+.toc-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px}
+.toc-item{background:var(--card);padding:18px 22px;display:flex;align-items:flex-start;gap:14px;cursor:pointer;transition:background .2s,border-color .2s;border:1px solid transparent;text-decoration:none}
+.toc-item:hover{background:var(--card2);border-color:var(--border)}
+.toc-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);opacity:.55;flex-shrink:0;min-width:26px;margin-top:2px}
+.toc-name{font-size:13.5px;color:var(--light);font-weight:400;transition:color .2s;line-height:1.4}
+.toc-item:hover .toc-name{color:var(--cream)}
+
+/* SECTIONS */
+.section{padding:96px 64px;position:relative}
+.section-alt{background:var(--surface)}
+.s-inner{max-width:1100px;margin:0 auto}
+.s-head-visual{display:grid;grid-template-columns:1fr auto;gap:48px;align-items:start;margin-bottom:60px;padding-bottom:44px;border-bottom:1px solid var(--border)}
+@media(max-width:768px){.s-head-visual{grid-template-columns:1fr}.s-aside{display:none}}
+.s-head{display:grid;grid-template-columns:90px 1fr;gap:32px;align-items:start}
+.s-num{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;padding-top:8px}
+.s-meta{display:flex;flex-direction:column;gap:10px}
+.s-cat{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:3px;color:var(--rust);text-transform:uppercase}
+.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,60px);font-weight:700;line-height:.92;letter-spacing:-1.5px;color:var(--cream)}
+.s-title span{color:var(--gold);font-style:italic}
+.s-desc{font-size:15.5px;color:var(--light);max-width:620px;font-weight:300;line-height:1.78;margin-top:6px}
+.s-aside{display:flex;flex-direction:column;align-items:center;gap:12px;flex-shrink:0}
+.s-aside-label{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2.5px;color:var(--muted);text-transform:uppercase;text-align:center}
+@media(max-width:600px){.s-head{grid-template-columns:1fr;gap:14px}}
+
+/* CARDS */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:2px}
+@media(max-width:600px){.cards{grid-template-columns:1fr}}
+.card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .25s,background .25s;position:relative;overflow:hidden}
+.card:hover{border-color:var(--border);background:var(--card2)}
+.card::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:linear-gradient(180deg,var(--gold),var(--slate));transition:height .35s}
+.card:hover::before{height:100%}
+.card-num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);opacity:.45;margin-bottom:14px}
+.card-icon{font-size:26px;margin-bottom:11px;display:block}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:700;color:var(--cream);letter-spacing:-.4px;margin-bottom:11px;line-height:1.15}
+.card-sec{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin:16px 0 7px}
+.card-text{font-size:13.5px;color:var(--light);line-height:1.72;font-weight:300}
+.psych{background:rgba(200,148,58,.06);border-left:2px solid var(--gold);padding:15px 18px;margin-top:18px}
+.psych .card-sec{margin-top:0}
+.databox{background:rgba(26,58,92,.07);border-left:2px solid rgba(26,58,92,.5);padding:15px 18px;margin-top:14px}
+.databox .card-sec{color:#7aaed8}
+.badge{display:inline-flex;align-items:center;padding:4px 11px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;margin-top:14px}
+.ba{background:rgba(200,148,58,.11);color:var(--gold);border:1px solid var(--border)}
+.bb{background:rgba(44,122,114,.12);color:#4aaa9e;border:1px solid rgba(44,122,114,.3)}
+.bc{background:rgba(184,69,50,.11);color:#d46040;border:1px solid rgba(184,69,50,.28)}
+.bd{background:rgba(26,58,92,.12);color:#7aaed8;border:1px solid rgba(26,58,92,.3)}
+
+/* QUOTE */
+.quote-block{background:var(--surface);padding:72px 64px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center}
+.quote-text{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3.2vw,36px);font-weight:600;font-style:italic;color:var(--cream);max-width:880px;margin:0 auto;line-height:1.4}
+.quote-text em{color:var(--gold)}
+.quote-attr{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:24px}
+
+/* STAT ROW */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:2px;margin:44px 0}
+.s-stat{background:var(--card);padding:26px 22px;text-align:center;border:1px solid transparent;transition:border-color .2s}
+.s-stat:hover{border-color:var(--border)}
+.s-stat-n{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.s-stat-l{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-top:5px}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}}
+.col-card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .2s}
+.col-card:hover{border-color:var(--border)}
+.col-icon{font-size:30px;margin-bottom:14px;display:block}
+.col-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:11px;letter-spacing:-.4px}
+.col-text{font-size:13.5px;color:var(--light);line-height:1.75;font-weight:300}
+.col-text strong{color:var(--cream);font-weight:500}
+
+/* 50/30/20 Visual */
+.budget-visual{background:var(--card);border:1px solid var(--border);padding:36px;margin:36px 0;display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center}
+@media(max-width:640px){.budget-visual{grid-template-columns:1fr}}
+.budget-bars{display:flex;align-items:flex-end;gap:12px;height:160px;padding:0 8px}
+.budget-bar-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;flex:1}
+.budget-bar{width:100%;background:linear-gradient(180deg,var(--gold2),var(--gold));border-radius:2px 2px 0 0;position:relative;transition:height .5s ease}
+.budget-bar.needs{background:linear-gradient(180deg,#7aaed8,#1a3a5c)}
+.budget-bar.wants{background:linear-gradient(180deg,var(--gold2),var(--gold))}
+.budget-bar.savings{background:linear-gradient(180deg,#7aaa88,#2a6b3a)}
+.budget-bar-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;text-align:center}
+.budget-bar-pct{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--gold)}
+.budget-breakdown{display:flex;flex-direction:column;gap:14px}
+.budget-row{display:flex;align-items:center;gap:14px}
+.budget-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.budget-dot.n{background:#1a3a5c}
+.budget-dot.w{background:var(--gold)}
+.budget-dot.s{background:#2a6b3a}
+.budget-row-text{flex:1}
+.budget-row-title{font-weight:600;color:var(--cream);font-size:14px;margin-bottom:2px}
+.budget-row-desc{font-size:12.5px;color:var(--light);font-weight:300;line-height:1.5}
+.budget-row-pct{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--gold);flex-shrink:0}
+
+/* TRAP CARDS */
+.trap-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2px;margin:36px 0}
+.trap-card{background:var(--card);padding:28px;border:1px solid transparent;transition:border-color .2s,background .2s;position:relative;overflow:hidden}
+.trap-card:hover{border-color:var(--border);background:var(--card2)}
+.trap-num{font-family:'Cormorant Garamond',serif;font-size:72px;font-weight:700;color:var(--gold);opacity:.07;position:absolute;top:6px;right:12px;line-height:1}
+.trap-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--rust);text-transform:uppercase;margin-bottom:6px}
+.trap-title{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:700;color:var(--cream);margin-bottom:8px;letter-spacing:-.3px}
+.trap-desc{font-size:13.5px;color:var(--light);line-height:1.7;font-weight:300;margin-bottom:10px}
+.trap-escape{background:rgba(44,122,114,.06);border-left:2px solid rgba(44,122,114,.4);padding:10px 14px;font-size:12.5px;color:var(--light);line-height:1.55}
+.trap-escape strong{color:#4aaa9e;font-weight:500}
+
+/* COMPOUND INTEREST TABLE */
+.compound-table{margin:36px 0;overflow-x:auto}
+.compound-visual{background:var(--card);border:1px solid var(--border);padding:28px;margin-bottom:2px}
+.compound-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--cream);margin-bottom:20px}
+.compound-bars{display:flex;align-items:flex-end;gap:8px;height:120px}
+.compound-bar-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1}
+.compound-bar-total{display:flex;flex-direction:column;align-items:stretch;width:100%}
+.compound-bar-invested{border-radius:0}
+.compound-bar-growth{border-radius:2px 2px 0 0}
+.compound-bar-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--muted);text-transform:uppercase;text-align:center;letter-spacing:1px}
+.compound-bar-value{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;color:var(--gold)}
+.compound-legend{display:flex;gap:20px;margin-top:14px}
+.compound-legend-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--light);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px}
+.legend-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+/* SAVINGS RATE STEPS */
+.savings-steps{display:flex;flex-direction:column;gap:2px;margin:36px 0}
+.savings-step{display:grid;grid-template-columns:80px 1fr;gap:0;background:var(--card);border:1px solid transparent;transition:border-color .2s}
+.savings-step:hover{border-color:var(--border)}
+.savings-pct{background:var(--golddim);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 8px;text-align:center}
+.savings-pct-num{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--gold);line-height:1}
+.savings-pct-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-top:2px}
+.savings-body{padding:18px 24px}
+.savings-title{font-weight:600;color:var(--cream);font-size:14.5px;margin-bottom:4px}
+.savings-text{font-size:13px;color:var(--light);line-height:1.65;font-weight:300}
+
+/* DEBT STRATEGY */
+.debt-compare{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:36px 0}
+@media(max-width:640px){.debt-compare{grid-template-columns:1fr}}
+.debt-side{background:var(--card);padding:28px;border:1px solid transparent;transition:border-color .2s}
+.debt-side:hover{border-color:var(--border)}
+.debt-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:3px;text-transform:uppercase;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.debt-head.avalanche{color:#7aaed8}
+.debt-head.snowball{color:var(--gold)}
+.debt-item{margin-bottom:12px;font-size:13.5px;color:var(--light);line-height:1.6;font-weight:300;display:flex;gap:10px}
+.debt-item::before{content:'→';color:var(--gold);flex-shrink:0;font-size:11px;margin-top:3px}
+
+/* ALERT / TIP */
+.alert{background:rgba(184,69,50,.07);border:1px solid rgba(184,69,50,.24);padding:22px 26px;margin:28px 0}
+.alert-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:var(--rust);text-transform:uppercase;margin-bottom:9px}
+.alert-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.alert-text strong{color:var(--cream);font-weight:500}
+.tip{background:rgba(44,122,114,.07);border:1px solid rgba(44,122,114,.24);padding:22px 26px;margin:28px 0}
+.tip-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:#4aaa9e;text-transform:uppercase;margin-bottom:9px}
+.tip-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.tip-text strong{color:var(--cream);font-weight:500}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;margin-top:40px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--card2);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);padding:13px 16px;text-align:left;border-bottom:1px solid var(--border)}
+tbody tr{border-bottom:1px solid rgba(200,148,58,.07);transition:background .15s}
+tbody tr:hover{background:var(--card)}
+tbody td{padding:13px 16px;color:var(--light);vertical-align:top;line-height:1.5}
+.num-cell{font-family:'JetBrains Mono',monospace;color:var(--gold);opacity:.55;font-size:11px}
+.name-cell{font-weight:500;color:var(--cream)}
+
+/* FOOTER */
+footer{background:var(--bg);border-top:1px solid var(--border);padding:56px 64px 72px;text-align:center}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;letter-spacing:2px;color:var(--gold);margin-bottom:10px}
+.footer-sub{font-size:13.5px;color:var(--muted);margin-bottom:6px}
+.footer-tiny{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(92,95,104,.45);text-transform:uppercase;margin-top:26px}
+
+.pg-hero-art{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:.55;z-index:0}
+.pg-hero-art svg{width:100%;height:100%;display:block}
+[class*="icon"] svg.pg-icon{width:1em;height:1em;display:inline-block;vertical-align:-0.15em}
+</style>
+</head>
+<body>
+
+
+<div id="prog"></div>
+<nav>
+  <div class="nav-logo">LinkedIn Growth: 21 Days</div>
+  <ul class="nav-links">
+    <li><a href="#week1">Week 1: Foundation</a></li>
+    <li><a href="#week2">Week 2: Content</a></li>
+    <li><a href="#week3">Week 3: Engagement</a></li>
+    <li><a href="#algorithm">The Algorithm</a></li>
+    <li><a href="#formats">Formats</a></li>
+    <li><a href="#mistakes">Mistakes</a></li>
+    <li><a href="#cheatsheet">21-Day Checklist</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero"><div class="pg-hero-art" aria-hidden="true"><svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><path d="M546.3 317.2 A149.2 149.2 0 0 1 530.7 38.7" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M768.7 -178.8 A254.7 254.7 0 0 1 1003.2 -54.6" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M185.2 246.3 A121.8 121.8 0 0 1 266.2 144.7" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><line x1="442.8" y1="201.8" x2="404.4" y2="190.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="45.8" y1="88.5" x2="148.8" y2="109.0" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="442.8" y1="201.8" x2="478.3" y2="248.1" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="404.4" y1="190.9" x2="478.3" y2="248.1" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="367.8" y1="42.2" x2="258.7" y2="59.2" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="753.5" y1="133.6" x2="708.3" y2="68.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="618.0" y1="37.6" x2="652.3" y2="29.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="618.0" y1="37.6" x2="708.3" y2="68.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="45.8" y1="88.5" x2="54.9" y2="212.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="652.3" y1="29.6" x2="708.3" y2="68.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="173.9" y1="141.9" x2="148.8" y2="109.0" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="173.9" y1="141.9" x2="256.8" y2="129.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="256.8" y1="129.8" x2="258.7" y2="59.2" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="353.1" y1="185.8" x2="348.5" y2="209.2" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><circle cx="442.8" cy="201.8" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="45.8" cy="88.5" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="404.4" cy="190.9" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="404.4" cy="190.9" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="478.3" cy="248.1" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="478.3" cy="248.1" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="367.8" cy="42.2" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="367.8" cy="42.2" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="753.5" cy="133.6" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="753.5" cy="133.6" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="618.0" cy="37.6" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="618.0" cy="37.6" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="652.3" cy="29.6" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="652.3" cy="29.6" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="54.9" cy="212.8" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="54.9" cy="212.8" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="708.3" cy="68.8" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="708.3" cy="68.8" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="173.9" cy="141.9" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="256.8" cy="129.8" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="258.7" cy="59.2" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="258.7" cy="59.2" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="353.1" cy="185.8" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="148.8" cy="109.0" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="148.8" cy="109.0" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="348.5" cy="209.2" r="1.8" fill="#c8943a" opacity="0.50"/></svg></div>
+  <div class="hero-glow"></div><div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">Networking · Personal Branding · Content Strategy · 2025–26</div>
+    <div class="hero-tag">The Complete LinkedIn Research Guide · 2025–26</div>
+    <h1>LinkedIn Growth:<br/><span>21-Day Playbook</span><span class="sub">A Day-by-Day System</span></h1>
+    <p class="hero-desc">Most LinkedIn advice is either “post more” or a vague theory of the algorithm. This is a specific 21-day sequence — profile first, then content systems, then engagement mechanics — built around how LinkedIn's relevance-based distribution actually works in 2026. No growth hacks that violate the platform's rules. Just the structure that consistently compounds.</p>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-n">45%</span><span class="hstat-l">more profile views for creators who post consistently vs sporadically, per LinkedIn 2026 data</span></div>
+      <div class="hstat"><span class="hstat-n">6.6%</span><span class="hstat-l">average engagement rate on document/carousel posts — the highest-performing format on the platform</span></div>
+      <div class="hstat"><span class="hstat-n">3–5×</span><span class="hstat-l">weekly posting frequency associated with the strongest sustained reach, per LinkedIn creator research</span></div>
+      <div class="hstat"><span class="hstat-n">72 hrs</span><span class="hstat-l">the “golden window” during which a post continues accumulating meaningful algorithmic distribution</span></div>
+    </div>
+    <div class="scroll-hint">Scroll to begin</div>
+  </div>
+</section>
+
+<!-- ─── TOC ─── -->
+<div class="toc-wrap">
+  <div class="toc-inner">
+    <div class="toc-label">Everything Inside This Guide</div>
+    <div class="toc-grid">
+      <a href="#week1" class="toc-item"><span class="toc-num">01</span><span class="toc-name">Week 1 (Days 1–7) — Foundation: profile, positioning, the golden window</span></a>
+      <a href="#week2" class="toc-item"><span class="toc-num">02</span><span class="toc-name">Week 2 (Days 8–14) — Content Systems: formats, frequency, consistency</span></a>
+      <a href="#week3" class="toc-item"><span class="toc-num">03</span><span class="toc-name">Week 3 (Days 15–21) — Engagement & Algorithm: what actually gets weighted</span></a>
+      <a href="#algorithm" class="toc-item"><span class="toc-num">04</span><span class="toc-name">The Algorithm Explained — Relevance-driven distribution, not just recency</span></a>
+      <a href="#formats" class="toc-item"><span class="toc-num">05</span><span class="toc-name">Content Formats That Win — Carousels, text, and native video compared</span></a>
+      <a href="#mistakes" class="toc-item"><span class="toc-num">06</span><span class="toc-name">Common Mistakes That Kill Reach — What quietly suppresses your posts</span></a>
+      <a href="#cheatsheet" class="toc-item"><span class="toc-num">07</span><span class="toc-name">The 21-Day Checklist — One row per day</span></a>
+    </div>
+  </div>
+</div>
+
+<section class="section" id="week1">
+<div class="s-inner">
+  <div class="s-head-visual">
+    <div class="s-head">
+      <div class="s-num">Chapter 01</div>
+      <div class="s-meta">
+        <div class="s-cat">LinkedIn Creator Research · Profile Optimization Studies · 2025–26</div>
+        <h2 class="s-title">Week 1<br/><span>Foundation</span></h2>
+        <p class="s-desc">Before you post a single piece of content, your profile has to hold up to scrutiny — because every post that performs well sends new visitors straight to it. LinkedIn's own data shows profiles with a complete, specific positioning statement get meaningfully more profile views than vague ones, and the first week of this playbook is entirely about getting that foundation right before you build on top of it.</p>
+      </div>
+    </div>
+  </div>
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">45%</span><span class="s-stat-l">more profile views for creators with consistent activity vs sporadic posting</span></div>
+    <div class="s-stat"><span class="s-stat-n">7</span><span class="s-stat-l">seconds — roughly how long a visitor spends deciding whether your profile is worth reading further</span></div>
+    <div class="s-stat"><span class="s-stat-n">3</span><span class="s-stat-l">elements that matter most: headline, banner, and featured section — fix these before anything else</span></div>
+    <div class="s-stat"><span class="s-stat-n">1</span><span class="s-stat-l">clear positioning statement in your headline beats five vague credentials, every time</span></div>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">DAY 1–2</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="1.4" fill="#c8943a"/></svg></span>
+      <div class="card-title">Rewrite Your Headline for Specificity</div>
+      <p class="card-text">Replace your job title with a specific positioning statement: what you do, who you do it for, and the outcome. “Helping B2B founders find product-market fit” beats “Founder | Entrepreneur | Innovator” by every visibility metric that matters.</p>
+      <span class="badge ba">Days 1–2</span>
+    </div>
+    <div class="card">
+      <div class="card-num">DAY 3–4</div>
+      <span class="card-icon">🖼️</span>
+      <div class="card-title">Fix Your Banner and Featured Section</div>
+      <p class="card-text">Your banner is free real estate most people waste on a stock photo. Use it to reinforce your positioning. Pin your best 2–3 pieces of content or proof points to Featured — it's the first place serious visitors look after your headline.</p>
+      <span class="badge ba">Days 3–4</span>
+    </div>
+    <div class="card">
+      <div class="card-num">DAY 5–7</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="5" y="4" width="14" height="17" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="9" y="2.5" width="6" height="3.5" rx="1" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.5 12h7M8.5 16h7" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Define Your 3 Content Pillars</div>
+      <p class="card-text">Pick 3 recurring topics you'll credibly post about for months, not a random mix. Consistency of topic is what teaches the algorithm — and your audience — what to expect from you and why to follow.</p>
+      <span class="badge bc">Days 5–7</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE ─── -->
+<div class="quote-block">
+  <p class="quote-text">"Your profile is not a resume. <em>It’s a landing page — and every good post you write sends traffic to it, whether you’ve prepared for that traffic or not.</em>"</p>
+  <p class="quote-attr">— LinkedIn Creator Research · 2025–26</p>
+</div>
+
+<section class="section section-alt" id="week2">
+<div class="s-inner">
+  <div class="s-head-visual">
+    <div class="s-head">
+      <div class="s-num">Chapter 02</div>
+      <div class="s-meta">
+        <div class="s-cat">LinkedIn Algorithm Insights · Creator Economy Report · 2025–26</div>
+        <h2 class="s-title">Week 2<br/><span>Content Systems</span></h2>
+        <p class="s-desc">With your foundation in place, week 2 is about building a repeatable content system rather than posting whatever comes to mind each day. LinkedIn's 2026 creator data consistently shows document-style carousel posts outperforming plain text and even native video on average engagement — but the deeper lesson is that a system beats inspiration, because inspiration runs out by week three without one.</p>
+      </div>
+    </div>
+  </div>
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">6.6%</span><span class="s-stat-l">average engagement rate on document/carousel posts — the strongest-performing format tracked</span></div>
+    <div class="s-stat"><span class="s-stat-n">3–5×</span><span class="s-stat-l">weekly posting frequency linked to the strongest sustained reach without audience fatigue</span></div>
+    <div class="s-stat"><span class="s-stat-n">63%</span><span class="s-stat-l">of top LinkedIn creators batch-produce content in advance rather than writing daily from scratch</span></div>
+    <div class="s-stat"><span class="s-stat-n">48 hrs</span><span class="s-stat-l">ideal minimum gap between posts to avoid the algorithm treating you as spam-adjacent</span></div>
+  </div>
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 5l14 14M19 5 5 19" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">The Inspiration-Only Approach</div>
+      <p class="col-text">Writing a post only when you feel like it produces inconsistent output, inconsistent quality, and an audience that can't predict when or what you'll post — all of which the algorithm and human followers both penalize.</p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m7.5 12.5 3 3 6-6.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">The Batching System</div>
+      <p class="col-text">Set aside one session per week to outline 3–5 posts using your content pillars. Draft loosely, refine daily. This removes the daily “what do I post?” paralysis and produces more consistent quality than writing from a blank page every morning.</p>
+    </div>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">DAY 8–10</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 20V10M12 20V4M19 20v-7" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 20h18" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Build Your First Document Carousel</div>
+      <p class="card-text">Document posts (PDF-style carousels) are the single highest-engagement format on the platform right now. Turn one of your content pillars into a 6–8 slide carousel this week and treat it as a template for future posts.</p>
+      <span class="badge ba">Days 8–10</span>
+    </div>
+    <div class="card">
+      <div class="card-num">DAY 11–12</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 3h9l5 5v13H5z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M14 3v5h5M8 12h8M8 16h8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Write 3 Text-Only Posts</div>
+      <p class="card-text">Not every post needs design. A well-structured text post — hook, 3 short points, one clear takeaway — is fast to produce and keeps your posting cadence up between higher-effort formats.</p>
+      <span class="badge bc">Days 11–12</span>
+    </div>
+    <div class="card">
+      <div class="card-num">DAY 13–14</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M20 11a8 8 0 0 0-14.9-3.5M4 13a8 8 0 0 0 14.9 3.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 4v4h4M19 20v-4h-4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Set Your Posting Cadence</div>
+      <p class="card-text">Commit to 3–5 posts per week, spaced at least 48 hours apart. Write them down on a simple calendar. The cadence matters more than any single post's brilliance — algorithms and audiences both reward predictability.</p>
+      <span class="badge ba">Days 13–14</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE ─── -->
+<div class="quote-block">
+  <p class="quote-text">"Document posts continue to be one of the highest-performing content formats on LinkedIn. <em>They combine visual scanning with substantive information — exactly what earns a save, not just a glance.</em>"</p>
+  <p class="quote-attr">— LinkedIn Creator Economy Report · 2026</p>
+</div>
+
+<section class="section" id="week3">
+<div class="s-inner">
+  <div class="s-head-visual">
+    <div class="s-head">
+      <div class="s-num">Chapter 03</div>
+      <div class="s-meta">
+        <div class="s-cat">LinkedIn Engagement Weighting Research · 2025–26</div>
+        <h2 class="s-title">Week 3<br/><span>Engagement & Algorithm</span></h2>
+        <p class="s-desc">By week 3, you have a solid profile and a content system running — now it's about understanding what the algorithm actually rewards after a post goes live, so your engagement time is spent where it matters instead of everywhere equally. Not all engagement is weighted the same, and knowing the hierarchy changes how you spend your first hour after posting.</p>
+      </div>
+    </div>
+  </div>
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">72 hrs</span><span class="s-stat-l">the “golden window” during which a post can still gain meaningful new distribution</span></div>
+    <div class="s-stat"><span class="s-stat-n">1 hr</span><span class="s-stat-l">the critical early window — engagement in the first hour heavily influences a post’s initial reach test</span></div>
+    <div class="s-stat"><span class="s-stat-n">Saves > Comments > Likes</span><span class="s-stat-l">the rough weighting hierarchy — a save signals stronger value than a like ever does</span></div>
+    <div class="s-stat"><span class="s-stat-n">4×</span><span class="s-stat-l">more likely a post is to be shown further when it earns a meaningful comment vs a like-only reaction</span></div>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">DAY 15–16</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="13" r="8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 9v4l3 2M9.5 2.5h5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Engage in the First Hour, Deliberately</div>
+      <p class="card-text">Reply to every comment on your own post within the first hour if you can. Early engagement velocity is one of the strongest signals the algorithm uses to decide whether to extend a post's reach beyond your immediate network.</p>
+      <span class="badge ba">Days 15–16</span>
+    </div>
+    <div class="card">
+      <div class="card-num">DAY 17–18</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M4 5h13a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H9l-5 4v-4H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Write Comments That Add Something, Not “Great Post!”</div>
+      <p class="card-text">Spend 15–20 minutes daily leaving substantive comments on posts in your niche — a real opinion or question, not a generic pleasantry. This builds visibility with exactly the audience your own posts are trying to reach.</p>
+      <span class="badge bc">Days 17–18</span>
+    </div>
+    <div class="card">
+      <div class="card-num">DAY 19–21</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="10.5" cy="10.5" r="6.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m20 20-4.8-4.8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Review What Actually Worked</div>
+      <p class="card-text">Look back at all 3 weeks of posts. Which format, topic, and posting time produced the strongest saves and comments? Double down on that pattern going into week 4 and beyond — this is where the real compounding begins.</p>
+      <span class="badge ba">Days 19–21</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE ─── -->
+<div class="quote-block">
+  <p class="quote-text">"A comment is worth more than a like, and a save is worth more than either. <em>The algorithm is reading intent, not just activity — and intent is exactly what these signals communicate.</em>"</p>
+  <p class="quote-attr">— LinkedIn Engagement Research · 2025–26</p>
+</div>
+
+<section class="section section-alt" id="algorithm">
+<div class="s-inner">
+  <div class="s-head-visual">
+    <div class="s-head">
+      <div class="s-num">Chapter 04</div>
+      <div class="s-meta">
+        <div class="s-cat">LinkedIn Engineering Notes · Platform Research · 2025–26</div>
+        <h2 class="s-title">The Algorithm<br/><span>Explained</span></h2>
+        <p class="s-desc">LinkedIn's distribution system is relevance-driven rather than purely chronological or follower-count-driven — a post from someone with 500 followers can meaningfully outperform a post from someone with 50,000, if it's more relevant to the specific people seeing it. Understanding this reframes the entire growth strategy: relevance to a specific audience beats broad appeal to nobody in particular.</p>
+      </div>
+    </div>
+  </div>
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">2</span><span class="s-stat-l">distribution stages — an initial small-audience test, then expanded reach based on early performance</span></div>
+    <div class="s-stat"><span class="s-stat-n">Dwell time</span><span class="s-stat-l">how long someone actually looks at your post — a heavily weighted, often-overlooked signal</span></div>
+    <div class="s-stat"><span class="s-stat-n">0</span><span class="s-stat-l">follower-count threshold required to go broadly relevant — small accounts regularly outperform large dormant ones</span></div>
+    <div class="s-stat"><span class="s-stat-n">~48 hrs</span><span class="s-stat-l">typical window before a post’s algorithmic momentum has mostly played out</span></div>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">PRINCIPLE 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="1.4" fill="#c8943a"/></svg></span>
+      <div class="card-title">Relevance Beats Follower Count</div>
+      <p class="card-text">The algorithm tests every post with a small slice of your network first, then expands distribution based on how that slice responds — regardless of your total follower count. A niche 800-follower account can outperform a broad 80,000-follower one.</p>
+      <span class="badge ba">Core Mechanic</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PRINCIPLE 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="13" r="8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 9v4l3 2M9.5 2.5h5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Dwell Time Matters More Than You’d Think</div>
+      <p class="card-text">How long someone pauses on your post — even without liking or commenting — feeds into distribution. This is part of why carousel and document posts perform well: they simply take longer to consume than a one-line text post.</p>
+      <span class="badge bc">Underrated</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PRINCIPLE 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m15 9-2 6-6 2 2-6z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Consistency Trains the System, Not Just the Audience</div>
+      <p class="card-text">Posting on your 3 content pillars repeatedly helps the algorithm build a clearer model of who to show your content to. Constantly switching topics resets that model and slows how efficiently you reach the right audience.</p>
+      <span class="badge ba">Long-Term</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE ─── -->
+<div class="quote-block">
+  <p class="quote-text">"The algorithm isn’t trying to reward the biggest accounts. <em>It’s trying to find the smallest audience most likely to genuinely engage — and then expand from there.</em>"</p>
+  <p class="quote-attr">— LinkedIn Platform Research · 2025–26</p>
+</div>
+
+<section class="section" id="formats">
+<div class="s-inner">
+  <div class="s-head-visual">
+    <div class="s-head">
+      <div class="s-num">Chapter 05</div>
+      <div class="s-meta">
+        <div class="s-cat">LinkedIn Format Performance Data · 2025–26</div>
+        <h2 class="s-title">Content Formats<br/><span>That Win</span></h2>
+        <p class="s-desc">Not all formats are created equal, and the gap between them is wide enough to matter. This chapter compares the three dominant formats — document carousels, text posts, and native video — by what the current data actually shows, so you can allocate your limited content-creation time toward what performs best for your specific goals.</p>
+      </div>
+    </div>
+  </div>
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">6.6%</span><span class="s-stat-l">average engagement rate for document/carousel posts — the current format leader</span></div>
+    <div class="s-stat"><span class="s-stat-n">~2–4%</span><span class="s-stat-l">typical range for well-written text-only posts — faster to produce, lower average ceiling</span></div>
+    <div class="s-stat"><span class="s-stat-n">Growing</span><span class="s-stat-l">native video’s trend line — currently behind carousels on average but rising fast platform-wide</span></div>
+    <div class="s-stat"><span class="s-stat-n">8</span><span class="s-stat-l">a reasonable slide count for a document carousel — long enough for substance, short enough to finish</span></div>
+  </div>
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 20V10M12 20V4M19 20v-7" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 20h18" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">When to Use a Carousel</div>
+      <p class="col-text">Frameworks, step-by-step breakdowns, before/after comparisons, and anything with a natural structure. Carousels reward substance — a thin carousel with one idea stretched over 8 slides underperforms a focused one.</p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 3h9l5 5v13H5z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M14 3v5h5M8 12h8M8 16h8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">When to Use Text or Video</div>
+      <p class="col-text">Text posts work well for quick opinions, reactions to news, or short stories — anything time-sensitive where a carousel's production time would cost you relevance. Video works best for personality-driven or demonstration content that's genuinely hard to convey in static slides.</p>
+    </div>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">PRINCIPLE 04</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 20V10M12 20V4M19 20v-7" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 20h18" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Lead With Carousels for Pillar Content</div>
+      <p class="card-text">Reserve your highest-effort format for your core content pillars — the topics you want to be known for. This is where the format's higher engagement ceiling matters most.</p>
+      <span class="badge ba">Strategic</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PRINCIPLE 05</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M13 2 4 14h6l-1 8 9-12h-6z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Use Text Posts to Maintain Cadence</div>
+      <p class="card-text">On weeks you don't have time for a full carousel, a solid text post keeps your posting frequency intact without sacrificing quality — consistency matters more than every single post being a home run.</p>
+      <span class="badge bc">Practical</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE ─── -->
+<div class="quote-block">
+  <p class="quote-text">"Format matters, but not as much as fit. <em>The best-performing post is the one whose format matches what the idea actually needs — not whatever’s trending this month.</em>"</p>
+  <p class="quote-attr">— LinkedIn Creator Economy Report · 2026</p>
+</div>
+
+<section class="section section-alt" id="mistakes">
+<div class="s-inner">
+  <div class="s-head-visual">
+    <div class="s-head">
+      <div class="s-num">Chapter 06</div>
+      <div class="s-meta">
+        <div class="s-cat">LinkedIn Reach Suppression Research · Creator Case Studies · 2025–26</div>
+        <h2 class="s-title">Common Mistakes<br/><span>That Kill Reach</span></h2>
+        <p class="s-desc">Several common habits quietly suppress reach without any obvious warning — the post simply performs worse than it should, and creators rarely trace the cause. This chapter lists the most consistent reach-killers so you can audit your last 10 posts against them directly.</p>
+      </div>
+    </div>
+  </div>
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">3+</span><span class="s-stat-l">external links in a single post is a common reach-suppression trigger — LinkedIn favors keeping users on-platform</span></div>
+    <div class="s-stat"><span class="s-stat-n">5+</span><span class="s-stat-l">hashtags is generally past the point of diminishing or negative returns — 3–5 relevant tags is the safer range</span></div>
+    <div class="s-stat"><span class="s-stat-n">“Engagement bait”</span><span class="s-stat-l">phrases like “comment YES below” are increasingly and explicitly penalized by the platform</span></div>
+    <div class="s-stat"><span class="s-stat-n">0</span><span class="s-stat-l">the ideal number of unrelated, unengaged tagged accounts in a post meant to build genuine reach</span></div>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">MISTAKE 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 15 15 9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 6.5 13 4.5a3.5 3.5 0 0 1 5 5l-2 2M13 17.5 11 19.5a3.5 3.5 0 0 1-5-5l2-2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Putting External Links in the Post Body</div>
+      <p class="card-text">LinkedIn's distribution system favors content that keeps people on the platform. Put your link in the first comment instead of the post itself — a small change with a measurable reach difference.</p>
+      <span class="badge ba">High Impact</span>
+    </div>
+    <div class="card">
+      <div class="card-num">MISTAKE 02</div>
+      <span class="card-icon">🏷️</span>
+      <div class="card-title">Hashtag Stuffing</div>
+      <p class="card-text">Piling on 10+ hashtags reads as spam to both the algorithm and human readers. Use 3–5 specific, relevant tags instead of a broad scattershot approach.</p>
+      <span class="badge bc">Common</span>
+    </div>
+    <div class="card">
+      <div class="card-num">MISTAKE 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m6 6 12 12" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Explicit Engagement Bait</div>
+      <p class="card-text">“Comment YES if you agree” and similar tactics are increasingly detected and suppressed rather than rewarded. Genuine, specific questions still work — generic bait phrases don't anymore.</p>
+      <span class="badge ba">Penalized</span>
+    </div>
+    <div class="card">
+      <div class="card-num">MISTAKE 04</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="9" cy="8" r="3.3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 20c0-3.5 2.5-6 5.5-6s5.5 2.5 5.5 6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="17" cy="9" r="2.6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15.5 12.3c2.6.4 4.5 2.5 4.5 5.7" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Tagging People Who Won’t Engage</div>
+      <p class="card-text">Tagging a long list of people hoping for visibility, when most won't engage, doesn't help — and can actively hurt if it reads as spam. Tag selectively, only people genuinely relevant to the content.</p>
+      <span class="badge bc">Overused</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE ─── -->
+<div class="quote-block">
+  <p class="quote-text">"Most reach problems aren’t mysterious. <em>They’re a handful of avoidable habits, repeated often enough that a creator stops noticing they’re doing them at all.</em>"</p>
+  <p class="quote-attr">— LinkedIn Creator Case Study Research · 2025–26</p>
+</div>
+
+<section class="section" id="cheatsheet">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 07</div>
+    <div class="s-meta">
+      <div class="s-cat">Quick Reference</div>
+      <h2 class="s-title">The <span>21-Day</span><br/>Checklist</h2>
+      <p class="s-desc">Every day of the playbook, condensed into one reference table you can follow start to finish.</p>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Focus</th><th>The Action</th><th>Week</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td class="num-cell">D1</td><td class="name-cell">Rewrite your headline for specificity</td><td>Positioning statement, not job title — who you help and how.</td><td>Week 1</td><td><span class="badge ba">Core</span></td></tr>
+        <tr><td class="num-cell">D2</td><td class="name-cell">Finish the headline rewrite, review 3 times</td><td>Read it as a stranger would. Cut anything vague.</td><td>Week 1</td><td><span class="badge ba">Core</span></td></tr>
+        <tr><td class="num-cell">D3</td><td class="name-cell">Redesign your banner</td><td>Reinforce your positioning — don’t waste this free real estate.</td><td>Week 1</td><td><span class="badge bc">Situational</span></td></tr>
+        <tr><td class="num-cell">D4</td><td class="name-cell">Fill your Featured section</td><td>Pin your best 2–3 pieces of proof or content.</td><td>Week 1</td><td><span class="badge bc">Situational</span></td></tr>
+        <tr><td class="num-cell">D5</td><td class="name-cell">Define content pillar #1</td><td>Pick a topic you can credibly post about for months.</td><td>Week 1</td><td><span class="badge ba">Core</span></td></tr>
+        <tr><td class="num-cell">D6</td><td class="name-cell">Define content pillars #2 and #3</td><td>Three total — enough range, not so much you dilute focus.</td><td>Week 1</td><td><span class="badge ba">Core</span></td></tr>
+        <tr><td class="num-cell">D7</td><td class="name-cell">Review your full profile end to end</td><td>Headline, banner, featured, pillars — confirm they’re aligned.</td><td>Week 1</td><td><span class="badge bc">Situational</span></td></tr>
+        <tr><td class="num-cell">D8</td><td class="name-cell">Outline your first document carousel</td><td>6–8 slides on one of your content pillars.</td><td>Week 2</td><td><span class="badge ba">Core</span></td></tr>
+        <tr><td class="num-cell">D9</td><td class="name-cell">Design and publish the carousel</td><td>Your new template for future high-effort posts.</td><td>Week 2</td><td><span class="badge ba">Core</span></td></tr>
+        <tr><td class="num-cell">D10</td><td class="name-cell">Review carousel performance at 24 hours</td><td>Note saves and comments specifically, not just likes.</td><td>Week 2</td><td><span class="badge bc">Situational</span></td></tr>
+        <tr><td class="num-cell">D11</td><td class="name-cell">Write and publish a text-only post</td><td>Hook, 3 points, one takeaway. Fast to produce.</td><td>Week 2</td><td><span class="badge ba">Core</span></td></tr>
+        <tr><td class="num-cell">D12</td><td class="name-cell">Write and publish a second text post</td><td>Different pillar than Day 11 — start testing variety.</td><td>Week 2</td><td><span class="badge bc">Situational</span></td></tr>
+        <tr><td class="num-cell">D13</td><td class="name-cell">Set your posting calendar</td><td>3–5 posts/week, 48+ hours apart, written down.</td><td>Week 2</td><td><span class="badge ba">Core</span></td></tr>
+        <tr><td class="num-cell">D14</td><td class="name-cell">Batch-outline next week’s posts</td><td>One planning session beats daily blank-page paralysis.</td><td>Week 2</td><td><span class="badge ba">Core</span></td></tr>
+        <tr><td class="num-cell">D15</td><td class="name-cell">Reply to every comment within 1 hour</td><td>Early engagement velocity strongly influences reach.</td><td>Week 3</td><td><span class="badge ba">Core</span></td></tr>
+        <tr><td class="num-cell">D16</td><td class="name-cell">Repeat the 1-hour reply habit</td><td>Consistency across posts, not just a single lucky one.</td><td>Week 3</td><td><span class="badge ba">Core</span></td></tr>
+        <tr><td class="num-cell">D17</td><td class="name-cell">Leave 5 substantive comments on others’ posts</td><td>Real opinions, not “great post!” — builds niche visibility.</td><td>Week 3</td><td><span class="badge bc">Situational</span></td></tr>
+        <tr><td class="num-cell">D18</td><td class="name-cell">Repeat targeted commenting</td><td>Same niche, same intent — this compounds over weeks.</td><td>Week 3</td><td><span class="badge bc">Situational</span></td></tr>
+        <tr><td class="num-cell">D19</td><td class="name-cell">Audit all 3 weeks of posts</td><td>Which format and topic produced the strongest saves?</td><td>Week 3</td><td><span class="badge ba">Core</span></td></tr>
+        <tr><td class="num-cell">D20</td><td class="name-cell">Identify your top-performing pattern</td><td>Format + topic + posting time — write it down explicitly.</td><td>Week 3</td><td><span class="badge ba">Core</span></td></tr>
+        <tr><td class="num-cell">D21</td><td class="name-cell">Plan week 4 around what worked</td><td>Double down on the pattern. This is where compounding starts.</td><td>Week 3</td><td><span class="badge ba">Core</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</section>
+
+<footer>
+  <div class="footer-logo">LinkedIn Growth: The 21-Day Playbook</div>
+  <p class="footer-sub">Networking · Personal Branding · Content Strategy · 2025–2026 Edition</p>
+  <p class="footer-sub" style="color:var(--muted);font-size:13px;margin-top:8px">7 Complete Chapters · 21-Day Structured Playbook · Research from LinkedIn Creator Economy Report 2026, LinkedIn Engineering platform research, LinkedIn Engagement Weighting studies</p>
+  <p class="footer-tiny">Research compiled July 2026 · Inspired by Parallelogram · Built for professionals who want a system, not just “post more” advice</p>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:rgba(200,148,58,.28);margin-top:36px">"The algorithm rewards relevance, not volume — and relevance is a system, not a mood." — LinkedIn platform research synthesis, 2025–26</p>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const st=document.documentElement.scrollTop;
+  const sh=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('prog').style.width=(st/sh*100)+'%';
+});
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}});
+},{threshold:0.07});
+document.querySelectorAll('.card,.col-card,.s-stat').forEach(el=>{
+  el.style.opacity='0';el.style.transform='translateY(18px)';
+  el.style.transition='opacity .5s ease, transform .5s ease';
+  obs.observe(el);
+});
+</script>
+</body>
+</html>

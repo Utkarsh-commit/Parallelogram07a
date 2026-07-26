@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Speak in Public Without Freezing</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07080a;--surface:#0e1014;--card:#13151a;--card2:#181b22;
+  --gold:#c8943a;--gold2:#e8b84b;--golddim:rgba(200,148,58,.13);
+  --cream:#f0e8d5;--muted:#5c5f68;--light:#9a9da8;
+  --border:rgba(200,148,58,.18);--rust:#b84532;
+  --teal:#2c7a72;--ink:#1a2a3a;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--cream);overflow-x:hidden;line-height:1.6}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.5}
+#prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--ink),var(--gold),var(--gold2));width:0%;z-index:2000;transition:width .08s}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:1500;display:flex;align-items:center;justify-content:space-between;padding:14px 48px;background:rgba(7,8,10,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(200,148,58,.1)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
+.nav-links{display:flex;gap:20px;list-style:none}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+@media(max-width:768px){.nav-links{display:none}.hero,.section,.toc-wrap,.quote-block,footer{padding-left:22px!important;padding-right:22px!important}nav{padding:14px 22px}}
+
+/* HERO */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr auto;align-items:center;gap:48px;padding:120px 64px 80px;position:relative;overflow:hidden}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.hero-waveform{display:none}}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 75% 55% at 92% 8%,rgba(26,42,58,.14) 0%,transparent 55%),radial-gradient(ellipse 55% 70% at 5% 90%,rgba(200,148,58,.1) 0%,transparent 60%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;opacity:.022;background-image:linear-gradient(rgba(200,148,58,1) 1px,transparent 1px),linear-gradient(90deg,rgba(200,148,58,1) 1px,transparent 1px);background-size:68px 68px}
+.hero-inner{position:relative;max-width:680px}
+.hero-badge{display:inline-flex;align-items:center;background:rgba(26,42,58,.18);border:1px solid rgba(26,42,58,.5);padding:5px 16px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#7aaed8;margin-bottom:22px;opacity:0;animation:fadeup .7s .15s forwards}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:26px;display:flex;align-items:center;gap:14px;opacity:0;animation:fadeup .7s .2s forwards}
+.hero-tag::before{content:'';width:44px;height:1px;background:var(--gold);flex-shrink:0}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(44px,7.5vw,108px);font-weight:700;line-height:.88;letter-spacing:-4px;margin-bottom:10px;opacity:0;animation:fadeup .8s .4s forwards}
+.hero h1 span{color:var(--gold);font-style:italic}
+.hero h1 .sub{display:block;color:rgba(240,232,213,.2);font-size:clamp(20px,3.4vw,48px);font-weight:400;font-style:italic;letter-spacing:-1px;margin-top:8px}
+.hero-desc{font-size:clamp(15px,1.9vw,18px);color:var(--light);max-width:520px;margin:34px 0 50px;font-weight:300;line-height:1.78;opacity:0;animation:fadeup .8s .6s forwards}
+.hero-stats{display:flex;gap:0;border:1px solid var(--border);width:fit-content;opacity:0;animation:fadeup .8s .8s forwards;flex-wrap:wrap}
+.hstat{padding:16px 26px;border-right:1px solid var(--border);text-align:center}
+.hstat:last-child{border-right:none}
+.hstat-n{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.hstat-l{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-top:4px}
+.scroll-hint{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-top:32px;opacity:.4}
+.scroll-hint::before{content:'';width:1px;height:28px;background:var(--gold);opacity:.35}
+@keyframes fadeup{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+
+/* TOC */
+.toc-wrap{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:56px 64px}
+.toc-inner{max-width:1100px;margin:0 auto}
+.toc-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:36px;display:flex;align-items:center;gap:12px}
+.toc-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px}
+.toc-item{background:var(--card);padding:18px 22px;display:flex;align-items:flex-start;gap:14px;cursor:pointer;transition:background .2s,border-color .2s;border:1px solid transparent;text-decoration:none}
+.toc-item:hover{background:var(--card2);border-color:var(--border)}
+.toc-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);opacity:.55;flex-shrink:0;min-width:26px;margin-top:2px}
+.toc-name{font-size:13.5px;color:var(--light);font-weight:400;transition:color .2s;line-height:1.4}
+.toc-item:hover .toc-name{color:var(--cream)}
+
+/* SECTIONS */
+.section{padding:96px 64px;position:relative}
+.section-alt{background:var(--surface)}
+.s-inner{max-width:1100px;margin:0 auto}
+.s-head-visual{display:grid;grid-template-columns:1fr auto;gap:48px;align-items:start;margin-bottom:60px;padding-bottom:44px;border-bottom:1px solid var(--border)}
+@media(max-width:768px){.s-head-visual{grid-template-columns:1fr}.s-aside{display:none}}
+.s-head{display:grid;grid-template-columns:90px 1fr;gap:32px;align-items:start}
+.s-num{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;padding-top:8px}
+.s-meta{display:flex;flex-direction:column;gap:10px}
+.s-cat{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:3px;color:var(--rust);text-transform:uppercase}
+.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,60px);font-weight:700;line-height:.92;letter-spacing:-1.5px;color:var(--cream)}
+.s-title span{color:var(--gold);font-style:italic}
+.s-desc{font-size:15.5px;color:var(--light);max-width:620px;font-weight:300;line-height:1.78;margin-top:6px}
+.s-aside{display:flex;flex-direction:column;align-items:center;gap:10px;flex-shrink:0}
+.s-aside-label{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2.5px;color:var(--muted);text-transform:uppercase;text-align:center}
+@media(max-width:600px){.s-head{grid-template-columns:1fr;gap:14px}}
+
+/* CARDS */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:2px}
+@media(max-width:600px){.cards{grid-template-columns:1fr}}
+.card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .25s,background .25s;position:relative;overflow:hidden}
+.card:hover{border-color:var(--border);background:var(--card2)}
+.card::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:linear-gradient(180deg,var(--gold),var(--ink));transition:height .35s}
+.card:hover::before{height:100%}
+.card-num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);opacity:.45;margin-bottom:14px}
+.card-icon{font-size:26px;margin-bottom:11px;display:block}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:700;color:var(--cream);letter-spacing:-.4px;margin-bottom:11px;line-height:1.15}
+.card-sec{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin:16px 0 7px}
+.card-text{font-size:13.5px;color:var(--light);line-height:1.72;font-weight:300}
+.psych{background:rgba(200,148,58,.06);border-left:2px solid var(--gold);padding:15px 18px;margin-top:18px}
+.psych .card-sec{margin-top:0}
+.scibox{background:rgba(44,122,114,.07);border-left:2px solid rgba(44,122,114,.5);padding:15px 18px;margin-top:14px}
+.scibox .card-sec{color:#4aaa9e}
+.badge{display:inline-flex;align-items:center;padding:4px 11px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;margin-top:14px}
+.ba{background:rgba(200,148,58,.11);color:var(--gold);border:1px solid var(--border)}
+.bb{background:rgba(44,122,114,.12);color:#4aaa9e;border:1px solid rgba(44,122,114,.3)}
+.bc{background:rgba(184,69,50,.11);color:#d46040;border:1px solid rgba(184,69,50,.28)}
+.bd{background:rgba(26,42,58,.14);color:#7aaed8;border:1px solid rgba(26,42,58,.4)}
+
+/* QUOTE */
+.quote-block{background:var(--surface);padding:72px 64px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center}
+.quote-text{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3.2vw,36px);font-weight:600;font-style:italic;color:var(--cream);max-width:880px;margin:0 auto;line-height:1.4}
+.quote-text em{color:var(--gold)}
+.quote-attr{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:24px}
+
+/* STAT ROW */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:2px;margin:44px 0}
+.s-stat{background:var(--card);padding:26px 22px;text-align:center;border:1px solid transparent;transition:border-color .2s}
+.s-stat:hover{border-color:var(--border)}
+.s-stat-n{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.s-stat-l{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-top:5px}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}}
+.col-card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .2s}
+.col-card:hover{border-color:var(--border)}
+.col-icon{font-size:30px;margin-bottom:14px;display:block}
+.col-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:11px;letter-spacing:-.4px}
+.col-text{font-size:13.5px;color:var(--light);line-height:1.75;font-weight:300}
+.col-text strong{color:var(--cream);font-weight:500}
+
+/* PREP FRAMEWORK */
+.prep-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin:36px 0}
+@media(max-width:640px){.prep-grid{grid-template-columns:1fr 1fr}}
+.prep-block{background:var(--card);padding:28px 20px;border:1px solid transparent;transition:border-color .2s,background .2s;text-align:center;position:relative;overflow:hidden}
+.prep-block:hover{border-color:var(--border);background:var(--card2)}
+.prep-letter{font-family:'Cormorant Garamond',serif;font-size:72px;font-weight:700;color:var(--gold);opacity:.12;position:absolute;top:4px;right:8px;line-height:1}
+.prep-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+.prep-word{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--cream);margin-bottom:10px;letter-spacing:-.3px}
+.prep-desc{font-size:13px;color:var(--light);line-height:1.6;font-weight:300;text-align:left}
+.prep-time{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-top:12px;text-align:center}
+.prep-arrow{display:none}
+@media(min-width:641px){.prep-block:not(:last-child)::after{content:'→';position:absolute;right:-10px;top:50%;transform:translateY(-50%);color:var(--gold);opacity:.4;font-size:14px;z-index:1}}
+
+/* VOICE MODULATION */
+.voice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin:36px 0}
+@media(max-width:640px){.voice-grid{grid-template-columns:1fr}}
+.voice-card{background:var(--card);padding:28px;border:1px solid transparent;transition:border-color .2s,background .2s;position:relative;overflow:hidden}
+.voice-card:hover{border-color:var(--border);background:var(--card2)}
+.voice-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+.voice-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--cream);margin-bottom:10px;letter-spacing:-.3px}
+.voice-text{font-size:13.5px;color:var(--light);line-height:1.7;font-weight:300}
+.voice-rule{background:rgba(200,148,58,.06);border-left:2px solid rgba(200,148,58,.35);padding:10px 14px;margin-top:12px;font-size:12.5px;color:var(--light);font-style:italic;line-height:1.55}
+
+/* BLANK MIND PROTOCOL */
+.blank-steps{display:flex;flex-direction:column;gap:2px;margin:36px 0}
+.blank-step{display:grid;grid-template-columns:64px 1fr;gap:0;background:var(--card);border:1px solid transparent;transition:border-color .2s}
+.blank-step:hover{border-color:var(--border)}
+.blank-sec{background:var(--golddim);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--gold)}
+.blank-body{padding:18px 24px}
+.blank-title{font-weight:600;color:var(--cream);font-size:14.5px;margin-bottom:4px}
+.blank-text{font-size:13px;color:var(--light);line-height:1.65;font-weight:300}
+.blank-phrase{font-size:12.5px;color:var(--gold);font-style:italic;margin-top:8px;line-height:1.5}
+
+/* PRACTICE LADDER */
+.practice-ladder{display:flex;flex-direction:column;gap:2px;margin:36px 0}
+.practice-rung{display:grid;grid-template-columns:80px 1fr;gap:0;background:var(--card);border:1px solid transparent;transition:border-color .2s}
+.practice-rung:hover{border-color:var(--border)}
+.practice-level{background:var(--golddim);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 8px;text-align:center}
+.practice-num{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--gold);line-height:1}
+.practice-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-top:2px}
+.practice-body{padding:18px 24px}
+.practice-title{font-weight:600;color:var(--cream);font-size:14.5px;margin-bottom:4px;display:flex;align-items:center;gap:10px}
+.practice-tag{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;padding:3px 9px;border-radius:1px;text-transform:uppercase}
+.tag-easy{background:rgba(44,122,114,.12);color:#4aaa9e;border:1px solid rgba(44,122,114,.28)}
+.tag-mid{background:rgba(200,148,58,.11);color:var(--gold);border:1px solid var(--border)}
+.tag-hard{background:rgba(184,69,50,.11);color:#d46040;border:1px solid rgba(184,69,50,.28)}
+.practice-text{font-size:13px;color:var(--light);line-height:1.65;font-weight:300}
+
+/* ALERT / TIP */
+.alert{background:rgba(184,69,50,.07);border:1px solid rgba(184,69,50,.24);padding:22px 26px;margin:28px 0}
+.alert-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:var(--rust);text-transform:uppercase;margin-bottom:9px}
+.alert-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.alert-text strong{color:var(--cream);font-weight:500}
+.tip{background:rgba(44,122,114,.07);border:1px solid rgba(44,122,114,.24);padding:22px 26px;margin:28px 0}
+.tip-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:#4aaa9e;text-transform:uppercase;margin-bottom:9px}
+.tip-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.tip-text strong{color:var(--cream);font-weight:500}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;margin-top:40px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--card2);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);padding:13px 16px;text-align:left;border-bottom:1px solid var(--border)}
+tbody tr{border-bottom:1px solid rgba(200,148,58,.07);transition:background .15s}
+tbody tr:hover{background:var(--card)}
+tbody td{padding:13px 16px;color:var(--light);vertical-align:top;line-height:1.5}
+.num-cell{font-family:'JetBrains Mono',monospace;color:var(--gold);opacity:.55;font-size:11px}
+.name-cell{font-weight:500;color:var(--cream)}
+
+footer{background:var(--bg);border-top:1px solid var(--border);padding:56px 64px 72px;text-align:center}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;letter-spacing:2px;color:var(--gold);margin-bottom:10px}
+.footer-sub{font-size:13.5px;color:var(--muted);margin-bottom:6px}
+.footer-tiny{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(92,95,104,.45);text-transform:uppercase;margin-top:26px}
+
+.pg-hero-art{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:.55;z-index:0}
+.pg-hero-art svg{width:100%;height:100%;display:block}
+[class*="icon"] svg.pg-icon{width:1em;height:1em;display:inline-block;vertical-align:-0.15em}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav>
+  <div class="nav-logo">Speak Without Freezing</div>
+  <ul class="nav-links">
+    <li><a href="#anxiety">The Fear</a></li>
+    <li><a href="#prep">PREP Framework</a></li>
+    <li><a href="#voice">Voice Modulation</a></li>
+    <li><a href="#blank">Blank Mind</a></li>
+    <li><a href="#audience">Audience Control</a></li>
+    <li><a href="#practice">Practice System</a></li>
+    <li><a href="#advanced">Advanced Edge</a></li>
+    <li><a href="#cheatsheet">Cheatsheet</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero"><div class="pg-hero-art" aria-hidden="true"><svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><path d="M-103.7 311.6 A257.8 257.8 0 0 1 51.9 -126.2" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M443.0 -32.8 A134.7 134.7 0 0 1 353.0 214.5" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M428.7 120.9 A196.8 196.8 0 0 1 107.4 274.5" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><line x1="69.1" y1="34.4" x2="214.4" y2="56.0" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="663.1" y1="73.3" x2="664.0" y2="102.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="226.9" y1="199.4" x2="214.4" y2="56.0" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="450.2" y1="133.3" x2="455.4" y2="120.2" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="871.8" y1="145.5" x2="827.4" y2="136.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="871.8" y1="145.5" x2="804.0" y2="30.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="827.4" y1="136.5" x2="804.0" y2="30.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="455.4" y1="120.2" x2="431.7" y2="24.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="35.0" y1="241.5" x2="58.0" y2="185.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="226.9" y1="199.4" x2="35.0" y2="241.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="804.0" y1="30.5" x2="744.3" y2="35.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="663.1" y1="73.3" x2="744.3" y2="35.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><circle cx="69.1" cy="34.4" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="69.1" cy="34.4" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="663.1" cy="73.3" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="226.9" cy="199.4" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="450.2" cy="133.3" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="450.2" cy="133.3" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="871.8" cy="145.5" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="827.4" cy="136.5" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="827.4" cy="136.5" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="455.4" cy="120.2" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="455.4" cy="120.2" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="431.7" cy="24.3" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="431.7" cy="24.3" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="35.0" cy="241.5" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="35.0" cy="241.5" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="804.0" cy="30.5" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="804.0" cy="30.5" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="664.0" cy="102.6" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="664.0" cy="102.6" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="744.3" cy="35.3" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="214.4" cy="56.0" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="58.0" cy="185.5" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="58.0" cy="185.5" r="2.2" fill="#e8b84b" opacity="0.85"/></svg></div>
+  <div class="hero-glow"></div><div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">Social Skills · Public Speaking · Performance Science · 2025–26</div>
+    <div class="hero-tag">The Complete Public Speaking Research Guide · 2025–26</div>
+    <h1>Speak in<br/><span>Public</span><span class="sub">Without Freezing</span></h1>
+    <p class="hero-desc">The neuroscience of why even confident people freeze on stage — and the exact frameworks, voice techniques, and rehearsal systems that override the amygdala, eliminate blank-mind moments, and build the kind of authority that commands any room. No performance coaching fees required.</p>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-n">#1</span><span class="hstat-l">most common human fear — ranking above death in multiple surveys</span></div>
+      <div class="hstat"><span class="hstat-n">Amygdala</span><span class="hstat-l">reads an audience as a predator circle — evolutionary threat response</span></div>
+      <div class="hstat"><span class="hstat-n">PREP</span><span class="hstat-l">4-step framework — structures any speech in 4 minutes flat</span></div>
+      <div class="hstat"><span class="hstat-n">Pace</span><span class="hstat-l">Pause · Pitch — the three variables that command or lose a room</span></div>
+    </div>
+    <div class="scroll-hint">Scroll to begin</div>
+  </div>
+
+  <!-- HERO — Clean waveform SVG editorial visual -->
+  <div class="hero-waveform" style="flex-shrink:0;opacity:0;animation:fadeup .9s 1s forwards">
+    <svg width="280" height="380" viewBox="0 0 280 380" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="wbg" cx="50%" cy="50%" r="55%">
+          <stop offset="0%" stop-color="#1a1408"/>
+          <stop offset="100%" stop-color="#07080a"/>
+        </radialGradient>
+      </defs>
+      <rect width="280" height="380" fill="url(#wbg)"/>
+      <!-- Minimal stage outline -->
+      <rect x="30" y="40" width="220" height="140" rx="3" fill="none" stroke="#c8943a" stroke-opacity="0.18" stroke-width="1"/>
+      <!-- Stage platform -->
+      <rect x="80" y="165" width="120" height="8" rx="1" fill="#c8943a" opacity="0.2"/>
+      <rect x="60" y="170" width="160" height="5" rx="1" fill="#c8943a" opacity="0.12"/>
+      <!-- Podium silhouette — minimal lines -->
+      <line x1="120" y1="165" x2="116" y2="230" stroke="#c8943a" stroke-opacity="0.35" stroke-width="1.2"/>
+      <line x1="160" y1="165" x2="164" y2="230" stroke="#c8943a" stroke-opacity="0.35" stroke-width="1.2"/>
+      <line x1="112" y1="230" x2="168" y2="230" stroke="#c8943a" stroke-opacity="0.35" stroke-width="1"/>
+      <line x1="108" y1="235" x2="172" y2="235" stroke="#c8943a" stroke-opacity="0.2" stroke-width="0.8"/>
+      <!-- Speaker figure — abstract minimal -->
+      <circle cx="140" cy="100" r="18" fill="none" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1.5"/>
+      <circle cx="140" cy="100" r="6" fill="#c8943a" opacity="0.2"/>
+      <!-- Body suggestion -->
+      <path d="M125 118 Q125 145 120 165 M155 118 Q155 145 160 165" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1.2" fill="none"/>
+      <path d="M125 128 L155 128" stroke="#c8943a" stroke-opacity="0.25" stroke-width="1"/>
+      <!-- Arms suggestion -->
+      <path d="M125 125 Q112 135 105 148" stroke="#c8943a" stroke-opacity="0.25" stroke-width="1" fill="none"/>
+      <path d="M155 125 Q168 135 175 148" stroke="#c8943a" stroke-opacity="0.25" stroke-width="1" fill="none"/>
+
+      <!-- Audience dots — rows of minimal circles -->
+      <!-- Row 1 -->
+      <circle cx="60" cy="270" r="5" fill="#c8943a" opacity="0.15" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.8"/>
+      <circle cx="80" cy="270" r="5" fill="#c8943a" opacity="0.15" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.8"/>
+      <circle cx="100" cy="270" r="5" fill="#c8943a" opacity="0.15" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.8"/>
+      <circle cx="120" cy="270" r="5" fill="#c8943a" opacity="0.15" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.8"/>
+      <circle cx="140" cy="270" r="5" fill="#c8943a" opacity="0.25" stroke="#c8943a" stroke-opacity="0.5" stroke-width="0.8"/>
+      <circle cx="160" cy="270" r="5" fill="#c8943a" opacity="0.15" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.8"/>
+      <circle cx="180" cy="270" r="5" fill="#c8943a" opacity="0.15" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.8"/>
+      <circle cx="200" cy="270" r="5" fill="#c8943a" opacity="0.15" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.8"/>
+      <circle cx="220" cy="270" r="5" fill="#c8943a" opacity="0.15" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.8"/>
+      <!-- Row 2 -->
+      <circle cx="50" cy="292" r="5" fill="#c8943a" opacity="0.1" stroke="#c8943a" stroke-opacity="0.22" stroke-width="0.8"/>
+      <circle cx="70" cy="292" r="5" fill="#c8943a" opacity="0.1" stroke="#c8943a" stroke-opacity="0.22" stroke-width="0.8"/>
+      <circle cx="90" cy="292" r="5" fill="#c8943a" opacity="0.1" stroke="#c8943a" stroke-opacity="0.22" stroke-width="0.8"/>
+      <circle cx="110" cy="292" r="5" fill="#c8943a" opacity="0.1" stroke="#c8943a" stroke-opacity="0.22" stroke-width="0.8"/>
+      <circle cx="130" cy="292" r="5" fill="#c8943a" opacity="0.1" stroke="#c8943a" stroke-opacity="0.22" stroke-width="0.8"/>
+      <circle cx="150" cy="292" r="5" fill="#c8943a" opacity="0.1" stroke="#c8943a" stroke-opacity="0.22" stroke-width="0.8"/>
+      <circle cx="170" cy="292" r="5" fill="#c8943a" opacity="0.1" stroke="#c8943a" stroke-opacity="0.22" stroke-width="0.8"/>
+      <circle cx="190" cy="292" r="5" fill="#c8943a" opacity="0.1" stroke="#c8943a" stroke-opacity="0.22" stroke-width="0.8"/>
+      <circle cx="210" cy="292" r="5" fill="#c8943a" opacity="0.1" stroke="#c8943a" stroke-opacity="0.22" stroke-width="0.8"/>
+      <circle cx="230" cy="292" r="5" fill="#c8943a" opacity="0.1" stroke="#c8943a" stroke-opacity="0.22" stroke-width="0.8"/>
+      <!-- Row 3 -->
+      <circle cx="60" cy="314" r="4.5" fill="#c8943a" opacity="0.07" stroke="#c8943a" stroke-opacity="0.15" stroke-width="0.7"/>
+      <circle cx="80" cy="314" r="4.5" fill="#c8943a" opacity="0.07" stroke="#c8943a" stroke-opacity="0.15" stroke-width="0.7"/>
+      <circle cx="100" cy="314" r="4.5" fill="#c8943a" opacity="0.07" stroke="#c8943a" stroke-opacity="0.15" stroke-width="0.7"/>
+      <circle cx="120" cy="314" r="4.5" fill="#c8943a" opacity="0.07" stroke="#c8943a" stroke-opacity="0.15" stroke-width="0.7"/>
+      <circle cx="140" cy="314" r="4.5" fill="#c8943a" opacity="0.07" stroke="#c8943a" stroke-opacity="0.15" stroke-width="0.7"/>
+      <circle cx="160" cy="314" r="4.5" fill="#c8943a" opacity="0.07" stroke="#c8943a" stroke-opacity="0.15" stroke-width="0.7"/>
+      <circle cx="180" cy="314" r="4.5" fill="#c8943a" opacity="0.07" stroke="#c8943a" stroke-opacity="0.15" stroke-width="0.7"/>
+      <circle cx="200" cy="314" r="4.5" fill="#c8943a" opacity="0.07" stroke="#c8943a" stroke-opacity="0.15" stroke-width="0.7"/>
+      <circle cx="220" cy="314" r="4.5" fill="#c8943a" opacity="0.07" stroke="#c8943a" stroke-opacity="0.15" stroke-width="0.7"/>
+
+      <!-- Spotlight cone from above -->
+      <path d="M140 40 L90 165 L190 165 Z" fill="#c8943a" opacity="0.025"/>
+      <path d="M140 40 L95 165" stroke="#c8943a" stroke-opacity="0.12" stroke-width="0.7"/>
+      <path d="M140 40 L185 165" stroke="#c8943a" stroke-opacity="0.12" stroke-width="0.7"/>
+
+      <!-- Corner marks -->
+      <line x1="20" y1="20" x2="38" y2="20" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1"/>
+      <line x1="20" y1="20" x2="20" y2="38" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1"/>
+      <line x1="242" y1="360" x2="260" y2="360" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1"/>
+      <line x1="260" y1="342" x2="260" y2="360" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1"/>
+
+      <!-- Label -->
+      <text x="140" y="354" font-family="'JetBrains Mono',monospace" font-size="8" fill="#c8943a" opacity="0.35" text-anchor="middle" letter-spacing="2">SPEAKER · AUDIENCE</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ─── TOC ─── -->
+<div class="toc-wrap">
+  <div class="toc-inner">
+    <div class="toc-label">Everything Inside This Guide</div>
+    <div class="toc-grid">
+      <a href="#anxiety" class="toc-item"><span class="toc-num">01</span><span class="toc-name">The Fear Is Evolutionary — Your brain protecting you from a threat that isn't there</span></a>
+      <a href="#prep" class="toc-item"><span class="toc-num">02</span><span class="toc-name">The PREP Framework — Structure any speech in 4 minutes that sounds prepared for hours</span></a>
+      <a href="#voice" class="toc-item"><span class="toc-num">03</span><span class="toc-name">Voice Modulation Secrets — Pace, pause & pitch: the trio that commands any room</span></a>
+      <a href="#blank" class="toc-item"><span class="toc-num">04</span><span class="toc-name">How to Handle a Blank Mind — Mid-speech, without losing the audience's confidence</span></a>
+      <a href="#audience" class="toc-item"><span class="toc-num">05</span><span class="toc-name">Reading & Controlling the Room — What great speakers do that nervous ones don't</span></a>
+      <a href="#practice" class="toc-item"><span class="toc-num">06</span><span class="toc-name">The Practice Ladder — The deliberate system that actually builds confidence</span></a>
+      <a href="#advanced" class="toc-item"><span class="toc-num">07</span><span class="toc-name">Advanced Edge — Opening hooks, storytelling, and the secrets of memorable speakers</span></a>
+      <a href="#cheatsheet" class="toc-item"><span class="toc-num">08</span><span class="toc-name">The Master Cheatsheet — Every principle, one table</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- ─── 01: THE FEAR ─── -->
+<section class="section" id="anxiety">
+<div class="s-inner">
+  <div class="s-head-visual">
+    <div class="s-head">
+      <div class="s-num">Chapter 01</div>
+      <div class="s-meta">
+        <div class="s-cat">Evolve2 · Mindlab Neuroscience · Klarity Health Nov 2025 · Frontiers 2025</div>
+        <h2 class="s-title">The Fear is<br/><span>Evolutionary</span></h2>
+        <p class="s-desc">Public speaking anxiety isn't a character flaw. It isn't weakness. It is ancient, hardwired biology — your amygdala running exactly as designed. Research shows just anticipating a public speaking event causes cortisol to spike and the amygdala to activate as though facing physical danger. Understanding why this happens is the first and most important step to overriding it.</p>
+      </div>
+    </div>
+    <!-- Amygdala threat diagram — clean minimal SVG -->
+    <div class="s-aside">
+      <svg width="130" height="160" viewBox="0 0 130 160" fill="none">
+        <defs><radialGradient id="ambg" cx="50%" cy="50%" r="55%"><stop offset="0%" stop-color="#1a1408"/><stop offset="100%" stop-color="#07080a"/></radialGradient></defs>
+        <rect width="130" height="160" fill="url(#ambg)"/>
+        <!-- Brain outline simple -->
+        <ellipse cx="65" cy="65" rx="44" ry="38" fill="none" stroke="#c8943a" stroke-opacity="0.25" stroke-width="1"/>
+        <!-- Amygdala highlight -->
+        <ellipse cx="52" cy="72" rx="14" ry="10" fill="#c8943a" opacity="0.14" stroke="#c8943a" stroke-opacity="0.6" stroke-width="1.2"/>
+        <text x="52" y="75" font-family="'JetBrains Mono',monospace" font-size="6" fill="#c8943a" opacity="0.7" text-anchor="middle" letter-spacing="0.5">AMYGDALA</text>
+        <!-- PFC highlight -->
+        <ellipse cx="72" cy="42" rx="18" ry="10" fill="#c8943a" opacity="0.07" stroke="#c8943a" stroke-opacity="0.35" stroke-width="0.8"/>
+        <text x="72" y="45" font-family="'JetBrains Mono',monospace" font-size="5.5" fill="#c8943a" opacity="0.45" text-anchor="middle">PFC</text>
+        <!-- Arrow: amygdala overrides PFC -->
+        <path d="M58 66 Q68 56 70 52" stroke="#c8943a" stroke-opacity="0.4" stroke-width="1" fill="none" marker-end="url(#arr)"/>
+        <!-- Threat signal lines -->
+        <line x1="52" y1="82" x2="52" y2="100" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.8" stroke-dasharray="3,2"/>
+        <text x="65" y="115" font-family="'JetBrains Mono',monospace" font-size="7" fill="#c8943a" opacity="0.45" text-anchor="middle" letter-spacing="1">THREAT</text>
+        <text x="65" y="125" font-family="'JetBrains Mono',monospace" font-size="7" fill="#c8943a" opacity="0.45" text-anchor="middle" letter-spacing="1">RESPONSE</text>
+        <!-- Arrows from amygdala outward -->
+        <line x1="38" y1="72" x2="22" y2="62" stroke="#c8943a" stroke-opacity="0.25" stroke-width="0.8"/>
+        <line x1="52" y1="82" x2="42" y2="96" stroke="#c8943a" stroke-opacity="0.25" stroke-width="0.8"/>
+        <line x1="66" y1="80" x2="76" y2="94" stroke="#c8943a" stroke-opacity="0.25" stroke-width="0.8"/>
+        <text x="65" y="148" font-family="'JetBrains Mono',monospace" font-size="6.5" fill="#c8943a" opacity="0.3" text-anchor="middle" letter-spacing="1">AMYGDALA HIJACK</text>
+      </svg>
+      <div class="s-aside-label">The Amygdala<br/>Threat Response</div>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">#1</span><span class="s-stat-l">most common human fear — consistently above death in surveys (glossophobia)</span></div>
+    <div class="s-stat"><span class="s-stat-n">4 Threats</span><span class="s-stat-l">Visible + Evaluated + Can't escape + Uncertain outcome = maximum amygdala activation</span></div>
+    <div class="s-stat"><span class="s-stat-n">Cortisol</span><span class="s-stat-l">spikes just anticipating a public speaking event — before you even walk on stage</span></div>
+    <div class="s-stat"><span class="s-stat-n">PFC</span><span class="s-stat-l">prefrontal cortex — complex thinking shuts down when amygdala hijack occurs</span></div>
+  </div>
+
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8A3.5 3.5 0 0 0 8 18a3 3 0 0 0 3-2.5V6a2 2 0 0 0-2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 1 5.8A3.5 3.5 0 0 1 16 18a3 3 0 0 1-3-2.5V6a2 2 0 0 1 2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">Why the Brain Treats Audiences as Predators</div>
+      <p class="col-text">
+        The amygdala — your brain's threat detection centre — evolved for a different world. In ancestral environments, being singled out and evaluated by a group was genuinely dangerous. Group rejection meant expulsion. Expulsion meant death. So the amygdala wired "visible social evaluation" as a survival threat, triggering the same cascade as physical danger: cortisol, adrenaline, heart rate spike, hyperventilation, and blood flow diverted from your brain to your muscles.<br/><br/>
+        Public speaking activates all four of the brain's threat triggers simultaneously: <strong>high visibility, direct judgment from multiple observers, no easy escape route, and uncertain outcome.</strong><br/><br/>
+        This is why you freeze. The amygdala has initiated an emergency protocol that diverts blood flow away from the prefrontal cortex — the brain region responsible for eloquent speech, logical sequencing, and memory retrieval. The blank mind isn't failure. It's biology.
+      </p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M13 2 4 14h6l-1 8 9-12h-6z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">The Reframe That Changes Everything</div>
+      <p class="col-text">
+        The most powerful cognitive shift in public speaking research: <strong>reappraisal</strong> — changing how you interpret the physiological arousal of anxiety.<br/><br/>
+        <strong>Old interpretation:</strong> "I'm terrified. Something is wrong. I'm going to fail."<br/>
+        <strong>Reappraisal:</strong> "My body is generating exactly the energy I need to deliver this well."<br/><br/>
+        Harvard Business School researcher Alison Wood Brooks: telling yourself "I am excited" before a public speaking event produces measurably better performance than telling yourself to "calm down" — because anxiety and excitement share the same physiological signature. The difference is the label you apply.<br/><br/>
+        The amygdala response cannot be fully eliminated — because the brain is wired to monitor social evaluation as a survival function. The realistic goal is <strong>functional management:</strong> reducing activation so the arousal enhances rather than impairs performance. Skilled speakers still feel nervous. The difference is their prefrontal cortex modulates the signal effectively.
+      </p>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">ANXIETY TOOL 01</div>
+      <span class="card-icon">🫁</span>
+      <div class="card-title">Physiological Sigh — The Fastest Nervous System Reset</div>
+      <p class="card-text">The fastest neuroscience-backed technique for reducing acute public speaking anxiety: the physiological sigh (double inhale through the nose, followed by a long, slow exhale through the mouth). Neuroscientist Andrew Huberman: this specific breathing pattern is the fastest known way to calm the nervous system — faster than any other breathing technique. One to three physiological sighs in the 60 seconds before stepping on stage measurably reduces cortisol and heart rate. It's physiologically impossible to be in full fight-or-flight while the exhale is longer than the inhale. Use it. Every time.</p>
+      <span class="badge ba">Before Every Speech</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ANXIETY TOOL 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 15V9a2 2 0 0 1 2-2 2 2 0 0 1 2 2M9 9V6a2 2 0 0 1 4 0v6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 9a2 2 0 0 1 4 0v3.5c0 3-2 6-6 6H8a3 3 0 0 1-3-3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Power Posture — Amy Cuddy's 2-Minute Protocol</div>
+      <p class="card-text">Amy Cuddy's Harvard research found that adopting a high-power body posture (standing upright, arms wide, feet apart — think: hands on hips, chest open) for 2 minutes before a high-stakes social situation produces hormonal changes that reduce cortisol and increase testosterone — the precise neurochemical shift that moves the body from threat-mode to confidence-mode. The mechanism: body posture provides proprioceptive feedback to the brain that changes its assessment of the social situation. You cannot stand like a champion for 2 minutes and feel like prey at the same time.</p>
+      <span class="badge ba">2 Minutes Before</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ANXIETY TOOL 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="1.4" fill="#c8943a"/></svg></span>
+      <div class="card-title">Exposure — The Only Long-Term Solution</div>
+      <p class="card-text">Klarity Health Nov 2025: "Exposure therapy stands as one of the most evidence-backed approaches to overcoming public speaking anxiety." Repeated exposure to speaking in front of groups — starting small and escalating — is the only mechanism that permanently changes the amygdala's threat assessment of social evaluation. Not visualisation. Not positive thinking. Actual exposure. Each time you speak and survive without catastrophe, you provide your amygdala with new data: "This threat doesn't produce the predicted harm." Over dozens of exposures, the threat response diminishes. There is no shortcut past this process — only through it.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Frontiers 2025 Finding</div>
+        <p class="card-text">Frontiers in Human Neuroscience 2025: "Virtual reality exposure therapy and structured online speaking exercises have shown promising results in reducing PSA and improving speaker confidence." VR speaking practice is now an accessible first step for people with severe anxiety — it provides real amygdala activation with reduced real-world stakes.</p>
+      </div>
+      <span class="badge ba">The Only Cure</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 1 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"Stage fright is an amygdala hijack — the brain treating an audience like a circle of predators. <em>Skilled speakers still get nervous. The difference is their prefrontal cortex modulates the signal effectively.</em>"</p>
+  <p class="quote-attr">— Mindlab Neuroscience · Public Speaking Anxiety Neuroscience: 7 Strategies · 2024</p>
+</div>
+
+<!-- ─── 02: PREP FRAMEWORK ─── -->
+<section class="section section-alt" id="prep">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 02</div>
+    <div class="s-meta">
+      <div class="s-cat">Toastmasters International · BiteSize Learning 2025 · Vocate.work 2025</div>
+      <h2 class="s-title">The <span>PREP</span><br/>Framework</h2>
+      <p class="s-desc">Recommended by Toastmasters International as "probably the easiest framework to learn and use" for structuring speeches, PREP (Point, Reason, Example, Point) turns any question, topic, or speaking opportunity into a coherent, authoritative response — even when you had zero preparation time. The framework works because it provides a mental roadmap that prevents the worst enemy of public speaking: rambling without a destination.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">4 min</span><span class="s-stat-l">to structure a speech using PREP that sounds prepared for hours</span></div>
+    <div class="s-stat"><span class="s-stat-n">Toastmasters</span><span class="s-stat-l">International recommended PREP as the primary impromptu speaking framework</span></div>
+    <div class="s-stat"><span class="s-stat-n">Clarity</span><span class="s-stat-l">PREP forces you to lead with your answer — not build to it. Executives do this instinctively.</span></div>
+    <div class="s-stat"><span class="s-stat-n">Logic +</span><span class="s-stat-l">Story — PREP combines rational reasoning with example narrative for maximum persuasion</span></div>
+  </div>
+
+  <div class="prep-grid">
+    <div class="prep-block">
+      <div class="prep-letter">P</div>
+      <div class="prep-label">Step 01</div>
+      <div class="prep-word">Point</div>
+      <p class="prep-desc">State your main claim or position clearly and directly. One sentence. No build-up. No context-setting. Lead with the answer, not the journey to it. In high-pressure situations like Q&As or interviews, getting straight to the point establishes authority immediately.</p>
+      <div class="prep-time">~30–45 seconds</div>
+    </div>
+    <div class="prep-block">
+      <div class="prep-letter">R</div>
+      <div class="prep-label">Step 02</div>
+      <div class="prep-word">Reason</div>
+      <p class="prep-desc">Explain why your point is true or important. Give one to three supporting reasons — evidence, data, logic, or context. This is where you build credibility. Three reasons is the research-backed optimum: enough to be convincing, few enough to be remembered.</p>
+      <div class="prep-time">~45–60 seconds</div>
+    </div>
+    <div class="prep-block">
+      <div class="prep-letter">E</div>
+      <div class="prep-label">Step 03</div>
+      <div class="prep-word">Example</div>
+      <p class="prep-desc">Give one concrete example, story, or illustration that brings the reasoning to life. This is the "show don't tell" step. Stories are processed by the brain 22 times more memorably than facts alone. The example makes the abstract real — and makes you memorable.</p>
+      <div class="prep-time">~60–90 seconds</div>
+    </div>
+    <div class="prep-block">
+      <div class="prep-letter">P</div>
+      <div class="prep-label">Step 04</div>
+      <div class="prep-word">Point</div>
+      <p class="prep-desc">Restate your main point to close the loop. The repetition reinforces the message — the audience hears the conclusion twice and remembers it twice as well. Vary the wording slightly to avoid sounding mechanical. End decisively. Don't trail off.</p>
+      <div class="prep-time">~20–30 seconds</div>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">PREP EXAMPLE 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="3" y="8" width="18" height="12" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">PREP Applied — Meeting Ambush</div>
+      <div class="card-sec">Scenario: You're asked unexpectedly to share your view on a strategy</div>
+      <p class="card-text"><strong style="color:var(--cream)">Point:</strong> "I think we should delay the product launch by 6 weeks."<br/><br/><strong style="color:var(--cream)">Reason:</strong> "Three reasons: our user testing data shows two significant UX issues still unresolved, the Q4 launch window is already crowded with competitor releases, and our support team isn't yet trained for the new feature set."<br/><br/><strong style="color:var(--cream)">Example:</strong> "When we launched the payments feature under schedule pressure last year, we got 400 support tickets in the first week and had to roll back the UI entirely — a delay would have prevented that."<br/><br/><strong style="color:var(--cream)">Point:</strong> "A 6-week delay now will produce a significantly cleaner launch — and protect the team's credibility."</p>
+      <span class="badge ba">Copy This Structure</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PREP EXAMPLE 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M2 9 12 4l10 5-10 5z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M6 11.5V17c0 1.5 3 3 6 3s6-1.5 6-3v-5.5M21 9v6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">PREP Applied — The Unexpected Question</div>
+      <div class="card-sec">Scenario: Presentation Q&A — a question you weren't prepared for</div>
+      <p class="card-text"><strong style="color:var(--cream)">The stall technique:</strong> Before using PREP, buy yourself 3–5 seconds of legitimate thinking time with any of these phrases: "That's an important question, let me address it directly." / "I want to make sure I give you a complete answer on that." / "I've actually been thinking about exactly this." These phrases signal authority — not delay. They communicate that you take the question seriously. Then use PREP to structure your response.<br/><br/><strong style="color:var(--cream)">If you genuinely don't know:</strong> "I don't have the exact data for that in front of me — what I can tell you is [what you do know]. I'll confirm the specific number and follow up with you directly." Honest and authoritative beats guessed and confident.</p>
+      <span class="badge ba">Immediate Application</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PREP ADVANCED</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 15 15 9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 6.5 13 4.5a3.5 3.5 0 0 1 5 5l-2 2M13 17.5 11 19.5a3.5 3.5 0 0 1-5-5l2-2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Chaining PREPs — For Longer Speeches</div>
+      <p class="card-text">For presentations longer than 3 minutes, chain multiple PREPs together. Each major point gets its own PREP cycle. The structure: Opening Hook → PREP 1 (Point 1) → PREP 2 (Point 2) → PREP 3 (Point 3) → Summary + Call to Action. This creates the architecture of a professional presentation in minutes. Each PREP block stands alone — if the audience zones out during Point 2, they can re-engage at Point 3 and still follow. This self-contained structure is more resilient than a single continuous narrative that loses the audience if they lose the thread once.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 Why It Works Neurologically</div>
+        <p class="card-text">PREP maps directly to how the brain processes persuasive communication: the initial point activates expectation and primes the listener; the reason engages analytical processing; the example activates narrative processing (22× more memorable); the repeated point consolidates memory. It is a framework built on the architecture of how brains actually receive information.</p>
+      </div>
+      <span class="badge ba">Longer Speeches</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 2 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"The secret to confident impromptu speaking isn't quick thinking — it's having a framework ready before you need it. <em>PREP buys you thinking time while making you sound organised and authoritative.</em>"</p>
+  <p class="quote-attr">— Winning Presentations · Impromptu Speaking: 4 Steps to Sound Prepared on the Spot · January 2026</p>
+</div>
+
+<!-- ─── 03: VOICE MODULATION ─── -->
+<section class="section" id="voice">
+<div class="s-inner">
+  <div class="s-head-visual">
+    <div class="s-head">
+      <div class="s-num">Chapter 03</div>
+      <div class="s-meta">
+        <div class="s-cat">Mehrabian Rule · Voice Science · Oratory Research · Toastmasters</div>
+        <h2 class="s-title">Voice<br/><span>Modulation</span></h2>
+        <p class="s-desc">Albert Mehrabian's research established that 38% of meaning in emotional communication is conveyed through voice qualities — tone, pace, pitch, and volume — while only 7% comes from the actual words spoken. You can have the most brilliant speech in the world and deliver it in a monotone and lose the room entirely. Voice is not decoration. It is the medium.</p>
+      </div>
+    </div>
+    <!-- Voice waveform editorial SVG -->
+    <div class="s-aside">
+      <svg width="140" height="130" viewBox="0 0 140 130" fill="none">
+        <defs><radialGradient id="vwbg" cx="50%" cy="50%" r="55%"><stop offset="0%" stop-color="#1a1408"/><stop offset="100%" stop-color="#07080a"/></radialGradient></defs>
+        <rect width="140" height="130" fill="url(#vwbg)"/>
+        <!-- Waveform bars — varied heights for voice modulation -->
+        <rect x="10" y="60" width="6" height="12" fill="#c8943a" opacity="0.3" rx="1"/>
+        <rect x="20" y="52" width="6" height="28" fill="#c8943a" opacity="0.4" rx="1"/>
+        <rect x="30" y="44" width="6" height="44" fill="#c8943a" opacity="0.5" rx="1"/>
+        <rect x="40" y="36" width="6" height="60" fill="#c8943a" opacity="0.65" rx="1"/>
+        <rect x="50" y="30" width="6" height="72" fill="#c8943a" opacity="0.8" rx="1"/>
+        <rect x="60" y="24" width="6" height="84" fill="#c8943a" opacity="0.9" rx="1"/>
+        <!-- Pause — gap -->
+        <rect x="72" y="56" width="3" height="20" fill="#c8943a" opacity="0.15" rx="1"/>
+        <!-- Resume — build again differently -->
+        <rect x="79" y="40" width="6" height="52" fill="#c8943a" opacity="0.7" rx="1"/>
+        <rect x="89" y="50" width="6" height="32" fill="#c8943a" opacity="0.55" rx="1"/>
+        <rect x="99" y="58" width="6" height="16" fill="#c8943a" opacity="0.45" rx="1"/>
+        <rect x="109" y="62" width="6" height="8" fill="#c8943a" opacity="0.3" rx="1"/>
+        <rect x="119" y="64" width="6" height="4" fill="#c8943a" opacity="0.2" rx="1"/>
+        <!-- Baseline -->
+        <line x1="8" y1="100" x2="132" y2="100" stroke="#c8943a" stroke-opacity="0.12" stroke-width="0.8"/>
+        <!-- Labels -->
+        <text x="55" y="118" font-family="'JetBrains Mono',monospace" font-size="7" fill="#c8943a" opacity="0.45" text-anchor="middle" letter-spacing="1">BUILD</text>
+        <text x="73" y="118" font-family="'JetBrains Mono',monospace" font-size="7" fill="#e8b84b" opacity="0.6" text-anchor="middle">PAUSE</text>
+        <text x="100" y="118" font-family="'JetBrains Mono',monospace" font-size="7" fill="#c8943a" opacity="0.35" text-anchor="middle" letter-spacing="1">LAND</text>
+      </svg>
+      <div class="s-aside-label">Voice Modulation<br/>Waveform</div>
+    </div>
+  </div>
+
+  <div class="voice-grid">
+    <div class="voice-card">
+      <div class="voice-label">The First Variable</div>
+      <div class="voice-title">Pace</div>
+      <p class="voice-text">Speaking pace is the most commonly misused voice variable for nervous speakers. The default anxiety response is to speed up — because rushing feels like covering ground, and the amygdala wants to escape the situation as fast as possible. This is catastrophic for perception. A fast pace signals anxiety, reduces comprehension, and prevents the pauses that create impact.<br/><br/>Research-backed target: 130–150 words per minute for high-impact spoken content. Conversational English averages 140–160 wpm. Deliberately slow down 10–15% from your natural nervous pace — your slowest feels normal to the audience.</p>
+      <div class="voice-rule">Rule: Slow down for important points. Double slow down for your most important sentence. The words you slow down on are the words the audience writes down.</div>
+    </div>
+    <div class="voice-card">
+      <div class="voice-label">The Second Variable</div>
+      <div class="voice-title">Pause</div>
+      <p class="voice-text">The strategic pause is the most powerful and most underused tool in public speaking. A 2–3 second pause after a significant statement does three things simultaneously: it gives the audience time to absorb what you said; it signals confidence (anxious speakers fill every silence with "um" or "so"); and it creates dramatic tension that makes the next sentence land harder.<br/><br/>The "um" and "ah" problem is entirely a filling-the-silence problem. You fill silence because you're uncomfortable with it. The audience is never uncomfortable with silence from a confident speaker — they use it to process. Own the pause. Never fill it.</p>
+      <div class="voice-rule">Rule: After every major point — pause for 2–3 full seconds. Hold eye contact with one person during the pause. It communicates: "I'm giving you time to understand what I just said."</div>
+    </div>
+    <div class="voice-card">
+      <div class="voice-label">The Third Variable</div>
+      <div class="voice-title">Pitch</div>
+      <p class="voice-text">Pitch variation is what prevents a monotone delivery from putting an audience to sleep. The brain is wired to tune out flat stimuli (it's a survival mechanism — uniform stimuli are unlikely to be important). Varying your pitch keeps the audience's attention engaged at a neurological level.<br/><br/>The upspeak trap: ending statements with rising pitch (as if asking a question) signals uncertainty and reduces authority. End every definitive statement with a downward pitch drop — it is the vocal signature of confidence. Practise by reading any text aloud and consciously dropping pitch at the end of each sentence.</p>
+      <div class="voice-rule">Rule: Statements end with falling pitch (authority). Questions end with rising pitch (genuine inquiry). Mix pitch levels throughout — higher for energy, lower for gravity and importance.</div>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">VOICE BONUS 01</div>
+      <span class="card-icon">🔊</span>
+      <div class="card-title">Volume — The Authority Variable</div>
+      <p class="card-text">Volume is the most immediately perceived authority signal. Speaking too quietly communicates either nerves or a desire to be invisible — both undermine presence. Speaking at full, consistent volume communicates ownership of the space. Practical rule: project to the back row — always. Even in small rooms. The person in the front row will not find it too loud; the person at the back will finally hear you clearly. Before any speech, deliberately choose to speak 15–20% louder than your instinct. Nervous speakers habitually underestimate how quietly they're speaking.</p>
+      <span class="badge ba">The Space Signal</span>
+    </div>
+    <div class="card">
+      <div class="card-num">VOICE BONUS 02</div>
+      <span class="card-icon">🎵</span>
+      <div class="card-title">Resonance — The Voice That Carries Authority</div>
+      <p class="card-text">Voice resonance is produced by breathing from the diaphragm rather than the chest. Chest breathing produces a thin, high, tight voice — the exact voice of anxiety. Diaphragmatic breathing produces depth, warmth, and the "radio voice" quality that carries authority. The practice: place a hand on your stomach. Breathe in so your stomach pushes forward (not your chest rises). Speak from that breath. This takes deliberate practice but produces a voice quality improvement that is immediately audible. Every broadcast professional, trained actor, and experienced speaker uses diaphragmatic breathing.</p>
+      <span class="badge ba">Voice Quality</span>
+    </div>
+    <div class="card">
+      <div class="card-num">VOICE BONUS 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m6 6 12 12" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Filler Words — The Silent Authority Killer</div>
+      <p class="card-text">Research shows that the frequency of filler words (um, uh, like, so, you know, basically) directly correlates with lower perceived intelligence and credibility ratings from audiences — even when the content is identical. The listener hears the filler and their confidence in your competence diminishes slightly each time. The cure is not suppression — it is replacement. Replace every "um" with silence. A pause sounds confident. An "um" sounds nervous. Record yourself speaking for 3 minutes on any topic and count your fillers. Most people discover they have significantly more than they believed. Awareness precedes elimination.</p>
+      <span class="badge bc">Eliminate These</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 04: BLANK MIND ─── -->
+<section class="section section-alt" id="blank">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 04</div>
+    <div class="s-meta">
+      <div class="s-cat">Amygdala Hijack · Recovery Protocol · Audience Confidence Management</div>
+      <h2 class="s-title">How to Handle<br/>a <span>Blank Mind</span></h2>
+      <p class="s-desc">The blank mind mid-speech is the fear behind the fear. The experience that paralyses most aspiring speakers before they've even started. But blank mind moments follow a predictable pattern — and every professional speaker has a protocol for them that the audience never sees. Here it is.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">3 sec</span><span class="s-stat-l">is how long a pause feels eternal to the speaker and completely normal to the audience</span></div>
+    <div class="s-stat"><span class="s-stat-n">PFC</span><span class="s-stat-l">offline during amygdala hijack — why memory retrieval fails at peak anxiety</span></div>
+    <div class="s-stat"><span class="s-stat-n">Protocol</span><span class="s-stat-l">every professional speaker has a 4-step recovery sequence — they just never need to use it</span></div>
+    <div class="s-stat"><span class="s-stat-n">Confidence</span><span class="s-stat-l">what the audience sees — how you respond to a blank — is always within your control</span></div>
+  </div>
+
+  <div class="blank-steps">
+    <div class="blank-step">
+      <div class="blank-sec">1</div>
+      <div class="blank-body">
+        <div class="blank-title">Pause Deliberately — Do Not Panic-Speak</div>
+        <p class="blank-text">The worst response to a blank mind is the instinctive one: beginning to speak nonsense to fill the silence while your brain searches for the thread. This produces verbal circular wandering that the audience notices and that deepens the amygdala response. The counter-intuitive correct response: stop speaking. Pause fully. Look down at your notes, look at the room, breathe — but do not fill the silence with unformed words. A pause of 3–5 seconds feels like eternity to the speaker and reads as considered thought to the audience. They cannot tell the difference between "I'm thinking of the next important point" and "I've forgotten everything."</p>
+        <p class="blank-phrase">"Take a breath. A pause is a choice. Panic-speaking is the only thing that reveals the blank."</p>
+      </div>
+    </div>
+    <div class="blank-step">
+      <div class="blank-sec">2</div>
+      <div class="blank-body">
+        <div class="blank-title">Return to Your Last Anchor Point</div>
+        <p class="blank-text">Every well-structured speech has anchor points — the main points you definitely remember. When you blank, do not try to find where you were in the middle of a detailed section. Instead, return to the last anchor point you remember clearly and restate it briefly: "So what we've established is [last anchor point]." This buys time while your brain reconnects to the thread, and it usefully reinforces the key message for the audience. They experience it as emphasis — not as recovery.</p>
+        <p class="blank-phrase">"Return to the last thing you said that you're sure about. Restate it. The thread usually reappears from there."</p>
+      </div>
+    </div>
+    <div class="blank-step">
+      <div class="blank-sec">3</div>
+      <div class="blank-body">
+        <div class="blank-title">Ask the Audience a Question</div>
+        <p class="blank-text">One of the most elegant professional recovery techniques: turn the moment of blankness into audience engagement. "Before I continue — I'm curious what your experience has been with this. Has anyone here encountered [topic]?" This shifts focus from you to them, buys you 60–90 seconds of recovery time, and is simultaneously an excellent presentation technique that makes the audience feel involved. The audience is never suspicious of an unexpected audience engagement moment. They welcome it. You recover. Nobody knows.</p>
+        <p class="blank-phrase">"Turn the blank into engagement. Ask them. It's always the right move and they'll never know why."</p>
+      </div>
+    </div>
+    <div class="blank-step">
+      <div class="blank-sec">4</div>
+      <div class="blank-body">
+        <div class="blank-title">Admit It — With Confidence</div>
+        <p class="blank-text">The most underrated option — and often the most powerful one. When all else fails: "I want to make sure I give you the most accurate information on this point — I've gone slightly blank on a specific detail. Let me come back to that — what I can tell you with certainty is [what you do know]." Delivered calmly and without shame, this reads as intellectual honesty, not incompetence. Research on speaker credibility consistently shows that authentic acknowledgment of a gap handled with composure increases audience trust — not decreases it. Panicking decreases it. Calm honesty increases it.</p>
+        <p class="blank-phrase">"The composure with which you handle the blank tells the audience more about you than the content you forgot."</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-head">✅ The Blank-Proofing System — Before You Step On Stage</div>
+    <p class="tip-text">Blank mind prevention begins 48 hours before the speech, not in the moment. <strong>The three-point card rule:</strong> Reduce your entire speech to 3 numbered anchor points on a single index card or phone note. If you blank, you know exactly where your structure is — you glance, you're back. <strong>Speak in structures not scripts:</strong> Memorising word-for-word produces catastrophic blanks when the exact wording doesn't come. Knowing the structure deeply means you can express each point in any words that occur to you — and none of them are "wrong." <strong>Do a full run-through aloud</strong> at least once without stopping — including recovering if you blank. Practice recovering, not just delivering.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── 05: READING THE ROOM ─── -->
+<section class="section" id="audience">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 05</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · Audience Intelligence & Presence</div>
+      <h2 class="s-title">Reading &<br/><span>Controlling</span> the Room</h2>
+      <p class="s-desc">The difference between a speaker and a great speaker is almost entirely in how they read and respond to the audience in real time. Most speakers broadcast — delivering a prepared signal regardless of the room's response. Great speakers converse — constantly adjusting based on what the audience is giving back.</p>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">ROOM READING 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Eye Contact — The Connection Multiplier</div>
+      <p class="card-text">Eye contact is the primary mechanism through which audiences feel individually connected to a speaker — and without it, the speech exists entirely in the third person. The technique: the 3-second rule. Make eye contact with one person for 3 full seconds — long enough to complete one thought — then move to another person. This creates the experience of speaking to individuals, not a crowd. Strategic targeting: look at engaged listeners (nodding, leaning forward) when building confidence; look at neutral or sceptical listeners when making your most important points — holding their gaze through the key message creates the most persuasive impact.</p>
+      <span class="badge ba">Primary Connection Tool</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ROOM READING 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="10.5" cy="10.5" r="6.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m20 20-4.8-4.8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Reading Audience Signals in Real Time</div>
+      <p class="card-text"><strong style="color:var(--cream)">Engagement signals:</strong> Nodding, leaning forward, taking notes, smiling, eye contact. → Continue on this track. Go deeper. You've connected.<br/><br/><strong style="color:var(--cream)">Confusion signals:</strong> Furrowed brows, head tilts, exchanged glances between audience members. → Pause and rephrase: "Let me put that another way." Don't push through confusion hoping it resolves itself. It rarely does.<br/><br/><strong style="color:var(--cream)">Disengagement signals:</strong> Phone checking, slumping, side conversations, blinking increase. → Change the energy: ask a question, change your position, increase your volume briefly, or introduce an unexpected element. Disengagement is feedback — act on it in real time.</p>
+      <span class="badge ba">Real-Time Adjustment</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ROOM READING 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="1.4" fill="#c8943a"/></svg></span>
+      <div class="card-title">Own Your Space Physically</div>
+      <p class="card-text">The physical space a speaker occupies communicates authority before a word is spoken. Rules: Plant your feet (no swaying or shifting weight — it signals anxiety). Move deliberately — walk to a new position to signal a new major point, then stop and plant again. Use the full stage — moving toward the audience creates intimacy and brings disengaged listeners back. Use hand gestures that match your words (not random nervous movement — purposeful gestures that illustrate scale, sequence, or emphasis). The speaker who owns their physical space is assumed to own the content — even before the audience has evaluated what's being said.</p>
+      <span class="badge ba">Physical Authority</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ROOM READING 04</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M3 12h4l3-3 3 3 3-3 5 3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 12v5h4v-5M17 12v5h4v-5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Q&A Protocol — Where Confidence Is Won or Lost</div>
+      <p class="card-text">Most speakers are strong during their prepared content and weak during Q&A — when the PREP framework is unavailable if they haven't practised it. Rules for commanding Q&A: Repeat or paraphrase every question before answering (buys thinking time, confirms understanding, ensures the whole room heard it). Use PREP for every answer. If you don't know — say "I don't have that specific data — let me follow up directly" with confidence. If a question is hostile — acknowledge the concern, don't match the energy. Answer once, clearly, then redirect: "What I can speak to is [your controlled territory]."</p>
+      <span class="badge ba">Where Great Speakers Shine</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 06: PRACTICE SYSTEM ─── -->
+<section class="section section-alt" id="practice">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 06</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · The Deliberate Practice Ladder</div>
+      <h2 class="s-title">The <span>Practice</span><br/>Ladder</h2>
+      <p class="s-desc">Exposure is the only mechanism that permanently changes the amygdala's threat assessment of public speaking. But not all exposure is equal. A deliberate practice ladder — starting with the smallest possible audiences and escalating systematically — builds real confidence without overwhelming the system before it's ready. Here is the research-backed sequence.</p>
+    </div>
+  </div>
+
+  <div class="practice-ladder">
+    <div class="practice-rung">
+      <div class="practice-level"><div class="practice-num">1</div><div class="practice-label">Start</div></div>
+      <div class="practice-body">
+        <div class="practice-title">Speak Aloud Alone <span class="practice-tag tag-easy">Zero Risk</span></div>
+        <p class="practice-text">The entry point that almost nobody does: speak your ideas aloud, alone, in a room. Not in your head. Out loud. The brain processes verbalised thought differently from internal monologue — and practising aloud is the only practice that prepares your voice, your pace, and your verbal habits for the real environment. Practise PREP on random topics for 3 minutes daily. Read text aloud at deliberately varying pace and pitch. Record yourself and listen back — the gap between how you sound in your head and how you actually sound is almost universally revealing.</p>
+      </div>
+    </div>
+    <div class="practice-rung">
+      <div class="practice-level"><div class="practice-num">2</div><div class="practice-label">Low Stakes</div></div>
+      <div class="practice-body">
+        <div class="practice-title">One Person You Trust <span class="practice-tag tag-easy">Minimal Risk</span></div>
+        <p class="practice-text">Speak your prepared content to one person who won't judge you — a partner, close friend, or trusted colleague. Ask for one specific piece of feedback only: "Was there a moment when you wanted to ask me a question or felt confused?" Not "was it good?" — that produces meaningless reassurance. One specific, actionable question produces useful data. The presence of even one real human activates a version of the amygdala response — which is exactly what you need to begin building the exposure-based resilience that carries to real audiences.</p>
+      </div>
+    </div>
+    <div class="practice-rung">
+      <div class="practice-level"><div class="practice-num">3</div><div class="practice-label">Building</div></div>
+      <div class="practice-body">
+        <div class="practice-title">3–5 People Who Support You <span class="practice-tag tag-easy">Low Risk</span></div>
+        <p class="practice-text">A small, supportive audience of 3–5 people activates significantly more amygdala response than solo or one-person practice — and produces proportionally more useful resilience when you survive it. This is also the level where you begin practising the full experience: walking into the space, setting up, beginning with your opening hook, running the full PREP structure, handling Q&A. Full dress rehearsals at this level are dramatically more effective than mental rehearsals or note-reviewing. The physical experience is what trains the nervous system.</p>
+      </div>
+    </div>
+    <div class="practice-rung">
+      <div class="practice-level"><div class="practice-num">4</div><div class="practice-label">Real Audience</div></div>
+      <div class="practice-body">
+        <div class="practice-title">Toastmasters / Community Groups <span class="practice-tag tag-mid">Moderate Stakes</span></div>
+        <p class="practice-text">Toastmasters International clubs exist specifically to provide structured, judgment-free environments for repeated public speaking practice with real, unfamiliar audiences. Meeting attendees are themselves working on public speaking — creating a uniquely supportive dynamic. The structured feedback format produces more actionable improvement data per speaking session than almost any other practice environment. Research on public speaking anxiety consistently identifies Toastmasters as one of the most effective real-world exposure programmes available. Join one. Attend weekly. Speak at every session. Within 3 months, your baseline amygdala response will measurably diminish.</p>
+      </div>
+    </div>
+    <div class="practice-rung">
+      <div class="practice-level"><div class="practice-num">5</div><div class="practice-label">Advanced</div></div>
+      <div class="practice-body">
+        <div class="practice-title">Professional Stakes — Presentations & Keynotes <span class="practice-tag tag-hard">Full Exposure</span></div>
+        <p class="practice-text">The final rung: real stakes, unfamiliar audiences, professional consequences. The key principle at this level: over-prepare the structure, under-prepare the exact words. Know your three anchor points perfectly. Know your opening hook perfectly. Know your closing line perfectly. Let everything between them be fluent but unscripted — because scripted delivery produces the catastrophic blank when the exact words don't come, and unscripted delivery within a solid structure gives you the flexibility to recover, adjust, and respond to the room authentically.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-head">✅ The 5-Minute Daily Practice That Changes Everything</div>
+    <p class="tip-text">The single most effective daily habit for improving public speaking: <strong>5 minutes of out-loud PREP practice on a random topic every morning.</strong> Pick any topic (current event, opinion, recent observation). State your Point. Give your Reason. Give your Example. Restate your Point. Time yourself. Then do it again on a different topic. This practice: trains the PREP structure to become automatic, reduces verbal filler through daily exposure to your own voice, builds the habit of clear structured thinking under pressure, and systematically reduces the gap between "I know what I want to say" and "I can say it clearly." In 30 days this practice produces a measurable improvement in your spontaneous speaking quality.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── 07: ADVANCED EDGE ─── -->
+<section class="section" id="advanced">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 07</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · Opening Hooks · Storytelling · Memorability</div>
+      <h2 class="s-title">The <span>Advanced</span><br/>Edge</h2>
+      <p class="s-desc">Once the anxiety is manageable and the PREP framework is automatic, these advanced techniques separate competent speakers from genuinely memorable ones. The research on what audiences remember about speakers tells a consistent story: they remember how you began, how you ended, and one story. Everything in between is largely forgotten within 48 hours.</p>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">ADVANCED 01</div>
+      <span class="card-icon">🎣</span>
+      <div class="card-title">The Opening Hook — The 30 Seconds That Determine Everything</div>
+      <p class="card-text">Research on audience attention shows that the first 30 seconds of any speech determines the audience's initial perception of the speaker's credibility — and that initial perception is extremely resistant to later revision. The most effective opening hooks:<br/><br/><strong style="color:var(--cream)">A counterintuitive statement:</strong> "The biggest mistake I see in [topic] is the one everyone calls best practice."<br/><strong style="color:var(--cream)">A specific question:</strong> Not "has anyone ever wondered about X" — but "how many of you have been in a meeting where [specific painful scenario]?"<br/><strong style="color:var(--cream)">A story's opening line:</strong> "It was 3AM, the product was already deployed, and the server was down."<br/><strong style="color:var(--cream)">A striking number:</strong> "In 2025, 38% of high earners reported saving less than 5% of their income."<br/><br/>Never open with "Good morning, my name is..." — it is the weakest possible start.</p>
+      <span class="badge ba">Most Remembered Moment</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ADVANCED 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 6c-2-1.5-5-2-8-1.5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-13c-3-.5-6 0-8 1.5z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M12 6v13" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Story Structure — Why 22× Memory Advantage is Real</div>
+      <p class="card-text">Stanford researcher Jennifer Aaker established that stories are 22 times more memorable than facts alone. The mechanism: stories activate the whole brain — including sensory cortices, motor cortices, and emotional processing areas — producing a much richer memory trace than abstract information. The simplest effective story structure for professional speaking:<br/><br/><strong style="color:var(--cream)">Situation:</strong> Set the scene in one sentence.<br/><strong style="color:var(--cream)">Complication:</strong> What went wrong or what challenge appeared?<br/><strong style="color:var(--cream)">Resolution:</strong> What happened? What was learned?<br/><strong style="color:var(--cream)">Relevance:</strong> "And here's why that matters for what we're discussing."<br/><br/>The entire story should take 60–90 seconds. Brevity is the discipline that makes stories powerful.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 Story vs Fact</div>
+        <p class="card-text">A speaker who presents three statistics and a speaker who presents one statistic followed by one story about a real person who experienced that statistic will be judged equally on logic — but the story-teller will be remembered twice as long and rated as more likeable, more credible, and more influential. The data is not the problem. The delivery vehicle is the problem.</p>
+      </div>
+      <span class="badge ba">22× Memory</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ADVANCED 03</div>
+      <span class="card-icon">🏁</span>
+      <div class="card-title">The Closing — The Last Thing They Hear Is the First Thing They Remember</div>
+      <p class="card-text">The primacy and recency effect: audiences remember best what they hear first and last. Your closing is therefore the second most important moment in any speech (after the opening hook). Rules for a great closing:<br/><br/><strong style="color:var(--cream)">Never end with "That's it" or "Any questions?"</strong> Both signal the speech ran out of ideas.<br/><strong style="color:var(--cream)">Return to your opening:</strong> Reference the hook from your opening — creates a satisfying structural close.<br/><strong style="color:var(--cream)">One-sentence summary:</strong> The single sentence that captures the entire speech.<br/><strong style="color:var(--cream)">A call to action or forward-looking statement:</strong> Tell them what you want them to do or think differently about.<br/><strong style="color:var(--cream)">Then stop:</strong> Ending decisively is itself a signal of authority. The speaker who keeps talking past the close undermines everything before it.</p>
+      <span class="badge ba">The Last Impression</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ADVANCED 04</div>
+      <span class="card-icon">🌡️</span>
+      <div class="card-title">Reframe Anxiety as Excitement — The Harvard Finding</div>
+      <p class="card-text">Harvard Business School's Alison Wood Brooks: participants who said "I am excited" before a public speaking task performed measurably better than those who tried to calm down — because anxiety and excitement share the same physiological signature (elevated heart rate, adrenaline, heightened attention) but opposite cognitive frames. Trying to calm down suppresses arousal that actually enhances performance. Reframing it as excitement maintains the arousal while changing its direction from threat to opportunity. The phrase to use before any speech: "I'm excited about this." Say it aloud. Say it to yourself. It changes the brain's interpretation of the physiological signal — without changing the signal itself.</p>
+      <span class="badge ba">Harvard Research</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 3 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"Stories are remembered up to 22 times more than facts alone. <em>The most compelling data in the world lands harder inside a story than beside one.</em>"</p>
+  <p class="quote-attr">— Jennifer Aaker · Stanford Graduate School of Business · Research on Narrative & Memory</p>
+</div>
+
+<!-- ─── 08: MASTER CHEATSHEET ─── -->
+<section class="section" id="cheatsheet">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 08</div>
+    <div class="s-meta">
+      <div class="s-cat">Quick Reference</div>
+      <h2 class="s-title">The Master<br/><span>Cheatsheet</span></h2>
+      <p class="s-desc">Every principle from this guide — one quick-reference table. The complete operating system for speaking without freezing.</p>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Principle</th><th>The Action</th><th>Chapter</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td class="num-cell">01</td><td class="name-cell">Reframe the Fear</td><td>Anxiety = evolutionary amygdala response. It isn't weakness. It's biology. The goal is management — not elimination.</td><td>Fear</td><td><span class="badge ba">Mental Model</span></td></tr>
+        <tr><td class="num-cell">02</td><td class="name-cell">Physiological Sigh</td><td>Double inhale through nose + long exhale through mouth. 1–3 times before speaking. Fastest nervous system reset available.</td><td>Fear</td><td><span class="badge ba">Before Every Speech</span></td></tr>
+        <tr><td class="num-cell">03</td><td class="name-cell">Power Posture</td><td>2 minutes of high-power body posture before speaking. Arms wide, chest open, feet planted. Reduces cortisol measurably.</td><td>Fear</td><td><span class="badge ba">2 Min Before</span></td></tr>
+        <tr><td class="num-cell">04</td><td class="name-cell">"I Am Excited"</td><td>Say it aloud before speaking. Harvard research: reframing anxiety as excitement produces measurably better performance.</td><td>Fear</td><td><span class="badge ba">Always</span></td></tr>
+        <tr><td class="num-cell">05</td><td class="name-cell">Exposure Is the Cure</td><td>Repeated speaking practice in front of real audiences is the only permanent solution to public speaking anxiety.</td><td>Fear</td><td><span class="badge ba">Long-Term</span></td></tr>
+        <tr><td class="num-cell">06</td><td class="name-cell">PREP — Point</td><td>Lead with your answer, not the journey to it. One sentence. Direct. Authoritative. No build-up first.</td><td>PREP</td><td><span class="badge ba">Every Response</span></td></tr>
+        <tr><td class="num-cell">07</td><td class="name-cell">PREP — Reason</td><td>Three supporting reasons. Three is optimal: convincing enough to persuade, few enough to be remembered.</td><td>PREP</td><td><span class="badge ba">Every Response</span></td></tr>
+        <tr><td class="num-cell">08</td><td class="name-cell">PREP — Example</td><td>One concrete story or illustration. Stories are 22× more memorable than facts. Never skip this step.</td><td>PREP</td><td><span class="badge ba">Every Response</span></td></tr>
+        <tr><td class="num-cell">09</td><td class="name-cell">PREP — Point (Again)</td><td>Restate your conclusion. Vary the wording slightly. End decisively. Don't trail off.</td><td>PREP</td><td><span class="badge ba">Every Response</span></td></tr>
+        <tr><td class="num-cell">10</td><td class="name-cell">Stall Legitimately</td><td>"That's an important question — let me address it directly." Buys 3–5 seconds of thinking time. Reads as authority.</td><td>PREP</td><td><span class="badge ba">Q&A Tool</span></td></tr>
+        <tr><td class="num-cell">11</td><td class="name-cell">Slow Down Pace</td><td>Slow down 10–15% from your nervous instinct. Double slow for your most important sentence. Audience never finds it too slow.</td><td>Voice</td><td><span class="badge ba">Every Speech</span></td></tr>
+        <tr><td class="num-cell">12</td><td class="name-cell">Own the Pause</td><td>After every major point — 2–3 second pause. Never fill silence with "um." The pause IS the punctuation.</td><td>Voice</td><td><span class="badge ba">Non-Negotiable</span></td></tr>
+        <tr><td class="num-cell">13</td><td class="name-cell">Drop Pitch at End</td><td>Statements end with falling pitch (authority). Questions end with rising pitch. Eliminate upspeak entirely.</td><td>Voice</td><td><span class="badge ba">Voice Rule</span></td></tr>
+        <tr><td class="num-cell">14</td><td class="name-cell">Project to the Back Row</td><td>Always. Even small rooms. The front row won't find it too loud. The back row will finally hear you.</td><td>Voice</td><td><span class="badge ba">Every Speech</span></td></tr>
+        <tr><td class="num-cell">15</td><td class="name-cell">Eliminate Fillers</td><td>Replace every "um" and "uh" with silence. Record yourself. Count the fillers. Awareness produces elimination.</td><td>Voice</td><td><span class="badge bc">Ongoing Work</span></td></tr>
+        <tr><td class="num-cell">16</td><td class="name-cell">Blank Step 1 — Pause</td><td>Stop speaking. Don't panic-speak. A pause reads as thought. Circular nervous talking reveals the blank.</td><td>Blank Mind</td><td><span class="badge ba">Step One</span></td></tr>
+        <tr><td class="num-cell">17</td><td class="name-cell">Blank Step 2 — Anchor</td><td>Return to last clear anchor point. Restate it. Buys time while the thread reconnects. Audience hears emphasis.</td><td>Blank Mind</td><td><span class="badge ba">Step Two</span></td></tr>
+        <tr><td class="num-cell">18</td><td class="name-cell">Blank Step 3 — Ask</td><td>Turn blank into engagement: ask the audience a question. Buys 60–90 seconds. Nobody suspects recovery.</td><td>Blank Mind</td><td><span class="badge ba">Step Three</span></td></tr>
+        <tr><td class="num-cell">19</td><td class="name-cell">3-Point Card</td><td">Reduce your entire speech to 3 numbered anchor points. One card. If you blank — glance, recover, continue.</td><td>Blank Mind</td><td><span class="badge ba">Preparation</span></td></tr>
+        <tr><td class="num-cell">20</td><td class="name-cell">3-Second Eye Contact Rule</td><td>One person, 3 full seconds, one complete thought, then move. Creates individual connection across a crowd.</td><td>Audience</td><td><span class="badge ba">Every Speech</span></td></tr>
+        <tr><td class="num-cell">21</td><td class="name-cell">Read Engagement Signals</td><td>Nodding/leaning = go deeper. Furrowed brows = rephrase now. Phone checking = change energy immediately.</td><td>Audience</td><td><span class="badge ba">Real-Time</span></td></tr>
+        <tr><td class="num-cell">22</td><td class="name-cell">Plant Your Feet</td><td>No swaying. No weight-shifting. Plant feet, own the space. Physical stillness communicates authority.</td><td>Audience</td><td><span class="badge ba">Every Speech</span></td></tr>
+        <tr><td class="num-cell">23</td><td class="name-cell">Speak Aloud Daily</td><td>5 minutes of out-loud PREP practice on random topics every morning. The gap between thinking and saying closes rapidly.</td><td>Practice</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">24</td><td class="name-cell">The Practice Ladder</td><td>Solo → 1 person → 3–5 people → Toastmasters → Professional stakes. Escalate systematically. Each rung builds the next.</td><td>Practice</td><td><span class="badge ba">The System</span></td></tr>
+        <tr><td class="num-cell">25</td><td class="name-cell">Join Toastmasters</td><td>Real audiences, structured feedback, judgment-free environment. The single highest-leverage public speaking improvement environment.</td><td>Practice</td><td><span class="badge ba">This Month</span></td></tr>
+        <tr><td class="num-cell">26</td><td class="name-cell">Hook First 30 Seconds</td><td>Never open with "Good morning, my name is." Open with a counterintuitive statement, a question, a story, or a number.</td><td>Advanced</td><td><span class="badge ba">Every Speech</span></td></tr>
+        <tr><td class="num-cell">27</td><td class="name-cell">One Story Per Speech</td><td>60–90 seconds: Situation → Complication → Resolution → Relevance. Stories are 22× more memorable than facts.</td><td>Advanced</td><td><span class="badge ba">Every Speech</span></td></tr>
+        <tr><td class="num-cell">28</td><td class="name-cell">Close Decisively</td><td>Return to opening. One-sentence summary. Call to action. Then stop. The speaker who keeps going past the close undoes everything.</td><td>Advanced</td><td><span class="badge ba">Every Speech</span></td></tr>
+        <tr><td class="num-cell">29</td><td class="name-cell">Structure Not Script</td><td>Know your 3 anchor points perfectly. Know your opening and closing perfectly. Let everything between be fluent but flexible.</td><td>Advanced</td><td><span class="badge ba">Preparation Rule</span></td></tr>
+        <tr><td class="num-cell">30</td><td class="name-cell">The Ultimate Rule</td><td>Every great speaker was once a terrible speaker. The difference is they kept speaking. Exposure + reflection + repetition = mastery.</td><td>All</td><td><span class="badge ba">Philosophy</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</section>
+
+<footer>
+  <div class="footer-logo">Speak in Public Without Freezing</div>
+  <p class="footer-sub">Social Skills · Public Speaking · Performance Science · 2025–2026 Edition</p>
+  <p class="footer-sub" style="color:var(--muted);font-size:13px;margin-top:8px">8 Complete Chapters · 30 Core Principles · Research from Evolve2, Mindlab Neuroscience, Klarity Health Nov 2025, Frontiers in Human Neuroscience 2025, Toastmasters International, Harvard Business School (Alison Wood Brooks), Stanford (Jennifer Aaker) & Andrew Huberman</p>
+  <p class="footer-tiny">Research compiled May 2026 · Inspired by Parallelogram · Built for everyone who has something worth saying and has been afraid to say it</p>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:rgba(200,148,58,.28);margin-top:36px">"According to most studies, people's number one fear is public speaking. Number two is death. This means to the average person, if you go to a funeral, you're better off in the casket than doing the eulogy." — Jerry Seinfeld</p>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const st=document.documentElement.scrollTop;
+  const sh=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('prog').style.width=(st/sh*100)+'%';
+});
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}});
+},{threshold:0.07});
+document.querySelectorAll('.card,.col-card,.s-stat,.prep-block,.voice-card,.blank-step,.practice-rung').forEach(el=>{
+  el.style.opacity='0';el.style.transform='translateY(18px)';
+  el.style.transition='opacity .5s ease, transform .5s ease';
+  obs.observe(el);
+});
+</script>
+</body>
+</html>

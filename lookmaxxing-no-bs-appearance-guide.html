@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Lookmaxxing: The No-BS Appearance Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07080a;--surface:#0e1014;--card:#13151a;--card2:#181b22;
+  --gold:#c8943a;--gold2:#e8b84b;--golddim:rgba(200,148,58,.13);
+  --cream:#f0e8d5;--muted:#5c5f68;--light:#9a9da8;
+  --border:rgba(200,148,58,.18);--rust:#b84532;
+  --teal:#2c7a72;--rose:#8c3a5a;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--cream);overflow-x:hidden;line-height:1.6}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.5}
+#prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--rose),var(--gold),var(--gold2));width:0%;z-index:2000;transition:width .08s}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:1500;display:flex;align-items:center;justify-content:space-between;padding:14px 48px;background:rgba(7,8,10,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(200,148,58,.1)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
+.nav-links{display:flex;gap:20px;list-style:none}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+@media(max-width:768px){.nav-links{display:none}.hero,.section,.toc-wrap,.quote-block,footer{padding-left:22px!important;padding-right:22px!important}nav{padding:14px 22px}}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr auto;align-items:center;gap:48px;padding:120px 64px 80px;position:relative;overflow:hidden;background:var(--bg)}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.hero-portrait{display:none}}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 75% 55% at 92% 8%,rgba(140,58,90,.14) 0%,transparent 55%),radial-gradient(ellipse 55% 70% at 5% 90%,rgba(200,148,58,.1) 0%,transparent 60%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;opacity:.022;background-image:linear-gradient(rgba(200,148,58,1) 1px,transparent 1px),linear-gradient(90deg,rgba(200,148,58,1) 1px,transparent 1px);background-size:68px 68px}
+.hero-inner{position:relative;max-width:680px}
+.hero-badge{display:inline-flex;align-items:center;background:rgba(140,58,90,.15);border:1px solid rgba(140,58,90,.4);padding:5px 16px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#d47898;margin-bottom:22px;opacity:0;animation:fadeup .7s .15s forwards}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:26px;display:flex;align-items:center;gap:14px;opacity:0;animation:fadeup .7s .2s forwards}
+.hero-tag::before{content:'';width:44px;height:1px;background:var(--gold);flex-shrink:0}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(46px,7.5vw,108px);font-weight:700;line-height:.88;letter-spacing:-4px;margin-bottom:10px;opacity:0;animation:fadeup .8s .4s forwards}
+.hero h1 span{color:var(--gold);font-style:italic}
+.hero h1 .sub{display:block;color:rgba(240,232,213,.2);font-size:clamp(20px,3.2vw,46px);font-weight:400;font-style:italic;letter-spacing:-1px;margin-top:8px}
+.hero-desc{font-size:clamp(14px,1.7vw,17px);color:var(--light);max-width:520px;margin:30px 0 44px;font-weight:300;line-height:1.78;opacity:0;animation:fadeup .8s .6s forwards}
+.hero-stats{display:flex;gap:0;border:1px solid var(--border);width:fit-content;opacity:0;animation:fadeup .8s .8s forwards;flex-wrap:wrap}
+.hstat{padding:16px 28px;border-right:1px solid var(--border);text-align:center}
+.hstat:last-child{border-right:none}
+.hstat-n{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.hstat-l{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-top:4px}
+.scroll-hint{position:absolute;bottom:40px;left:64px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:10px;animation:pulse 2.5s infinite}
+.scroll-hint::before{content:'';width:1px;height:38px;background:var(--gold);opacity:.35}
+
+/* ── HERO PORTRAIT ── */
+.hero-portrait{position:relative;flex-shrink:0;opacity:0;animation:fadeup .9s 1s forwards}
+.hero-portrait svg{display:block;filter:drop-shadow(0 0 60px rgba(200,148,58,.15))}
+.portrait-frame{position:absolute;inset:-12px;border:1px solid rgba(200,148,58,.12);pointer-events:none}
+.portrait-corner{position:absolute;width:20px;height:20px;border-color:var(--gold);border-style:solid;opacity:.5}
+.portrait-corner.tl{top:-2px;left:-2px;border-width:2px 0 0 2px}
+.portrait-corner.tr{top:-2px;right:-2px;border-width:2px 2px 0 0}
+.portrait-corner.bl{bottom:-2px;left:-2px;border-width:0 0 2px 2px}
+.portrait-corner.br{bottom:-2px;right:-2px;border-width:0 2px 2px 0}
+
+@keyframes fadeup{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+@keyframes floatface{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+/* ── TOC ── */
+.toc-wrap{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:56px 64px}
+.toc-inner{max-width:1100px;margin:0 auto}
+.toc-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:36px;display:flex;align-items:center;gap:12px}
+.toc-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px}
+.toc-item{background:var(--card);padding:18px 22px;display:flex;align-items:flex-start;gap:14px;cursor:pointer;transition:background .2s,border-color .2s;border:1px solid transparent;text-decoration:none}
+.toc-item:hover{background:var(--card2);border-color:var(--border)}
+.toc-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);opacity:.55;flex-shrink:0;min-width:26px;margin-top:2px}
+.toc-name{font-size:13.5px;color:var(--light);font-weight:400;transition:color .2s;line-height:1.4}
+.toc-item:hover .toc-name{color:var(--cream)}
+
+/* ── FACE BANNER ── (between sections) */
+.face-banner{background:var(--bg);padding:0;display:grid;grid-template-columns:repeat(5,1fr);gap:2px;overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.face-panel{position:relative;background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 16px;gap:14px;overflow:hidden;transition:background .25s}
+.face-panel:hover{background:var(--card2)}
+.face-panel svg{display:block}
+.face-panel-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;text-align:center}
+.face-panel-sub{font-size:11px;color:var(--muted);text-align:center;font-weight:300;line-height:1.4}
+@media(max-width:700px){.face-banner{grid-template-columns:repeat(3,1fr)}.face-panel:nth-child(n+4){display:none}}
+
+/* ── SECTIONS ── */
+.section{padding:96px 64px;position:relative}
+.section-alt{background:var(--surface)}
+.s-inner{max-width:1100px;margin:0 auto}
+
+/* ── SECTION HEADER WITH FACE ── */
+.s-head-visual{display:grid;grid-template-columns:1fr auto;gap:48px;align-items:start;margin-bottom:60px;padding-bottom:44px;border-bottom:1px solid var(--border)}
+@media(max-width:768px){.s-head-visual{grid-template-columns:1fr}.s-head-visual .face-aside{display:none}}
+.s-head{display:grid;grid-template-columns:90px 1fr;gap:32px;align-items:start}
+.s-num{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;padding-top:8px}
+.s-meta{display:flex;flex-direction:column;gap:10px}
+.s-cat{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:3px;color:var(--rust);text-transform:uppercase}
+.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,60px);font-weight:700;line-height:.92;letter-spacing:-1.5px;color:var(--cream)}
+.s-title span{color:var(--gold);font-style:italic}
+.s-desc{font-size:15.5px;color:var(--light);max-width:620px;font-weight:300;line-height:1.78;margin-top:6px}
+
+/* FACE ASIDE */
+.face-aside{display:flex;flex-direction:column;align-items:center;gap:12px;flex-shrink:0}
+.face-aside-label{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2.5px;color:var(--muted);text-transform:uppercase;text-align:center}
+.face-frame{position:relative;padding:3px;background:linear-gradient(135deg,var(--gold),transparent,var(--gold));border-radius:0}
+.face-frame-inner{background:var(--card);padding:4px}
+
+@media(max-width:600px){.s-head{grid-template-columns:1fr;gap:14px}}
+
+/* ── CARDS ── */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:2px}
+@media(max-width:600px){.cards{grid-template-columns:1fr}}
+.card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .25s,background .25s;position:relative;overflow:hidden}
+.card:hover{border-color:var(--border);background:var(--card2)}
+.card::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:linear-gradient(180deg,var(--gold),var(--rose));transition:height .35s}
+.card:hover::before{height:100%}
+.card-num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);opacity:.45;margin-bottom:14px}
+.card-icon{font-size:26px;margin-bottom:11px;display:block}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:700;color:var(--cream);letter-spacing:-.4px;margin-bottom:11px;line-height:1.15}
+.card-sec{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin:16px 0 7px}
+.card-text{font-size:13.5px;color:var(--light);line-height:1.72;font-weight:300}
+.psych{background:rgba(200,148,58,.06);border-left:2px solid var(--gold);padding:15px 18px;margin-top:18px}
+.psych .card-sec{margin-top:0}
+.scibox{background:rgba(140,58,90,.07);border-left:2px solid rgba(140,58,90,.5);padding:15px 18px;margin-top:14px}
+.scibox .card-sec{color:#d47898}
+.badge{display:inline-flex;align-items:center;padding:4px 11px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;margin-top:14px}
+.ba{background:rgba(200,148,58,.11);color:var(--gold);border:1px solid var(--border)}
+.bb{background:rgba(44,122,114,.12);color:#4aaa9e;border:1px solid rgba(44,122,114,.3)}
+.bc{background:rgba(184,69,50,.11);color:#d46040;border:1px solid rgba(184,69,50,.28)}
+.bd{background:rgba(140,58,90,.12);color:#d47898;border:1px solid rgba(140,58,90,.3)}
+
+/* ── QUOTE ── */
+.quote-block{background:var(--surface);padding:72px 64px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center}
+.quote-text{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3.2vw,36px);font-weight:600;font-style:italic;color:var(--cream);max-width:880px;margin:0 auto;line-height:1.4}
+.quote-text em{color:var(--gold)}
+.quote-attr{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:24px}
+
+/* ── STAT ROW ── */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:2px;margin:44px 0}
+.s-stat{background:var(--card);padding:26px 22px;text-align:center;border:1px solid transparent;transition:border-color .2s}
+.s-stat:hover{border-color:var(--border)}
+.s-stat-n{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.s-stat-l{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-top:5px}
+
+/* ── TWO COL ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}}
+.col-card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .2s}
+.col-card:hover{border-color:var(--border)}
+.col-icon{font-size:30px;margin-bottom:14px;display:block}
+.col-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:11px;letter-spacing:-.4px}
+.col-text{font-size:13.5px;color:var(--light);line-height:1.75;font-weight:300}
+.col-text strong{color:var(--cream);font-weight:500}
+
+/* ── PROFILE CARDS ── */
+.profile-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:2px;margin:40px 0}
+.profile-card{background:var(--card);padding:28px 20px;border:1px solid transparent;transition:border-color .25s,background .25s;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
+.profile-card:hover{border-color:var(--border);background:var(--card2)}
+.profile-card svg{display:block;filter:drop-shadow(0 4px 20px rgba(200,148,58,.1))}
+.profile-card-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--cream);letter-spacing:-.3px}
+.profile-card-role{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;color:var(--gold);text-transform:uppercase}
+.profile-card-text{font-size:12.5px;color:var(--light);line-height:1.65;font-weight:300}
+.profile-card-badge{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;border-top:1px solid var(--border);padding-top:12px;width:100%}
+
+/* ── SKIN ZONE VISUAL ── */
+.skin-visual-wrap{display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:center;margin:36px 0;background:var(--card);padding:36px;border:1px solid var(--border)}
+@media(max-width:640px){.skin-visual-wrap{grid-template-columns:1fr}.skin-face-svg{display:none}}
+.skin-zones{display:flex;flex-direction:column;gap:12px}
+.skin-zone{display:flex;align-items:center;gap:14px;padding:12px 16px;background:var(--card2);border:1px solid transparent;transition:border-color .2s}
+.skin-zone:hover{border-color:var(--border)}
+.skin-zone-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.skin-zone-name{font-weight:600;color:var(--cream);font-size:13.5px;min-width:120px}
+.skin-zone-tip{font-size:12.5px;color:var(--light);line-height:1.5;font-weight:300}
+
+/* ── SKINCARE STEPS ── */
+.skin-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin:36px 0}
+@media(max-width:640px){.skin-steps{grid-template-columns:1fr}}
+.skin-step{background:var(--card);padding:30px;border:1px solid transparent;transition:border-color .2s,background .2s;position:relative;overflow:hidden}
+.skin-step:hover{border-color:var(--border);background:var(--card2)}
+.skin-num{font-family:'Cormorant Garamond',serif;font-size:80px;font-weight:700;color:var(--gold);opacity:.08;position:absolute;top:8px;right:14px;line-height:1}
+.skin-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+.skin-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--cream);margin-bottom:12px}
+.skin-text{font-size:13.5px;color:var(--light);line-height:1.7;font-weight:300}
+.skin-products{margin-top:14px;display:flex;flex-direction:column;gap:7px}
+.skin-p{font-size:12.5px;color:var(--light);padding:8px 12px;background:rgba(200,148,58,.05);border-left:2px solid rgba(200,148,58,.3);line-height:1.5}
+.skin-p strong{color:var(--cream);font-weight:500}
+
+/* ── POSTURE COMPARE ── */
+.posture-compare{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:36px 0}
+@media(max-width:640px){.posture-compare{grid-template-columns:1fr}}
+.posture-side{background:var(--card);padding:36px;display:flex;flex-direction:column;align-items:center;gap:20px;border:1px solid transparent;transition:border-color .2s}
+.posture-side:hover{border-color:var(--border)}
+.posture-side-label{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:3px;text-transform:uppercase}
+.posture-side.bad .posture-side-label{color:#d46040}
+.posture-side.good .posture-side-label{color:#4aaa9e}
+.posture-side-text{font-size:13px;color:var(--light);line-height:1.65;font-weight:300;text-align:center}
+
+/* ── POSTURE 10-DAY ── */
+.posture-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:2px;margin:36px 0}
+.p-day{background:var(--card);padding:20px 16px;text-align:center;border:1px solid transparent;transition:border-color .2s}
+.p-day:hover{border-color:var(--border)}
+.p-day-num{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.p-day-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-top:4px}
+.p-day-action{font-size:12px;color:var(--light);margin-top:8px;line-height:1.45;font-weight:300}
+
+/* ── WARDROBE PIECES ── */
+.wardrobe-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:2px;margin:36px 0}
+.w-piece{background:var(--card);padding:28px;border:1px solid transparent;transition:border-color .2s,background .2s;position:relative}
+.w-piece:hover{border-color:var(--border);background:var(--card2)}
+.w-num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);opacity:.45;margin-bottom:10px}
+.w-icon{font-size:24px;margin-bottom:10px;display:block}
+.w-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:10px;letter-spacing:-.3px}
+.w-text{font-size:13.5px;color:var(--light);line-height:1.7;font-weight:300}
+.w-tip{background:rgba(200,148,58,.05);border-left:2px solid rgba(200,148,58,.3);padding:10px 14px;margin-top:14px;font-size:12.5px;color:var(--light);line-height:1.55}
+.w-tip strong{color:var(--cream);font-weight:500}
+
+/* ── GROOMING STEPS ── */
+.groom-list{display:flex;flex-direction:column;gap:2px;margin:36px 0}
+.groom-row{display:grid;grid-template-columns:64px 1fr;gap:0;background:var(--card);border:1px solid transparent;transition:border-color .2s}
+.groom-row:hover{border-color:var(--border)}
+.groom-icon{background:var(--golddim);display:flex;align-items:center;justify-content:center;font-size:22px}
+.groom-body{padding:20px 26px}
+.groom-title{font-weight:600;color:var(--cream);font-size:15px;margin-bottom:5px}
+.groom-text{font-size:13px;color:var(--light);line-height:1.65;font-weight:300}
+
+/* ── TRANSFORMATION STRIP ── */
+.transform-strip{background:var(--card);border:1px solid var(--border);padding:0;overflow:hidden;margin:40px 0}
+.transform-strip-inner{display:flex;align-items:stretch}
+.ts-label{background:var(--golddim);padding:20px 28px;display:flex;align-items:center;writing-mode:vertical-rl;transform:rotate(180deg);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;flex-shrink:0;border-right:1px solid var(--border)}
+.ts-faces{display:flex;flex:1;overflow:hidden}
+.ts-face{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 16px;border-right:1px solid rgba(200,148,58,.08);gap:10px}
+.ts-face:last-child{border-right:none}
+.ts-face-title{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--gold);text-transform:uppercase}
+.ts-face-desc{font-size:11.5px;color:var(--muted);text-align:center;line-height:1.4;font-weight:300}
+@media(max-width:640px){.transform-strip-inner{flex-direction:column}.ts-label{writing-mode:horizontal-tb;transform:none;border-right:none;border-bottom:1px solid var(--border)}.ts-faces{flex-wrap:wrap}.ts-face{min-width:50%}}
+
+/* ── ALERT / TIP ── */
+.alert{background:rgba(184,69,50,.07);border:1px solid rgba(184,69,50,.24);padding:22px 26px;margin:28px 0}
+.alert-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:var(--rust);text-transform:uppercase;margin-bottom:9px}
+.alert-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.alert-text strong{color:var(--cream);font-weight:500}
+.tip{background:rgba(44,122,114,.07);border:1px solid rgba(44,122,114,.24);padding:22px 26px;margin:28px 0}
+.tip-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:#4aaa9e;text-transform:uppercase;margin-bottom:9px}
+.tip-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.tip-text strong{color:var(--cream);font-weight:500}
+
+/* ── TABLE ── */
+.table-wrap{overflow-x:auto;margin-top:40px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--card2);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);padding:13px 16px;text-align:left;border-bottom:1px solid var(--border)}
+tbody tr{border-bottom:1px solid rgba(200,148,58,.07);transition:background .15s}
+tbody tr:hover{background:var(--card)}
+tbody td{padding:13px 16px;color:var(--light);vertical-align:top;line-height:1.5}
+.num-cell{font-family:'JetBrains Mono',monospace;color:var(--gold);opacity:.55;font-size:11px}
+.name-cell{font-weight:500;color:var(--cream)}
+
+/* ── FOOTER ── */
+footer{background:var(--bg);border-top:1px solid var(--border);padding:56px 64px 72px;text-align:center}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;letter-spacing:2px;color:var(--gold);margin-bottom:10px}
+.footer-sub{font-size:13.5px;color:var(--muted);margin-bottom:6px}
+.footer-tiny{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(92,95,104,.45);text-transform:uppercase;margin-top:26px}
+
+.pg-hero-art{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:.55;z-index:0}
+.pg-hero-art svg{width:100%;height:100%;display:block}
+[class*="icon"] svg.pg-icon{width:1em;height:1em;display:inline-block;vertical-align:-0.15em}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav>
+  <div class="nav-logo">Lookmaxxing</div>
+  <ul class="nav-links">
+    <li><a href="#halo">Halo Effect</a></li>
+    <li><a href="#skincare">Skincare</a></li>
+    <li><a href="#posture">Posture</a></li>
+    <li><a href="#wardrobe">Wardrobe</a></li>
+    <li><a href="#grooming">Grooming</a></li>
+    <li><a href="#fitness">Fitness</a></li>
+    <li><a href="#mindset">Mindset</a></li>
+    <li><a href="#cheatsheet">Cheatsheet</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero"><div class="pg-hero-art" aria-hidden="true"><svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><path d="M340.7 211.0 A194.8 194.8 0 0 1 19.0 295.3" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M714.5 160.0 A170.1 170.1 0 0 1 740.3 -166.3" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><line x1="619.5" y1="111.3" x2="609.2" y2="43.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="399.7" y1="143.6" x2="384.6" y2="176.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="399.7" y1="143.6" x2="364.9" y2="125.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="829.8" y1="60.5" x2="785.5" y2="101.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="212.9" y1="26.1" x2="250.0" y2="78.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="117.9" y1="64.5" x2="115.4" y2="30.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="512.0" y1="82.0" x2="494.5" y2="91.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="26.6" y1="160.9" x2="94.3" y2="89.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="577.4" y1="26.9" x2="609.2" y2="43.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="785.5" y1="101.9" x2="805.9" y2="156.1" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="250.0" y1="78.7" x2="364.9" y2="125.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="705.5" y1="192.1" x2="805.9" y2="156.1" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="134.2" y1="143.5" x2="94.3" y2="89.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="117.9" y1="64.5" x2="134.2" y2="143.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="577.4" y1="26.9" x2="494.5" y2="91.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="364.9" y1="125.9" x2="384.6" y2="176.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="117.9" y1="64.5" x2="94.3" y2="89.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><circle cx="619.5" cy="111.3" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="399.7" cy="143.6" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="399.7" cy="143.6" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="829.8" cy="60.5" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="829.8" cy="60.5" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="212.9" cy="26.1" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="212.9" cy="26.1" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="117.9" cy="64.5" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="512.0" cy="82.0" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="115.4" cy="30.4" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="115.4" cy="30.4" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="26.6" cy="160.9" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="577.4" cy="26.9" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="577.4" cy="26.9" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="785.5" cy="101.9" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="785.5" cy="101.9" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="250.0" cy="78.7" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="705.5" cy="192.1" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="134.2" cy="143.5" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="609.2" cy="43.9" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="609.2" cy="43.9" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="494.5" cy="91.5" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="364.9" cy="125.9" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="384.6" cy="176.8" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="94.3" cy="89.9" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="805.9" cy="156.1" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="805.9" cy="156.1" r="2.2" fill="#e8b84b" opacity="0.85"/></svg></div>
+  <div class="hero-glow"></div><div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">Lifestyle · Appearance Science · Self-Improvement · 2025–26</div>
+    <div class="hero-tag">The Complete No-BS Appearance Research Guide · 2025–26</div>
+    <h1>Look<br/><span>Maxxing</span><span class="sub">The No-BS Guide</span></h1>
+    <p class="hero-desc">The science of looking your best — backed by psychology, dermatology, biomechanics, and real data. Not trends. Not filters. The fundamentals that actually compound over time.</p>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-n">$12</span><span class="hstat-l">Max/Month Skincare</span></div>
+      <div class="hstat"><span class="hstat-n">7sec</span><span class="hstat-l">Halo Effect Window</span></div>
+      <div class="hstat"><span class="hstat-n">10d</span><span class="hstat-l">Posture Correction</span></div>
+      <div class="hstat"><span class="hstat-n">5</span><span class="hstat-l">Wardrobe Pieces</span></div>
+    </div>
+  </div>
+
+  <!-- HERO PORTRAIT — Premium SVG Face Illustration -->
+  <div class="hero-portrait" style="animation:floatface 5s ease-in-out infinite 1.5s">
+    <div class="portrait-frame">
+      <div class="portrait-corner tl"></div>
+      <div class="portrait-corner tr"></div>
+      <div class="portrait-corner bl"></div>
+      <div class="portrait-corner br"></div>
+    </div>
+    <svg width="300" height="420" viewBox="0 0 300 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Background gradient -->
+      <defs>
+        <radialGradient id="bgGrad" cx="50%" cy="40%" r="55%">
+          <stop offset="0%" stop-color="#1a1410" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#07080a" stop-opacity="1"/>
+        </radialGradient>
+        <radialGradient id="skinGrad" cx="50%" cy="35%" r="60%">
+          <stop offset="0%" stop-color="#2a1f14"/>
+          <stop offset="100%" stop-color="#1a1208"/>
+        </radialGradient>
+        <linearGradient id="goldLine" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#c8943a"/>
+          <stop offset="50%" stop-color="#e8b84b"/>
+          <stop offset="100%" stop-color="#c8943a"/>
+        </linearGradient>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="3" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="softglow">
+          <feGaussianBlur stdDeviation="6" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      
+      <!-- BG -->
+      <rect width="300" height="420" fill="url(#bgGrad)"/>
+      
+      <!-- Subtle grid -->
+      <line x1="0" y1="140" x2="300" y2="140" stroke="#c8943a" stroke-opacity="0.06" stroke-width="0.5"/>
+      <line x1="0" y1="280" x2="300" y2="280" stroke="#c8943a" stroke-opacity="0.06" stroke-width="0.5"/>
+      <line x1="100" y1="0" x2="100" y2="420" stroke="#c8943a" stroke-opacity="0.06" stroke-width="0.5"/>
+      <line x1="200" y1="0" x2="200" y2="420" stroke="#c8943a" stroke-opacity="0.06" stroke-width="0.5"/>
+      
+      <!-- Neck / shoulders -->
+      <path d="M95 310 Q100 340 110 360 Q130 385 150 390 Q170 385 190 360 Q200 340 205 310" stroke="#c8943a" stroke-opacity="0.4" stroke-width="1.2" fill="none"/>
+      <!-- Shoulder lines -->
+      <path d="M40 380 Q70 355 95 330 Q110 318 120 310" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1" fill="none"/>
+      <path d="M260 380 Q230 355 205 330 Q190 318 180 310" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1" fill="none"/>
+      <!-- Collar / clothing hint -->
+      <path d="M60 420 Q90 370 120 345 Q135 337 150 335 Q165 337 180 345 Q210 370 240 420" stroke="#c8943a" stroke-opacity="0.2" stroke-width="1" fill="none"/>
+      
+      <!-- Head shape — refined oval -->
+      <ellipse cx="150" cy="190" rx="85" ry="108" fill="url(#skinGrad)" stroke="#c8943a" stroke-opacity="0.25" stroke-width="1"/>
+      
+      <!-- Jaw definition -->
+      <path d="M95 240 Q100 280 115 300 Q130 318 150 322 Q170 318 185 300 Q200 280 205 240" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1" fill="none"/>
+      
+      <!-- Cheekbone highlights -->
+      <path d="M82 190 Q88 185 96 188" stroke="#c8943a" stroke-opacity="0.45" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M218 190 Q212 185 204 188" stroke="#c8943a" stroke-opacity="0.45" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      
+      <!-- Forehead plane -->
+      <path d="M110 130 Q150 118 190 130" stroke="#c8943a" stroke-opacity="0.15" stroke-width="1" fill="none"/>
+      
+      <!-- Hair — swept back, clean, editorial -->
+      <path d="M65 160 Q62 130 68 105 Q78 75 100 60 Q125 44 150 42 Q175 44 200 60 Q222 75 232 105 Q238 130 235 160" fill="#0d0b09" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1.2"/>
+      <!-- Hair texture lines -->
+      <path d="M72 155 Q80 120 100 95 Q120 74 150 70" stroke="#c8943a" stroke-opacity="0.2" stroke-width="0.8" fill="none"/>
+      <path d="M228 155 Q220 120 200 95 Q180 74 150 70" stroke="#c8943a" stroke-opacity="0.2" stroke-width="0.8" fill="none"/>
+      <path d="M90 78 Q115 62 150 58 Q185 62 210 78" stroke="#c8943a" stroke-opacity="0.15" stroke-width="0.8" fill="none"/>
+      
+      <!-- EYEBROWS — strong, defined -->
+      <path d="M102 158 Q118 150 136 152" stroke="#c8943a" stroke-opacity="0.8" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <path d="M164 152 Q182 150 198 158" stroke="#c8943a" stroke-opacity="0.8" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      
+      <!-- EYES — detailed, elegant -->
+      <!-- Left eye -->
+      <ellipse cx="119" cy="176" rx="18" ry="10" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.6" stroke-width="1.2"/>
+      <circle cx="119" cy="176" r="7" fill="#1a0e06"/>
+      <circle cx="119" cy="176" r="4.5" fill="#0a0705"/>
+      <!-- Eye highlight -->
+      <circle cx="122" cy="173" r="1.8" fill="#c8943a" opacity="0.7" filter="url(#glow)"/>
+      <circle cx="116" cy="179" r="0.8" fill="#e8b84b" opacity="0.3"/>
+      <!-- Upper lid line -->
+      <path d="M101 172 Q119 162 137 172" stroke="#c8943a" stroke-opacity="0.7" stroke-width="1.2" fill="none"/>
+      <!-- Lower lid -->
+      <path d="M103 180 Q119 186 135 180" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.8" fill="none"/>
+      <!-- Lash hints -->
+      <line x1="101" y1="172" x2="99" y2="169" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1"/>
+      <line x1="110" y1="166" x2="109" y2="162" stroke="#c8943a" stroke-opacity="0.4" stroke-width="0.9"/>
+      <line x1="119" y1="164" x2="119" y2="160" stroke="#c8943a" stroke-opacity="0.4" stroke-width="0.9"/>
+      <line x1="128" y1="166" x2="129" y2="162" stroke="#c8943a" stroke-opacity="0.4" stroke-width="0.9"/>
+      <line x1="137" y1="172" x2="139" y2="169" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1"/>
+      
+      <!-- Right eye -->
+      <ellipse cx="181" cy="176" rx="18" ry="10" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.6" stroke-width="1.2"/>
+      <circle cx="181" cy="176" r="7" fill="#1a0e06"/>
+      <circle cx="181" cy="176" r="4.5" fill="#0a0705"/>
+      <circle cx="184" cy="173" r="1.8" fill="#c8943a" opacity="0.7" filter="url(#glow)"/>
+      <circle cx="178" cy="179" r="0.8" fill="#e8b84b" opacity="0.3"/>
+      <path d="M163 172 Q181 162 199 172" stroke="#c8943a" stroke-opacity="0.7" stroke-width="1.2" fill="none"/>
+      <path d="M165 180 Q181 186 197 180" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.8" fill="none"/>
+      <line x1="163" y1="172" x2="161" y2="169" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1"/>
+      <line x1="172" y1="166" x2="171" y2="162" stroke="#c8943a" stroke-opacity="0.4" stroke-width="0.9"/>
+      <line x1="181" y1="164" x2="181" y2="160" stroke="#c8943a" stroke-opacity="0.4" stroke-width="0.9"/>
+      <line x1="190" y1="166" x2="191" y2="162" stroke="#c8943a" stroke-opacity="0.4" stroke-width="0.9"/>
+      <line x1="199" y1="172" x2="201" y2="169" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1"/>
+      
+      <!-- NOSE — refined, architectural -->
+      <path d="M150 186 L148 220" stroke="#c8943a" stroke-opacity="0.25" stroke-width="0.8" fill="none"/>
+      <!-- Nose bridge shadow -->
+      <path d="M143 196 Q141 210 140 220" stroke="#c8943a" stroke-opacity="0.2" stroke-width="1" fill="none"/>
+      <!-- Nostrils -->
+      <path d="M138 222 Q142 228 148 226 Q154 224 156 228 Q162 230 162 222" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <!-- Nose tip -->
+      <ellipse cx="150" cy="222" rx="5" ry="3" fill="none" stroke="#c8943a" stroke-opacity="0.25" stroke-width="0.8"/>
+      
+      <!-- MOUTH — defined, elegant -->
+      <!-- Cupid's bow -->
+      <path d="M130 248 Q138 242 145 245 Q150 247 155 245 Q162 242 170 248" stroke="#c8943a" stroke-opacity="0.7" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <!-- Lower lip -->
+      <path d="M130 248 Q140 258 150 260 Q160 258 170 248" stroke="#c8943a" stroke-opacity="0.6" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <!-- Lip fill hint -->
+      <path d="M133 249 Q141 244 150 246 Q159 244 167 249 Q162 255 150 258 Q138 255 133 249Z" fill="#c8943a" opacity="0.07"/>
+      <!-- Philtrum -->
+      <path d="M145 235 Q148 240 150 243 Q152 240 155 235" stroke="#c8943a" stroke-opacity="0.2" stroke-width="0.8" fill="none"/>
+      
+      <!-- EAR HINTS -->
+      <path d="M65 185 Q60 190 62 200 Q64 208 70 210" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1" fill="none"/>
+      <path d="M235 185 Q240 190 238 200 Q236 208 230 210" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1" fill="none"/>
+      
+      <!-- Chin definition -->
+      <path d="M143 305 Q150 312 157 305" stroke="#c8943a" stroke-opacity="0.25" stroke-width="1" fill="none"/>
+      
+      <!-- Gold accent lines — editorial marks -->
+      <line x1="20" y1="30" x2="50" y2="30" stroke="#c8943a" stroke-opacity="0.4" stroke-width="1"/>
+      <line x1="20" y1="30" x2="20" y2="55" stroke="#c8943a" stroke-opacity="0.4" stroke-width="1"/>
+      <line x1="250" y1="390" x2="280" y2="390" stroke="#c8943a" stroke-opacity="0.4" stroke-width="1"/>
+      <line x1="280" y1="365" x2="280" y2="390" stroke="#c8943a" stroke-opacity="0.4" stroke-width="1"/>
+      
+      <!-- Measurement reference lines (editorial/fashion feel) -->
+      <line x1="22" y1="176" x2="64" y2="176" stroke="#c8943a" stroke-opacity="0.15" stroke-width="0.5" stroke-dasharray="3,3"/>
+      <line x1="236" y1="176" x2="278" y2="176" stroke="#c8943a" stroke-opacity="0.15" stroke-width="0.5" stroke-dasharray="3,3"/>
+      <line x1="22" y1="248" x2="64" y2="248" stroke="#c8943a" stroke-opacity="0.12" stroke-width="0.5" stroke-dasharray="3,3"/>
+      <line x1="236" y1="248" x2="278" y2="248" stroke="#c8943a" stroke-opacity="0.12" stroke-width="0.5" stroke-dasharray="3,3"/>
+      
+      <!-- Golden ratio spiral hint -->
+      <circle cx="150" cy="176" r="62" stroke="#c8943a" stroke-opacity="0.04" stroke-width="0.8" fill="none"/>
+      <circle cx="150" cy="176" r="38" stroke="#c8943a" stroke-opacity="0.04" stroke-width="0.8" fill="none"/>
+      
+      <!-- Aura glow behind face -->
+      <ellipse cx="150" cy="200" rx="70" ry="90" fill="#c8943a" opacity="0.03" filter="url(#softglow)"/>
+    </svg>
+  </div>
+  <div class="scroll-hint" style="position:static;margin-top:32px;opacity:.4">Scroll to begin</div>
+</section>
+
+<!-- ─── TOC ─── -->
+<div class="toc-wrap">
+  <div class="toc-inner">
+    <div class="toc-label">Everything Inside This Guide</div>
+    <div class="toc-grid">
+      <a href="#halo" class="toc-item"><span class="toc-num">01</span><span class="toc-name">The Halo Effect — Science shows appearance shapes how people judge your intelligence</span></a>
+      <a href="#skincare" class="toc-item"><span class="toc-num">02</span><span class="toc-name">The 3-Step Skincare Routine — Costs under $12/month and actually works</span></a>
+      <a href="#posture" class="toc-item"><span class="toc-num">03</span><span class="toc-name">Posture in 10 Days — The exercises that change how the world sees you</span></a>
+      <a href="#wardrobe" class="toc-item"><span class="toc-num">04</span><span class="toc-name">Style on a Budget — The 5 wardrobe pieces that make every outfit look deliberate</span></a>
+      <a href="#grooming" class="toc-item"><span class="toc-num">05</span><span class="toc-name">Grooming Fundamentals — The no-nonsense guide that changes everything</span></a>
+      <a href="#fitness" class="toc-item"><span class="toc-num">06</span><span class="toc-name">Fitness for Appearance — What actually changes how you look (and how fast)</span></a>
+      <a href="#mindset" class="toc-item"><span class="toc-num">07</span><span class="toc-name">The Inner Foundation — Why confidence is the most attractive thing you can wear</span></a>
+      <a href="#cheatsheet" class="toc-item"><span class="toc-num">08</span><span class="toc-name">The Master Cheatsheet — Every principle, one table</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- ─── FACE BANNER — The 5 Controllable Halo Triggers ─── -->
+<div class="face-banner">
+  <!-- Face 1: Skincare / Glowing Skin -->
+  <div class="face-panel">
+    <svg width="80" height="100" viewBox="0 0 80 100" fill="none">
+      <defs><radialGradient id="g1" cx="50%" cy="40%" r="55%"><stop offset="0%" stop-color="#2a1f14"/><stop offset="100%" stop-color="#0e0a06"/></radialGradient></defs>
+      <ellipse cx="40" cy="52" rx="26" ry="34" fill="url(#g1)" stroke="#c8943a" stroke-opacity="0.4" stroke-width="1"/>
+      <path d="M24 38 Q32 33 40 36" stroke="#c8943a" stroke-opacity="0.6" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M40 36 Q48 33 56 38" stroke="#c8943a" stroke-opacity="0.6" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="31" cy="48" rx="6" ry="3.5" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.5" stroke-width="0.9"/>
+      <circle cx="33" cy="47" r="1.2" fill="#c8943a" opacity="0.8"/>
+      <ellipse cx="49" cy="48" rx="6" ry="3.5" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.5" stroke-width="0.9"/>
+      <circle cx="51" cy="47" r="1.2" fill="#c8943a" opacity="0.8"/>
+      <path d="M34 64 Q40 68 46 64" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <!-- Glow dots around face = radiance -->
+      <circle cx="14" cy="42" r="1.5" fill="#c8943a" opacity="0.4"/>
+      <circle cx="10" cy="52" r="1" fill="#e8b84b" opacity="0.3"/>
+      <circle cx="66" cy="42" r="1.5" fill="#c8943a" opacity="0.4"/>
+      <circle cx="70" cy="52" r="1" fill="#e8b84b" opacity="0.3"/>
+      <circle cx="40" cy="14" r="1.5" fill="#c8943a" opacity="0.3"/>
+      <path d="M14 20 Q20 12 40 10 Q60 12 66 20" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1" fill="none"/>
+    </svg>
+    <div class="face-panel-label">Skin Health</div>
+    <div class="face-panel-sub">Radiance signals youth & vitality</div>
+  </div>
+  <!-- Face 2: Posture / Upright -->
+  <div class="face-panel">
+    <svg width="80" height="100" viewBox="0 0 80 100" fill="none">
+      <defs><radialGradient id="g2" cx="50%" cy="40%" r="55%"><stop offset="0%" stop-color="#2a1f14"/><stop offset="100%" stop-color="#0e0a06"/></radialGradient></defs>
+      <ellipse cx="40" cy="38" rx="22" ry="28" fill="url(#g2)" stroke="#c8943a" stroke-opacity="0.4" stroke-width="1"/>
+      <path d="M28 29 Q35 25 40 27" stroke="#c8943a" stroke-opacity="0.6" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <path d="M40 27 Q45 25 52 29" stroke="#c8943a" stroke-opacity="0.6" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <ellipse cx="33" cy="37" rx="5" ry="3" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.5" stroke-width="0.9"/>
+      <circle cx="35" cy="36" r="1.1" fill="#c8943a" opacity="0.8"/>
+      <ellipse cx="47" cy="37" rx="5" ry="3" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.5" stroke-width="0.9"/>
+      <circle cx="49" cy="36" r="1.1" fill="#c8943a" opacity="0.8"/>
+      <path d="M35 50 Q40 54 45 50" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+      <!-- Spine line = posture -->
+      <line x1="40" y1="66" x2="40" y2="96" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1.5" stroke-dasharray="3,2"/>
+      <!-- Shoulders -->
+      <path d="M12 75 Q26 68 40 67 Q54 68 68 75" stroke="#c8943a" stroke-opacity="0.4" stroke-width="1.2" fill="none"/>
+      <!-- Posture arrow (up) -->
+      <line x1="7" y1="55" x2="7" y2="25" stroke="#4aaa9e" stroke-opacity="0.6" stroke-width="1.5"/>
+      <path d="M4 28 L7 22 L10 28" fill="none" stroke="#4aaa9e" stroke-opacity="0.6" stroke-width="1.2"/>
+    </svg>
+    <div class="face-panel-label">Posture</div>
+    <div class="face-panel-sub">Spine signals status & confidence</div>
+  </div>
+  <!-- Face 3: Grooming / Clean Cut -->
+  <div class="face-panel">
+    <svg width="80" height="100" viewBox="0 0 80 100" fill="none">
+      <defs><radialGradient id="g3" cx="50%" cy="40%" r="55%"><stop offset="0%" stop-color="#2a1f14"/><stop offset="100%" stop-color="#0e0a06"/></radialGradient></defs>
+      <ellipse cx="40" cy="48" rx="24" ry="32" fill="url(#g3)" stroke="#c8943a" stroke-opacity="0.4" stroke-width="1"/>
+      <!-- Clean hair -->
+      <path d="M16 40 Q17 18 40 14 Q63 18 64 40" fill="#0d0a07" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1"/>
+      <path d="M22 36 Q28 22 40 19 Q52 22 58 36" stroke="#c8943a" stroke-opacity="0.2" stroke-width="0.7" fill="none"/>
+      <path d="M26 34 Q33 24 40 22" stroke="#c8943a" stroke-opacity="0.15" stroke-width="0.7" fill="none"/>
+      <path d="M26 34 Q20 28 17 40" stroke="#c8943a" stroke-opacity="0.15" stroke-width="0.7" fill="none"/>
+      <path d="M27 33 Q34 26 40 23" stroke="#c8943a" stroke-opacity="0.15" stroke-width="0.6" fill="none"/>
+      <path d="M27 33 Q22 29 18 38" stroke="#c8943a" stroke-opacity="0.15" stroke-width="0.6" fill="none"/>
+      <path d="M28 34 Q34 27 40 24" stroke="#c8943a" stroke-opacity="0.12" stroke-width="0.6" fill="none"/>
+      <path d="M54 34 Q58 29 62 38" stroke="#c8943a" stroke-opacity="0.15" stroke-width="0.6" fill="none"/>
+      <!-- Brows -->
+      <path d="M26 37 Q33 33 38 35" stroke="#c8943a" stroke-opacity="0.75" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <path d="M42 35 Q47 33 54 37" stroke="#c8943a" stroke-opacity="0.75" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <!-- Eyes -->
+      <ellipse cx="32" cy="46" rx="6" ry="3.5" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.5" stroke-width="0.9"/>
+      <circle cx="34" cy="45" r="1.2" fill="#c8943a" opacity="0.8"/>
+      <ellipse cx="48" cy="46" rx="6" ry="3.5" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.5" stroke-width="0.9"/>
+      <circle cx="50" cy="45" r="1.2" fill="#c8943a" opacity="0.8"/>
+      <!-- Clean jaw / shaved -->
+      <path d="M16 52 Q18 70 30 76 Q40 80 50 76 Q62 70 64 52" stroke="#c8943a" stroke-opacity="0.25" stroke-width="0.8" fill="none"/>
+      <path d="M34 64 Q40 68 46 64" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+      <!-- Clean-shave indicator line -->
+      <line x1="58" y1="72" x2="70" y2="80" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.8" stroke-dasharray="2,2"/>
+      <circle cx="70" cy="80" r="2" fill="none" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.8"/>
+    </svg>
+    <div class="face-panel-label">Grooming</div>
+    <div class="face-panel-sub">Intentionality signals social care</div>
+  </div>
+  <!-- Face 4: Style / Collar Visible -->
+  <div class="face-panel">
+    <svg width="80" height="100" viewBox="0 0 80 100" fill="none">
+      <defs><radialGradient id="g4" cx="50%" cy="35%" r="55%"><stop offset="0%" stop-color="#2a1f14"/><stop offset="100%" stop-color="#0e0a06"/></radialGradient></defs>
+      <ellipse cx="40" cy="42" rx="23" ry="30" fill="url(#g4)" stroke="#c8943a" stroke-opacity="0.4" stroke-width="1"/>
+      <!-- Styled hair -->
+      <path d="M17 35 Q19 12 40 9 Q61 12 63 35" fill="#0d0a07" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1"/>
+      <!-- Side part -->
+      <path d="M28 9 Q30 22 32 35" stroke="#c8943a" stroke-opacity="0.15" stroke-width="1.5"/>
+      <path d="M17 20 Q26 16 28 9" stroke="#c8943a" stroke-opacity="0.12" stroke-width="0.8" fill="none"/>
+      <path d="M19 28 Q24 20 28 15" stroke="#c8943a" stroke-opacity="0.1" stroke-width="0.7" fill="none"/>
+      <path d="M32 35 Q40 18 60 20" stroke="#c8943a" stroke-opacity="0.1" stroke-width="0.7" fill="none"/>
+      <!-- Brows -->
+      <path d="M24 33 Q31 29 37 31" stroke="#c8943a" stroke-opacity="0.75" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <path d="M43 31 Q49 29 56 33" stroke="#c8943a" stroke-opacity="0.75" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <!-- Eyes -->
+      <ellipse cx="31" cy="42" rx="6" ry="3.5" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.5" stroke-width="0.9"/>
+      <circle cx="33" cy="41" r="1.2" fill="#c8943a" opacity="0.8"/>
+      <ellipse cx="49" cy="42" rx="6" ry="3.5" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.5" stroke-width="0.9"/>
+      <circle cx="51" cy="41" r="1.2" fill="#c8943a" opacity="0.8"/>
+      <path d="M34 57 Q40 62 46 57" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+      <!-- Blazer collar / lapel -->
+      <path d="M10 100 Q22 80 32 72 Q36 68 40 67 Q44 68 48 72 Q58 80 70 100" fill="#0d0a07" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1.2"/>
+      <!-- Lapel lines -->
+      <path d="M40 67 L32 78 L25 90" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.8" fill="none"/>
+      <path d="M40 67 L48 78 L55 90" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.8" fill="none"/>
+      <!-- Shirt collar -->
+      <path d="M34 68 Q40 74 46 68" stroke="#c8943a" stroke-opacity="0.35" stroke-width="1" fill="none"/>
+    </svg>
+    <div class="face-panel-label">Style</div>
+    <div class="face-panel-sub">Fit signals self-awareness</div>
+  </div>
+  <!-- Face 5: Confidence / Smile -->
+  <div class="face-panel">
+    <svg width="80" height="100" viewBox="0 0 80 100" fill="none">
+      <defs><radialGradient id="g5" cx="50%" cy="40%" r="55%"><stop offset="0%" stop-color="#2a1f14"/><stop offset="100%" stop-color="#0e0a06"/></radialGradient></defs>
+      <ellipse cx="40" cy="48" rx="25" ry="33" fill="url(#g5)" stroke="#c8943a" stroke-opacity="0.4" stroke-width="1"/>
+      <path d="M15 42 Q17 18 40 14 Q63 18 65 42" fill="#0d0a07" stroke="#c8943a" stroke-opacity="0.45" stroke-width="1"/>
+      <!-- Brows lifted = warmth -->
+      <path d="M22 36 Q30 30 37 33" stroke="#c8943a" stroke-opacity="0.75" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <path d="M43 33 Q50 30 58 36" stroke="#c8943a" stroke-opacity="0.75" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <!-- Eyes slightly narrowed = Duchenne smile -->
+      <path d="M22 43 Q31 37 40 40" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1" fill="none"/>
+      <ellipse cx="31" cy="44" rx="7" ry="4" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.5" stroke-width="0.9"/>
+      <circle cx="33" cy="43" r="1.3" fill="#c8943a" opacity="0.85"/>
+      <path d="M40 40 Q49 37 58 43" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1" fill="none"/>
+      <ellipse cx="49" cy="44" rx="7" ry="4" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.5" stroke-width="0.9"/>
+      <circle cx="51" cy="43" r="1.3" fill="#c8943a" opacity="0.85"/>
+      <!-- Cheek lift = genuine smile -->
+      <path d="M16 50 Q20 46 24 48" stroke="#c8943a" stroke-opacity="0.35" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <path d="M64 50 Q60 46 56 48" stroke="#c8943a" stroke-opacity="0.35" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <!-- Wide smile -->
+      <path d="M25 64 Q32 73 40 75 Q48 73 55 64" stroke="#c8943a" stroke-opacity="0.75" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M25 64 Q22 62 24 58" stroke="#c8943a" stroke-opacity="0.4" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <path d="M55 64 Q58 62 56 58" stroke="#c8943a" stroke-opacity="0.4" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <!-- Smile fill -->
+      <path d="M26 64 Q32 72 40 74 Q48 72 54 64 Q48 68 40 69 Q32 68 26 64Z" fill="#c8943a" opacity="0.06"/>
+      <!-- Radiance dots -->
+      <circle cx="8" cy="48" r="1.5" fill="#e8b84b" opacity="0.35"/>
+      <circle cx="72" cy="48" r="1.5" fill="#e8b84b" opacity="0.35"/>
+      <circle cx="40" cy="8" r="2" fill="#c8943a" opacity="0.25"/>
+    </svg>
+    <div class="face-panel-label">Confidence</div>
+    <div class="face-panel-sub">Genuine smile — most trusted signal</div>
+  </div>
+</div>
+
+<!-- ─── 01: HALO EFFECT ─── -->
+<section class="section" id="halo">
+<div class="s-inner">
+  <div class="s-head-visual">
+    <div class="s-head">
+      <div class="s-num">Chapter 01</div>
+      <div class="s-meta">
+        <div class="s-cat">Thorndike · Princeton · Royal Society Research 2024</div>
+        <h2 class="s-title">The <span>Halo</span><br/>Effect</h2>
+        <p class="s-desc">In 1920, psychologist Edward Thorndike discovered that a single positive trait causes observers to assume intelligence, competence, and trustworthiness. A 2024 Royal Society study with 2,748 participants confirmed this bias is stronger than ever.</p>
+      </div>
+    </div>
+    <!-- Section face: neutral, observing -->
+    <div class="face-aside">
+      <div class="face-frame"><div class="face-frame-inner">
+        <svg width="140" height="180" viewBox="0 0 140 180" fill="none">
+          <defs><radialGradient id="hg" cx="50%" cy="40%" r="55%"><stop offset="0%" stop-color="#1e1508"/><stop offset="100%" stop-color="#07080a"/></radialGradient></defs>
+          <rect width="140" height="180" fill="url(#hg)"/>
+          <ellipse cx="70" cy="95" rx="42" ry="54" fill="#16100a" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1"/>
+          <path d="M28 75 Q35 50 70 46 Q105 50 112 75" fill="#0d0a07" stroke="#c8943a" stroke-opacity="0.4" stroke-width="1"/>
+          <path d="M42 67 Q54 61 66 64" stroke="#c8943a" stroke-opacity="0.7" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          <path d="M74 64 Q86 61 98 67" stroke="#c8943a" stroke-opacity="0.7" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          <ellipse cx="55" cy="78" rx="9" ry="5.5" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1"/>
+          <circle cx="58" cy="77" r="2" fill="#c8943a" opacity="0.8"/>
+          <ellipse cx="85" cy="78" rx="9" ry="5.5" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1"/>
+          <circle cx="88" cy="77" r="2" fill="#c8943a" opacity="0.8"/>
+          <path d="M60 105 Q70 112 80 105" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+          <!-- halo ring above head -->
+          <ellipse cx="70" cy="36" rx="32" ry="8" fill="none" stroke="#c8943a" stroke-opacity="0.25" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <ellipse cx="70" cy="36" rx="22" ry="5" fill="none" stroke="#e8b84b" stroke-opacity="0.12" stroke-width="1"/>
+          <circle cx="70" cy="28" r="2" fill="#c8943a" opacity="0.4"/>
+        </svg>
+      </div></div>
+      <div class="face-aside-label">The Halo Effect<br/>Forms in 100ms</div>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">100ms</span><span class="s-stat-l">to form trustworthiness judgment (Princeton)</span></div>
+    <div class="s-stat"><span class="s-stat-n">12%</span><span class="s-stat-l">higher salaries for attractive people vs peers</span></div>
+    <div class="s-stat"><span class="s-stat-n">2,748</span><span class="s-stat-l">participants confirmed halo effect (Royal Society 2024)</span></div>
+    <div class="s-stat"><span class="s-stat-n">"What</span><span class="s-stat-l">is beautiful is also good" — the cognitive shortcut</span></div>
+  </div>
+
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8A3.5 3.5 0 0 0 8 18a3 3 0 0 0 3-2.5V6a2 2 0 0 0-2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 1 5.8A3.5 3.5 0 0 1 16 18a3 3 0 0 1-3-2.5V6a2 2 0 0 1 2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">What the Research Shows</div>
+      <p class="col-text">The Royal Society (2024) study found that the same individuals received statistically significantly higher ratings for intelligence, trustworthiness, and sociability when photographed to look more attractive — even when raters knew this was a filter condition. <strong>Attractive people earn 12% more</strong> on average. They are more likely to be trusted by strangers, given the benefit of the doubt in ambiguous situations, and favoured in hiring decisions — regardless of actual competence. The mechanism: in environments of information overload, the brain shifts decision-making toward legibility.</p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M13 2 4 14h6l-1 8 9-12h-6z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">The 5 Controllable Triggers</div>
+      <p class="col-text">The halo effect is triggered not just by natural attractiveness — but by signals of <em>intentionality</em>. Research shows these controllable factors produce the strongest halo signals:<br/><br/><strong>1. Good skin</strong> — the most immediate biological health signal.<br/><strong>2. Upright posture</strong> — signals confidence and social status.<br/><strong>3. Well-fitting clothes</strong> — signals self-awareness and attention to detail.<br/><strong>4. Clean grooming</strong> — signals hygiene and care for others' experience.<br/><strong>5. Genuine smile</strong> — the Duchenne smile — the most universally trusted signal.</p>
+    </div>
+  </div>
+
+  <!-- Profile cards showing before/after halo triggers -->
+  <p style="font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:var(--gold);margin:36px 0 0">The Halo Effect in Action — Same Person, Different Signals</p>
+  <div class="profile-cards">
+    <!-- Profile 1: Before intentional presentation -->
+    <div class="profile-card">
+      <svg width="100" height="130" viewBox="0 0 100 130" fill="none">
+        <defs><radialGradient id="p1g" cx="50%" cy="40%" r="55%"><stop offset="0%" stop-color="#151008"/><stop offset="100%" stop-color="#07080a"/></radialGradient></defs>
+        <rect width="100" height="130" fill="url(#p1g)"/>
+        <ellipse cx="50" cy="68" rx="28" ry="36" fill="#12100c" stroke="#5c5f68" stroke-opacity="0.4" stroke-width="0.8"/>
+        <path d="M22 52 Q24 32 50 28 Q76 32 78 52" fill="#100e0a" stroke="#5c5f68" stroke-opacity="0.3" stroke-width="0.8"/>
+        <!-- Messy hair -->
+        <path d="M22 50 Q21 30 50 26 Q79 30 78 50" fill="#0a0907" stroke="#5c5f68" stroke-opacity="0.25" stroke-width="0.8"/>
+        <path d="M24 44 Q30 30 50 27" stroke="#5c5f68" stroke-opacity="0.1" stroke-width="1.5"/>
+        <path d="M76 44 Q70 30 50 27" stroke="#5c5f68" stroke-opacity="0.1" stroke-width="1.5"/>
+        <path d="M22 44 Q24 38 26 44" stroke="#5c5f68" stroke-opacity="0.12" stroke-width="1.2"/>
+        <!-- Heavy/tired eyes -->
+        <ellipse cx="37" cy="60" rx="7" ry="4" fill="#0a0705" stroke="#5c5f68" stroke-opacity="0.35" stroke-width="0.8"/>
+        <ellipse cx="63" cy="60" rx="7" ry="4" fill="#0a0705" stroke="#5c5f68" stroke-opacity="0.35" stroke-width="0.8"/>
+        <!-- Slight frown -->
+        <path d="M37 84 Q50 82 63 84" stroke="#5c5f68" stroke-opacity="0.4" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+        <!-- Slouch hint -->
+        <path d="M10 128 Q25 108 35 100 Q40 96 50 95 Q60 96 65 100 Q75 108 90 128" fill="#0d0a07" stroke="#5c5f68" stroke-opacity="0.3" stroke-width="0.8"/>
+        <!-- Casual tee = no collar -->
+        <path d="M36 96 Q50 98 64 96" stroke="#5c5f68" stroke-opacity="0.2" stroke-width="0.8" fill="none"/>
+      </svg>
+      <div class="profile-card-name">Before</div>
+      <div class="profile-card-role">No Intentional Signals</div>
+      <p class="profile-card-text">Same genetics. Ungroomed. Slouched. Ill-fitting clothes. Dull skin. Tired eyes. The halo works against them.</p>
+      <div class="profile-card-badge">Perceived: Less Capable · Less Trustworthy</div>
+    </div>
+    <!-- Profile 2: After intentional presentation -->
+    <div class="profile-card">
+      <svg width="100" height="130" viewBox="0 0 100 130" fill="none">
+        <defs><radialGradient id="p2g" cx="50%" cy="40%" r="55%"><stop offset="0%" stop-color="#2a1f14"/><stop offset="100%" stop-color="#07080a"/></radialGradient><filter id="glow2"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+        <rect width="100" height="130" fill="url(#p2g)"/>
+        <!-- Aura -->
+        <ellipse cx="50" cy="68" rx="36" ry="46" fill="#c8943a" opacity="0.03" filter="url(#glow2)"/>
+        <ellipse cx="50" cy="62" rx="26" ry="34" fill="#1e1508" stroke="#c8943a" stroke-opacity="0.45" stroke-width="1"/>
+        <!-- Clean styled hair -->
+        <path d="M24 50 Q25 28 50 24 Q75 28 76 50" fill="#0d0a07" stroke="#c8943a" stroke-opacity="0.5" stroke-width="0.9"/>
+        <path d="M30 28 Q32 36 35 50" stroke="#c8943a" stroke-opacity="0.15" stroke-width="1.2"/>
+        <path d="M70 28 Q68 36 65 50" stroke="#c8943a" stroke-opacity="0.1" stroke-width="0.8" fill="none"/>
+        <!-- Strong brows -->
+        <path d="M32 42 Q39 38 44 40" stroke="#c8943a" stroke-opacity="0.75" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M56 40 Q61 38 68 42" stroke="#c8943a" stroke-opacity="0.75" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <!-- Alert eyes -->
+        <ellipse cx="38" cy="52" rx="7" ry="4.5" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.6" stroke-width="0.9"/>
+        <circle cx="40" cy="51" r="1.8" fill="#c8943a" opacity="0.85" filter="url(#glow2)"/>
+        <ellipse cx="62" cy="52" rx="7" ry="4.5" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.6" stroke-width="0.9"/>
+        <circle cx="64" cy="51" r="1.8" fill="#c8943a" opacity="0.85" filter="url(#glow2)"/>
+        <!-- Smile -->
+        <path d="M36 73 Q43 80 50 82 Q57 80 64 73" stroke="#c8943a" stroke-opacity="0.7" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <!-- Blazer collar -->
+        <path d="M8 130 Q22 105 36 95 Q40 92 50 91 Q60 92 64 95 Q78 105 92 130" fill="#0d0a07" stroke="#c8943a" stroke-opacity="0.55" stroke-width="1.1"/>
+        <path d="M50 91 L42 103 L35 116" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.8" fill="none"/>
+        <path d="M50 91 L58 103 L65 116" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.8" fill="none"/>
+        <!-- Radiance glow dots -->
+        <circle cx="14" cy="52" r="1.2" fill="#e8b84b" opacity="0.35"/>
+        <circle cx="86" cy="52" r="1.2" fill="#e8b84b" opacity="0.35"/>
+      </svg>
+      <div class="profile-card-name">After</div>
+      <div class="profile-card-role">Intentional Signals Active</div>
+      <p class="profile-card-text">Same genetics. Groomed. Upright. Well-fitting clothes. Glowing skin. Genuine smile. The halo works for them.</p>
+      <div class="profile-card-badge">Perceived: More Capable · More Trustworthy</div>
+    </div>
+    <!-- Profile 3: The ideal state -->
+    <div class="profile-card">
+      <svg width="100" height="130" viewBox="0 0 100 130" fill="none">
+        <defs><radialGradient id="p3g" cx="50%" cy="35%" r="55%"><stop offset="0%" stop-color="#2e2010"/><stop offset="100%" stop-color="#07080a"/></radialGradient><filter id="glow3"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+        <rect width="100" height="130" fill="url(#p3g)"/>
+        <ellipse cx="50" cy="65" rx="32" ry="42" fill="#c8943a" opacity="0.04" filter="url(#glow3)"/>
+        <ellipse cx="50" cy="60" rx="25" ry="33" fill="#201508" stroke="#c8943a" stroke-opacity="0.55" stroke-width="1.2"/>
+        <!-- Premium hair — side part, swept -->
+        <path d="M25 47 Q26 24 50 20 Q74 24 75 47" fill="#0d0a07" stroke="#c8943a" stroke-opacity="0.55" stroke-width="1"/>
+        <path d="M33 22 Q35 32 38 47" stroke="#c8943a" stroke-opacity="0.2" stroke-width="1.5"/>
+        <path d="M25 35 Q30 26 33 22" stroke="#c8943a" stroke-opacity="0.12" stroke-width="0.8" fill="none"/>
+        <!-- Sharp brows -->
+        <path d="M30 39 Q37 34 43 37" stroke="#c8943a" stroke-opacity="0.85" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+        <path d="M57 37 Q63 34 70 39" stroke="#c8943a" stroke-opacity="0.85" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+        <!-- Sharp eyes -->
+        <ellipse cx="37" cy="49" rx="7.5" ry="4.5" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.65" stroke-width="1"/>
+        <circle cx="39" cy="48" r="2" fill="#c8943a" opacity="0.9" filter="url(#glow3)"/>
+        <circle cx="36" cy="51" r="0.7" fill="#e8b84b" opacity="0.4"/>
+        <ellipse cx="63" cy="49" rx="7.5" ry="4.5" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.65" stroke-width="1"/>
+        <circle cx="65" cy="48" r="2" fill="#c8943a" opacity="0.9" filter="url(#glow3)"/>
+        <circle cx="62" cy="51" r="0.7" fill="#e8b84b" opacity="0.4"/>
+        <!-- Confident slight smile -->
+        <path d="M38 74 Q50 80 62 74" stroke="#c8943a" stroke-opacity="0.6" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+        <!-- Premium blazer + tie -->
+        <path d="M5 130 Q20 102 35 92 Q40 88 50 87 Q60 88 65 92 Q80 102 95 130" fill="#0d0a07" stroke="#c8943a" stroke-opacity="0.6" stroke-width="1.2"/>
+        <path d="M50 87 L44 99 L40 112" stroke="#c8943a" stroke-opacity="0.35" stroke-width="0.9" fill="none"/>
+        <path d="M50 87 L56 99 L60 112" stroke="#c8943a" stroke-opacity="0.35" stroke-width="0.9" fill="none"/>
+        <!-- Tie -->
+        <path d="M47 88 L50 93 L53 88" fill="none" stroke="#c8943a" stroke-opacity="0.4" stroke-width="0.8"/>
+        <path d="M47 88 L46 100 L50 108 L54 100 L53 88" fill="#c8943a" opacity="0.08" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.7"/>
+        <!-- Max radiance -->
+        <circle cx="10" cy="48" r="1.5" fill="#e8b84b" opacity="0.45"/>
+        <circle cx="90" cy="48" r="1.5" fill="#e8b84b" opacity="0.45"/>
+        <circle cx="50" cy="10" r="2" fill="#c8943a" opacity="0.35"/>
+        <circle cx="50" cy="10" r="5" fill="none" stroke="#c8943a" stroke-opacity="0.12" stroke-width="0.8"/>
+      </svg>
+      <div class="profile-card-name">Mastered</div>
+      <div class="profile-card-role">All 5 Triggers Activated</div>
+      <p class="profile-card-text">Skin. Posture. Grooming. Style. Confidence. Every chapter of this guide building one signal. The full halo.</p>
+      <div class="profile-card-badge">Perceived: Highly Capable · Fully Trusted</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 1 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"The halo effect is not about vanity. It is a governing logic of attention — it decides whose voice arrives already trusted and whose must <em>fight for legitimacy after the fact.</em>"</p>
+  <p class="quote-attr">— The Aesthetic Mind Research · 2026 · Citing Reber et al.</p>
+</div>
+
+<!-- ─── 02: SKINCARE ─── -->
+<section class="section section-alt" id="skincare">
+<div class="s-inner">
+  <div class="s-head-visual">
+    <div class="s-head">
+      <div class="s-num">Chapter 02</div>
+      <div class="s-meta">
+        <div class="s-cat">Dermatologist-Backed · Under $12/Month · All Skin Types</div>
+        <h2 class="s-title">The 3-Step<br/><span>Skincare</span> Routine</h2>
+        <p class="s-desc">The skincare industry generates $150B per year by convincing you that healthy skin requires 10 products. Dermatologists disagree. Three steps: cleanse, moisturise, SPF. Everything else is optional.</p>
+      </div>
+    </div>
+    <!-- Skin zone face -->
+    <div class="face-aside">
+      <div class="face-frame"><div class="face-frame-inner">
+        <svg width="140" height="180" viewBox="0 0 140 180" fill="none">
+          <defs><radialGradient id="sg" cx="50%" cy="40%" r="55%"><stop offset="0%" stop-color="#1e1508"/><stop offset="100%" stop-color="#07080a"/></radialGradient></defs>
+          <rect width="140" height="180" fill="url(#sg)"/>
+          <ellipse cx="70" cy="100" rx="44" ry="56" fill="#181008" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1"/>
+          <path d="M26 78 Q28 50 70 44 Q112 50 114 78" fill="#100e0a" stroke="#c8943a" stroke-opacity="0.4" stroke-width="0.9"/>
+          <!-- T-zone highlight -->
+          <rect x="62" y="56" width="16" height="70" rx="8" fill="#c8943a" opacity="0.04" stroke="#c8943a" stroke-opacity="0.15" stroke-width="0.8" stroke-dasharray="3,3"/>
+          <!-- Cheek zones -->
+          <ellipse cx="36" cy="102" rx="14" ry="18" fill="#c8943a" opacity="0.03" stroke="#c8943a" stroke-opacity="0.12" stroke-width="0.8" stroke-dasharray="3,3"/>
+          <ellipse cx="104" cy="102" rx="14" ry="18" fill="#c8943a" opacity="0.03" stroke="#c8943a" stroke-opacity="0.12" stroke-width="0.8" stroke-dasharray="3,3"/>
+          <!-- Eyes -->
+          <path d="M42 79 Q55 73 64 76" stroke="#c8943a" stroke-opacity="0.7" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <path d="M76 76 Q85 73 98 79" stroke="#c8943a" stroke-opacity="0.7" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <ellipse cx="53" cy="88" rx="10" ry="6" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.5" stroke-width="0.9"/>
+          <circle cx="56" cy="87" r="2.2" fill="#c8943a" opacity="0.8"/>
+          <ellipse cx="87" cy="88" rx="10" ry="6" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.5" stroke-width="0.9"/>
+          <circle cx="90" cy="87" r="2.2" fill="#c8943a" opacity="0.8"/>
+          <path d="M58 113 Q70 120 82 113" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+          <!-- Labels -->
+          <line x1="78" y1="62" x2="118" y2="50" stroke="#c8943a" stroke-opacity="0.25" stroke-width="0.7"/>
+          <text x="118" y="48" font-family="monospace" font-size="7" fill="#c8943a" opacity="0.5">T-ZONE</text>
+          <line x1="36" y1="100" x2="10" y2="90" stroke="#c8943a" stroke-opacity="0.25" stroke-width="0.7"/>
+          <text x="4" y="88" font-family="monospace" font-size="6" fill="#c8943a" opacity="0.5">CHEEK</text>
+          <line x1="104" y1="100" x2="128" y2="90" stroke="#c8943a" stroke-opacity="0.25" stroke-width="0.7"/>
+        </svg>
+      </div></div>
+      <div class="face-aside-label">Skin Zone Mapping<br/>T-Zone · Cheeks · Jaw</div>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">$150B</span><span class="s-stat-l">industry built on complexity most dermatologists don't endorse</span></div>
+    <div class="s-stat"><span class="s-stat-n">3</span><span class="s-stat-l">steps dermatologists consistently recommend above all else</span></div>
+    <div class="s-stat"><span class="s-stat-n">SPF</span><span class="s-stat-l">the single most important anti-aging intervention OTC</span></div>
+    <div class="s-stat"><span class="s-stat-n">90%</span><span class="s-stat-l">of visible aging caused by UV exposure — all preventable</span></div>
+  </div>
+
+  <div class="skin-steps">
+    <div class="skin-step">
+      <div class="skin-num">1</div>
+      <div class="skin-label">Step 1 · AM + PM</div>
+      <div class="skin-title">Cleanse</div>
+      <p class="skin-text">Remove oil, pollution, dead skin cells without stripping the skin's natural barrier. A gentle, non-foaming cleanser is universally suitable. Avoid anything that leaves skin "squeaky clean" — that's barrier damage, not cleanliness. Wash twice daily. Add a third cleanse after heavy sweating.</p>
+      <div class="skin-products">
+        <div class="skin-p"><strong>Best Budget:</strong> CeraVe Hydrating Cleanser (~$12 for 3 months) — 3 ceramides + hyaluronic acid. All skin types.</div>
+        <div class="skin-p"><strong>Oily/Acne:</strong> La Roche-Posay Effaclar Gel — gentle salicylic acid to unclog pores without over-drying.</div>
+        <div class="skin-p"><strong>Rule:</strong> Tight skin after cleansing = barrier disruption. Switch to gentler formula immediately.</div>
+      </div>
+    </div>
+    <div class="skin-step">
+      <div class="skin-num">2</div>
+      <div class="skin-label">Step 2 · AM + PM</div>
+      <div class="skin-title">Moisturise</div>
+      <p class="skin-text">All skin types need moisture — including oily skin. Dehydrated skin overproduces oil to compensate. Look for: ceramides (barrier repair), hyaluronic acid (hydration), niacinamide (brightening + oil control). Avoid: fragrance (irritant for most skin types).</p>
+      <div class="skin-products">
+        <div class="skin-p"><strong>Best Budget:</strong> CeraVe Moisturising Cream (~$14 for 6 months) — fragrance-free, ceramide-rich, all skin types.</div>
+        <div class="skin-p"><strong>Oily Skin:</strong> Neutrogena Hydro Boost Water Gel — lightweight, non-comedogenic, hyaluronic acid focus.</div>
+        <div class="skin-p"><strong>Rule:</strong> Apply while skin is still slightly damp from cleansing — locks in residual moisture.</div>
+      </div>
+    </div>
+    <div class="skin-step">
+      <div class="skin-num">3</div>
+      <div class="skin-label">Step 3 · AM Only</div>
+      <div class="skin-title">SPF 30+</div>
+      <p class="skin-text">The most evidence-backed anti-aging investment without a prescription. 90% of visible skin aging is caused by cumulative UV exposure. SPF 30 blocks 97% of UVB rays. You cannot out-moisturise this step. Apply every morning. Reapply if outdoors for extended periods.</p>
+      <div class="skin-products">
+        <div class="skin-p"><strong>Best:</strong> EltaMD UV Clear SPF 46 (~$40, lasts 4 months) — dermatologist's first choice globally.</div>
+        <div class="skin-p"><strong>Budget:</strong> Any drugstore broad-spectrum SPF 30+ in lightweight, non-comedogenic formula.</div>
+        <div class="skin-p"><strong>Rule:</strong> The best SPF is the one you'll actually use every day. Texture drives compliance.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">SKIN BONUS 01</div><span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The 4th Step — Night Retinol</div>
+      <div class="card-sec">After 8 Weeks of the 3-Step</div>
+      <p class="card-text">Retinol is the most studied, most evidence-backed active ingredient in skincare after SPF. It increases cell turnover, stimulates collagen, reduces fine lines, evens skin tone. Start at 0.025% every third night. Build to nightly over 8 weeks. Always apply at night. Always follow with SPF the next morning. Results at 12 weeks. Transformative at 6 months.</p>
+      <span class="badge bb">Advanced Step</span>
+    </div>
+    <div class="card">
+      <div class="card-num">SKIN BONUS 02</div><span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 3s6 7 6 11.5A6 6 0 0 1 6 14.5C6 10 12 3 12 3z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Non-Product Factors That Matter More</div>
+      <div class="card-sec">What No Cream Can Replace</div>
+      <p class="card-text"><strong style="color:var(--cream)">Sleep:</strong> Skin repairs primarily during deep sleep stages 3–4. No product reverses chronic sleep deprivation.<br/><br/><strong style="color:var(--cream)">Hydration:</strong> 8 glasses daily. Dehydrated skin appears dull and emphasises fine lines.<br/><br/><strong style="color:var(--cream)">Diet:</strong> Low-glycemic reduces acne. Omega-3s support barrier health. Vitamin C supports collagen.<br/><br/><strong style="color:var(--cream)">Pillow hygiene:</strong> Change pillowcase 2× per week — accumulates oil, bacteria, and dead skin cells.</p>
+      <span class="badge ba">Foundational</span>
+    </div>
+    <div class="card">
+      <div class="card-num">SKIN TRAP</div><span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m6 6 12 12" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Stop Overcomplicating Your Routine</div>
+      <div class="card-sec">The Biggest Skin Mistake</div>
+      <p class="card-text">Stacking too many actives simultaneously — retinol + niacinamide + vitamin C + AHA + BHA — causes irritation, compromises the skin barrier, and often makes all conditions worse. Start with the 3-step. Nail it for 8 weeks. Then add one active at a time. Give each new addition 6 weeks to show results before adding another. Consistency beats complexity every time.</p>
+      <span class="badge bc">Avoid This</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 2 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"The perfect skincare routine isn't about using the most products — it's about consistently supporting your skin's fundamental needs with <em>proven, high-quality formulations.</em>"</p>
+  <p class="quote-attr">— Dr. Sandra Lee · Board-Certified Dermatologist · Dr. Pimple Popper</p>
+</div>
+
+<!-- ─── 03: POSTURE ─── -->
+<section class="section" id="posture">
+<div class="s-inner">
+  <div class="s-head-visual">
+    <div class="s-head">
+      <div class="s-num">Chapter 03</div>
+      <div class="s-meta">
+        <div class="s-cat">Ohio State · Biomechanics · 10-Day Correction Plan</div>
+        <h2 class="s-title">Posture<br/><span>Correction</span> in 10 Days</h2>
+        <p class="s-desc">Your posture is your body's headline — it announces who you are before you say a word. Ohio State research showed that upright posture makes people more likely to believe their own positive thoughts. The good news: posture changes fast with the right daily practice.</p>
+      </div>
+    </div>
+    <!-- Posture side face -->
+    <div class="face-aside">
+      <div class="face-frame"><div class="face-frame-inner">
+        <svg width="140" height="180" viewBox="0 0 140 180" fill="none">
+          <defs><radialGradient id="pg2" cx="50%" cy="40%" r="55%"><stop offset="0%" stop-color="#1e1508"/><stop offset="100%" stop-color="#07080a"/></radialGradient></defs>
+          <rect width="140" height="180" fill="url(#pg2)"/>
+          <!-- Head profile / side view -->
+          <ellipse cx="72" cy="82" rx="36" ry="46" fill="#181008" stroke="#c8943a" stroke-opacity="0.35" stroke-width="1"/>
+          <path d="M36 60 Q38 38 72 32 Q106 38 108 60" fill="#0d0a07" stroke="#c8943a" stroke-opacity="0.45" stroke-width="0.9"/>
+          <path d="M42 52 Q52 42 72 38" stroke="#c8943a" stroke-opacity="0.2" stroke-width="0.7" fill="none"/>
+          <path d="M54 67 Q62 63 68 65" stroke="#c8943a" stroke-opacity="0.7" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <path d="M76 65 Q82 63 90 67" stroke="#c8943a" stroke-opacity="0.7" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <ellipse cx="63" cy="76" rx="9" ry="5.5" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.5" stroke-width="0.9"/>
+          <circle cx="66" cy="75" r="2" fill="#c8943a" opacity="0.8"/>
+          <ellipse cx="85" cy="76" rx="9" ry="5.5" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.5" stroke-width="0.9"/>
+          <circle cx="88" cy="75" r="2" fill="#c8943a" opacity="0.8"/>
+          <path d="M63 99 Q72 106 81 99" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+          <!-- Spine alignment indicator -->
+          <line x1="72" y1="128" x2="72" y2="175" stroke="#4aaa9e" stroke-opacity="0.5" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <!-- Shoulders squared -->
+          <path d="M22 140 Q47 132 72 130 Q97 132 118 140" stroke="#c8943a" stroke-opacity="0.4" stroke-width="1.2" fill="none"/>
+          <!-- Head position correct -->
+          <line x1="72" y1="52" x2="72" y2="128" stroke="#4aaa9e" stroke-opacity="0.2" stroke-width="1" stroke-dasharray="3,3"/>
+          <!-- UP arrow -->
+          <line x1="15" y1="100" x2="15" y2="50" stroke="#4aaa9e" stroke-opacity="0.5" stroke-width="1.5"/>
+          <path d="M12 54 L15 46 L18 54" fill="none" stroke="#4aaa9e" stroke-opacity="0.5" stroke-width="1.2"/>
+          <text x="5" y="108" font-family="monospace" font-size="6" fill="#4aaa9e" opacity="0.4">LIFT</text>
+        </svg>
+      </div></div>
+      <div class="face-aside-label">Spine Alignment<br/>Ears Over Shoulders</div>
+    </div>
+  </div>
+
+  <!-- Posture Compare -->
+  <div class="posture-compare">
+    <div class="posture-side bad">
+      <div class="posture-side-label">❌ The Slouch — Forward Head Posture</div>
+      <svg width="120" height="200" viewBox="0 0 120 200" fill="none">
+        <defs><radialGradient id="slg" cx="45%" cy="30%" r="55%"><stop offset="0%" stop-color="#1a1408"/><stop offset="100%" stop-color="#07080a"/></radialGradient></defs>
+        <!-- Slouched silhouette -->
+        <!-- Head forward -->
+        <ellipse cx="42" cy="46" rx="28" ry="34" fill="url(#slg)" stroke="#d46040" stroke-opacity="0.35" stroke-width="1"/>
+        <path d="M14 32 Q16 12 42 8 Q68 12 70 32" fill="#0d0a07" stroke="#d46040" stroke-opacity="0.25" stroke-width="0.8"/>
+        <!-- Eyes drooping -->
+        <ellipse cx="32" cy="40" rx="7" ry="3.5" fill="#0a0705" stroke="#d46040" stroke-opacity="0.35" stroke-width="0.7"/>
+        <ellipse cx="52" cy="40" rx="7" ry="3.5" fill="#0a0705" stroke="#d46040" stroke-opacity="0.35" stroke-width="0.7"/>
+        <!-- Slumped mouth -->
+        <path d="M33 60 Q42 57 51 60" stroke="#d46040" stroke-opacity="0.35" stroke-width="1" fill="none" stroke-linecap="round"/>
+        <!-- Neck craning forward -->
+        <path d="M32 78 Q36 88 42 95 Q50 100 58 100" stroke="#d46040" stroke-opacity="0.4" stroke-width="1.2" fill="none"/>
+        <!-- Curved/hunchback spine -->
+        <path d="M58 100 Q68 110 70 125 Q70 145 65 165 Q62 178 60 195" stroke="#d46040" stroke-opacity="0.45" stroke-width="2" fill="none"/>
+        <!-- Rounded shoulders -->
+        <path d="M10 105 Q30 95 55 95 Q80 95 100 108" stroke="#d46040" stroke-opacity="0.35" stroke-width="1" fill="none"/>
+        <!-- Forward head arrow -->
+        <line x1="42" y1="46" x2="85" y2="46" stroke="#d46040" stroke-opacity="0.25" stroke-width="0.7" stroke-dasharray="3,2"/>
+        <!-- Ideal line -->
+        <line x1="85" y1="20" x2="85" y2="195" stroke="#d46040" stroke-opacity="0.15" stroke-width="0.8" stroke-dasharray="4,3"/>
+        <text x="88" y="100" font-family="monospace" font-size="7" fill="#d46040" opacity="0.4">IDEAL</text>
+      </svg>
+      <p class="posture-side-text">Head forward. Shoulders rounded. Spine curved. Every inch of forward head posture adds 10 lbs of effective neck load. Generates "hopeless, powerless" cognitions.</p>
+    </div>
+    <div class="posture-side good">
+      <div class="posture-side-label">✅ Aligned — Ears Over Shoulders</div>
+      <svg width="120" height="200" viewBox="0 0 120 200" fill="none">
+        <defs><radialGradient id="alg" cx="50%" cy="30%" r="55%"><stop offset="0%" stop-color="#2a1f14"/><stop offset="100%" stop-color="#07080a"/></radialGradient><filter id="glow4"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+        <!-- Upright silhouette -->
+        <ellipse cx="60" cy="44" rx="28" ry="34" fill="url(#alg)" stroke="#4aaa9e" stroke-opacity="0.45" stroke-width="1"/>
+        <path d="M32 30 Q34 10 60 6 Q86 10 88 30" fill="#0d0a07" stroke="#4aaa9e" stroke-opacity="0.3" stroke-width="0.8"/>
+        <!-- Alert eyes -->
+        <ellipse cx="50" cy="38" rx="7" ry="4.5" fill="#0a0705" stroke="#4aaa9e" stroke-opacity="0.5" stroke-width="0.8"/>
+        <circle cx="52" cy="37" r="1.8" fill="#c8943a" opacity="0.8" filter="url(#glow4)"/>
+        <ellipse cx="70" cy="38" rx="7" ry="4.5" fill="#0a0705" stroke="#4aaa9e" stroke-opacity="0.5" stroke-width="0.8"/>
+        <circle cx="72" cy="37" r="1.8" fill="#c8943a" opacity="0.8" filter="url(#glow4)"/>
+        <!-- Confident smile -->
+        <path d="M50 57 Q60 63 70 57" stroke="#4aaa9e" stroke-opacity="0.5" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+        <!-- Straight neck -->
+        <path d="M50 76 Q55 86 58 95" stroke="#4aaa9e" stroke-opacity="0.4" stroke-width="1.2" fill="none"/>
+        <path d="M70 76 Q65 86 62 95" stroke="#4aaa9e" stroke-opacity="0.4" stroke-width="1.2" fill="none"/>
+        <!-- Perfect straight spine -->
+        <line x1="60" y1="95" x2="60" y2="195" stroke="#4aaa9e" stroke-opacity="0.55" stroke-width="2"/>
+        <!-- Level shoulders -->
+        <path d="M10 100 Q35 94 58 93 Q82 94 110 100" stroke="#4aaa9e" stroke-opacity="0.45" stroke-width="1.2" fill="none"/>
+        <!-- Alignment check marks -->
+        <circle cx="60" cy="44" r="3" fill="none" stroke="#4aaa9e" stroke-opacity="0.3" stroke-width="0.8"/>
+        <circle cx="60" cy="96" r="3" fill="none" stroke="#4aaa9e" stroke-opacity="0.3" stroke-width="0.8"/>
+        <circle cx="60" cy="195" r="3" fill="none" stroke="#4aaa9e" stroke-opacity="0.3" stroke-width="0.8"/>
+        <!-- Perfect line -->
+        <line x1="60" y1="20" x2="60" y2="10" stroke="#4aaa9e" stroke-opacity="0.3" stroke-width="0.8" stroke-dasharray="3,2"/>
+        <!-- Radiance -->
+        <circle cx="12" cy="44" r="1.5" fill="#e8b84b" opacity="0.35" filter="url(#glow4)"/>
+        <circle cx="108" cy="44" r="1.5" fill="#e8b84b" opacity="0.35" filter="url(#glow4)"/>
+      </svg>
+      <p class="posture-side-text">Head over spine. Shoulders back and relaxed. Natural lumbar curve. Immediately perceived as more competent, confident, and in control by everyone in the room.</p>
+    </div>
+  </div>
+
+  <p style="font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:var(--gold);margin:28px 0 0">The 10-Day Posture Correction Plan</p>
+  <div class="posture-grid">
+    <div class="p-day"><span class="p-day-num">1–2</span><span class="p-day-label">Foundation</span><div class="p-day-action">Chin tucks × 15 reps · 3 sets. Every morning. Counteracts forward head posture immediately.</div></div>
+    <div class="p-day"><span class="p-day-num">3–4</span><span class="p-day-label">Chest Opening</span><div class="p-day-action">Doorway chest stretch · 30 sec × 3. Lengthens pec minor — primary cause of rounded shoulders.</div></div>
+    <div class="p-day"><span class="p-day-num">5–6</span><span class="p-day-label">Shoulder</span><div class="p-day-action">Wall angels × 12 · 3 sets. Activates mid/lower traps — the muscles poor posture has switched off.</div></div>
+    <div class="p-day"><span class="p-day-num">7–8</span><span class="p-day-label">Core & Glutes</span><div class="p-day-action">Glute bridges × 15. Bird-dogs × 10 each side. Supports lumbar curve and spinal stability.</div></div>
+    <div class="p-day"><span class="p-day-num">9–10</span><span class="p-day-label">Integration</span><div class="p-day-action">Full sequence 10 min daily. Plank 3 × 30 sec. Set a 30-min posture alarm during work hours.</div></div>
+  </div>
+</div>
+</section>
+
+<!-- ─── TRANSFORMATION STRIP ─── -->
+<div style="padding:0 64px;background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div style="max-width:1100px;margin:0 auto">
+    <div class="transform-strip">
+      <div class="transform-strip-inner">
+        <div class="ts-label">The Lookmaxxing Journey</div>
+        <div class="ts-faces">
+          <div class="ts-face">
+            <svg width="60" height="72" viewBox="0 0 60 72" fill="none">
+              <ellipse cx="30" cy="38" rx="18" ry="24" fill="#12100c" stroke="#5c5f68" stroke-opacity="0.3" stroke-width="0.8"/>
+              <path d="M12 28 Q13 14 30 11 Q47 14 48 28" fill="#0d0a07" stroke="#5c5f68" stroke-opacity="0.2" stroke-width="0.7"/>
+              <ellipse cx="21" cy="33" rx="5" ry="3" fill="#0a0705" stroke="#5c5f68" stroke-opacity="0.3" stroke-width="0.6"/>
+              <ellipse cx="39" cy="33" rx="5" ry="3" fill="#0a0705" stroke="#5c5f68" stroke-opacity="0.3" stroke-width="0.6"/>
+              <path d="M22 52 Q30 50 38 52" stroke="#5c5f68" stroke-opacity="0.35" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+            </svg>
+            <div class="ts-face-title">Week 0</div>
+            <div class="ts-face-desc">Starting point — no routine</div>
+          </div>
+          <div class="ts-face">
+            <svg width="60" height="72" viewBox="0 0 60 72" fill="none">
+              <ellipse cx="30" cy="38" rx="18" ry="24" fill="#18120a" stroke="#c8943a" stroke-opacity="0.2" stroke-width="0.8"/>
+              <path d="M12 26 Q13 12 30 9 Q47 12 48 26" fill="#0d0a07" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.7"/>
+              <path d="M18 24 Q24 21 28 23" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+              <path d="M32 23 Q36 21 42 24" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+              <ellipse cx="22" cy="32" rx="5.5" ry="3.5" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.4" stroke-width="0.7"/>
+              <circle cx="24" cy="31" r="1.3" fill="#c8943a" opacity="0.6"/>
+              <ellipse cx="38" cy="32" rx="5.5" ry="3.5" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.4" stroke-width="0.7"/>
+              <circle cx="40" cy="31" r="1.3" fill="#c8943a" opacity="0.6"/>
+              <path d="M22 50 Q30 53 38 50" stroke="#c8943a" stroke-opacity="0.4" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+            </svg>
+            <div class="ts-face-title">Week 2</div>
+            <div class="ts-face-desc">Skincare started · Posture work begins</div>
+          </div>
+          <div class="ts-face">
+            <svg width="60" height="72" viewBox="0 0 60 72" fill="none">
+              <ellipse cx="30" cy="38" rx="18" ry="24" fill="#1e1508" stroke="#c8943a" stroke-opacity="0.35" stroke-width="0.9"/>
+              <path d="M12 25 Q13 11 30 8 Q47 11 48 25" fill="#0d0a07" stroke="#c8943a" stroke-opacity="0.4" stroke-width="0.8"/>
+              <path d="M18 23 Q24 19 29 21" stroke="#c8943a" stroke-opacity="0.65" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+              <path d="M31 21 Q36 19 42 23" stroke="#c8943a" stroke-opacity="0.65" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+              <ellipse cx="22" cy="31" rx="6" ry="3.5" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.5" stroke-width="0.8"/>
+              <circle cx="24" cy="30" r="1.5" fill="#c8943a" opacity="0.75"/>
+              <ellipse cx="38" cy="31" rx="6" ry="3.5" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.5" stroke-width="0.8"/>
+              <circle cx="40" cy="30" r="1.5" fill="#c8943a" opacity="0.75"/>
+              <path d="M22 49 Q30 54 38 49" stroke="#c8943a" stroke-opacity="0.55" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+              <!-- Small glow -->
+              <circle cx="8" cy="30" r="1" fill="#c8943a" opacity="0.25"/>
+              <circle cx="52" cy="30" r="1" fill="#c8943a" opacity="0.25"/>
+            </svg>
+            <div class="ts-face-title">Month 1</div>
+            <div class="ts-face-desc">Skin improving · Grooming locked in</div>
+          </div>
+          <div class="ts-face">
+            <svg width="60" height="72" viewBox="0 0 60 72" fill="none">
+              <defs><filter id="gwk"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+              <ellipse cx="30" cy="37" rx="19" ry="25" fill="#221808" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1"/>
+              <path d="M11 24 Q12 10 30 7 Q48 10 49 24" fill="#0d0a07" stroke="#c8943a" stroke-opacity="0.5" stroke-width="0.9"/>
+              <path d="M16 22 Q23 17 28 19" stroke="#c8943a" stroke-opacity="0.8" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              <path d="M32 19 Q37 17 44 22" stroke="#c8943a" stroke-opacity="0.8" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              <ellipse cx="22" cy="30" rx="6.5" ry="4" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.6" stroke-width="0.9"/>
+              <circle cx="24" cy="29" r="1.8" fill="#c8943a" opacity="0.85" filter="url(#gwk)"/>
+              <ellipse cx="38" cy="30" rx="6.5" ry="4" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.6" stroke-width="0.9"/>
+              <circle cx="40" cy="29" r="1.8" fill="#c8943a" opacity="0.85" filter="url(#gwk)"/>
+              <path d="M20 47 Q30 54 40 47" stroke="#c8943a" stroke-opacity="0.7" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+              <circle cx="5" cy="28" r="1.2" fill="#e8b84b" opacity="0.4" filter="url(#gwk)"/>
+              <circle cx="55" cy="28" r="1.2" fill="#e8b84b" opacity="0.4" filter="url(#gwk)"/>
+            </svg>
+            <div class="ts-face-title">Month 3</div>
+            <div class="ts-face-desc">Visible change · People comment</div>
+          </div>
+          <div class="ts-face">
+            <svg width="60" height="72" viewBox="0 0 60 72" fill="none">
+              <defs><filter id="gw6"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+              <ellipse cx="30" cy="38" rx="28" ry="36" fill="#c8943a" opacity="0.03" filter="url(#gw6)"/>
+              <ellipse cx="30" cy="37" rx="19" ry="25" fill="#2a1e0c" stroke="#c8943a" stroke-opacity="0.65" stroke-width="1.2"/>
+              <path d="M11 23 Q12 9 30 6 Q48 9 49 23" fill="#0d0a07" stroke="#c8943a" stroke-opacity="0.6" stroke-width="1"/>
+              <path d="M14 21 Q22 15 28 18" stroke="#c8943a" stroke-opacity="0.9" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+              <path d="M32 18 Q38 15 46 21" stroke="#c8943a" stroke-opacity="0.9" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+              <ellipse cx="21" cy="30" rx="7" ry="4.5" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.7" stroke-width="1"/>
+              <circle cx="24" cy="29" r="2.2" fill="#c8943a" opacity="0.9" filter="url(#gw6)"/>
+              <circle cx="21" cy="33" r="0.8" fill="#e8b84b" opacity="0.45"/>
+              <ellipse cx="39" cy="30" rx="7" ry="4.5" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.7" stroke-width="1"/>
+              <circle cx="42" cy="29" r="2.2" fill="#c8943a" opacity="0.9" filter="url(#gw6)"/>
+              <circle cx="39" cy="33" r="0.8" fill="#e8b84b" opacity="0.45"/>
+              <path d="M18 48 Q30 57 42 48" stroke="#c8943a" stroke-opacity="0.85" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+              <!-- Cheek lift -->
+              <path d="M10 34 Q14 30 18 32" stroke="#c8943a" stroke-opacity="0.4" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+              <path d="M50 34 Q46 30 42 32" stroke="#c8943a" stroke-opacity="0.4" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+              <!-- Max radiance -->
+              <circle cx="3" cy="28" r="1.8" fill="#e8b84b" opacity="0.55" filter="url(#gw6)"/>
+              <circle cx="57" cy="28" r="1.8" fill="#e8b84b" opacity="0.55" filter="url(#gw6)"/>
+              <circle cx="30" cy="5" r="2" fill="#c8943a" opacity="0.45" filter="url(#gw6)"/>
+              <circle cx="30" cy="5" r="5" fill="none" stroke="#c8943a" stroke-opacity="0.2" stroke-width="0.8"/>
+            </svg>
+            <div class="ts-face-title">Month 6</div>
+            <div class="ts-face-desc">Transformed · Unrecognisable</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── 04: WARDROBE ─── -->
+<section class="section section-alt" id="wardrobe">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 04</div>
+    <div class="s-meta">
+      <div class="s-cat">Capsule Wardrobe Science · 2025–26 Data</div>
+      <h2 class="s-title">Style on a<br/><span>Budget</span></h2>
+      <p class="s-desc">You don't need a large wardrobe to look consistently put-together. You need 5 high-leverage pieces that work together, fit properly, and signal intentionality. These 5 items cover 80% of outfit combinations for any professional or social setting.</p>
+    </div>
+  </div>
+
+  <div class="wardrobe-grid">
+    <div class="w-piece"><div class="w-num">PIECE 01</div><span class="w-icon">🟤</span>
+      <div class="w-title">Well-Fitted Dark-Wash Jeans</div>
+      <p class="w-text">The most versatile bottom in any wardrobe. Dark-wash jeans read as casual or semi-formal depending on what's paired with them. The word "well-fitted" is doing all the work. Ill-fitting jeans are the single biggest style mistake most people make.</p>
+      <div class="w-tip"><strong>Fit rule:</strong> Should fit at the waist without a belt. Thighs have room to move. Break at or just above the shoe. Tailor if needed — $15 at a tailor is the best style investment you can make.</div>
+    </div>
+    <div class="w-piece"><div class="w-num">PIECE 02</div><span class="w-icon">👔</span>
+      <div class="w-title">A Structured Blazer or Sport Coat</div>
+      <p class="w-text">A blazer elevates any outfit by approximately two social registers. Jeans + white tee + blazer = effortlessly put-together. The same jeans without the blazer = casual. One well-fitting blazer in navy, charcoal, or camel is the highest style ROI purchase you can make.</p>
+      <div class="w-tip"><strong>Fit rule:</strong> Shoulder seam ends at shoulder. Sleeves show 0.5in of shirt cuff. Body should skim — not hug, not float.</div>
+    </div>
+    <div class="w-piece"><div class="w-num">PIECE 03</div><span class="w-icon">⬜</span>
+      <div class="w-title">White or Neutral Well-Fitted Tee</div>
+      <p class="w-text">A quality, well-fitting plain tee in white, black, or neutral shade is the most essential foundation piece. Works under blazers, on its own in summer, under open overshirts. Poor-quality tees that stretch or collar-roll undermine everything layered over them.</p>
+      <div class="w-tip"><strong>Fit rule:</strong> Shoulder seam at the shoulder. Hem just below waistband. Should skim the torso — not tight, not boxy.</div>
+    </div>
+    <div class="w-piece"><div class="w-num">PIECE 04</div><span class="w-icon">👟</span>
+      <div class="w-title">Clean White or Minimal Sneakers</div>
+      <p class="w-text">Minimal white sneakers work with jeans, chinos, casual suits, and summer outfits. The operative word is "clean" — scuffed, yellowed soles undermine everything else you're wearing. Clean your sneakers once a week with a Magic Eraser and soft toothbrush.</p>
+      <div class="w-tip"><strong>Budget option:</strong> New Balance 574 (~$90) or Skechers Arch Fit. Clean soles with Magic Eraser weekly — dramatic impact for zero cost.</div>
+    </div>
+    <div class="w-piece"><div class="w-num">PIECE 05</div><span class="w-icon">🧥</span>
+      <div class="w-title">A Classic Outerwear Layer</div>
+      <p class="w-text">The outermost layer is the first thing people see. A clean, well-fitting coat — trench, wool overcoat, or minimal puffer in a neutral colour — instantly elevates what's underneath. Buy the best coat your budget allows. Wear it for 5–10 years.</p>
+      <div class="w-tip"><strong>Style rule:</strong> Neutral colours (camel, navy, black, grey) work with everything. Avoid logos or trend-specific details that will date quickly. A classic cut lasts forever.</div>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card"><div class="card-num">STYLE RULE 01</div><span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M4 20 14 4l6 16z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M9 20h5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Fit Beats Brand — Every Time</div>
+      <p class="card-text">A $30 shirt that fits perfectly looks better than a $300 shirt that doesn't. Fit is the single most important variable in how clothes look. Most people wear clothes that are too large. Well-fitted clothes that skim the body create the most flattering silhouette for every body type. The tailoring budget is more valuable than the shopping budget.</p>
+      <span class="badge ba">Non-Negotiable Rule</span>
+    </div>
+    <div class="card"><div class="card-num">STYLE RULE 02</div><span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 3a9 9 0 1 0 0 18c1.2 0 1.8-1 1.2-2-.5-.7-.2-1.7.7-1.9 3.5-.7 6.1-3.6 6.1-7.1A9 9 0 0 0 12 3z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><circle cx="7.5" cy="10.5" r="1.1" fill="#c8943a"/><circle cx="12" cy="7.5" r="1.1" fill="#c8943a"/><circle cx="16" cy="10" r="1.1" fill="#c8943a"/></svg></span>
+      <div class="card-title">The Neutral Colour Palette System</div>
+      <p class="card-text">Building a wardrobe around neutrals (white, black, navy, grey, camel, olive) means every piece works with every other piece — eliminating "I have nothing to wear" permanently. Add colour through accessories or one statement piece per outfit maximum. Your outfit should have one point of interest. Everything else recedes.</p>
+      <span class="badge ba">System</span>
+    </div>
+    <div class="card"><div class="card-num">STYLE RULE 03</div><span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M20 11a8 8 0 0 0-14.9-3.5M4 13a8 8 0 0 0 14.9 3.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 4v4h4M19 20v-4h-4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Buy Less, Buy Better, Buy Second-Hand</div>
+      <p class="card-text">ThredUp, Vinted, Depop, and eBay carry premium pieces at 20–30% of retail. A $400 blazer available second-hand for $60 is a better investment than a $60 fast-fashion blazer that loses shape in 6 months. Decide what you need → buy the best quality second-hand → have it tailored for fit.</p>
+      <span class="badge bb">Budget Strategy</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 05: GROOMING ─── -->
+<section class="section" id="grooming">
+<div class="s-inner">
+  <div class="s-head-visual">
+    <div class="s-head">
+      <div class="s-num">Chapter 05</div>
+      <div class="s-meta">
+        <div class="s-cat">The Fundamentals That Make 80% of the Difference</div>
+        <h2 class="s-title">Grooming<br/><span>Fundamentals</span></h2>
+        <p class="s-desc">Grooming is not vanity. It is the management of hygiene and presentation signals that the halo effect reads in the first 7 seconds. Most grooming improvements cost nothing. All cost less than a single meal out.</p>
+      </div>
+    </div>
+    <!-- Grooming detail face -->
+    <div class="face-aside">
+      <div class="face-frame"><div class="face-frame-inner">
+        <svg width="140" height="180" viewBox="0 0 140 180" fill="none">
+          <defs><radialGradient id="grg" cx="50%" cy="40%" r="55%"><stop offset="0%" stop-color="#2a1f14"/><stop offset="100%" stop-color="#07080a"/></radialGradient><filter id="glw5"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+          <rect width="140" height="180" fill="url(#grg)"/>
+          <ellipse cx="70" cy="98" rx="44" ry="56" fill="#201508" stroke="#c8943a" stroke-opacity="0.45" stroke-width="1.2"/>
+          <!-- Styled hair with detail -->
+          <path d="M26 78 Q28 50 70 44 Q112 50 114 78" fill="#0d0a07" stroke="#c8943a" stroke-opacity="0.55" stroke-width="1"/>
+          <path d="M36 50 Q38 58 40 78" stroke="#c8943a" stroke-opacity="0.2" stroke-width="1.5"/>
+          <path d="M26 62 Q32 52 36 50" stroke="#c8943a" stroke-opacity="0.12" stroke-width="0.8" fill="none"/>
+          <!-- Strong defined brows -->
+          <path d="M42 67 Q54 61 66 64" stroke="#c8943a" stroke-opacity="0.85" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M74 64 Q86 61 98 67" stroke="#c8943a" stroke-opacity="0.85" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <!-- Eyes with lashes -->
+          <ellipse cx="53" cy="78" rx="11" ry="6.5" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.6" stroke-width="1"/>
+          <circle cx="56" cy="77" r="2.8" fill="#c8943a" opacity="0.85" filter="url(#glw5)"/>
+          <circle cx="53" cy="81" r="1" fill="#e8b84b" opacity="0.4"/>
+          <path d="M42 73 Q53 66 64 73" stroke="#c8943a" stroke-opacity="0.65" stroke-width="1.1" fill="none"/>
+          <line x1="42" y1="73" x2="40" y2="70" stroke="#c8943a" stroke-opacity="0.5" stroke-width="0.9"/>
+          <line x1="50" y1="68" x2="49" y2="64" stroke="#c8943a" stroke-opacity="0.4" stroke-width="0.8"/>
+          <line x1="53" y1="67" x2="53" y2="63" stroke="#c8943a" stroke-opacity="0.4" stroke-width="0.8"/>
+          <line x1="57" y1="68" x2="58" y2="64" stroke="#c8943a" stroke-opacity="0.4" stroke-width="0.8"/>
+          <line x1="64" y1="73" x2="66" y2="70" stroke="#c8943a" stroke-opacity="0.5" stroke-width="0.9"/>
+          <ellipse cx="87" cy="78" rx="11" ry="6.5" fill="#0a0705" stroke="#c8943a" stroke-opacity="0.6" stroke-width="1"/>
+          <circle cx="90" cy="77" r="2.8" fill="#c8943a" opacity="0.85" filter="url(#glw5)"/>
+          <path d="M76 73 Q87 66 98 73" stroke="#c8943a" stroke-opacity="0.65" stroke-width="1.1" fill="none"/>
+          <!-- Clean jaw / beard line -->
+          <path d="M26 108 Q28 130 44 144 Q56 154 70 157 Q84 154 96 144 Q112 130 114 108" stroke="#c8943a" stroke-opacity="0.2" stroke-width="0.8" fill="none"/>
+          <!-- Defined jawline -->
+          <path d="M30 120 Q40 138 70 148 Q100 138 110 120" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1" fill="none"/>
+          <path d="M60 120 Q70 128 80 120" stroke="#c8943a" stroke-opacity="0.6" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <!-- Clean skin tone -->
+          <circle cx="20" cy="88" r="1.5" fill="#e8b84b" opacity="0.4" filter="url(#glw5)"/>
+          <circle cx="120" cy="88" r="1.5" fill="#e8b84b" opacity="0.4" filter="url(#glw5)"/>
+          <circle cx="70" cy="38" r="2" fill="#c8943a" opacity="0.3" filter="url(#glw5)"/>
+        </svg>
+      </div></div>
+      <div class="face-aside-label">Groomed & Defined<br/>Every Detail Signals Care</div>
+    </div>
+  </div>
+
+  <div class="groom-list">
+    <div class="groom-row"><div class="groom-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="6.5" cy="6.5" r="2.3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6.5" cy="17.5" r="2.3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m20 5-11.5 7M8.5 12 20 19" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="groom-body"><div class="groom-title">Hair — The Frame of the Face</div><p class="groom-text">A clean, well-maintained haircut that suits your face shape, styled with a small amount of product (matte pomade or light hold clay), is the single highest-ROI grooming investment. A fresh haircut changes how you carry yourself more dramatically than almost any other single change. Rule: cut every 4–6 weeks. Show your barber references. Don't just say "a bit off the top."</p></div></div>
+    <div class="groom-row"><div class="groom-icon">🦷</div><div class="groom-body"><div class="groom-title">Teeth & Breath — The Trust Signal</div><p class="groom-text">In face-to-face interactions, teeth and breath are among the most consciously registered signals of health and hygiene. Brush twice daily (electric toothbrush: $30 investment, significantly more effective). Floss daily. Alcohol-free mouthwash. Whitening strips for one 7-day session visually reset teeth colour. Dental hygiene also correlates directly to cardiovascular health — benefits beyond appearance.</p></div></div>
+    <div class="groom-row"><div class="groom-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="6.5" cy="6.5" r="2.3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6.5" cy="17.5" r="2.3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m20 5-11.5 7M8.5 12 20 19" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="groom-body"><div class="groom-title">Facial Hair — Maintained or Clean-Shaven</div><p class="groom-text">Two positive states: well-maintained (defined lines, conditioned, styled, trimmed consistently) or clean-shaven. Anything in between signals neglect. For beards: invest in a quality trimmer ($30), beard oil (softens, eliminates flakiness), and trim the neckline every 3–4 days. The neckline is what separates "intentional beard" from "forgot to shave."</p></div></div>
+    <div class="groom-row"><div class="groom-icon">💅</div><div class="groom-body"><div class="groom-title">Hands & Nails — More Noticed Than You Think</div><p class="groom-text">Hands are the second-most socially visible part of the body after the face — involved in handshakes, gestures, and every close interaction. Clean, trimmed nails and moisturised hands signal care and attention to detail. 5 minutes per week. Hand cream ($5) and a nail file are the entire investment. In interviews, presentations, and first meetings, hands receive far more attention than people expect.</p></div></div>
+    <div class="groom-row"><div class="groom-icon">👃</div><div class="groom-body"><div class="groom-title">Nose & Ear Hair — The Easy Win</div><p class="groom-text">A $15 nose/ear hair trimmer is one of the most significant appearance improvements available. Trim every 2 weeks. Nobody compliments your nose hair maintenance. Everyone notices its absence. This is a 90-second task that removes a significant visual distraction. The most overlooked grooming step — and among the most impactful.</p></div></div>
+    <div class="groom-row"><div class="groom-icon">🌸</div><div class="groom-body"><div class="groom-title">Fragrance — The Invisible Signal</div><p class="groom-text">Scent is processed directly by the limbic system — the brain's emotional centre. A good fragrance creates a subconscious positive association with your presence. Apply 2–3 sprays to pulse points (wrists, neck). Restraint is the differentiator. Goal: noticeable when someone leans in — not from 3 metres away. Overapplication is significantly worse than wearing none.</p></div></div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 06: FITNESS ─── -->
+<section class="section section-alt" id="fitness">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 06</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · What Actually Changes Appearance</div>
+      <h2 class="s-title">Fitness for<br/><span>Appearance</span></h2>
+      <p class="s-desc">Most people either skip fitness entirely or choose the wrong type for their appearance goals. Here's what the research actually shows about which training modalities change how you look — and how fast.</p>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card"><div class="card-num">FITNESS 01</div><span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 15V9a2 2 0 0 1 2-2 2 2 0 0 1 2 2M9 9V6a2 2 0 0 1 4 0v6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 9a2 2 0 0 1 4 0v3.5c0 3-2 6-6 6H8a3 3 0 0 1-3-3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Resistance Training — Highest ROI</div>
+      <p class="card-text">Resistance training produces the most dramatic visible body composition changes of any modality. It increases muscle mass (raises basal metabolic rate permanently), reduces body fat, improves posture by strengthening the posterior chain, and changes how clothes fit. Minimal effective dose: 3 sessions/week, 45 minutes each, 4–6 compound movements.</p>
+      <div class="psych"><div class="card-sec">🔬 The V-Shape Effect</div><p class="card-text">The shoulder-to-waist ratio is one of the most universally perceived attractiveness signals. Lateral raises, pull-ups, and overhead pressing build this ratio efficiently. Even modest muscular development in the shoulders and back changes how clothes sit on the body and how the silhouette reads from a distance.</p></div>
+      <span class="badge ba">Highest ROI</span>
+    </div>
+    <div class="card"><div class="card-num">FITNESS 02</div><span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="14.5" cy="4.5" r="1.7" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 9l3-2 3 3-2 2 4 3-1.5 4M8 13l3.5-3 2 2-2.5 3-4.5 1M6 21l3-5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Zone 2 Cardio — The Glow Effect</div>
+      <p class="card-text">30 minutes of Zone 2 cardio 3–4× per week dramatically improves skin appearance through: increased blood flow delivering oxygen to skin cells, reduced cortisol (drives inflammation and breakouts), improved sleep quality, and a natural flush that gives skin a "lit from within" appearance. Skin benefits are visible within 2–4 weeks. Requires no products.</p>
+      <span class="badge bb">Skin + Body</span>
+    </div>
+    <div class="card"><div class="card-num">FITNESS 03</div><span class="card-icon">🥗</span>
+      <div class="card-title">Nutrition — The Foundation</div>
+      <p class="card-text">Body composition is 80% nutrition, 20% training. Simple framework: adequate protein (0.8–1g per lb body weight) to preserve and build muscle, modest caloric deficit if reducing body fat. Two biggest dietary appearance improvements: reduce ultra-processed food (reduces facial puffiness within weeks) and eat more vegetables (antioxidants visibly improve skin tone within 6 weeks).</p>
+      <span class="badge ba">Foundation</span>
+    </div>
+    <div class="card"><div class="card-num">TIMELINE</div><span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="3.5" y="5" width="17" height="15" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 10h17M8 3v4M16 3v4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Realistic Appearance Timelines</div>
+      <p class="card-text"><strong style="color:var(--cream)">2 weeks:</strong> Better energy, sleep, skin improving.<br/><strong style="color:var(--cream)">4–6 weeks:</strong> Clothes fitting differently. Posture improving.<br/><strong style="color:var(--cream)">3 months:</strong> Significant visible changes. People comment.<br/><strong style="color:var(--cream)">6 months:</strong> Transformative. Body composition changed substantially.<br/><strong style="color:var(--cream)">1 year:</strong> Unrecognisable to anyone who knew you before. Daily habits compounding visibly.</p>
+      <span class="badge bb">Reality Check</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 07: MINDSET ─── -->
+<section class="section" id="mindset">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 07</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · The Invisible Layer</div>
+      <h2 class="s-title">The Inner<br/><span>Foundation</span></h2>
+      <p class="s-desc">Confidence is not a personality trait. It is a signal — and like all appearance signals, it can be cultivated deliberately. Research shows how you feel about yourself changes how you carry yourself, which changes how others respond, which changes how you feel. The loop is real.</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="col-card"><span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M20 11a8 8 0 0 0-14.9-3.5M4 13a8 8 0 0 0 14.9 3.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 4v4h4M19 20v-4h-4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">The Confidence Feedback Loop</div>
+      <p class="col-text">Every physical improvement in this guide — better skin, improved posture, well-fitting clothes, cleaner grooming — changes how you feel about yourself before it changes how others see you. This internal shift changes how you carry yourself. Which changes how others respond. Which reinforces the internal shift. People who feel they look better stand taller, make more eye contact, speak with more authority, and take more interpersonal risks. You can enter this loop at any point.</p>
+    </div>
+    <div class="col-card"><span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><ellipse cx="12" cy="10" rx="6" ry="7.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 17.5V21M9 21h6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">Lookmaxxing as a Values Question</div>
+      <p class="col-text">There is a version of appearance investment that is grounded and healthy: improving your presentation as a form of self-respect, social consideration, and practical advantage — while knowing that your worth as a person is entirely separate from your appearance.<br/><br/>The physical improvements here are real. Their social benefits are documented. But they work best when pursued from a foundation of self-acceptance — not as a replacement for it.<br/><br/><strong>The goal:</strong> Not to become someone else. But to become a more intentional, more cared-for version of who you already are.</p>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card"><div class="card-num">MINDSET 01</div><span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 18h18M5 15l1.5-1.5M19 15l-1.5-1.5M12 6V4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Daily Presentation Intention</div>
+      <p class="card-text">Each morning, before leaving: "Does how I'm presenting myself today reflect how I want to show up in the world?" Not "Am I attractive enough?" Just: does this presentation reflect my values and intentions? This single question — asked consistently — creates a mindset of intentional presentation rather than anxious evaluation. Intentional beats perfect. Every time.</p>
+      <span class="badge ba">Daily Practice</span>
+    </div>
+    <div class="card"><div class="card-num">MINDSET 02</div><span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="m4 16 5-5 4 3 7-8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 6h5v5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Monthly Progress Photos</div>
+      <p class="card-text">Take a photo at the start of each 30-day cycle. Same lighting. Same angle. Same time. Review at 30, 60, and 90 days. This removes the inaccuracy of daily mirror-gazing (heavily influenced by lighting and mood) and replaces it with objective progress data. The rule: monthly photos. Not daily. Evidence compounds motivation without requiring daily validation.</p>
+      <span class="badge bb">System</span>
+    </div>
+    <div class="card"><div class="card-num">MINDSET 03</div><span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M13 2 4 14h6l-1 8 9-12h-6z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Habit Anchoring Standard</div>
+      <p class="card-text">Most grooming and presentation habits in this guide — combined — take under 15 minutes per day. The barrier isn't time. Attach each habit to an existing morning anchor. After 21 days, the sequence becomes automatic. The standard becomes your default. You stop "trying to look good" and simply look good — because it became who you are, not what you do.</p>
+      <span class="badge ba">Habit Architecture</span>
+    </div>
+  </div>
+
+  <div class="tip"><div class="tip-head">✅ The One Rule of Lookmaxxing</div>
+    <p class="tip-text">The goal is not to become someone else. The goal is to become a more intentional, more cared-for, more presented version of who you already are. <strong>Attractiveness at its most effective is not about perfection — it is about intentionality.</strong> The person who shows up with clean skin, good posture, well-fitting clothes, and genuine confidence doesn't need perfect genetics. They already have what the halo effect responds to most powerfully: the signal that they take themselves seriously.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── CHEATSHEET ─── -->
+<section class="section" id="cheatsheet">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 08</div>
+    <div class="s-meta">
+      <div class="s-cat">Quick Reference</div>
+      <h2 class="s-title">The Master<br/><span>Cheatsheet</span></h2>
+      <p class="s-desc">Every principle from this guide — one table. Build this into your weekly routine and watch everything compound.</p>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Principle</th><th>The Action</th><th>Chapter</th><th>Frequency</th></tr></thead>
+      <tbody>
+        <tr><td class="num-cell">01</td><td class="name-cell">Halo Triggers</td><td>Manage the 5 controllable triggers: skin, posture, fit, grooming, smile</td><td>Halo</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">02</td><td class="name-cell">Intentional Presentation</td><td>"Does this reflect how I want to show up today?" Ask every morning.</td><td>Halo</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">03</td><td class="name-cell">Cleanser</td><td>Gentle, non-stripping cleanser AM + PM. CeraVe Hydrating as baseline.</td><td>Skincare</td><td><span class="badge ba">2× Daily</span></td></tr>
+        <tr><td class="num-cell">04</td><td class="name-cell">Moisturiser</td><td>Ceramide-based moisturiser on damp skin AM + PM. All skin types including oily.</td><td>Skincare</td><td><span class="badge ba">2× Daily</span></td></tr>
+        <tr><td class="num-cell">05</td><td class="name-cell">SPF 30+</td><td>Broad-spectrum every single morning. Non-negotiable. Best anti-aging product on Earth.</td><td>Skincare</td><td><span class="badge ba">Every AM</span></td></tr>
+        <tr><td class="num-cell">06</td><td class="name-cell">Retinol</td><td>Lowest concentration, every 3rd night. Build to nightly over 8 weeks.</td><td>Skincare</td><td><span class="badge bb">3× Week</span></td></tr>
+        <tr><td class="num-cell">07</td><td class="name-cell">Pillow Hygiene</td><td>Change pillowcase 2× per week. Eliminates 7hrs/night of bacteria exposure.</td><td>Skincare</td><td><span class="badge bb">2× Week</span></td></tr>
+        <tr><td class="num-cell">08</td><td class="name-cell">Chin Tucks</td><td>15 reps × 3 sets. Every morning. Counteracts forward head posture directly.</td><td>Posture</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">09</td><td class="name-cell">Wall Angels</td><td>12 reps × 3 sets. Activates posterior chain muscles switched off by desk work.</td><td>Posture</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">10</td><td class="name-cell">Doorway Chest Stretch</td><td>30 sec × 3 reps. Lengthens pec minor — primary cause of rounded shoulders.</td><td>Posture</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">11</td><td class="name-cell">Posture Alarm</td><td>Set 30-min recurring alarm during work hours. Reset to neutral each time.</td><td>Posture</td><td><span class="badge ba">All Day</span></td></tr>
+        <tr><td class="num-cell">12</td><td class="name-cell">Fit Over Brand</td><td>$30 that fits beats $300 that doesn't. Tailor what you have first.</td><td>Wardrobe</td><td><span class="badge ba">Rule</span></td></tr>
+        <tr><td class="num-cell">13</td><td class="name-cell">5 Pieces System</td><td>Dark jeans + blazer + fitted tee + clean sneakers + classic outerwear</td><td>Wardrobe</td><td><span class="badge ba">Foundation</span></td></tr>
+        <tr><td class="num-cell">14</td><td class="name-cell">Neutral Palette</td><td>Build around neutrals. One point of interest per outfit. Everything else recedes.</td><td>Wardrobe</td><td><span class="badge ba">System</span></td></tr>
+        <tr><td class="num-cell">15</td><td class="name-cell">Second-Hand Premium</td><td>Buy quality second-hand + tailor. Beats fast fashion at 1/10th the cost.</td><td>Wardrobe</td><td><span class="badge bb">Strategy</span></td></tr>
+        <tr><td class="num-cell">16</td><td class="name-cell">Hair Maintenance</td><td>Fresh cut every 4–6 weeks. Style daily with small amount of product.</td><td>Grooming</td><td><span class="badge ba">4–6 Weeks</span></td></tr>
+        <tr><td class="num-cell">17</td><td class="name-cell">Oral Hygiene</td><td>Electric toothbrush twice daily. Floss. Mouthwash. Monthly whitening cycle.</td><td>Grooming</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">18</td><td class="name-cell">Beard Rule</td><td>Maintained or clean-shaven. Nothing in between. Neckline every 3–4 days.</td><td>Grooming</td><td><span class="badge bb">3× Week</span></td></tr>
+        <tr><td class="num-cell">19</td><td class="name-cell">Hands & Nails</td><td>Trim, file, moisturise. 5 minutes. More noticed than you expect.</td><td>Grooming</td><td><span class="badge bb">Weekly</span></td></tr>
+        <tr><td class="num-cell">20</td><td class="name-cell">Nose/Ear Trimmer</td><td>Trim every 2 weeks. $15. Most impactful invisible grooming step.</td><td>Grooming</td><td><span class="badge bb">2× Month</span></td></tr>
+        <tr><td class="num-cell">21</td><td class="name-cell">Fragrance</td><td>2–3 sprays to pulse points. Restraint. Noticeable close, invisible at distance.</td><td>Grooming</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">22</td><td class="name-cell">Resistance Training</td><td>3× per week. 4–6 compound movements. 3 sets × 8–12 reps.</td><td>Fitness</td><td><span class="badge ba">3× Week</span></td></tr>
+        <tr><td class="num-cell">23</td><td class="name-cell">Zone 2 Cardio</td><td>30 min brisk walk/cycle. 3× per week. Skin glow visible in 2–4 weeks.</td><td>Fitness</td><td><span class="badge ba">3× Week</span></td></tr>
+        <tr><td class="num-cell">24</td><td class="name-cell">Protein First</td><td>0.8–1g protein per lb body weight daily. Preserves muscle during fat loss.</td><td>Fitness</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">25</td><td class="name-cell">Reduce Ultra-Processed</td><td>Reduces facial puffiness and skin inflammation within 2–3 weeks visibly.</td><td>Fitness</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">26</td><td class="name-cell">Monthly Progress Photos</td><td>Same lighting, angle, time. Monthly. Removes daily mirror inaccuracy.</td><td>Mindset</td><td><span class="badge bb">Monthly</span></td></tr>
+        <tr><td class="num-cell">27</td><td class="name-cell">Habit Anchoring</td><td>Attach grooming habits to morning routine. Automatic in 21 days.</td><td>Mindset</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">28</td><td class="name-cell">Foundation First</td><td>Master the 3-step skincare and posture basics before adding anything else.</td><td>All</td><td><span class="badge ba">Always</span></td></tr>
+        <tr><td class="num-cell">29</td><td class="name-cell">Clean Sneakers Weekly</td><td>Magic Eraser on soles. Soft brush on uppers. 5 minutes. Massive visual impact.</td><td>Wardrobe</td><td><span class="badge ba">Weekly</span></td></tr>
+        <tr><td class="num-cell">30</td><td class="name-cell">The Philosophy</td><td>Intentionality beats perfection. Show up cared-for, not flawless.</td><td>Mindset</td><td><span class="badge ba">Always</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</section>
+
+<footer>
+  <div class="footer-logo">Lookmaxxing: The No-BS Appearance Guide</div>
+  <p class="footer-sub">Lifestyle · Appearance Science · Self-Improvement · 2025–2026 Edition</p>
+  <p class="footer-sub" style="color:var(--muted);font-size:13px;margin-top:8px">8 Complete Chapters · 30 Core Principles · Research from Royal Society, Princeton, Ohio State, Dr. Sandra Lee, Amy Cuddy, Susie Faux & Edward Thorndike</p>
+  <p class="footer-tiny">Research compiled May 2026 · Inspired by Parallelogram · Built for people who take themselves seriously</p>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:rgba(200,148,58,.28);margin-top:36px">"Take care of your body. It's the only place you have to live." — Jim Rohn</p>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const st=document.documentElement.scrollTop;
+  const sh=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('prog').style.width=(st/sh*100)+'%';
+});
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}});
+},{threshold:0.07});
+document.querySelectorAll('.card,.col-card,.s-stat,.skin-step,.w-piece,.groom-row,.p-day,.posture-side,.profile-card,.face-panel,.ts-face').forEach(el=>{
+  el.style.opacity='0';el.style.transform='translateY(18px)';
+  el.style.transition='opacity .5s ease, transform .5s ease';
+  obs.observe(el);
+});
+</script>
+</body>
+</html>

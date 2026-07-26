@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Own Your Time: The Anti-Busy System</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07080a;--surface:#0e1014;--card:#13151a;--card2:#181b22;
+  --gold:#c8943a;--gold2:#e8b84b;--golddim:rgba(200,148,58,.13);
+  --cream:#f0e8d5;--muted:#5c5f68;--light:#9a9da8;
+  --border:rgba(200,148,58,.18);--rust:#b84532;
+  --teal:#2c7a72;--deep:#1a2a1a;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--cream);overflow-x:hidden;line-height:1.6}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.5}
+#prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--deep),var(--gold),var(--gold2));width:0%;z-index:2000;transition:width .08s}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:1500;display:flex;align-items:center;justify-content:space-between;padding:14px 48px;background:rgba(7,8,10,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(200,148,58,.1)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
+.nav-links{display:flex;gap:20px;list-style:none}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+@media(max-width:768px){.nav-links{display:none}.hero,.section,.toc-wrap,.quote-block,footer{padding-left:22px!important;padding-right:22px!important}nav{padding:14px 22px}}
+
+/* HERO */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr auto;align-items:center;gap:48px;padding:120px 64px 80px;position:relative;overflow:hidden}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.hero-visual{display:none}}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 75% 55% at 92% 8%,rgba(26,42,26,.14) 0%,transparent 55%),radial-gradient(ellipse 55% 70% at 5% 90%,rgba(200,148,58,.1) 0%,transparent 60%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;opacity:.022;background-image:linear-gradient(rgba(200,148,58,1) 1px,transparent 1px),linear-gradient(90deg,rgba(200,148,58,1) 1px,transparent 1px);background-size:68px 68px}
+.hero-inner{position:relative;max-width:680px}
+.hero-badge{display:inline-flex;align-items:center;background:rgba(26,42,26,.18);border:1px solid rgba(26,42,26,.5);padding:5px 16px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#7aaa88;margin-bottom:22px;opacity:0;animation:fadeup .7s .15s forwards}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:26px;display:flex;align-items:center;gap:14px;opacity:0;animation:fadeup .7s .2s forwards}
+.hero-tag::before{content:'';width:44px;height:1px;background:var(--gold);flex-shrink:0}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(44px,7.5vw,108px);font-weight:700;line-height:.88;letter-spacing:-4px;margin-bottom:10px;opacity:0;animation:fadeup .8s .4s forwards}
+.hero h1 span{color:var(--gold);font-style:italic}
+.hero h1 .sub{display:block;color:rgba(240,232,213,.2);font-size:clamp(20px,3.4vw,48px);font-weight:400;font-style:italic;letter-spacing:-1px;margin-top:8px}
+.hero-desc{font-size:clamp(15px,1.9vw,18px);color:var(--light);max-width:520px;margin:34px 0 50px;font-weight:300;line-height:1.78;opacity:0;animation:fadeup .8s .6s forwards}
+.hero-stats{display:flex;gap:0;border:1px solid var(--border);width:fit-content;opacity:0;animation:fadeup .8s .8s forwards;flex-wrap:wrap}
+.hstat{padding:16px 26px;border-right:1px solid var(--border);text-align:center}
+.hstat:last-child{border-right:none}
+.hstat-n{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.hstat-l{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-top:4px}
+.scroll-hint{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-top:32px;opacity:.4}
+.scroll-hint::before{content:'';width:1px;height:28px;background:var(--gold);opacity:.35}
+@keyframes fadeup{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+
+/* TOC */
+.toc-wrap{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:56px 64px}
+.toc-inner{max-width:1100px;margin:0 auto}
+.toc-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:36px;display:flex;align-items:center;gap:12px}
+.toc-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px}
+.toc-item{background:var(--card);padding:18px 22px;display:flex;align-items:flex-start;gap:14px;cursor:pointer;transition:background .2s,border-color .2s;border:1px solid transparent;text-decoration:none}
+.toc-item:hover{background:var(--card2);border-color:var(--border)}
+.toc-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);opacity:.55;flex-shrink:0;min-width:26px;margin-top:2px}
+.toc-name{font-size:13.5px;color:var(--light);font-weight:400;transition:color .2s;line-height:1.4}
+.toc-item:hover .toc-name{color:var(--cream)}
+
+/* SECTIONS */
+.section{padding:96px 64px;position:relative}
+.section-alt{background:var(--surface)}
+.s-inner{max-width:1100px;margin:0 auto}
+.s-head-visual{display:grid;grid-template-columns:1fr auto;gap:48px;align-items:start;margin-bottom:60px;padding-bottom:44px;border-bottom:1px solid var(--border)}
+@media(max-width:768px){.s-head-visual{grid-template-columns:1fr}.s-aside{display:none}}
+.s-head{display:grid;grid-template-columns:90px 1fr;gap:32px;align-items:start;margin-bottom:60px;padding-bottom:44px;border-bottom:1px solid var(--border)}
+.s-num{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;padding-top:8px}
+.s-meta{display:flex;flex-direction:column;gap:10px}
+.s-cat{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:3px;color:var(--rust);text-transform:uppercase}
+.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,60px);font-weight:700;line-height:.92;letter-spacing:-1.5px;color:var(--cream)}
+.s-title span{color:var(--gold);font-style:italic}
+.s-desc{font-size:15.5px;color:var(--light);max-width:620px;font-weight:300;line-height:1.78;margin-top:6px}
+.s-aside{display:flex;flex-direction:column;align-items:center;gap:10px;flex-shrink:0}
+.s-aside-label{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2.5px;color:var(--muted);text-transform:uppercase;text-align:center}
+@media(max-width:600px){.s-head{grid-template-columns:1fr;gap:14px}.s-head-visual .s-head{grid-template-columns:1fr;gap:14px}}
+
+/* CARDS */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:2px}
+@media(max-width:600px){.cards{grid-template-columns:1fr}}
+.card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .25s,background .25s;position:relative;overflow:hidden}
+.card:hover{border-color:var(--border);background:var(--card2)}
+.card::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:linear-gradient(180deg,var(--gold),var(--deep));transition:height .35s}
+.card:hover::before{height:100%}
+.card-num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);opacity:.45;margin-bottom:14px}
+.card-icon{font-size:26px;margin-bottom:11px;display:block}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:700;color:var(--cream);letter-spacing:-.4px;margin-bottom:11px;line-height:1.15}
+.card-sec{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin:16px 0 7px}
+.card-text{font-size:13.5px;color:var(--light);line-height:1.72;font-weight:300}
+.psych{background:rgba(200,148,58,.06);border-left:2px solid var(--gold);padding:15px 18px;margin-top:18px}
+.psych .card-sec{margin-top:0}
+.scibox{background:rgba(44,122,114,.07);border-left:2px solid rgba(44,122,114,.5);padding:15px 18px;margin-top:14px}
+.scibox .card-sec{color:#4aaa9e}
+.badge{display:inline-flex;align-items:center;padding:4px 11px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;margin-top:14px}
+.ba{background:rgba(200,148,58,.11);color:var(--gold);border:1px solid var(--border)}
+.bb{background:rgba(44,122,114,.12);color:#4aaa9e;border:1px solid rgba(44,122,114,.3)}
+.bc{background:rgba(184,69,50,.11);color:#d46040;border:1px solid rgba(184,69,50,.28)}
+.bd{background:rgba(26,42,26,.14);color:#7aaa88;border:1px solid rgba(26,42,26,.4)}
+
+/* QUOTE */
+.quote-block{background:var(--surface);padding:72px 64px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center}
+.quote-text{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3.2vw,36px);font-weight:600;font-style:italic;color:var(--cream);max-width:880px;margin:0 auto;line-height:1.4}
+.quote-text em{color:var(--gold)}
+.quote-attr{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:24px}
+
+/* STAT ROW */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:2px;margin:44px 0}
+.s-stat{background:var(--card);padding:26px 22px;text-align:center;border:1px solid transparent;transition:border-color .2s}
+.s-stat:hover{border-color:var(--border)}
+.s-stat-n{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.s-stat-l{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-top:5px}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}}
+.col-card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .2s}
+.col-card:hover{border-color:var(--border)}
+.col-icon{font-size:30px;margin-bottom:14px;display:block}
+.col-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:11px;letter-spacing:-.4px}
+.col-text{font-size:13.5px;color:var(--light);line-height:1.75;font-weight:300}
+.col-text strong{color:var(--cream);font-weight:500}
+
+/* PARKINSON VISUAL */
+.park-visual{background:var(--card);border:1px solid var(--border);padding:32px;margin:36px 0}
+
+/* ENERGY BLOCKS */
+.energy-blocks{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:2px;margin:36px 0}
+.energy-block{background:var(--card);padding:26px;border:1px solid transparent;transition:border-color .2s,background .2s;position:relative;overflow:hidden}
+.energy-block:hover{border-color:var(--border);background:var(--card2)}
+.energy-block-time{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:var(--gold);line-height:1;margin-bottom:6px}
+.energy-block-label{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2.5px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;display:block}
+.energy-block-title{font-weight:600;color:var(--cream);font-size:14px;margin-bottom:6px}
+.energy-block-text{font-size:13px;color:var(--light);line-height:1.65;font-weight:300}
+.energy-indicator{position:absolute;top:0;right:0;width:4px;height:100%}
+.peak{background:linear-gradient(180deg,#e8b84b,#c8943a)}
+.trough{background:linear-gradient(180deg,#2a3a2a,#1a2a1a)}
+.recovery{background:linear-gradient(180deg,#7aaa88,#4aaa9e)}
+
+/* MIT METHOD */
+.mit-steps{display:flex;flex-direction:column;gap:2px;margin:36px 0}
+.mit-step{display:grid;grid-template-columns:64px 1fr;gap:0;background:var(--card);border:1px solid transparent;transition:border-color .2s}
+.mit-step:hover{border-color:var(--border)}
+.mit-num{background:var(--golddim);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--gold)}
+.mit-body{padding:18px 24px}
+.mit-title{font-weight:600;color:var(--cream);font-size:14.5px;margin-bottom:4px}
+.mit-text{font-size:13px;color:var(--light);line-height:1.65;font-weight:300}
+.mit-phrase{font-size:12.5px;color:var(--gold);font-style:italic;margin-top:8px;line-height:1.5}
+
+/* NO SCRIPTS */
+.no-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2px;margin:36px 0}
+.no-card{background:var(--card);padding:28px;border:1px solid transparent;transition:border-color .2s,background .2s;position:relative;overflow:hidden}
+.no-card:hover{border-color:var(--border);background:var(--card2)}
+.no-num{font-family:'Cormorant Garamond',serif;font-size:64px;font-weight:700;color:var(--gold);opacity:.07;position:absolute;top:4px;right:10px;line-height:1}
+.no-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+.no-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:8px;letter-spacing:-.3px}
+.no-script{font-size:12.5px;color:var(--gold);font-style:italic;margin-bottom:8px;padding:8px 12px;background:rgba(200,148,58,.06);border-left:2px solid rgba(200,148,58,.3);line-height:1.55}
+.no-why{font-size:13px;color:var(--light);line-height:1.65;font-weight:300}
+
+/* ALERT / TIP */
+.alert{background:rgba(184,69,50,.07);border:1px solid rgba(184,69,50,.24);padding:22px 26px;margin:28px 0}
+.alert-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:var(--rust);text-transform:uppercase;margin-bottom:9px}
+.alert-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.alert-text strong{color:var(--cream);font-weight:500}
+.tip{background:rgba(44,122,114,.07);border:1px solid rgba(44,122,114,.24);padding:22px 26px;margin:28px 0}
+.tip-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:#4aaa9e;text-transform:uppercase;margin-bottom:9px}
+.tip-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.tip-text strong{color:var(--cream);font-weight:500}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;margin-top:40px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--card2);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);padding:13px 16px;text-align:left;border-bottom:1px solid var(--border)}
+tbody tr{border-bottom:1px solid rgba(200,148,58,.07);transition:background .15s}
+tbody tr:hover{background:var(--card)}
+tbody td{padding:13px 16px;color:var(--light);vertical-align:top;line-height:1.5}
+.num-cell{font-family:'JetBrains Mono',monospace;color:var(--gold);opacity:.55;font-size:11px}
+.name-cell{font-weight:500;color:var(--cream)}
+
+footer{background:var(--bg);border-top:1px solid var(--border);padding:56px 64px 72px;text-align:center}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;letter-spacing:2px;color:var(--gold);margin-bottom:10px}
+.footer-sub{font-size:13.5px;color:var(--muted);margin-bottom:6px}
+.footer-tiny{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(92,95,104,.45);text-transform:uppercase;margin-top:26px}
+
+.pg-hero-art{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:.55;z-index:0}
+.pg-hero-art svg{width:100%;height:100%;display:block}
+[class*="icon"] svg.pg-icon{width:1em;height:1em;display:inline-block;vertical-align:-0.15em}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav>
+  <div class="nav-logo">Anti-Busy System</div>
+  <ul class="nav-links">
+    <li><a href="#parkinson">Parkinson's Law</a></li>
+    <li><a href="#mit">MIT Method</a></li>
+    <li><a href="#energy">Energy Management</a></li>
+    <li><a href="#no">Saying No</a></li>
+    <li><a href="#deepwork">Deep Work</a></li>
+    <li><a href="#digital">Digital Minimalism</a></li>
+    <li><a href="#weekly">Weekly Design</a></li>
+    <li><a href="#cheatsheet">Cheatsheet</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero"><div class="pg-hero-art" aria-hidden="true"><svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><path d="M420.1 410.4 A195.9 195.9 0 0 1 192.8 145.4" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M712.8 432.2 A211.6 211.6 0 0 1 409.9 363.8" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M502.3 312.6 A154.5 154.5 0 0 1 556.4 65.8" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><line x1="495.9" y1="84.1" x2="526.3" y2="34.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="493.0" y1="168.0" x2="469.2" y2="208.1" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="147.5" y1="106.2" x2="185.1" y2="124.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="172.2" y1="141.1" x2="185.1" y2="124.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="709.5" y1="256.8" x2="714.6" y2="188.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="709.5" y1="256.8" x2="801.8" y2="222.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="405.5" y1="91.5" x2="383.6" y2="62.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="809.1" y1="76.1" x2="813.1" y2="131.1" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="797.3" y1="163.4" x2="820.8" y2="172.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="797.3" y1="163.4" x2="813.1" y2="131.1" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="172.2" y1="141.1" x2="93.9" y2="259.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="675.8" y1="123.6" x2="714.6" y2="188.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="797.3" y1="163.4" x2="675.8" y2="123.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="820.8" y1="172.7" x2="801.8" y2="222.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="797.3" y1="163.4" x2="801.8" y2="222.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><circle cx="495.9" cy="84.1" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="495.9" cy="84.1" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="493.0" cy="168.0" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="147.5" cy="106.2" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="526.3" cy="34.3" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="172.2" cy="141.1" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="709.5" cy="256.8" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="405.5" cy="91.5" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="405.5" cy="91.5" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="809.1" cy="76.1" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="809.1" cy="76.1" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="797.3" cy="163.4" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="93.9" cy="259.3" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="469.2" cy="208.1" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="469.2" cy="208.1" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="813.1" cy="131.1" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="820.8" cy="172.7" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="383.6" cy="62.8" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="383.6" cy="62.8" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="675.8" cy="123.6" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="675.8" cy="123.6" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="185.1" cy="124.6" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="801.8" cy="222.9" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="801.8" cy="222.9" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="714.6" cy="188.8" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="714.6" cy="188.8" r="3.2" fill="#e8b84b" opacity="0.85"/></svg></div>
+  <div class="hero-glow"></div><div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">Mindset · Productivity Science · Time Architecture · 2025–26</div>
+    <div class="hero-tag">The Complete Anti-Busy Research Guide · 2025–26 Edition</div>
+    <h1>Own Your<br/><span>Time</span><span class="sub">The Anti-Busy System</span></h1>
+    <p class="hero-desc">The science of reclaiming your hours — from Parkinson's Law to biological peak hours, from the one task that matters most to the exact language for saying no without guilt. Not a productivity hack collection. A complete redesign of how you relate to time. 8 deep chapters. Research-first. No busywork.</p>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-n">1955</span><span class="hstat-l">Parkinson's Law — still the most accurately observed productivity principle in history</span></div>
+      <div class="hstat"><span class="hstat-n">20–40%</span><span class="hstat-l">productivity gain from aligning work to biological peak hours (Insightful 2025)</span></div>
+      <div class="hstat"><span class="hstat-n">1 MIT</span><span class="hstat-l">Most Important Task — the principle that ends the illusion of productive busyness</span></div>
+      <div class="hstat"><span class="hstat-n">2.5hrs</span><span class="hstat-l">average knowledge worker's productive deep work per day — most waste the rest</span></div>
+    </div>
+    <div class="scroll-hint">Scroll to begin</div>
+  </div>
+
+  <!-- HERO — Clean clock/time editorial SVG -->
+  <div class="hero-visual" style="flex-shrink:0;opacity:0;animation:fadeup .9s 1s forwards">
+    <svg width="300" height="380" viewBox="0 0 300 380" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="clockbg" cx="50%" cy="50%" r="55%">
+          <stop offset="0%" stop-color="#1a1408"/>
+          <stop offset="100%" stop-color="#07080a"/>
+        </radialGradient>
+      </defs>
+      <rect width="300" height="380" fill="url(#clockbg)"/>
+
+      <!-- Main clock circle — minimal -->
+      <circle cx="150" cy="170" r="100" fill="none" stroke="#c8943a" stroke-opacity="0.2" stroke-width="1.2"/>
+      <circle cx="150" cy="170" r="92" fill="none" stroke="#c8943a" stroke-opacity="0.08" stroke-width="0.6"/>
+
+      <!-- Hour tick marks -->
+      <line x1="150" y1="72" x2="150" y2="84" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1.5"/>
+      <line x1="228" y1="94" x2="222" y2="104" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1"/>
+      <line x1="248" y1="170" x2="236" y2="170" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1"/>
+      <line x1="228" y1="246" x2="222" y2="236" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1"/>
+      <line x1="150" y1="268" x2="150" y2="256" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1.5"/>
+      <line x1="72" y1="246" x2="78" y2="236" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1"/>
+      <line x1="52" y1="170" x2="64" y2="170" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1"/>
+      <line x1="72" y1="94" x2="78" y2="104" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1"/>
+
+      <!-- Deep work arc — golden segment (9AM to 12PM area) -->
+      <path d="M150 72 A98 98 0 0 1 247 145" fill="none" stroke="#c8943a" stroke-opacity="0.65" stroke-width="8" stroke-linecap="round"/>
+      <!-- Label for deep work arc -->
+      <text x="220" y="100" font-family="'JetBrains Mono',monospace" font-size="7" fill="#c8943a" opacity="0.7" letter-spacing="1">PEAK</text>
+      <text x="215" y="111" font-family="'JetBrains Mono',monospace" font-size="7" fill="#c8943a" opacity="0.7" letter-spacing="1">HOURS</text>
+
+      <!-- Trough arc — dim segment (1PM to 3PM) -->
+      <path d="M150 268 A98 98 0 0 1 88 226" fill="none" stroke="#c8943a" stroke-opacity="0.15" stroke-width="6" stroke-linecap="round"/>
+      <text x="60" y="252" font-family="'JetBrains Mono',monospace" font-size="7" fill="#c8943a" opacity="0.3" letter-spacing="1">TROUGH</text>
+
+      <!-- Clock hands — minimal lines -->
+      <!-- Hour hand — pointing to ~10 -->
+      <line x1="150" y1="170" x2="120" y2="108" stroke="#c8943a" stroke-opacity="0.7" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- Minute hand — pointing to ~2 -->
+      <line x1="150" y1="170" x2="196" y2="110" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1.5" stroke-linecap="round"/>
+
+      <!-- Center dot -->
+      <circle cx="150" cy="170" r="5" fill="#c8943a" opacity="0.8"/>
+      <circle cx="150" cy="170" r="2" fill="#07080a"/>
+
+      <!-- MIT label — 12 o'clock position -->
+      <text x="150" y="60" font-family="'JetBrains Mono',monospace" font-size="8" fill="#e8b84b" opacity="0.7" text-anchor="middle" letter-spacing="2">MIT</text>
+      <text x="150" y="50" font-family="'JetBrains Mono',monospace" font-size="7" fill="#c8943a" opacity="0.4" text-anchor="middle" letter-spacing="1">MOST IMPORTANT</text>
+
+      <!-- Bottom label -->
+      <text x="150" y="295" font-family="'Cormorant Garamond',serif" font-size="14" font-style="italic" fill="#c8943a" opacity="0.45" text-anchor="middle">Own Your Hours</text>
+      <text x="150" y="313" font-family="'JetBrains Mono',monospace" font-size="7" fill="#c8943a" opacity="0.28" text-anchor="middle" letter-spacing="2">ANTI-BUSY SYSTEM</text>
+
+      <!-- Energy curve below clock -->
+      <path d="M30 340 Q80 318 120 320 Q150 322 150 330 Q150 340 180 330 Q220 318 270 320" stroke="#c8943a" stroke-opacity="0.4" stroke-width="1.5" fill="none"/>
+      <path d="M30 340 Q80 318 120 320 Q150 322 150 330 Q150 340 180 330 Q220 318 270 320" stroke="#c8943a" stroke-opacity="0.06" stroke-width="8" fill="none"/>
+      <text x="75" y="312" font-family="'JetBrains Mono',monospace" font-size="6" fill="#c8943a" opacity="0.35" text-anchor="middle" letter-spacing="1">PEAK</text>
+      <text x="150" y="344" font-family="'JetBrains Mono',monospace" font-size="6" fill="#c8943a" opacity="0.25" text-anchor="middle" letter-spacing="1">TROUGH</text>
+      <text x="225" y="312" font-family="'JetBrains Mono',monospace" font-size="6" fill="#c8943a" opacity="0.35" text-anchor="middle" letter-spacing="1">RECOVERY</text>
+
+      <!-- Corner marks -->
+      <line x1="20" y1="20" x2="38" y2="20" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1"/>
+      <line x1="20" y1="20" x2="20" y2="38" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1"/>
+      <line x1="262" y1="360" x2="280" y2="360" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1"/>
+      <line x1="280" y1="342" x2="280" y2="360" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ─── TOC ─── -->
+<div class="toc-wrap">
+  <div class="toc-inner">
+    <div class="toc-label">Everything Inside This Guide</div>
+    <div class="toc-grid">
+      <a href="#parkinson" class="toc-item"><span class="toc-num">01</span><span class="toc-name">Parkinson's Law — Work expands to fill time. Here's how to use that against itself.</span></a>
+      <a href="#mit" class="toc-item"><span class="toc-num">02</span><span class="toc-name">The MIT Method — Identify your 1 Most Important Task before opening your phone</span></a>
+      <a href="#energy" class="toc-item"><span class="toc-num">03</span><span class="toc-name">Energy Over Time — Match your hardest work to your biological peak hours</span></a>
+      <a href="#no" class="toc-item"><span class="toc-num">04</span><span class="toc-name">How to Say No Without Guilt — The exact language that protects relationships and calendar</span></a>
+      <a href="#deepwork" class="toc-item"><span class="toc-num">05</span><span class="toc-name">Deep Work Architecture — Build the conditions where real work actually happens</span></a>
+      <a href="#digital" class="toc-item"><span class="toc-num">06</span><span class="toc-name">Digital Minimalism — Reclaim the attention that busyness is built on</span></a>
+      <a href="#weekly" class="toc-item"><span class="toc-num">07</span><span class="toc-name">The Weekly Design Session — The one habit that changes how you relate to all 168 hours</span></a>
+      <a href="#cheatsheet" class="toc-item"><span class="toc-num">08</span><span class="toc-name">The Master Cheatsheet — Every principle, one table</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- ─── 01: PARKINSON'S LAW ─── -->
+<section class="section" id="parkinson">
+<div class="s-inner">
+  <div class="s-head-visual">
+    <div class="s-head" style="border:none;margin:0;padding:0">
+      <div class="s-num">Chapter 01</div>
+      <div class="s-meta">
+        <div class="s-cat">Cyril Northcote Parkinson · 1955 · Asana · Monday.com · Goals & Progress 2025</div>
+        <h2 class="s-title">Parkinson's<br/><span>Law</span></h2>
+        <p class="s-desc">Published in The Economist in 1955 as satirical observation of bureaucratic expansion, Parkinson's Law has become one of the most reliably verified principles in productivity science: <em>work expands to fill the time available for its completion.</em> The two-hour report becomes an all-day task when you've assigned it all day. And the fix is not more discipline — it's smarter constraints.</p>
+      </div>
+    </div>
+    <!-- Parkinson visual — before/after timebox SVG -->
+    <div class="s-aside">
+      <svg width="130" height="160" viewBox="0 0 130 160" fill="none">
+        <defs><radialGradient id="pkbg" cx="50%" cy="50%" r="55%"><stop offset="0%" stop-color="#1a1408"/><stop offset="100%" stop-color="#07080a"/></radialGradient></defs>
+        <rect width="130" height="160" fill="url(#pkbg)"/>
+        <!-- WITHOUT TIMEBOX: task fills all available time -->
+        <text x="65" y="20" font-family="'JetBrains Mono',monospace" font-size="7" fill="#c8943a" opacity="0.5" text-anchor="middle" letter-spacing="1">AVAILABLE TIME</text>
+        <rect x="10" y="25" width="110" height="52" rx="2" fill="#c8943a" opacity="0.09" stroke="#c8943a" stroke-opacity="0.35" stroke-width="1"/>
+        <rect x="10" y="25" width="110" height="52" rx="2" fill="#c8943a" opacity="0.09"/>
+        <text x="65" y="54" font-family="'JetBrains Mono',monospace" font-size="8" fill="#c8943a" opacity="0.6" text-anchor="middle">TASK EXPANDS</text>
+        <text x="65" y="66" font-family="'JetBrains Mono',monospace" font-size="8" fill="#c8943a" opacity="0.6" text-anchor="middle">TO FILL IT</text>
+
+        <!-- WITH TIMEBOX: task compressed -->
+        <text x="65" y="96" font-family="'JetBrains Mono',monospace" font-size="7" fill="#7aaa88" opacity="0.6" text-anchor="middle" letter-spacing="1">TIMEBOX APPLIED</text>
+        <rect x="10" y="101" width="110" height="52" rx="2" fill="none" stroke="#c8943a" stroke-opacity="0.15" stroke-width="0.8" stroke-dasharray="3,3"/>
+        <rect x="10" y="101" width="52" height="52" rx="2" fill="#c8943a" opacity="0.12" stroke="#7aaa88" stroke-opacity="0.5" stroke-width="1"/>
+        <text x="36" y="126" font-family="'JetBrains Mono',monospace" font-size="7" fill="#7aaa88" opacity="0.7" text-anchor="middle">TASK</text>
+        <text x="36" y="137" font-family="'JetBrains Mono',monospace" font-size="7" fill="#7aaa88" opacity="0.7" text-anchor="middle">DONE</text>
+        <!-- Free time -->
+        <text x="90" y="128" font-family="'JetBrains Mono',monospace" font-size="7" fill="#c8943a" opacity="0.3" text-anchor="middle">FREE</text>
+      </svg>
+      <div class="s-aside-label">Task Expands<br/>vs Timebox</div>
+    </div>
+  </div>
+  <div style="height:44px;border-bottom:1px solid var(--border);margin-bottom:60px"></div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">1955</span><span class="s-stat-l">Parkinson's original Economist essay — verified in psychology labs for 70 years since</span></div>
+    <div class="s-stat"><span class="s-stat-n">Weak</span><span class="s-stat-l">form: people consistently use MORE time when more is available, even without better results</span></div>
+    <div class="s-stat"><span class="s-stat-n">Goals</span><span class="s-stat-l">Parkinson's Law operates through goal-setting: generous deadlines = lower performance goals</span></div>
+    <div class="s-stat"><span class="s-stat-n">Yerkes</span><span class="s-stat-l">-Dodson: inverted-U performance curve — too little pressure kills focus, too much kills quality</span></div>
+  </div>
+
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 3v7.5L5.5 17a2 2 0 0 0 1.8 3h9.4a2 2 0 0 0 1.8-3L15 10.5V3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 3h6M6.5 15h11" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">Why Work Expands — The Psychology</div>
+      <p class="col-text">
+        Parkinson's Law isn't purely about procrastination. Research shows it's a <strong>goal-setting phenomenon</strong>: generous deadlines cause people to unconsciously set lower performance targets for themselves. Those lower goals — not the time itself — drive the slower pace.<br/><br/>
+        Goals & Progress 2025: "In Aronson and Gerard's study, subjects given excess time didn't just take longer — they actually rated the same task as more complex than subjects given tight deadlines." The brain interprets "I have 2 weeks for this" as a signal that the task must be a 2-week task — and adjusts both effort and quality threshold accordingly.<br/><br/>
+        The law applies most powerfully to <strong>knowledge work with fuzzy boundaries</strong> — writing, planning, reviewing, communicating — where "done" is a judgment call rather than a clear finish line. If you don't define done, the work defines it for you — usually by consuming all available time.
+      </p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon">⚔️</span>
+      <div class="col-title">Use Parkinson's Law Against Itself</div>
+      <p class="col-text">
+        The most direct counter: <strong>timeboxing</strong> — setting a deliberately tight time limit for a task before you start. Research shows constraints actually boost creativity rather than killing it. Time pressure reduces overthinking, forces prioritisation, and reveals what is genuinely necessary.<br/><br/>
+        <strong>The Pareto complement:</strong> Combine Parkinson's Law with the 80/20 principle. 80% of a task's value comes from 20% of the effort. Parkinson's Law lets you identify that 20% by asking: "If I had only 30 minutes for this, what would I focus on?" The answer is the essential work. Everything else is Parkinson's Law at work.<br/><br/>
+        <strong>The important caveat:</strong> The law should not be applied mechanically. Chronic time pressure is genuinely harmful to performance and wellbeing. Complex analysis and creative work can suffer under unrealistically compressed deadlines. The aim is appropriate constraint — not constant haste.
+      </p>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">PARKINSON TOOL 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="13" r="8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 9v4l3 2M9.5 2.5h5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Timeboxing — The Primary Counter</div>
+      <p class="card-text">Assign a fixed, deliberately compressed time limit to every task before you begin. Not "I'll work on this until it's done" — but "I have 45 minutes for this. Go." The timebox functions as a self-imposed deadline that activates the same urgency mechanisms as an external deadline. Practically: block specific time intervals in your calendar for specific tasks. When the block ends — stop. Assess what was completed and what remains. The discipline of stopping on time is as important as starting on time.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Research</div>
+        <p class="card-text">A 1967 study in Organizational Behavior and Human Performance tested the deadline effect directly. Participants consistently paced their effort to match their deadline — neither faster nor slower. This means the timebox doesn't just prevent expansion; it actively sets the cognitive pace of the work itself.</p>
+      </div>
+      <span class="badge ba">Primary Tool</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PARKINSON TOOL 02</div>
+      <span class="card-icon">📏</span>
+      <div class="card-title">Define "Done" Before You Start</div>
+      <p class="card-text">Parkinson's Law feeds on fuzzy finish lines. If you don't know what "done" looks like before you start, you will keep working until time runs out — because there is always something more you could add. Before any significant task, write down one sentence: "This task is done when [specific, verifiable condition]." Not "when I've done a good job on the report" but "when I have 3 completed sections, 500 words each, with a conclusion paragraph." Specific conditions create the logical endpoint that prevents indefinite expansion. No definition of done = no done.</p>
+      <span class="badge ba">Before Every Task</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PARKINSON TOOL 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="3.5" y="5" width="17" height="15" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 10h17M8 3v4M16 3v4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Half-Time Challenge</div>
+      <p class="card-text">For any recurring task you've done before, try completing it in half your usual time. This isn't about quality — it's about discovering how much of your current time expenditure is genuine requirement vs Parkinson-driven expansion. Most people discover they can do it. The task that "takes 2 hours" gets done in 55 minutes when 1 hour is what's allocated. The extra hour wasn't producing better output — it was producing the comfortable illusion of thorough work. The half-time challenge is diagnostic: it reveals the true time cost of a task vs its Parkinson cost.</p>
+      <span class="badge ba">Diagnostic Tool</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PARKINSON + MEETINGS</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="3.5" y="5" width="17" height="15" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 10h17M8 3v4M16 3v4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Meetings Are Parkinson's Law in Action</div>
+      <p class="card-text">A 60-minute meeting will fill 60 minutes — regardless of how much content needs to be covered. A 30-minute meeting will cover the same content in 30 minutes. This isn't speculation — it's an institutional application of Parkinson's Law that wastes millions of hours annually. The fix: every meeting gets a specific agenda with time allocations for each item, a stated goal ("this meeting is done when we've made a decision on X"), and a default duration of 25 or 50 minutes instead of 30 or 60 (the 5-minute buffer prevents back-to-back meeting exhaustion).</p>
+      <span class="badge ba">High-Leverage</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 1 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"Work expands to fill the time available for its completion. <em>The insight isn't just that we're inefficient — it's that we unconsciously calibrate our effort to match the deadline, not the task.</em>"</p>
+  <p class="quote-attr">— Cyril Northcote Parkinson · The Economist · 1955 · Verified across 70 years of productivity research</p>
+</div>
+
+<!-- ─── 02: MIT METHOD ─── -->
+<section class="section section-alt" id="mit">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 02</div>
+    <div class="s-meta">
+      <div class="s-cat">Leo Babauta · Zen to Done · Anti-Busy Method · Focus Architecture</div>
+      <h2 class="s-title">The <span>MIT</span><br/>Method</h2>
+      <p class="s-desc">The MIT — Most Important Task — is the single practice that most ruthlessly separates real productivity from the performance of productivity. It asks one question before any other: "If I could accomplish only one thing today, what would make this day a genuine success?" The answer is your MIT. Everything else is Parkinson's Law in waiting.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">1</span><span class="s-stat-l">Most Important Task — identified before opening your phone or email each morning</span></div>
+    <div class="s-stat"><span class="s-stat-n">First</span><span class="s-stat-l">hours of the day are biologically optimal for high-stakes cognitive work</span></div>
+    <div class="s-stat"><span class="s-stat-n">Busy ≠</span><span class="s-stat-l">Productive. The MIT method is the daily test of whether your activity matches your priority.</span></div>
+    <div class="s-stat"><span class="s-stat-n">Weekly</span><span class="s-stat-l">MITs: identify 3 MITs per week — one per major life domain — for strategic clarity</span></div>
+  </div>
+
+  <div class="mit-steps">
+    <div class="mit-step">
+      <div class="mit-num">1</div>
+      <div class="mit-body">
+        <div class="mit-title">Before Opening Your Phone — Ask the MIT Question</div>
+        <p class="mit-text">Before touching your phone, checking email, or engaging with any incoming demand on your attention: write down or state clearly the one task that would make today a genuine success if it were the only thing you completed. This task should be something that moves your most important project or goal meaningfully forward — not administrative, not reactive, not urgent-because-someone-else-made-it-urgent. Your MIT is the thing your future self would most thank you for completing today.</p>
+        <p class="mit-phrase">"If I could only accomplish one thing today, what would make this day a genuine success?"</p>
+      </div>
+    </div>
+    <div class="mit-step">
+      <div class="mit-num">2</div>
+      <div class="mit-body">
+        <div class="mit-title">Do the MIT First — Before Email, Before Slack, Before Anything</div>
+        <p class="mit-text">Your MIT must be done first — in the first 60–90 minutes of your productive day, before you've processed any incoming demands that would recalibrate your priority hierarchy. The moment you check email or Slack before doing your MIT, you have handed control of your priority list to whoever sent the most recent message. The first hour of your workday is your highest-leverage hour — it determines whether you are driving your day or being driven by it. Protect it absolutely.</p>
+        <p class="mit-phrase">"Email is a to-do list written by other people for your time." — The MIT must come before the list other people wrote.</p>
+      </div>
+    </div>
+    <div class="mit-step">
+      <div class="mit-num">3</div>
+      <div class="mit-body">
+        <div class="mit-title">3 MITs Maximum — The Secondary List</div>
+        <p class="mit-text">After your primary MIT, you may have 2 additional MITs for the day — secondary tasks that are important but not the most important. Three MITs total, maximum. The limit is not arbitrary: it reflects the reality that most knowledge workers have approximately 2.5–4 hours of genuine deep cognitive work available per day. More than 3 MITs means you're including tasks that don't genuinely belong in the "most important" category — which means none of them are really MITs. Be ruthless about the list. If everything is important, nothing is.</p>
+        <p class="mit-phrase">"Three MITs per day, five days per week, 52 weeks per year = 780 genuine moments of meaningful progress. That is a career."</p>
+      </div>
+    </div>
+    <div class="mit-step">
+      <div class="mit-num">4</div>
+      <div class="mit-body">
+        <div class="mit-title">Everything Else Is the Support System — Not the Goal</div>
+        <p class="mit-text">Email, meetings, admin, calls, messages — these are the support system that keeps the organisation running. They are not the work itself. They are not MITs. The cultural confusion between support-system activity and meaningful productive work is the root cause of most "busy" days that produce no genuine progress. The MIT method forces a daily honest reckoning: did I actually move something forward today, or did I successfully maintain the machinery? Both have value — but only one builds your career and your projects.</p>
+        <p class="mit-phrase">"At the end of every day: did I complete my MIT? If yes — regardless of everything else — this was a productive day."</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-head">✅ The Distinction That Changes Everything</div>
+    <p class="tip-text">There is a difference between being <strong>active and being effective.</strong> You can have a day that is full from 9AM to 7PM — calls, meetings, emails, tasks checked off — and move nothing genuinely important forward. The MIT method is the daily confrontation with this distinction. It asks: not "was I busy?" but "did I move the thing that actually matters?" This question, asked honestly every evening, produces more professional growth in a year than almost any skill, system, or strategy available.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 2 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"The most productive people don't just manage their time well — they manage their <em>energy and attention</em> well. The MIT method aligns your best hours with your most important work."</p>
+  <p class="quote-attr">— Chris Bailey · Author of The Productivity Project · Biological Prime Time Research</p>
+</div>
+
+<!-- ─── 03: ENERGY MANAGEMENT ─── -->
+<section class="section" id="energy">
+<div class="s-inner">
+  <div class="s-head-visual">
+    <div class="s-head" style="border:none;margin:0;padding:0">
+      <div class="s-num">Chapter 03</div>
+      <div class="s-meta">
+        <div class="s-cat">Insightful 2025 · Rational Growth Apr 2026 · Hubstaff · Timestripe Dec 2025</div>
+        <h2 class="s-title">Energy Over<br/><span>Time</span></h2>
+        <p class="s-desc">Traditional time management treats every hour as having equal value. Biology disagrees. Research shows that aligning work with your biological peak hours can improve productivity by 20–40%, reduce errors by up to 50%, and decrease fatigue by 30% (Insightful, 2025). An hour of your peak cognitive window is worth 3–5 hours of your trough — in output quality, not just quantity.</p>
+      </div>
+    </div>
+    <!-- Energy curve SVG -->
+    <div class="s-aside">
+      <svg width="130" height="150" viewBox="0 0 130 150" fill="none">
+        <defs><radialGradient id="encbg" cx="50%" cy="50%" r="55%"><stop offset="0%" stop-color="#1a1408"/><stop offset="100%" stop-color="#07080a"/></radialGradient></defs>
+        <rect width="130" height="150" fill="url(#encbg)"/>
+        <!-- Axes -->
+        <line x1="18" y1="20" x2="18" y2="118" stroke="#c8943a" stroke-opacity="0.2" stroke-width="0.8"/>
+        <line x1="18" y1="118" x2="120" y2="118" stroke="#c8943a" stroke-opacity="0.2" stroke-width="0.8"/>
+        <!-- Energy curve — peak morning, trough afternoon, recovery late afternoon -->
+        <path d="M18 90 Q35 40 60 35 Q75 33 82 60 Q86 78 90 85 Q100 70 115 55" stroke="#c8943a" stroke-opacity="0.7" stroke-width="2" fill="none"/>
+        <!-- Area fill -->
+        <path d="M18 90 Q35 40 60 35 Q75 33 82 60 Q86 78 90 85 Q100 70 115 55 L115 118 L18 118 Z" fill="#c8943a" opacity="0.05"/>
+        <!-- Peak label -->
+        <circle cx="60" cy="35" r="4" fill="#e8b84b" opacity="0.7"/>
+        <text x="62" y="28" font-family="'JetBrains Mono',monospace" font-size="7" fill="#c8943a" opacity="0.65" letter-spacing="1">PEAK</text>
+        <!-- Trough label -->
+        <circle cx="88" cy="84" r="3" fill="#c8943a" opacity="0.3"/>
+        <text x="74" y="100" font-family="'JetBrains Mono',monospace" font-size="6" fill="#c8943a" opacity="0.4" letter-spacing="0.5">TROUGH</text>
+        <!-- Recovery -->
+        <circle cx="115" cy="55" r="3" fill="#7aaa88" opacity="0.6"/>
+        <text x="90" y="48" font-family="'JetBrains Mono',monospace" font-size="6" fill="#7aaa88" opacity="0.55" letter-spacing="0.5">RECOVERY</text>
+        <!-- Time labels -->
+        <text x="18" y="132" font-family="'JetBrains Mono',monospace" font-size="6" fill="#c8943a" opacity="0.35" letter-spacing="0.5">9AM</text>
+        <text x="55" y="132" font-family="'JetBrains Mono',monospace" font-size="6" fill="#c8943a" opacity="0.35" letter-spacing="0.5">1PM</text>
+        <text x="98" y="132" font-family="'JetBrains Mono',monospace" font-size="6" fill="#c8943a" opacity="0.35" letter-spacing="0.5">5PM</text>
+      </svg>
+      <div class="s-aside-label">Biological Energy<br/>Curve</div>
+    </div>
+  </div>
+  <div style="height:44px;border-bottom:1px solid var(--border);margin-bottom:60px"></div>
+
+  <div class="energy-blocks">
+    <div class="energy-block">
+      <div class="energy-indicator peak"></div>
+      <div class="energy-block-time">Peak</div>
+      <span class="energy-block-label">2–4hrs after waking · Most</span>
+      <div class="energy-block-title">Deep Cognitive Work Only</div>
+      <p class="energy-block-text">Your highest-value cognitive work belongs in your peak energy window — not email, not administrative tasks, not meetings that could be async. For most adults, peak arrives roughly 2–4 hours after waking (approximately 9–11AM for early risers) when glucose metabolism and prefrontal cortex connectivity are at their highest. This is when you write, create, think strategically, and solve your hardest problems. Protect this window as if it is irreplaceable — because it is.</p>
+    </div>
+    <div class="energy-block">
+      <div class="energy-indicator trough"></div>
+      <div class="energy-block-time">Trough</div>
+      <span class="energy-block-label">Early–Mid Afternoon · Low Cognition</span>
+      <div class="energy-block-title">Admin, Email & Routine Tasks</div>
+      <p class="energy-block-text">The early afternoon energy trough is real, circadian, and universal. It is not a character flaw — it is biology. Rather than fighting it with caffeine or willpower, deploy it: this is the optimal window for low-complexity tasks that still need doing. Email, administrative filing, routine scheduling, data entry, rote processes. These tasks don't require your best cognition — and doing them in the trough preserves your peak for work that actually needs it.</p>
+    </div>
+    <div class="energy-block">
+      <div class="energy-indicator recovery"></div>
+      <div class="energy-block-time">Recovery</div>
+      <span class="energy-block-label">Late Afternoon · Secondary Peak</span>
+      <div class="energy-block-title">Collaboration, Meetings & Creative Work</div>
+      <p class="energy-block-text">Most people experience a secondary energy recovery in the late afternoon (3–5PM) — not as strong as the morning peak, but sufficient for collaborative work, brainstorming, meetings that benefit from social energy, and lighter creative tasks. This is also the optimal window for review, feedback, and synthesising the day's output. Schedule collaborative team work here rather than in the morning peak — your deep work is worth more than any meeting.</p>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">ENERGY TOOL 01</div>
+      <span class="card-icon">🦁</span>
+      <div class="card-title">Find Your Chronotype — Then Stop Fighting It</div>
+      <p class="card-text">Chronotype is your genetically determined tendency toward a specific peak alertness window. The four main chronotypes (from Dr. Michael Breus): <strong style="color:var(--cream)">Lion</strong> (early riser, peak morning, bed early), <strong style="color:var(--cream)">Bear</strong> (solar schedule majority, mid-morning peak), <strong style="color:var(--cream)">Wolf</strong> (late-night peak, Barack Obama reportedly), and <strong style="color:var(--cream)">Dolphin</strong> (light sleeper, erratic peak). Research shows that "social jetlag" — working against your chronotype — measurably reduces cognitive performance and increases error rates. Track your alertness hourly for 7–14 days. Your pattern is your productivity architecture. Design your schedule around it rather than against it.</p>
+      <span class="badge ba">Know Your Type</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ENERGY TOOL 02</div>
+      <span class="card-icon">🔋</span>
+      <div class="card-title">The 4 Energy Sources — Not Just Sleep</div>
+      <p class="card-text">Energy is not a single variable. Jim Loehr and Tony Schwartz's performance research identified four energy dimensions that all require management:<br/><br/><strong style="color:var(--cream)">Physical:</strong> Sleep, nutrition, movement, recovery. Foundation of everything else.<br/><strong style="color:var(--cream)">Emotional:</strong> Quality of relationships, sense of safety, emotional regulation capacity.<br/><strong style="color:var(--cream)">Mental:</strong> Focus, concentration, cognitive clarity — depleted by multitasking and context-switching.<br/><strong style="color:var(--cream)">Purpose/Spiritual:</strong> Connection to values and meaning — depleted by work that feels misaligned.<br/><br/>Most "time management" problems are actually energy problems in one of these four dimensions. When you can't focus — before adjusting your schedule, diagnose which energy source is depleted.</p>
+      <span class="badge ba">Diagnostic Framework</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ENERGY TOOL 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M13 2 4 14h6l-1 8 9-12h-6z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Ultradian Rhythms — The 90-Minute Work Cycle</div>
+      <p class="card-text">Within your daily energy arc, the brain also operates in 90-minute ultradian cycles — periods of higher and lower alertness that cycle throughout the day regardless of chronotype. Research: working with these cycles (approximately 90 minutes of focused work followed by a 10–20 minute genuine break) produces better outcomes than continuous work sessions. The break must be genuinely restorative — not "checking Instagram while pretending to rest." Stand up, move, look at something 20+ feet away, drink water. The brain needs the break to consolidate learning and prepare for the next cycle.</p>
+      <span class="badge ba">90-Min Cycles</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 04: SAYING NO ─── -->
+<section class="section section-alt" id="no">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 04</div>
+    <div class="s-meta">
+      <div class="s-cat">Greg McKeown · Essentialism · Steve Jobs · Saying No Without Guilt</div>
+      <h2 class="s-title">How to Say<br/><span>No</span> Without Guilt</h2>
+      <p class="s-desc">"No" is the most powerful time management tool available — and the most underused. Every "yes" to something non-essential is simultaneously a "no" to something important. The inability to say no is not a social virtue. It is a calendar tragedy. Here is the exact language that protects relationships while protecting your time.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">No</span><span class="s-stat-l">is complete in one word. Everything after "no" is either negotiation or guilt management.</span></div>
+    <div class="s-stat"><span class="s-stat-n">Yes</span><span class="s-stat-l">to everything = excellence at nothing. Essentialism is choosing where to be exceptional.</span></div>
+    <div class="s-stat"><span class="s-stat-n">Jobs</span><span class="s-stat-l">"I'm as proud of what we don't do as what we do." — Steve Jobs on the power of no.</span></div>
+    <div class="s-stat"><span class="s-stat-n">Guilt</span><span class="s-stat-l">is the feeling of disappointing someone. It can coexist with the right decision. Always.</span></div>
+  </div>
+
+  <div class="no-grid">
+    <div class="no-card">
+      <div class="no-num">1</div>
+      <div class="no-label">Script 01 · Meeting Request</div>
+      <div class="no-title">The Redirect No</div>
+      <div class="no-script">"I'm not able to take a meeting on this right now — could you send me a brief summary of what you need and I'll respond by [day]? That'll probably get you an answer faster anyway."</div>
+      <p class="no-why">Why it works: you've offered a genuine alternative that serves their actual need (an answer) without accommodating their preferred method (a meeting). You've protected your time while delivering real value.</p>
+    </div>
+    <div class="no-card">
+      <div class="no-num">2</div>
+      <div class="no-label">Script 02 · Project Addition</div>
+      <div class="no-title">The Tradeoff No</div>
+      <div class="no-script">"I'd like to help with this — but to do it well, I'd need to drop or delay [existing commitment]. Is that the right tradeoff, or would you prefer I defer this new request instead?"</div>
+      <p class="no-why">Why it works: makes the cost of yes explicit. Forces the requester to participate in the prioritisation decision. If they say "yes, drop the other thing" — now it's a mutual decision, not your sacrifice. Often they'll say "ah, don't worry — we'll figure it out."</p>
+    </div>
+    <div class="no-card">
+      <div class="no-num">3</div>
+      <div class="no-label">Script 03 · Social Invitation</div>
+      <div class="no-title">The Honest No</div>
+      <div class="no-script">"Thank you for thinking of me — I'm going to sit this one out. I hope it goes well."</div>
+      <p class="no-why">Why it works: direct, warm, no explanation required. Explanations invite negotiation. "I can't because I have X" invites "what if we change the time?" A clean no needs no defence. The warmth ("thank you for thinking of me") signals respect — the brevity signals finality.</p>
+    </div>
+    <div class="no-card">
+      <div class="no-num">4</div>
+      <div class="no-label">Script 04 · Ongoing Commitment</div>
+      <div class="no-title">The Graceful Exit</div>
+      <div class="no-script">"I've been reflecting on my commitments and I need to step back from [X]. I want to give you enough notice to find someone who can give it the attention it deserves. My last [contribution/meeting/date] would be [specific date]."</div>
+      <p class="no-why">Why it works: specific notice date prevents "just one more month" creep. Framing around giving the work proper attention rather than rejecting it is both honest and gracious. A clear exit date is kinder than an open-ended withdrawal.</p>
+    </div>
+    <div class="no-card">
+      <div class="no-num">5</div>
+      <div class="no-label">Script 05 · The Manager/Boss Ask</div>
+      <div class="no-title">The Priority Clarification No</div>
+      <div class="no-script">"I want to make sure I deliver the right things well. I currently have [A], [B], and [C] as my main priorities. Where does this new request sit relative to those? I want to make sure I'm focused on what matters most to you."</div>
+      <p class="no-why">Why it works: you haven't said no — you've asked them to help you prioritise. If they say "it's more important than A" — you have their explicit authorisation to de-prioritise A. If they say "fit it in around the others" — you've surfaced a capacity problem they need to solve, not you.</p>
+    </div>
+    <div class="no-card">
+      <div class="no-num">6</div>
+      <div class="no-label">The Principle</div>
+      <div class="no-title">Why the Guilt Is Normal and Irrelevant</div>
+      <div class="no-script">"Guilt is the feeling of having disappointed someone. It is a social signal — not a moral verdict on whether you made the right decision."</div>
+      <p class="no-why">The guilt of saying no is not evidence that you said the wrong thing. It is evidence that you value the relationship with the person you said it to. Both can be true simultaneously: it was the right decision AND it feels uncomfortable. Tolerating the discomfort without reversing the decision is the skill. It is a skill — not a personality trait. It gets easier with deliberate practice.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 05: DEEP WORK ─── -->
+<section class="section" id="deepwork">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 05</div>
+    <div class="s-meta">
+      <div class="s-cat">Cal Newport · Deep Work · Focus Architecture · 2025–26</div>
+      <h2 class="s-title">Deep Work<br/><span>Architecture</span></h2>
+      <p class="s-desc">Cal Newport defines deep work as "professional activities performed in a state of distraction-free concentration that push your cognitive capabilities to their limit." The research finding that changed his field: the ability to do deep work is becoming increasingly rare at the same time it is becoming increasingly valuable. The person who can build this capacity owns their most irreplaceable professional advantage.</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon">🏊</span>
+      <div class="col-title">What Deep Work Actually Is</div>
+      <p class="col-text">
+        Deep work is not simply "focused work." It is the cognitive state in which you can produce output at the edge of your ability — the state in which genuinely difficult thinking, complex synthesis, and creative production happens. It requires:<br/><br/>
+        <strong>Complete absence of multitasking.</strong> The brain cannot do deep cognitive work while context-switching. Each switch incurs a "residue" of attention from the previous task that contaminates the current one for 20–30 minutes.<br/><br/>
+        <strong>Extended uninterrupted time.</strong> Deep work sessions below 60–90 minutes rarely reach the state where the best thinking happens. You need time to warm up, to hold complexity in working memory, and to produce the breakthrough insights that only emerge after sustained engagement.<br/><br/>
+        <strong>A clear problem to solve.</strong> Unfocused "deep work" is impossible. The session must have a specific output target: "I will draft the strategy section" not "I will work on strategy."
+      </p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 3 5 6v6c0 5 3 8 7 9 4-1 7-4 7-9V6z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">How to Build the Architecture</div>
+      <p class="col-text">
+        <strong>Schedule it like a meeting.</strong> Block 90–120 minutes in your calendar as a fixed appointment. Tell colleagues. Protect it the way you'd protect an external meeting.<br/><br/>
+        <strong>Remove distraction infrastructure.</strong> Close email. Close Slack. Put your phone in another room or on airplane mode. Block distracting websites (Cold Turkey, Freedom). The goal: no escape route for attention during the block.<br/><br/>
+        <strong>Set a specific output.</strong> "In this session I will write 800 words of the proposal." Not "I will work on the proposal." Specificity creates accountability.<br/><br/>
+        <strong>Build the habit gradually.</strong> Newport: start with 1 hour of deep work per day and build to 4 hours over several months. Trying to jump to 4 hours immediately produces frustration, not output — the concentration muscle needs progressive overload like any other.
+      </p>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">DEEP WORK 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8A3.5 3.5 0 0 0 8 18a3 3 0 0 0 3-2.5V6a2 2 0 0 0-2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 1 5.8A3.5 3.5 0 0 1 16 18a3 3 0 0 1-3-2.5V6a2 2 0 0 1 2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Attention Residue Problem</div>
+      <p class="card-text">Sophie Leroy's research on "attention residue" found that when you switch from one task to another, part of your attention remains on the previous task — contaminating your performance on the current one. This residue takes 20–30 minutes to fully clear. In a typical open-plan office workday, the average knowledge worker is interrupted every 11 minutes — and rarely completes more than 20 minutes of uninterrupted work before the next interruption. The cumulative attention residue from this pattern means most "full-day" workers never reach the cognitive state necessary for their most valuable output.</p>
+      <span class="badge ba">The Root Cause</span>
+    </div>
+    <div class="card">
+      <div class="card-num">DEEP WORK 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="7" y="3" width="10" height="18" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 18h2M4 4l16 16" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The 4 Deep Work Philosophies</div>
+      <p class="card-text"><strong style="color:var(--cream)">Monastic:</strong> Eliminate shallow work almost entirely. Works for academics, writers, solo professionals. Not applicable to most.<br/><br/><strong style="color:var(--cream)">Bimodal:</strong> Divide time into deep work periods (days or weeks) and shallow work periods. Consulting model. Works for some executives.<br/><br/><strong style="color:var(--cream)">Rhythmic:</strong> Schedule a fixed daily deep work block and protect it consistently. Most accessible for knowledge workers. Newport's recommended starting philosophy.<br/><br/><strong style="color:var(--cream)">Journalistic:</strong> Fit deep work wherever possible throughout the day. Requires highly trained ability to shift into focus quickly. Hardest — for experienced practitioners only. Start rhythmic.</p>
+      <span class="badge ba">Choose Your Model</span>
+    </div>
+    <div class="card">
+      <div class="card-num">DEEP WORK 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 20V10M12 20V4M19 20v-7" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 20h18" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Shallow Work — Know What It Is and When to Do It</div>
+      <p class="card-text">Shallow work is not bad work. It is necessary work: email, routine meetings, administrative tasks, quick replies. The problem is not that shallow work exists — it is when shallow work crowds out deep work and poses as productivity. The formula: maximise deep work hours; do shallow work in designated shallow work windows (the trough hours); never let shallow work masquerade as important output. Newport's diagnostic question: "How long would it take to train a bright university graduate to do this task?" Short answer = shallow. Long answer = deep. Route each to its appropriate hour.</p>
+      <span class="badge ba">Framework</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 06: DIGITAL MINIMALISM ─── -->
+<section class="section section-alt" id="digital">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 06</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · Cal Newport · Digital Minimalism · Attention Architecture</div>
+      <h2 class="s-title">Digital<br/><span>Minimalism</span></h2>
+      <p class="s-desc">Every hour of busyness is built on a foundation of fragmented attention. Social media, notifications, news feeds, and messaging apps are engineered by teams of the world's best engineers to maximise the time you spend on them — at the direct expense of the time and attention you have available for your actual life and work. Digital minimalism is the deliberate redesign of your relationship with technology.</p>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">DIGITAL 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M6 17h12l-1.5-2V10a4.5 4.5 0 0 0-9 0v5z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M10 20a2 2 0 0 0 4 0" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Notifications — The Manufactured Interruption</div>
+      <p class="card-text">The default notification setting on every app is maximum. App companies profit from your attention — which means they have a direct financial incentive to interrupt you as frequently as possible. The average smartphone user receives 65–80 notifications per day. Each one redirects attention and incurs attention residue. The fix: audit every app's notification permission and turn off all non-essential ones. The only notifications that should push to your phone are calls from specific people and calendar alerts. Everything else can be checked at designated times. The world will not end if you don't see a Slack message within 4 minutes.</p>
+      <span class="badge bc">Turn Them Off Today</span>
+    </div>
+    <div class="card">
+      <div class="card-num">DIGITAL 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="7" y="3" width="10" height="18" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 18h2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Phone-Free Morning Protocol</div>
+      <p class="card-text">The single highest-leverage digital habit available: no phone for the first 60 minutes after waking. The reasons are neurological, hormonal, and psychological simultaneously. The cortisol awakening response (your body's natural morning alertness boost) is designed to help you clarify priorities and prepare for the day. Checking your phone in the first 60 minutes hijacks this response — redirecting your first alert cognitive state toward other people's agendas before you've established your own. The compounding impact: after 30 days of phone-free mornings, most people report having clearer priorities, more intentional days, and significantly reduced daily anxiety.</p>
+      <span class="badge ba">Highest Leverage</span>
+    </div>
+    <div class="card">
+      <div class="card-num">DIGITAL 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="3.5" y="5" width="17" height="15" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 10h17M8 3v4M16 3v4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Batched Communication — Not Constant Availability</div>
+      <p class="card-text">The expectation of constant email and message availability is a professional norm that has never been proven to improve outcomes — and has been consistently shown to impair them. Research on email checking frequency: checking email 3 times per day produces equivalent responsiveness to checking it constantly, with dramatically less cognitive cost. The practice: designate 2–3 specific windows for email and messaging (morning, midday, late afternoon). Communicate these windows to colleagues and set an auto-responder that states your check times. Most colleagues adapt within a week. Your deep work capacity improves immediately.</p>
+      <span class="badge ba">Batch It</span>
+    </div>
+    <div class="card">
+      <div class="card-num">DIGITAL 04</div>
+      <span class="card-icon">🧹</span>
+      <div class="card-title">The Digital Declutter Protocol</div>
+      <p class="card-text">Newport's digital minimalism declutter: take 30 days away from all optional technologies — social media, streaming services, news sites, anything that isn't essential for work or essential for life. During the 30 days: don't announce it, don't count days, and deliberately fill the time with offline activities you value. At the end of 30 days: reintroduce only technologies that serve a clear, articulated value in your life, with specific operating procedures (when you use them, for how long, for what purpose). What returns? Usually far less than what left. What you don't miss — you didn't need.</p>
+      <span class="badge ba">30-Day Protocol</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 07: WEEKLY DESIGN ─── -->
+<section class="section" id="weekly">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 07</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · The Weekly Design Session</div>
+      <h2 class="s-title">The Weekly<br/><span>Design Session</span></h2>
+      <p class="s-desc">Most people react to their weeks rather than designing them. They open Monday with no clear plan and navigate by urgency — responding to whatever is loudest rather than what matters most. The Weekly Design Session — 45–60 minutes every Sunday or Friday — is the single habit that changes the entire character of how you relate to your 168 available hours.</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon">🔭</span>
+      <div class="col-title">The Weekly Review — What to Clear</div>
+      <p class="col-text">
+        <strong>Capture everything that happened.</strong> What was completed? What's still open? What new items landed this week that haven't been processed? The goal: empty working memory into a trusted system. Anything left in your head creates background anxiety that drains cognitive capacity throughout the following week.<br/><br/>
+        <strong>Review your calendar and commitments.</strong> What's already scheduled for next week that is non-negotiable? Block them as givens before you design anything else.<br/><br/>
+        <strong>Review your projects list.</strong> For each active project: what is the next physical action that would move it forward? Not "work on X" but "write the first section of X" or "call Y to confirm Z." David Allen's research: projects without a defined next action don't move — they just create anxiety.
+      </p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon">✏️</span>
+      <div class="col-title">The Weekly Design — What to Build</div>
+      <p class="col-text">
+        <strong>Identify 3 MIT targets for the week.</strong> One per major life domain (work, relationship, health/personal). These are the 3 things that — if completed — would make this week a genuine success regardless of everything else.<br/><br/>
+        <strong>Block deep work windows first.</strong> Before filling your calendar with meetings and admin, block your deep work sessions for the week. Protect them before the week fills around them — because if you don't, the week fills without them.<br/><br/>
+        <strong>Design your energy use.</strong> Given what you know about your chronotype and the week ahead, allocate your deep work to peak hours and meetings/admin to trough hours. This single act — if consistently applied — produces more output improvement than any productivity technique or tool.
+      </p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-head">✅ The 45-Minute Sunday/Friday Session — The Exact Agenda</div>
+    <p class="tip-text"><strong>Minutes 0–15:</strong> Review. Empty capture (inbox, notepad, calendar). Review all open projects. Note everything still pending. <strong>Minutes 15–25:</strong> Clarify. For every open item — is it still relevant? If yes: what is the next physical action? Add it to next week's list or schedule it. <strong>Minutes 25–35:</strong> Design. Identify 3 weekly MITs. Block deep work sessions in peak hours for next week. Schedule the 3 MITs into specific days. <strong>Minutes 35–45:</strong> Close. Review the designed week. Does it reflect what actually matters this week? If not — adjust. A week designed on paper in 45 minutes produces measurably more meaningful output than a week navigated by urgency.</p>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">WEEKLY DESIGN 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M20 11a8 8 0 0 0-14.9-3.5M4 13a8 8 0 0 0 14.9 3.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 4v4h4M19 20v-4h-4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Shutdown Ritual — End Work Completely</div>
+      <p class="card-text">Newport's shutdown ritual: a fixed daily procedure that signals the end of the workday, after which you don't engage with work until the next day. The ritual: review tomorrow's calendar, review open tasks, say out loud "shutdown complete." This seemingly simple act gives the unconscious mind permission to disengage — preventing the "half-working" state of evening where you're physically present with family but mentally still at the office. Research on recovery: cognitive disengagement from work in the evening hours is critical for next-day performance. Work that bleeds into evenings doesn't produce more — it produces worse output the next morning.</p>
+      <span class="badge ba">Daily Ritual</span>
+    </div>
+    <div class="card">
+      <div class="card-num">WEEKLY DESIGN 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M4 20 14 4l6 16z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M9 20h5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Ideal Week Template</div>
+      <p class="card-text">Design a template of your ideal week — not what your weeks look like, but what they should look like if you had full control. Assign each category of work to its optimal time slot: deep work in peak hours, meetings in mid-morning or late afternoon, admin in the trough. Block time for exercise, relationships, and recovery as rigorously as you block work time. Then use this template as a planning target — each week trying to get as close to the template as reality allows. You will rarely hit the template perfectly. Having it shifts your average significantly closer to your ideal.</p>
+      <span class="badge ba">Design Tool</span>
+    </div>
+    <div class="card">
+      <div class="card-num">WEEKLY DESIGN 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 20V10M12 20V4M19 20v-7" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 20h18" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Track Your Time — For One Week Only</div>
+      <p class="card-text">Time tracking is not a permanent lifestyle — it is a diagnostic intervention. Track every 30 minutes of one full work week: what you were doing, in which mode (deep, shallow, reactive). Most knowledge workers discover that their actual time use is shockingly different from their perception. The average: less than 2.5 hours of genuine deep cognitive work per day, despite feeling busy for 8–10 hours. This single diagnostic experience is more motivating than any productivity book — because the data is personal, precise, and impossible to argue with. One week of tracking. The revelation usually lasts years.</p>
+      <span class="badge ba">One Week Diagnostic</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 3 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"Busyness is a form of laziness — lazy thinking and indiscriminate action. Being busy is most often used as a guise for avoiding the few critically important but uncomfortable actions. <em>The anti-busy system asks: what actually matters?</em>"</p>
+  <p class="quote-attr">— Tim Ferriss · The 4-Hour Work Week · Combining Parkinson's Law with the 80/20 Principle</p>
+</div>
+
+<!-- ─── 08: MASTER CHEATSHEET ─── -->
+<section class="section" id="cheatsheet">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 08</div>
+    <div class="s-meta">
+      <div class="s-cat">Quick Reference</div>
+      <h2 class="s-title">The Master<br/><span>Cheatsheet</span></h2>
+      <p class="s-desc">Every principle from this guide — one quick-reference table. Your complete operating system for owning your time rather than being owned by it.</p>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Principle</th><th>The Action</th><th>Chapter</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td class="num-cell">01</td><td class="name-cell">Parkinson's Law</td><td>Work expands to fill available time. The fix is not discipline — it is smarter constraints.</td><td>Parkinson</td><td><span class="badge ba">Core Law</span></td></tr>
+        <tr><td class="num-cell">02</td><td class="name-cell">Timeboxing</td><td>Set a deliberately tight time limit for every task before you start. "I have 45 minutes. Go."</td><td>Parkinson</td><td><span class="badge ba">Primary Tool</span></td></tr>
+        <tr><td class="num-cell">03</td><td class="name-cell">Define Done First</td><td>Before every task: write one sentence — "This is done when [specific, verifiable condition]." No definition = no done.</td><td>Parkinson</td><td><span class="badge ba">Every Task</span></td></tr>
+        <tr><td class="num-cell">04</td><td class="name-cell">Half-Time Challenge</td><td>For any recurring task — try completing it in half your usual time. Diagnostic: reveals Parkinson's vs genuine time cost.</td><td>Parkinson</td><td><span class="badge ba">Weekly</span></td></tr>
+        <tr><td class="num-cell">05</td><td class="name-cell">Meeting Parkinson's</td><td>Every meeting: specific agenda, time allocations per item, stated goal, 25 or 50-minute default (not 30 or 60).</td><td>Parkinson</td><td><span class="badge ba">Every Meeting</span></td></tr>
+        <tr><td class="num-cell">06</td><td class="name-cell">The MIT Question</td><td>Before opening phone or email: "If I could only accomplish one thing today, what would make this day a success?"</td><td>MIT</td><td><span class="badge ba">Every Morning</span></td></tr>
+        <tr><td class="num-cell">07</td><td class="name-cell">MIT Goes First</td><td>Complete your MIT in the first 60–90 minutes before email, Slack, or any reactive work. Non-negotiable.</td><td>MIT</td><td><span class="badge ba">Non-Negotiable</span></td></tr>
+        <tr><td class="num-cell">08</td><td class="name-cell">Maximum 3 MITs Daily</td><td>3 MITs maximum. If everything is important, nothing is. Be ruthless about the list.</td><td>MIT</td><td><span class="badge ba">Hard Limit</span></td></tr>
+        <tr><td class="num-cell">09</td><td class="name-cell">Active vs Effective</td><td>End of day question: "Did I complete my MIT?" Yes = productive day. Regardless of email volume processed.</td><td>MIT</td><td><span class="badge ba">Daily Review</span></td></tr>
+        <tr><td class="num-cell">10</td><td class="name-cell">Know Your Chronotype</td><td>Track alertness hourly for 7–14 days. Find your peak, trough, recovery windows. Stop fighting your biology.</td><td>Energy</td><td><span class="badge ba">Diagnostic</span></td></tr>
+        <tr><td class="num-cell">11</td><td class="name-cell">Peak Hours = Deep Work Only</td><td">MIT and deep work in your peak window. Email, admin, and meetings in your trough. Protect peak hours like irreplaceable assets.</td><td>Energy</td><td><span class="badge ba">Architecture</span></td></tr>
+        <tr><td class="num-cell">12</td><td class="name-cell">20–40% Productivity Gain</td><td>Research stat: aligning work to biological peak hours improves productivity 20–40%, reduces errors 50%, cuts fatigue 30%.</td><td>Energy</td><td><span class="badge ba">The Evidence</span></td></tr>
+        <tr><td class="num-cell">13</td><td class="name-cell">90-Minute Ultradian Cycles</td><td>Work 90 minutes focused → 10–20 minute genuine break (not phone). Brain consolidates learning during rest.</td><td>Energy</td><td><span class="badge ba">Work Rhythm</span></td></tr>
+        <tr><td class="num-cell">14</td><td class="name-cell">No is Complete</td><td>No requires no explanation. Explanations invite negotiation. Warmth + brevity = a no that preserves relationships.</td><td>No</td><td><span class="badge ba">Core Principle</span></td></tr>
+        <tr><td class="num-cell">15</td><td class="name-cell">The Tradeoff No</td><td>"To do this well, I'd need to drop [X]. Is that the right tradeoff?" Makes the cost of yes explicit. Shared decision.</td><td>No</td><td><span class="badge ba">Powerful Script</span></td></tr>
+        <tr><td class="num-cell">16</td><td class="name-cell">The Priority Clarification No</td><td>"Where does this sit relative to A, B, C?" Surfaces capacity problems for managers to solve — not you to absorb.</td><td>No</td><td><span class="badge ba">Manager Script</span></td></tr>
+        <tr><td class="num-cell">17</td><td class="name-cell">Guilt ≠ Wrong Decision</td><td>Guilt is a social signal, not a moral verdict. It can coexist with the right decision. Tolerate it without reversing the no.</td><td>No</td><td><span class="badge ba">Mindset</span></td></tr>
+        <tr><td class="num-cell">18</td><td class="name-cell">Attention Residue</td><td>Each task switch costs 20–30 minutes of residual attention contamination. Protect uninterrupted blocks ruthlessly.</td><td>Deep Work</td><td><span class="badge ba">The Root Cause</span></td></tr>
+        <tr><td class="num-cell">19</td><td class="name-cell">Rhythmic Deep Work</td><td>Schedule a fixed daily 90–120 min deep work block. Protect it like an external meeting. Build to 4 hours over months.</td><td>Deep Work</td><td><span class="badge ba">Daily Practice</span></td></tr>
+        <tr><td class="num-cell">20</td><td class="name-cell">Specific Output Target</td><td>"In this session I will write 800 words." Not "I will work on the project." Specificity creates accountability.</td><td>Deep Work</td><td><span class="badge ba">Every Session</span></td></tr>
+        <tr><td class="num-cell">21</td><td class="name-cell">Remove Distraction Infrastructure</td><td>Close email. Close Slack. Phone in another room. Website blocker on. No exit routes for attention during deep work.</td><td>Deep Work</td><td><span class="badge ba">Every Session</span></td></tr>
+        <tr><td class="num-cell">22</td><td class="name-cell">Turn Off Notifications</td><td>Audit every app. Turn off all non-essential push notifications today. Calls + calendar only. Everything else: on your terms.</td><td>Digital</td><td><span class="badge bc">Do This Today</span></td></tr>
+        <tr><td class="num-cell">23</td><td class="name-cell">Phone-Free First 60 Min</td><td>Protect cortisol awakening response for your own priorities. First 60 minutes of the day: no phone. 30-day habit.</td><td>Digital</td><td><span class="badge ba">Highest Leverage</span></td></tr>
+        <tr><td class="num-cell">24</td><td class="name-cell">Batch Communication</td><td>Check email/messages 2–3 times per day at designated windows. Communicate your check times. Colleagues adapt.</td><td>Digital</td><td><span class="badge ba">Batch It</span></td></tr>
+        <tr><td class="num-cell">25</td><td class="name-cell">The Weekly Review</td><td>45–60 min Sunday/Friday. Capture open items. Clarify next actions on all projects. Empty working memory.</td><td>Weekly</td><td><span class="badge ba">Weekly Habit</span></td></tr>
+        <tr><td class="num-cell">26</td><td class="name-cell">3 Weekly MITs</td><td>One per major life domain (work, relationship, health/personal). If achieved — the week was a success.</td><td>Weekly</td><td><span class="badge ba">Weekly</span></td></tr>
+        <tr><td class="num-cell">27</td><td class="name-cell">Block Deep Work First</td><td>Before filling calendar with meetings, block deep work sessions. If you don't block them first, they never happen.</td><td>Weekly</td><td><span class="badge ba">Sunday Rule</span></td></tr>
+        <tr><td class="num-cell">28</td><td class="name-cell">The Shutdown Ritual</td><td>Review tomorrow + say "shutdown complete" + fully disengage. Evening recovery = better next-day output.</td><td>Weekly</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">29</td><td class="name-cell">Track One Week</td><td>Track every 30 minutes for one week. Discover the gap between perceived and actual productive output. One week. Permanent change.</td><td>Weekly</td><td><span class="badge ba">Once</span></td></tr>
+        <tr><td class="num-cell">30</td><td class="name-cell">The Anti-Busy Standard</td><td>Not: "Was I busy?" But: "Did I move what actually matters forward?" Design your time around the answer to the second question.</td><td>All</td><td><span class="badge ba">Always</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</section>
+
+<footer>
+  <div class="footer-logo">Own Your Time: The Anti-Busy System</div>
+  <p class="footer-sub">Mindset · Productivity Science · Time Architecture · 2025–2026 Edition</p>
+  <p class="footer-sub" style="color:var(--muted);font-size:13px;margin-top:8px">8 Complete Chapters · 30 Core Principles · Research from Cyril Northcote Parkinson, Cal Newport, Chris Bailey, Jim Loehr, Tony Schwartz, Leo Babauta, Asana Nov 2025, Monday.com Mar 2026, Insightful 2025, Rational Growth Apr 2026 & Timestripe Dec 2025</p>
+  <p class="footer-tiny">Research compiled May 2026 · Inspired by Parallelogram · Built for everyone who is busy but not productive</p>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:rgba(200,148,58,.28);margin-top:36px">"Time is not a resource to be managed. It is a life to be designed." </p>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const st=document.documentElement.scrollTop;
+  const sh=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('prog').style.width=(st/sh*100)+'%';
+});
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}});
+},{threshold:0.07});
+document.querySelectorAll('.card,.col-card,.s-stat,.energy-block,.mit-step,.no-card').forEach(el=>{
+  el.style.opacity='0';el.style.transform='translateY(18px)';
+  el.style.transition='opacity .5s ease, transform .5s ease';
+  obs.observe(el);
+});
+</script>
+</body>
+</html>

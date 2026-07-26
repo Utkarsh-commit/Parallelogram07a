@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Eat Smart: Nutrition & Diet Simplified</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07080a;--surface:#0e1014;--card:#13151a;--card2:#181b22;
+  --gold:#c8943a;--gold2:#e8b84b;--golddim:rgba(200,148,58,.13);
+  --cream:#f0e8d5;--muted:#5c5f68;--light:#9a9da8;
+  --border:rgba(200,148,58,.18);--rust:#b84532;
+  --teal:#2c7a72;--green:#2a6b3a;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--cream);overflow-x:hidden;line-height:1.6}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.5}
+#prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--green),var(--gold),var(--gold2));width:0%;z-index:2000;transition:width .08s}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:1500;display:flex;align-items:center;justify-content:space-between;padding:14px 48px;background:rgba(7,8,10,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(200,148,58,.1)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
+.nav-links{display:flex;gap:20px;list-style:none}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+@media(max-width:768px){.nav-links{display:none}.hero,.section,.toc-wrap,.quote-block,footer{padding-left:22px!important;padding-right:22px!important}nav{padding:14px 22px}}
+
+/* HERO */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr auto;align-items:center;gap:48px;padding:120px 64px 80px;position:relative;overflow:hidden}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.hero-plate{display:none}}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 75% 55% at 92% 8%,rgba(42,107,58,.14) 0%,transparent 55%),radial-gradient(ellipse 55% 70% at 5% 90%,rgba(200,148,58,.1) 0%,transparent 60%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;opacity:.022;background-image:linear-gradient(rgba(200,148,58,1) 1px,transparent 1px),linear-gradient(90deg,rgba(200,148,58,1) 1px,transparent 1px);background-size:68px 68px}
+.hero-inner{position:relative;max-width:680px}
+.hero-badge{display:inline-flex;align-items:center;background:rgba(42,107,58,.15);border:1px solid rgba(42,107,58,.4);padding:5px 16px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#7aaa88;margin-bottom:22px;opacity:0;animation:fadeup .7s .15s forwards}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:26px;display:flex;align-items:center;gap:14px;opacity:0;animation:fadeup .7s .2s forwards}
+.hero-tag::before{content:'';width:44px;height:1px;background:var(--gold);flex-shrink:0}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(46px,8vw,114px);font-weight:700;line-height:.88;letter-spacing:-4px;margin-bottom:10px;opacity:0;animation:fadeup .8s .4s forwards}
+.hero h1 span{color:var(--gold);font-style:italic}
+.hero h1 .sub{display:block;color:rgba(240,232,213,.2);font-size:clamp(22px,3.6vw,50px);font-weight:400;font-style:italic;letter-spacing:-1px;margin-top:8px}
+.hero-desc{font-size:clamp(15px,1.9vw,18px);color:var(--light);max-width:520px;margin:34px 0 50px;font-weight:300;line-height:1.78;opacity:0;animation:fadeup .8s .6s forwards}
+.hero-stats{display:flex;gap:0;border:1px solid var(--border);width:fit-content;opacity:0;animation:fadeup .8s .8s forwards;flex-wrap:wrap}
+.hstat{padding:16px 26px;border-right:1px solid var(--border);text-align:center}
+.hstat:last-child{border-right:none}
+.hstat-n{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.hstat-l{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-top:4px}
+.scroll-hint{position:absolute;bottom:40px;left:64px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:10px;animation:pulse 2.5s infinite}
+.scroll-hint::before{content:'';width:1px;height:38px;background:var(--gold);opacity:.35}
+@keyframes fadeup{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+@keyframes floatplate{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-8px) rotate(1deg)}}
+
+/* HERO PLATE */
+.hero-plate{flex-shrink:0;opacity:0;animation:fadeup .9s 1s forwards}
+.hero-plate svg{filter:drop-shadow(0 0 40px rgba(200,148,58,.15))}
+
+/* TOC */
+.toc-wrap{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:56px 64px}
+.toc-inner{max-width:1100px;margin:0 auto}
+.toc-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:36px;display:flex;align-items:center;gap:12px}
+.toc-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px}
+.toc-item{background:var(--card);padding:18px 22px;display:flex;align-items:flex-start;gap:14px;cursor:pointer;transition:background .2s,border-color .2s;border:1px solid transparent;text-decoration:none}
+.toc-item:hover{background:var(--card2);border-color:var(--border)}
+.toc-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);opacity:.55;flex-shrink:0;min-width:26px;margin-top:2px}
+.toc-name{font-size:13.5px;color:var(--light);font-weight:400;transition:color .2s;line-height:1.4}
+.toc-item:hover .toc-name{color:var(--cream)}
+
+/* FOOD ILLUSTRATION BANNER */
+.food-banner{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+@media(max-width:640px){.food-banner{grid-template-columns:repeat(3,1fr)}.food-banner .fb-cell:nth-child(n+4){display:none}}
+.fb-cell{background:var(--card);padding:28px 16px;display:flex;flex-direction:column;align-items:center;gap:12px;transition:background .2s}
+.fb-cell:hover{background:var(--card2)}
+.fb-cell svg{display:block}
+.fb-label{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;text-align:center}
+.fb-sub{font-size:11px;color:var(--muted);text-align:center;line-height:1.4;font-weight:300}
+
+/* SECTIONS */
+.section{padding:96px 64px;position:relative}
+.section-alt{background:var(--surface)}
+.s-inner{max-width:1100px;margin:0 auto}
+.s-head-visual{display:grid;grid-template-columns:1fr auto;gap:48px;align-items:start;margin-bottom:60px;padding-bottom:44px;border-bottom:1px solid var(--border)}
+@media(max-width:768px){.s-head-visual{grid-template-columns:1fr}.s-food-aside{display:none}}
+.s-head{display:grid;grid-template-columns:90px 1fr;gap:32px;align-items:start}
+.s-num{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;padding-top:8px}
+.s-meta{display:flex;flex-direction:column;gap:10px}
+.s-cat{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:3px;color:var(--rust);text-transform:uppercase}
+.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,60px);font-weight:700;line-height:.92;letter-spacing:-1.5px;color:var(--cream)}
+.s-title span{color:var(--gold);font-style:italic}
+.s-desc{font-size:15.5px;color:var(--light);max-width:620px;font-weight:300;line-height:1.78;margin-top:6px}
+.s-food-aside{display:flex;flex-direction:column;align-items:center;gap:12px;flex-shrink:0}
+.s-food-label{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2.5px;color:var(--muted);text-transform:uppercase;text-align:center}
+@media(max-width:600px){.s-head{grid-template-columns:1fr;gap:14px}}
+
+/* CARDS */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:2px}
+@media(max-width:600px){.cards{grid-template-columns:1fr}}
+.card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .25s,background .25s;position:relative;overflow:hidden}
+.card:hover{border-color:var(--border);background:var(--card2)}
+.card::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:linear-gradient(180deg,var(--gold),var(--green));transition:height .35s}
+.card:hover::before{height:100%}
+.card-num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);opacity:.45;margin-bottom:14px}
+.card-icon{font-size:26px;margin-bottom:11px;display:block}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:700;color:var(--cream);letter-spacing:-.4px;margin-bottom:11px;line-height:1.15}
+.card-sec{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin:16px 0 7px}
+.card-text{font-size:13.5px;color:var(--light);line-height:1.72;font-weight:300}
+.psych{background:rgba(200,148,58,.06);border-left:2px solid var(--gold);padding:15px 18px;margin-top:18px}
+.psych .card-sec{margin-top:0}
+.scibox{background:rgba(42,107,58,.07);border-left:2px solid rgba(42,107,58,.5);padding:15px 18px;margin-top:14px}
+.scibox .card-sec{color:#7aaa88}
+.badge{display:inline-flex;align-items:center;padding:4px 11px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;margin-top:14px}
+.ba{background:rgba(200,148,58,.11);color:var(--gold);border:1px solid var(--border)}
+.bb{background:rgba(42,107,58,.12);color:#7aaa88;border:1px solid rgba(42,107,58,.3)}
+.bc{background:rgba(184,69,50,.11);color:#d46040;border:1px solid rgba(184,69,50,.28)}
+.bd{background:rgba(44,122,114,.12);color:#4aaa9e;border:1px solid rgba(44,122,114,.3)}
+
+/* QUOTE */
+.quote-block{background:var(--surface);padding:72px 64px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center}
+.quote-text{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3.2vw,36px);font-weight:600;font-style:italic;color:var(--cream);max-width:880px;margin:0 auto;line-height:1.4}
+.quote-text em{color:var(--gold)}
+.quote-attr{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:24px}
+
+/* STAT ROW */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:2px;margin:44px 0}
+.s-stat{background:var(--card);padding:26px 22px;text-align:center;border:1px solid transparent;transition:border-color .2s}
+.s-stat:hover{border-color:var(--border)}
+.s-stat-n{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.s-stat-l{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-top:5px}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}}
+.col-card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .2s}
+.col-card:hover{border-color:var(--border)}
+.col-icon{font-size:30px;margin-bottom:14px;display:block}
+.col-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:11px;letter-spacing:-.4px}
+.col-text{font-size:13.5px;color:var(--light);line-height:1.75;font-weight:300}
+.col-text strong{color:var(--cream);font-weight:500}
+
+/* BRAIN FOODS GRID */
+.brain-foods{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:2px;margin:36px 0}
+.bf-card{background:var(--card);padding:26px;border:1px solid transparent;transition:border-color .2s,background .2s;display:flex;flex-direction:column;gap:10px}
+.bf-card:hover{border-color:var(--border);background:var(--card2)}
+.bf-card svg{align-self:center}
+.bf-food{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--cream);letter-spacing:-.3px}
+.bf-nutrient{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;color:var(--gold);text-transform:uppercase}
+.bf-text{font-size:13px;color:var(--light);line-height:1.65;font-weight:300}
+
+/* MYTH CARDS */
+.myth-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:2px;margin:36px 0}
+.myth-card{background:var(--card);padding:28px;border:1px solid transparent;transition:border-color .2s,background .2s}
+.myth-card:hover{border-color:var(--border);background:var(--card2)}
+.myth-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--rust);text-transform:uppercase;margin-bottom:6px}
+.myth-claim{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--cream);margin-bottom:8px;letter-spacing:-.2px;font-style:italic}
+.myth-truth{font-size:13px;color:var(--light);line-height:1.65;font-weight:300;margin-bottom:8px}
+.myth-verdict{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase}
+.verdict-busted{color:#d46040}
+.verdict-nuanced{color:var(--gold)}
+
+/* PROTEIN TABLE */
+.protein-table{display:flex;flex-direction:column;gap:2px;margin:36px 0}
+.pt-row{display:grid;grid-template-columns:60px 1fr auto;gap:0;background:var(--card);border:1px solid transparent;transition:border-color .2s;align-items:stretch}
+.pt-row:hover{border-color:var(--border)}
+.pt-icon{background:var(--golddim);display:flex;align-items:center;justify-content:center;font-size:22px;padding:0 12px}
+.pt-body{padding:16px 20px}
+.pt-combo{font-weight:600;color:var(--cream);font-size:14px;margin-bottom:3px}
+.pt-detail{font-size:12.5px;color:var(--light);line-height:1.5;font-weight:300}
+.pt-complete{padding:16px 16px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pt-complete-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;color:#7aaa88;text-transform:uppercase;text-align:center;line-height:1.4}
+
+/* MEAL TIMING */
+.timing-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:2px;margin:36px 0}
+.timing-card{background:var(--card);padding:26px;border:1px solid transparent;transition:border-color .2s,background .2s;position:relative}
+.timing-card:hover{border-color:var(--border);background:var(--card2)}
+.timing-time{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:700;color:var(--gold);line-height:1;margin-bottom:6px}
+.timing-label{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;display:block}
+.timing-title{font-weight:600;color:var(--cream);font-size:14px;margin-bottom:6px}
+.timing-text{font-size:13px;color:var(--light);line-height:1.65;font-weight:300}
+
+/* ALERT / TIP */
+.alert{background:rgba(184,69,50,.07);border:1px solid rgba(184,69,50,.24);padding:22px 26px;margin:28px 0}
+.alert-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:var(--rust);text-transform:uppercase;margin-bottom:9px}
+.alert-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.alert-text strong{color:var(--cream);font-weight:500}
+.tip{background:rgba(42,107,58,.07);border:1px solid rgba(42,107,58,.24);padding:22px 26px;margin:28px 0}
+.tip-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:#7aaa88;text-transform:uppercase;margin-bottom:9px}
+.tip-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.tip-text strong{color:var(--cream);font-weight:500}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;margin-top:40px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--card2);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);padding:13px 16px;text-align:left;border-bottom:1px solid var(--border)}
+tbody tr{border-bottom:1px solid rgba(200,148,58,.07);transition:background .15s}
+tbody tr:hover{background:var(--card)}
+tbody td{padding:13px 16px;color:var(--light);vertical-align:top;line-height:1.5}
+.num-cell{font-family:'JetBrains Mono',monospace;color:var(--gold);opacity:.55;font-size:11px}
+.name-cell{font-weight:500;color:var(--cream)}
+
+/* FOOTER */
+footer{background:var(--bg);border-top:1px solid var(--border);padding:56px 64px 72px;text-align:center}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;letter-spacing:2px;color:var(--gold);margin-bottom:10px}
+.footer-sub{font-size:13.5px;color:var(--muted);margin-bottom:6px}
+.footer-tiny{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(92,95,104,.45);text-transform:uppercase;margin-top:26px}
+
+.pg-hero-art{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:.55;z-index:0}
+.pg-hero-art svg{width:100%;height:100%;display:block}
+[class*="icon"] svg.pg-icon{width:1em;height:1em;display:inline-block;vertical-align:-0.15em}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav>
+  <div class="nav-logo">Eat Smart</div>
+  <ul class="nav-links">
+    <li><a href="#brain">Brain Foods</a></li>
+    <li><a href="#myths">Myths</a></li>
+    <li><a href="#protein">Veg Protein</a></li>
+    <li><a href="#timing">Meal Timing</a></li>
+    <li><a href="#gut">Gut Health</a></li>
+    <li><a href="#inflammation">Anti-Inflam</a></li>
+    <li><a href="#hydration">Hydration</a></li>
+    <li><a href="#cheatsheet">Cheatsheet</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero"><div class="pg-hero-art" aria-hidden="true"><svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><path d="M632.5 268.0 A124.6 124.6 0 0 1 433.4 223.6" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M886.5 209.7 A202.8 202.8 0 0 1 566.2 42.6" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><line x1="468.6" y1="193.1" x2="505.2" y2="179.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="513.2" y1="192.5" x2="505.2" y2="179.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="131.6" y1="104.0" x2="116.0" y2="73.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="131.6" y1="104.0" x2="118.5" y2="60.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="752.1" y1="109.2" x2="780.2" y2="164.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="562.7" y1="70.4" x2="468.9" y2="107.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="118.5" y1="60.5" x2="116.0" y2="73.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="21.5" y1="259.0" x2="38.9" y2="256.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="468.9" y1="107.5" x2="505.2" y2="179.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="315.0" y1="202.9" x2="251.9" y2="216.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="315.0" y1="202.9" x2="245.6" y2="202.0" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="251.9" y1="216.8" x2="245.6" y2="202.0" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="562.7" y1="70.4" x2="780.2" y2="164.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="116.0" y1="73.4" x2="37.6" y2="56.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><circle cx="468.6" cy="193.1" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="513.2" cy="192.5" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="513.2" cy="192.5" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="131.6" cy="104.0" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="752.1" cy="109.2" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="562.7" cy="70.4" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="562.7" cy="70.4" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="118.5" cy="60.5" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="118.5" cy="60.5" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="21.5" cy="259.0" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="38.9" cy="256.3" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="38.9" cy="256.3" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="468.9" cy="107.5" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="315.0" cy="202.9" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="315.0" cy="202.9" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="251.9" cy="216.8" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="505.2" cy="179.7" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="245.6" cy="202.0" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="116.0" cy="73.4" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="780.2" cy="164.5" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="780.2" cy="164.5" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="37.6" cy="56.3" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="37.6" cy="56.3" r="2.2" fill="#e8b84b" opacity="0.85"/></svg></div>
+  <div class="hero-glow"></div><div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">Lifestyle · Nutrition Science · Dietetics · 2025–26</div>
+    <div class="hero-tag">The Complete Nutrition Research Guide · 2025–26 Edition</div>
+    <h1>Eat <span>Smart</span><span class="sub">Nutrition & Diet Simplified</span></h1>
+    <p class="hero-desc">The science of what food actually does to your brain, body, and performance — backed by current research, stripped of industry myths, and translated into practical principles. No fad diets. No supplements to sell. Pure nutritional intelligence.</p>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-n">20%</span><span class="hstat-l">of daily calories your brain consumes</span></div>
+      <div class="hstat"><span class="hstat-n">60%</span><span class="hstat-l">of brain solid weight is fat — DHA is the most critical</span></div>
+      <div class="hstat"><span class="hstat-n">66%</span><span class="hstat-l">of chronic disease risk is modifiable through diet</span></div>
+      <div class="hstat"><span class="hstat-n">8 hrs</span><span class="hstat-l">optimal eating window supported by circadian nutrition science</span></div>
+    </div>
+  </div>
+
+  <!-- HERO PLATE SVG — Premium food illustration -->
+  <div class="hero-plate" style="animation:floatplate 5s ease-in-out infinite 1s">
+    <svg width="320" height="320" viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="plateGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#1a1408"/>
+          <stop offset="100%" stop-color="#07080a"/>
+        </radialGradient>
+        <radialGradient id="foodGrad" cx="50%" cy="30%" r="60%">
+          <stop offset="0%" stop-color="#2a1f10"/>
+          <stop offset="100%" stop-color="#0e0a04"/>
+        </radialGradient>
+        <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="softglow"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <!-- Background -->
+      <rect width="320" height="320" fill="url(#plateGrad)"/>
+      <!-- Grid lines -->
+      <line x1="0" y1="160" x2="320" y2="160" stroke="#c8943a" stroke-opacity="0.04" stroke-width="0.5"/>
+      <line x1="160" y1="0" x2="160" y2="320" stroke="#c8943a" stroke-opacity="0.04" stroke-width="0.5"/>
+      
+      <!-- PLATE — elegant circular plate -->
+      <circle cx="160" cy="180" r="118" fill="#0d0b07" stroke="#c8943a" stroke-opacity="0.35" stroke-width="1.5"/>
+      <circle cx="160" cy="180" r="108" fill="none" stroke="#c8943a" stroke-opacity="0.12" stroke-width="0.8"/>
+      <circle cx="160" cy="180" r="95" fill="url(#foodGrad)" stroke="#c8943a" stroke-opacity="0.15" stroke-width="0.5"/>
+      
+      <!-- SALMON FILLET — top left quadrant -->
+      <path d="M100 150 Q108 140 125 138 Q145 136 155 145 Q162 152 158 162 Q152 172 135 174 Q115 176 104 165 Q96 156 100 150Z" fill="#c8943a" opacity="0.18"/>
+      <path d="M100 150 Q108 140 125 138 Q145 136 155 145 Q162 152 158 162 Q152 172 135 174 Q115 176 104 165 Q96 156 100 150Z" fill="none" stroke="#c8943a" stroke-opacity="0.6" stroke-width="1.2"/>
+      <!-- Salmon texture lines -->
+      <path d="M108 144 Q130 141 152 148" stroke="#c8943a" stroke-opacity="0.25" stroke-width="0.8" fill="none"/>
+      <path d="M105 151 Q128 148 154 156" stroke="#c8943a" stroke-opacity="0.2" stroke-width="0.7" fill="none"/>
+      <path d="M103 158 Q126 156 151 163" stroke="#c8943a" stroke-opacity="0.18" stroke-width="0.7" fill="none"/>
+      <!-- Salmon label -->
+      <text x="128" y="160" font-family="'JetBrains Mono',monospace" font-size="6" fill="#c8943a" opacity="0.5" text-anchor="middle" letter-spacing="1">SALMON</text>
+
+      <!-- BLUEBERRIES cluster — top right -->
+      <circle cx="195" cy="148" r="9" fill="#c8943a" opacity="0.14" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1"/>
+      <circle cx="209" cy="144" r="8" fill="#c8943a" opacity="0.12" stroke="#c8943a" stroke-opacity="0.45" stroke-width="1"/>
+      <circle cx="204" cy="158" r="8.5" fill="#c8943a" opacity="0.13" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1"/>
+      <circle cx="218" cy="154" r="7.5" fill="#c8943a" opacity="0.11" stroke="#c8943a" stroke-opacity="0.4" stroke-width="1"/>
+      <!-- Berry stems -->
+      <line x1="195" y1="139" x2="195" y2="135" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.8"/>
+      <line x1="209" y1="136" x2="209" y2="132" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.8"/>
+      <line x1="204" y1="149" x2="204" y2="145" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.8"/>
+      <!-- Berry crown marks -->
+      <path d="M193 140 L195 138 L197 140" stroke="#c8943a" stroke-opacity="0.35" stroke-width="0.7" fill="none"/>
+      <path d="M207 137 L209 135 L211 137" stroke="#c8943a" stroke-opacity="0.35" stroke-width="0.7" fill="none"/>
+      <text x="207" y="168" font-family="'JetBrains Mono',monospace" font-size="6" fill="#c8943a" opacity="0.5" text-anchor="middle" letter-spacing="1">BERRIES</text>
+
+      <!-- LEAFY GREENS — bottom left -->
+      <path d="M108 192 Q115 178 128 175 Q140 172 145 182 Q148 190 140 198 Q130 206 118 204 Q108 200 108 192Z" fill="#c8943a" opacity="0.08" stroke="#c8943a" stroke-opacity="0.35" stroke-width="1"/>
+      <!-- Leaf veins -->
+      <line x1="126" y1="175" x2="124" y2="202" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.8"/>
+      <path d="M124 185 Q130 182 138 184" stroke="#c8943a" stroke-opacity="0.25" stroke-width="0.7" fill="none"/>
+      <path d="M124 192 Q131 189 140 192" stroke="#c8943a" stroke-opacity="0.22" stroke-width="0.7" fill="none"/>
+      <!-- Second leaf -->
+      <path d="M95 198 Q102 188 112 187 Q120 186 122 194 Q123 200 116 206 Q108 210 100 207 Q94 203 95 198Z" fill="#c8943a" opacity="0.07" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1"/>
+      <line x1="108" y1="187" x2="106" y2="208" stroke="#c8943a" stroke-opacity="0.25" stroke-width="0.7"/>
+      <text x="115" y="215" font-family="'JetBrains Mono',monospace" font-size="6" fill="#c8943a" opacity="0.5" text-anchor="middle" letter-spacing="1">GREENS</text>
+
+      <!-- WALNUTS — bottom right -->
+      <path d="M185 188 Q192 180 203 180 Q214 180 218 188 Q222 196 216 204 Q208 212 198 210 Q186 208 183 200 Q181 194 185 188Z" fill="#c8943a" opacity="0.12" stroke="#c8943a" stroke-opacity="0.45" stroke-width="1"/>
+      <!-- Walnut texture -->
+      <path d="M190 192 Q200 186 212 192" stroke="#c8943a" stroke-opacity="0.25" stroke-width="0.8" fill="none"/>
+      <path d="M188 199 Q200 194 214 199" stroke="#c8943a" stroke-opacity="0.2" stroke-width="0.7" fill="none"/>
+      <path d="M200 181 L200 209" stroke="#c8943a" stroke-opacity="0.18" stroke-width="0.8"/>
+      <!-- Second walnut -->
+      <path d="M200 205 Q207 198 216 199 Q224 200 226 207 Q228 214 222 219 Q214 224 207 221 Q199 217 200 210 Q200 207 200 205Z" fill="#c8943a" opacity="0.1" stroke="#c8943a" stroke-opacity="0.4" stroke-width="1"/>
+      <text x="210" y="228" font-family="'JetBrains Mono',monospace" font-size="6" fill="#c8943a" opacity="0.5" text-anchor="middle" letter-spacing="1">WALNUTS</text>
+
+      <!-- AVOCADO HALF — center -->
+      <ellipse cx="160" cy="185" rx="18" ry="22" fill="#c8943a" opacity="0.09" stroke="#c8943a" stroke-opacity="0.4" stroke-width="1.2"/>
+      <ellipse cx="160" cy="188" rx="9" ry="11" fill="#c8943a" opacity="0.15" stroke="#c8943a" stroke-opacity="0.35" stroke-width="0.8"/>
+      <ellipse cx="160" cy="188" rx="5" ry="6" fill="#c8943a" opacity="0.2"/>
+      <text x="160" y="213" font-family="'JetBrains Mono',monospace" font-size="6" fill="#c8943a" opacity="0.5" text-anchor="middle" letter-spacing="1">AVOCADO</text>
+
+      <!-- Corner decoration lines -->
+      <line x1="22" y1="22" x2="48" y2="22" stroke="#c8943a" stroke-opacity="0.35" stroke-width="1"/>
+      <line x1="22" y1="22" x2="22" y2="48" stroke="#c8943a" stroke-opacity="0.35" stroke-width="1"/>
+      <line x1="272" y1="298" x2="298" y2="298" stroke="#c8943a" stroke-opacity="0.35" stroke-width="1"/>
+      <line x1="298" y1="272" x2="298" y2="298" stroke="#c8943a" stroke-opacity="0.35" stroke-width="1"/>
+
+      <!-- FORK SVG — right of plate -->
+      <line x1="285" y1="90" x2="285" y2="260" stroke="#c8943a" stroke-opacity="0.4" stroke-width="1.5"/>
+      <line x1="278" y1="90" x2="278" y2="130" stroke="#c8943a" stroke-opacity="0.35" stroke-width="1"/>
+      <line x1="285" y1="90" x2="285" y2="130" stroke="#c8943a" stroke-opacity="0.35" stroke-width="1"/>
+      <line x1="292" y1="90" x2="292" y2="130" stroke="#c8943a" stroke-opacity="0.35" stroke-width="1"/>
+      <path d="M278 130 Q281 142 285 148 Q289 142 292 130" stroke="#c8943a" stroke-opacity="0.4" stroke-width="1" fill="none"/>
+      
+      <!-- KNIFE — left of plate -->
+      <line x1="35" y1="90" x2="35" y2="260" stroke="#c8943a" stroke-opacity="0.4" stroke-width="1.5"/>
+      <path d="M35 90 Q42 110 38 145 Q36 155 35 160" stroke="#c8943a" stroke-opacity="0.35" stroke-width="1" fill="none"/>
+      
+      <!-- Aura glow behind plate -->
+      <circle cx="160" cy="180" r="80" fill="#c8943a" opacity="0.025" filter="url(#softglow)"/>
+    </svg>
+  </div>
+  <div class="scroll-hint" style="position:static;margin-top:28px;opacity:.35">Scroll to begin</div>
+</section>
+
+<!-- ─── TOC ─── -->
+<div class="toc-wrap">
+  <div class="toc-inner">
+    <div class="toc-label">Everything Inside This Guide</div>
+    <div class="toc-grid">
+      <a href="#brain" class="toc-item"><span class="toc-num">01</span><span class="toc-name">What Your Brain Runs On — Foods that directly impact focus, mood & memory</span></a>
+      <a href="#myths" class="toc-item"><span class="toc-num">02</span><span class="toc-name">The Top 10 Nutrition Myths — The food industry wants you to keep believing</span></a>
+      <a href="#protein" class="toc-item"><span class="toc-num">03</span><span class="toc-name">Vegetarian Complete Protein — Get everything without meat</span></a>
+      <a href="#timing" class="toc-item"><span class="toc-num">04</span><span class="toc-name">Meal Timing Science — When you eat matters almost as much as what you eat</span></a>
+      <a href="#gut" class="toc-item"><span class="toc-num">05</span><span class="toc-name">The Gut-Brain Axis — Your second brain and how to feed it</span></a>
+      <a href="#inflammation" class="toc-item"><span class="toc-num">06</span><span class="toc-name">Anti-Inflammatory Eating — The root cause of most chronic disease</span></a>
+      <a href="#hydration" class="toc-item"><span class="toc-num">07</span><span class="toc-name">Hydration Science — The most underprescribed performance tool</span></a>
+      <a href="#cheatsheet" class="toc-item"><span class="toc-num">08</span><span class="toc-name">The Master Cheatsheet — Every principle, one table</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- ─── FOOD ILLUSTRATION BANNER ─── -->
+<div class="food-banner">
+  <!-- Salmon -->
+  <div class="fb-cell">
+    <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+      <defs><radialGradient id="fg1" cx="50%" cy="40%" r="55%"><stop offset="0%" stop-color="#1a1408"/><stop offset="100%" stop-color="#07080a"/></radialGradient></defs>
+      <rect width="80" height="80" fill="url(#fg1)"/>
+      <!-- Salmon fillet shape -->
+      <path d="M15 42 Q20 30 40 28 Q60 26 66 38 Q70 48 62 56 Q50 65 30 63 Q14 60 12 50 Q11 45 15 42Z" fill="#c8943a" opacity="0.15" stroke="#c8943a" stroke-opacity="0.55" stroke-width="1.2"/>
+      <!-- Flesh lines -->
+      <path d="M20 36 Q40 32 60 38" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.8" fill="none"/>
+      <path d="M17 44 Q40 40 63 46" stroke="#c8943a" stroke-opacity="0.25" stroke-width="0.8" fill="none"/>
+      <path d="M15 52 Q38 48 60 54" stroke="#c8943a" stroke-opacity="0.2" stroke-width="0.7" fill="none"/>
+      <!-- Skin edge -->
+      <path d="M15 42 Q13 50 14 56 Q16 62 22 64" stroke="#c8943a" stroke-opacity="0.45" stroke-width="1.2" fill="none"/>
+    </svg>
+    <div class="fb-label">Salmon</div>
+    <div class="fb-sub">DHA + EPA omega-3</div>
+  </div>
+  <!-- Blueberries -->
+  <div class="fb-cell">
+    <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+      <defs><radialGradient id="fg2" cx="50%" cy="40%" r="55%"><stop offset="0%" stop-color="#1a1408"/><stop offset="100%" stop-color="#07080a"/></radialGradient></defs>
+      <rect width="80" height="80" fill="url(#fg2)"/>
+      <circle cx="32" cy="38" r="13" fill="#c8943a" opacity="0.14" stroke="#c8943a" stroke-opacity="0.55" stroke-width="1.2"/>
+      <circle cx="50" cy="35" r="11" fill="#c8943a" opacity="0.12" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1.1"/>
+      <circle cx="44" cy="52" r="12" fill="#c8943a" opacity="0.13" stroke="#c8943a" stroke-opacity="0.52" stroke-width="1.1"/>
+      <circle cx="24" cy="52" r="10" fill="#c8943a" opacity="0.11" stroke="#c8943a" stroke-opacity="0.45" stroke-width="1"/>
+      <path d="M30 25 L32 21 L34 25" stroke="#c8943a" stroke-opacity="0.4" stroke-width="0.8" fill="none"/>
+      <path d="M48 24 L50 20 L52 24" stroke="#c8943a" stroke-opacity="0.4" stroke-width="0.8" fill="none"/>
+    </svg>
+    <div class="fb-label">Blueberries</div>
+    <div class="fb-sub">Anthocyanin antioxidants</div>
+  </div>
+  <!-- Avocado -->
+  <div class="fb-cell">
+    <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+      <defs><radialGradient id="fg3" cx="50%" cy="40%" r="55%"><stop offset="0%" stop-color="#1a1408"/><stop offset="100%" stop-color="#07080a"/></radialGradient></defs>
+      <rect width="80" height="80" fill="url(#fg3)"/>
+      <!-- Avocado half -->
+      <path d="M40 16 Q55 20 62 38 Q66 52 58 62 Q50 72 40 72 Q30 72 22 62 Q14 52 18 38 Q25 20 40 16Z" fill="#c8943a" opacity="0.1" stroke="#c8943a" stroke-opacity="0.45" stroke-width="1.2"/>
+      <!-- Flesh ring -->
+      <path d="M40 22 Q52 26 57 40 Q60 52 54 60 Q48 68 40 68 Q32 68 26 60 Q20 52 23 40 Q28 26 40 22Z" fill="#c8943a" opacity="0.06" stroke="#c8943a" stroke-opacity="0.25" stroke-width="0.8"/>
+      <!-- Pit -->
+      <ellipse cx="40" cy="46" rx="11" ry="13" fill="#c8943a" opacity="0.18" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1"/>
+      <ellipse cx="40" cy="46" rx="6" ry="7" fill="#c8943a" opacity="0.28"/>
+    </svg>
+    <div class="fb-label">Avocado</div>
+    <div class="fb-sub">Healthy fats + potassium</div>
+  </div>
+  <!-- Walnuts -->
+  <div class="fb-cell">
+    <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+      <defs><radialGradient id="fg4" cx="50%" cy="40%" r="55%"><stop offset="0%" stop-color="#1a1408"/><stop offset="100%" stop-color="#07080a"/></radialGradient></defs>
+      <rect width="80" height="80" fill="url(#fg4)"/>
+      <!-- Walnut 1 -->
+      <path d="M24 32 Q30 20 44 20 Q58 20 62 32 Q65 42 58 50 Q50 58 36 56 Q22 54 20 44 Q18 38 24 32Z" fill="#c8943a" opacity="0.13" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1.2"/>
+      <!-- Shell seam -->
+      <line x1="40" y1="20" x2="40" y2="56" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.9"/>
+      <path d="M22 36 Q40 30 62 36" stroke="#c8943a" stroke-opacity="0.25" stroke-width="0.8" fill="none"/>
+      <path d="M20 43 Q40 38 64 43" stroke="#c8943a" stroke-opacity="0.2" stroke-width="0.7" fill="none"/>
+      <!-- Walnut 2 (small) -->
+      <path d="M46 56 Q50 50 58 50 Q65 50 67 56 Q68 61 64 65 Q58 69 52 67 Q45 64 46 59 Q46 57 46 56Z" fill="#c8943a" opacity="0.11" stroke="#c8943a" stroke-opacity="0.4" stroke-width="1"/>
+      <line x1="56" y1="50" x2="56" y2="67" stroke="#c8943a" stroke-opacity="0.22" stroke-width="0.7"/>
+    </svg>
+    <div class="fb-label">Walnuts</div>
+    <div class="fb-sub">ALA + BDNF boost</div>
+  </div>
+  <!-- Leafy Greens -->
+  <div class="fb-cell">
+    <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+      <defs><radialGradient id="fg5" cx="50%" cy="40%" r="55%"><stop offset="0%" stop-color="#1a1408"/><stop offset="100%" stop-color="#07080a"/></radialGradient></defs>
+      <rect width="80" height="80" fill="url(#fg5)"/>
+      <!-- Large leaf -->
+      <path d="M40 14 Q58 18 66 34 Q70 46 62 58 Q52 68 40 66 Q28 64 22 52 Q16 40 24 28 Q32 16 40 14Z" fill="#c8943a" opacity="0.09" stroke="#c8943a" stroke-opacity="0.4" stroke-width="1.2"/>
+      <!-- Leaf veins -->
+      <line x1="40" y1="14" x2="40" y2="66" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.9"/>
+      <path d="M40 28 Q52 24 60 28" stroke="#c8943a" stroke-opacity="0.22" stroke-width="0.7" fill="none"/>
+      <path d="M40 38 Q52 34 62 38" stroke="#c8943a" stroke-opacity="0.2" stroke-width="0.7" fill="none"/>
+      <path d="M40 48 Q52 44 60 48" stroke="#c8943a" stroke-opacity="0.18" stroke-width="0.7" fill="none"/>
+      <path d="M40 28 Q28 24 20 28" stroke="#c8943a" stroke-opacity="0.2" stroke-width="0.7" fill="none"/>
+      <path d="M40 38 Q28 34 20 38" stroke="#c8943a" stroke-opacity="0.18" stroke-width="0.7" fill="none"/>
+    </svg>
+    <div class="fb-label">Leafy Greens</div>
+    <div class="fb-sub">Folate + serotonin support</div>
+  </div>
+</div>
+
+<!-- ─── 01: BRAIN FOODS ─── -->
+<section class="section" id="brain">
+<div class="s-inner">
+  <div class="s-head-visual">
+    <div class="s-head">
+      <div class="s-num">Chapter 01</div>
+      <div class="s-meta">
+        <div class="s-cat">Amen Clinics · Northwestern Medicine · PMC Neuroscience · 2025</div>
+        <h2 class="s-title">What Your <span>Brain</span><br/>Runs On</h2>
+        <p class="s-desc">Your brain is a high-energy organ consuming 20% of your daily calories. It is 60% fat by solid weight — and DHA omega-3 is the most critical component of that fat. What you eat doesn't just fuel your body. It builds, maintains, and repairs the physical structure of the organ generating your thoughts, emotions, and decisions. Every meal is a brain decision.</p>
+      </div>
+    </div>
+    <!-- Brain SVG aside -->
+    <div class="s-food-aside">
+      <svg width="130" height="160" viewBox="0 0 130 160" fill="none">
+        <defs>
+          <radialGradient id="brainbg" cx="50%" cy="50%" r="55%">
+            <stop offset="0%" stop-color="#1a1408"/>
+            <stop offset="100%" stop-color="#07080a"/>
+          </radialGradient>
+        </defs>
+        <rect width="130" height="160" fill="url(#brainbg)"/>
+        <!-- Brain outline left hemisphere -->
+        <path d="M65 30 Q40 28 28 42 Q18 56 22 74 Q24 88 34 96 Q42 104 52 108 Q58 110 65 110" fill="#c8943a" opacity="0.08" stroke="#c8943a" stroke-opacity="0.45" stroke-width="1.5"/>
+        <!-- Brain outline right hemisphere -->
+        <path d="M65 30 Q90 28 102 42 Q112 56 108 74 Q106 88 96 96 Q88 104 78 108 Q72 110 65 110" fill="#c8943a" opacity="0.08" stroke="#c8943a" stroke-opacity="0.45" stroke-width="1.5"/>
+        <!-- Brain stem -->
+        <path d="M59 110 Q62 122 64 132 Q65 136 66 132 Q68 122 71 110" fill="#c8943a" opacity="0.06" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1"/>
+        <!-- Brain fold lines - left -->
+        <path d="M30 52 Q38 48 44 54 Q50 60 46 66" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.8" fill="none"/>
+        <path d="M26 68 Q34 64 40 70 Q46 76 42 82" stroke="#c8943a" stroke-opacity="0.25" stroke-width="0.7" fill="none"/>
+        <path d="M30 86 Q38 82 44 88 Q50 94 46 100" stroke="#c8943a" stroke-opacity="0.22" stroke-width="0.7" fill="none"/>
+        <!-- Brain fold lines - right -->
+        <path d="M100 52 Q92 48 86 54 Q80 60 84 66" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.8" fill="none"/>
+        <path d="M104 68 Q96 64 90 70 Q84 76 88 82" stroke="#c8943a" stroke-opacity="0.25" stroke-width="0.7" fill="none"/>
+        <path d="M100 86 Q92 82 86 88 Q80 94 84 100" stroke="#c8943a" stroke-opacity="0.22" stroke-width="0.7" fill="none"/>
+        <!-- Center divide -->
+        <line x1="65" y1="30" x2="65" y2="110" stroke="#c8943a" stroke-opacity="0.15" stroke-width="0.8" stroke-dasharray="3,3"/>
+        <!-- Glow core -->
+        <ellipse cx="65" cy="70" rx="30" ry="35" fill="#c8943a" opacity="0.04"/>
+        <!-- Neuron dots -->
+        <circle cx="42" cy="55" r="2" fill="#c8943a" opacity="0.45"/>
+        <circle cx="88" cy="55" r="2" fill="#c8943a" opacity="0.45"/>
+        <circle cx="36" cy="80" r="1.5" fill="#e8b84b" opacity="0.4"/>
+        <circle cx="94" cy="80" r="1.5" fill="#e8b84b" opacity="0.4"/>
+        <circle cx="50" cy="98" r="1.5" fill="#c8943a" opacity="0.4"/>
+        <circle cx="80" cy="98" r="1.5" fill="#c8943a" opacity="0.4"/>
+        <!-- Neural connection lines -->
+        <line x1="42" y1="55" x2="36" y2="80" stroke="#c8943a" stroke-opacity="0.2" stroke-width="0.6"/>
+        <line x1="88" y1="55" x2="94" y2="80" stroke="#c8943a" stroke-opacity="0.2" stroke-width="0.6"/>
+        <line x1="36" y1="80" x2="50" y2="98" stroke="#c8943a" stroke-opacity="0.18" stroke-width="0.6"/>
+        <line x1="94" y1="80" x2="80" y2="98" stroke="#c8943a" stroke-opacity="0.18" stroke-width="0.6"/>
+        <!-- DHA label -->
+        <text x="65" y="148" font-family="'JetBrains Mono',monospace" font-size="7" fill="#c8943a" opacity="0.5" text-anchor="middle" letter-spacing="2">60% FAT</text>
+        <text x="65" y="158" font-family="'JetBrains Mono',monospace" font-size="6" fill="#c8943a" opacity="0.35" text-anchor="middle" letter-spacing="1.5">DHA IS KEY</text>
+      </svg>
+      <div class="s-food-label">Your Brain<br/>on Food</div>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">20%</span><span class="s-stat-l">of your daily calories consumed by brain alone</span></div>
+    <div class="s-stat"><span class="s-stat-n">60%</span><span class="s-stat-l">of brain's solid weight is fat — DHA omega-3 is the most critical component</span></div>
+    <div class="s-stat"><span class="s-stat-n">20%</span><span class="s-stat-l">reduction in depression symptoms from omega-3-rich diet (Nutritional Neuroscience 2023)</span></div>
+    <div class="s-stat"><span class="s-stat-n">BDNF</span><span class="s-stat-l">brain-derived neurotrophic factor — the "miracle-Gro for the brain" that food can boost</span></div>
+  </div>
+
+  <div class="brain-foods">
+    <!-- Salmon with SVG -->
+    <div class="bf-card">
+      <svg width="80" height="50" viewBox="0 0 80 50" fill="none">
+        <path d="M8 28 Q15 18 32 16 Q52 14 62 24 Q68 30 62 38 Q52 46 30 44 Q10 42 6 34 Q4 30 8 28Z" fill="#c8943a" opacity="0.15" stroke="#c8943a" stroke-opacity="0.6" stroke-width="1.2"/>
+        <path d="M14 22 Q34 18 58 24" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.8" fill="none"/>
+        <path d="M10 30 Q32 26 60 32" stroke="#c8943a" stroke-opacity="0.25" stroke-width="0.8" fill="none"/>
+        <path d="M10 37 Q30 33 58 38" stroke="#c8943a" stroke-opacity="0.2" stroke-width="0.7" fill="none"/>
+        <path d="M8 28 Q5 34 6 40" stroke="#c8943a" stroke-opacity="0.45" stroke-width="1.2" fill="none"/>
+      </svg>
+      <div class="bf-food">Salmon & Fatty Fish</div>
+      <div class="bf-nutrient">DHA + EPA Omega-3 · Vitamin D · B12</div>
+      <p class="bf-text">The richest source of DHA — the omega-3 that builds brain cell membranes and supports communication between neurons. A 2022 review of 9 studies confirmed omega-3 improves learning, memory, cognitive wellbeing, and blood flow in the brain. The anti-inflammatory and antioxidant properties of DHA counter neuroinflammation and oxidative stress directly. Aim for 2–3 servings per week. Sardines and mackerel are equally effective at a fraction of the cost.</p>
+    </div>
+
+    <!-- Blueberries with SVG -->
+    <div class="bf-card">
+      <svg width="80" height="50" viewBox="0 0 80 50" fill="none">
+        <circle cx="22" cy="28" r="10" fill="#c8943a" opacity="0.14" stroke="#c8943a" stroke-opacity="0.55" stroke-width="1"/>
+        <circle cx="38" cy="24" r="9" fill="#c8943a" opacity="0.12" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1"/>
+        <circle cx="55" cy="26" r="10" fill="#c8943a" opacity="0.13" stroke="#c8943a" stroke-opacity="0.52" stroke-width="1"/>
+        <circle cx="68" cy="30" r="8" fill="#c8943a" opacity="0.11" stroke="#c8943a" stroke-opacity="0.45" stroke-width="1"/>
+        <path d="M20 18 L22 14 L24 18" stroke="#c8943a" stroke-opacity="0.4" stroke-width="0.8" fill="none"/>
+        <path d="M36 14 L38 10 L40 14" stroke="#c8943a" stroke-opacity="0.4" stroke-width="0.8" fill="none"/>
+        <path d="M53 16 L55 12 L57 16" stroke="#c8943a" stroke-opacity="0.4" stroke-width="0.8" fill="none"/>
+      </svg>
+      <div class="bf-food">Blueberries & Berries</div>
+      <div class="bf-nutrient">Anthocyanins · Flavonoids · Vitamin C</div>
+      <p class="bf-text">Packed with anthocyanins — powerful flavonoids linked to improved memory and reduced cognitive decline. Research shows berry consumption improves blood flow to the brain, enhances brain plasticity (the ability to form new connections), and protects neurons from oxidative damage. Northwestern Medicine: blueberries may improve concentration, learning, and memory while protecting the brain from the aging process. Even frozen blueberries retain full potency — picked at peak ripeness and flash-frozen to lock in nutrients.</p>
+    </div>
+
+    <!-- Walnuts -->
+    <div class="bf-card">
+      <svg width="80" height="50" viewBox="0 0 80 50" fill="none">
+        <path d="M14 24 Q18 14 32 13 Q46 12 50 22 Q52 30 46 36 Q38 42 26 40 Q14 38 12 30 Q11 27 14 24Z" fill="#c8943a" opacity="0.13" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1.2"/>
+        <line x1="30" y1="13" x2="30" y2="40" stroke="#c8943a" stroke-opacity="0.3" stroke-width="0.8"/>
+        <path d="M14 24 Q30 20 50 24" stroke="#c8943a" stroke-opacity="0.25" stroke-width="0.7" fill="none"/>
+        <path d="M12 31 Q30 27 52 31" stroke="#c8943a" stroke-opacity="0.2" stroke-width="0.7" fill="none"/>
+        <path d="M50 24 Q60 20 68 24 Q72 30 68 36 Q62 42 54 40 Q48 38 48 32 Q48 27 50 24Z" fill="#c8943a" opacity="0.11" stroke="#c8943a" stroke-opacity="0.4" stroke-width="1"/>
+        <line x1="59" y1="24" x2="59" y2="40" stroke="#c8943a" stroke-opacity="0.22" stroke-width="0.7"/>
+      </svg>
+      <div class="bf-food">Walnuts</div>
+      <div class="bf-nutrient">ALA Omega-3 · BDNF · Antioxidants</div>
+      <p class="bf-text">The standout brain nut. Rich in ALA (plant-based omega-3) which increases secretion of BDNF — brain-derived neurotrophic factor, the protein that supports neurogenesis, neuron survival, memory, and learning. A 2021 systematic review found a strong association between walnut consumption and improved cognitive performance. Also protective against neurodegenerative diseases including Alzheimer's. 30g (a small handful) daily provides significant benefit.</p>
+    </div>
+
+    <!-- Eggs -->
+    <div class="bf-card">
+      <svg width="80" height="50" viewBox="0 0 80 50" fill="none">
+        <!-- Egg shape -->
+        <path d="M40 8 Q56 10 62 24 Q66 34 60 42 Q52 50 40 50 Q28 50 20 42 Q14 34 18 24 Q24 10 40 8Z" fill="#c8943a" opacity="0.1" stroke="#c8943a" stroke-opacity="0.45" stroke-width="1.2" transform="translate(0,-10) scale(0.85) translate(6,5)"/>
+        <!-- Yolk -->
+        <circle cx="38" cy="27" r="9" fill="#c8943a" opacity="0.2" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1"/>
+        <circle cx="38" cy="27" r="5" fill="#c8943a" opacity="0.35"/>
+      </svg>
+      <div class="bf-food">Eggs</div>
+      <div class="bf-nutrient">Choline · Tryptophan · Protein</div>
+      <p class="bf-text">One of the most nutrient-dense brain foods available. Choline in eggs is essential for memory and communication between brain cells — and most people are deficient. Tryptophan supports serotonin production, directly impacting mood. B vitamins support neurotransmitter production. The cholesterol concern? Largely debunked — research shows healthy adults can eat 1–2 eggs daily without negative cholesterol impact. The yolk contains almost all the brain-relevant nutrition.</p>
+    </div>
+
+    <!-- Leafy Greens -->
+    <div class="bf-card">
+      <svg width="80" height="50" viewBox="0 0 80 50" fill="none">
+        <path d="M40 4 Q58 8 66 22 Q70 32 62 42 Q52 50 40 48 Q28 46 20 36 Q14 26 22 14 Q30 4 40 4Z" fill="#c8943a" opacity="0.08" stroke="#c8943a" stroke-opacity="0.4" stroke-width="1.2" transform="scale(0.88) translate(5,2)"/>
+        <line x1="37" y1="6" x2="35" y2="46" stroke="#c8943a" stroke-opacity="0.28" stroke-width="0.9"/>
+        <path d="M37 16 Q50 12 58 18" stroke="#c8943a" stroke-opacity="0.22" stroke-width="0.7" fill="none"/>
+        <path d="M36 26 Q50 22 60 26" stroke="#c8943a" stroke-opacity="0.2" stroke-width="0.7" fill="none"/>
+        <path d="M35 36 Q48 32 56 36" stroke="#c8943a" stroke-opacity="0.18" stroke-width="0.7" fill="none"/>
+        <path d="M37 16 Q24 12 16 18" stroke="#c8943a" stroke-opacity="0.2" stroke-width="0.7" fill="none"/>
+        <path d="M36 26 Q22 22 14 26" stroke="#c8943a" stroke-opacity="0.18" stroke-width="0.7" fill="none"/>
+      </svg>
+      <div class="bf-food">Leafy Greens</div>
+      <div class="bf-nutrient">Folate · Vitamin K · Lutein</div>
+      <p class="bf-text">Spinach, kale, Swiss chard — folate powerhouses essential for serotonin synthesis. Low folate is associated with higher depression rates (NIH). Vitamin K in leafy greens is linked to slower cognitive decline. Lutein and zeaxanthin protect neurons from oxidative damage. The research: eating leafy greens daily is one of the most consistently evidence-backed dietary behaviours for long-term brain health. The goal: at least one serving daily, any preparation method.</p>
+    </div>
+
+    <!-- Dark Chocolate -->
+    <div class="bf-card">
+      <svg width="80" height="50" viewBox="0 0 80 50" fill="none">
+        <!-- Chocolate bar shape -->
+        <rect x="10" y="12" width="60" height="26" rx="3" fill="#c8943a" opacity="0.12" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1.2"/>
+        <!-- Segments -->
+        <line x1="30" y1="12" x2="30" y2="38" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1"/>
+        <line x1="50" y1="12" x2="50" y2="38" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1"/>
+        <line x1="10" y1="25" x2="70" y2="25" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1"/>
+        <!-- Shine -->
+        <line x1="14" y1="15" x2="26" y2="15" stroke="#c8943a" stroke-opacity="0.35" stroke-width="0.8"/>
+        <line x1="34" y1="15" x2="46" y2="15" stroke="#c8943a" stroke-opacity="0.35" stroke-width="0.8"/>
+        <line x1="54" y1="15" x2="66" y2="15" stroke="#c8943a" stroke-opacity="0.35" stroke-width="0.8"/>
+      </svg>
+      <div class="bf-food">Dark Chocolate (70%+)</div>
+      <div class="bf-nutrient">Flavanols · Magnesium · Theobromine</div>
+      <p class="bf-text">Dark chocolate (70%+ cocoa) contains flavanols that increase blood flow to the brain, improve neuroplasticity, and enhance mood via endorphin release. Theobromine provides a gentler, longer-lasting stimulation than caffeine. Magnesium in dark chocolate supports over 300 enzymatic reactions including those involved in serotonin synthesis. The practical rule: 20–30g of 70%+ dark chocolate daily earns the brain benefits without the sugar cost of lower-cocoa options.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 1 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"Your brain is a high-energy organ. It uses about 20% of your daily calorie intake. It needs nutrient-dense foods to support memory, mood, focus, and long-term cognitive health. <em>Every meal is a brain decision.</em>"</p>
+  <p class="quote-attr">— Amen Clinics · Brain Health Research · 2025</p>
+</div>
+
+<!-- ─── 02: NUTRITION MYTHS ─── -->
+<section class="section section-alt" id="myths">
+<div class="s-inner">
+  <div class="s-head-visual">
+    <div class="s-head">
+      <div class="s-num">Chapter 02</div>
+      <div class="s-meta">
+        <div class="s-cat">EUFIC 2025 · Mayo Clinic · AARP · American Council on Science 2025</div>
+        <h2 class="s-title">The Top 10<br/><span>Nutrition</span> Myths</h2>
+        <p class="s-desc">The nutrition space is one of the most heavily contaminated information environments available to consumers. Fad diets, wellness influencers, food industry marketing, and social media pseudoscience have created a landscape where false beliefs are more visible than the evidence. Here are 10 of the most pervasive myths — and what the research actually says.</p>
+      </div>
+    </div>
+    <!-- Crossed-out myths illustration -->
+    <div class="s-food-aside">
+      <svg width="120" height="150" viewBox="0 0 120 150" fill="none">
+        <defs><radialGradient id="mythbg" cx="50%" cy="50%" r="55%"><stop offset="0%" stop-color="#1a1408"/><stop offset="100%" stop-color="#07080a"/></radialGradient></defs>
+        <rect width="120" height="150" fill="url(#mythbg)"/>
+        <!-- MYTH label crossed out -->
+        <text x="60" y="40" font-family="'Cormorant Garamond',serif" font-size="28" font-weight="700" fill="#c8943a" opacity="0.4" text-anchor="middle">MYTH</text>
+        <line x1="14" y1="30" x2="106" y2="48" stroke="#d46040" stroke-opacity="0.6" stroke-width="2.5"/>
+        <!-- vs FACT -->
+        <text x="60" y="80" font-family="'Cormorant Garamond',serif" font-size="24" font-weight="700" fill="#c8943a" opacity="0.6" text-anchor="middle" font-style="italic">FACT</text>
+        <!-- checkmark -->
+        <path d="M40 95 L55 112 L82 88" stroke="#4aaa9e" stroke-opacity="0.7" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- decorative lines -->
+        <line x1="20" y1="125" x2="100" y2="125" stroke="#c8943a" stroke-opacity="0.2" stroke-width="0.8"/>
+        <line x1="30" y1="135" x2="90" y2="135" stroke="#c8943a" stroke-opacity="0.15" stroke-width="0.6"/>
+      </svg>
+      <div class="s-food-label">Industry Myths<br/>vs Research</div>
+    </div>
+  </div>
+
+  <div class="myth-grid">
+    <div class="myth-card">
+      <div class="myth-label">Myth 01 · Macros</div>
+      <div class="myth-claim">"Carbs make you fat."</div>
+      <p class="myth-truth">Excess calories cause fat gain — regardless of their source. Low-carb diets can produce effective short-term weight loss but show no advantage over balanced diets at 12 months (DIETFITS trial, 2018: 6kg vs 5.3kg difference — statistically negligible). Complex carbohydrates from whole grains, fruits, and legumes actively support metabolic health. The problem is refined carbs and added sugar — not carbohydrates as a category.</p>
+      <div class="myth-verdict verdict-busted">⚡ Busted — Partially True at Best</div>
+    </div>
+    <div class="myth-card">
+      <div class="myth-label">Myth 02 · Fats</div>
+      <div class="myth-claim">"Fat is the enemy — go low-fat."</div>
+      <p class="myth-truth">The low-fat craze of the 1990s was one of the most damaging public nutrition mistakes in history. Fat should constitute 20–35% of daily calories and is essential for hormone production, organ insulation, and nutrient absorption. The key distinction is fat type: unsaturated fats (olive oil, avocados, nuts, fish) actively reduce cardiovascular risk. "Low-fat" products typically replace fat with sugar or sodium — making them nutritionally worse while maintaining the label.</p>
+      <div class="myth-verdict verdict-busted">⚡ Busted — Outdated 1990s Science</div>
+    </div>
+    <div class="myth-card">
+      <div class="myth-label">Myth 03 · Hydration</div>
+      <div class="myth-claim">"Drink 8 glasses of water daily."</div>
+      <p class="myth-truth">No major health authority recommends a fixed 8-glass target. The "8×8 rule" traces to a 1945 US Food & Nutrition Board report — whose important caveat that food supplies water was lost in translation. Thirst is a reliable guide for healthy adults. Coffee, tea, and other beverages count toward hydration. The old claim that caffeine dehydrates has been debunked — moderate coffee (250–400mg caffeine daily) does not cause dehydration in regular consumers.</p>
+      <div class="myth-verdict verdict-nuanced">⚡ Nuanced — Thirst Is Enough</div>
+    </div>
+    <div class="myth-card">
+      <div class="myth-label">Myth 04 · Labels</div>
+      <div class="myth-claim">"Low-fat = healthy, fat-free = better."</div>
+      <p class="myth-truth">Mayo Clinic is direct: low-fat and fat-free products frequently contain added sugar, sodium, or artificial thickeners to compensate for lost flavour. Fat also produces satiety — so fat-free products often result in eating more overall, counteracting any caloric benefit. Always check the full nutrition label, not just the headline claim. "Made with whole grains" and "multigrain" are similarly misleading — look for "100% whole grain" listed first in ingredients.</p>
+      <div class="myth-verdict verdict-busted">⚡ Busted — Industry Marketing</div>
+    </div>
+    <div class="myth-card">
+      <div class="myth-label">Myth 05 · Eggs</div>
+      <div class="myth-claim">"Eggs raise your cholesterol — limit them."</div>
+      <p class="myth-truth">For healthy adults, dietary cholesterol has minimal impact on blood cholesterol. The body downregulates its own cholesterol production in response to dietary intake. EUFIC 2025: "Concerns about cholesterol are mostly overstated — healthy adults can enjoy 1–2 eggs a day without raising cholesterol." Eggs are among the most complete, nutrient-dense foods available: choline, B12, high-quality protein, vitamin D, and brain-critical tryptophan.</p>
+      <div class="myth-verdict verdict-busted">⚡ Busted — For Healthy Adults</div>
+    </div>
+    <div class="myth-card">
+      <div class="myth-label">Myth 06 · Frozen Food</div>
+      <div class="myth-claim">"Fresh vegetables are more nutritious than frozen."</div>
+      <p class="myth-truth">Frozen vegetables are often MORE nutritious than fresh. "Fresh" spinach may travel for up to two weeks losing up to 50% of its Vitamin C through oxidation. Frozen produce is harvested at peak ripeness and flash-frozen within hours — locking in the full nutrient profile. They're also cheaper and reduce food waste. The practical conclusion: frozen vegetables are a nutritionally equivalent and often superior alternative to out-of-season fresh produce.</p>
+      <div class="myth-verdict verdict-busted">⚡ Busted — Buy Frozen Confidently</div>
+    </div>
+    <div class="myth-card">
+      <div class="myth-label">Myth 07 · Supplements</div>
+      <div class="myth-claim">"You need multivitamins for optimal health."</div>
+      <p class="myth-truth">Multivitamins are an "insurance policy" — not a solution. For most healthy adults eating a varied diet, they provide no measurable health benefit. Real food contains thousands of phytochemicals, fibre types, and enzymes that work synergistically — none of which can be replicated in a pill. Supplements are genuinely beneficial in specific cases (B12 for vegans, folate in pregnancy, Vitamin D for low-sunlight exposure) — but as targeted interventions, not as a dietary substitute.</p>
+      <div class="myth-verdict verdict-nuanced">⚡ Nuanced — Food First, Always</div>
+    </div>
+    <div class="myth-card">
+      <div class="myth-label">Myth 08 · Gluten</div>
+      <div class="myth-claim">"Gluten-free is healthier for everyone."</div>
+      <p class="myth-truth">Celiac disease affects ~1% of the population. Non-celiac gluten sensitivity affects perhaps another 6%. For the remaining 93% of people: there is no proven health benefit to avoiding gluten — and significant downsides. Gluten-free processed foods typically use tapioca starch and rice flour, producing nutritionally inferior products with higher glycaemic indexes and lower fibre content. For non-celiacs, a gluten-free diet often means eating worse — not better.</p>
+      <div class="myth-verdict verdict-busted">⚡ Busted — Only for Celiac/Sensitivity</div>
+    </div>
+    <div class="myth-card">
+      <div class="myth-label">Myth 09 · Seed Oils</div>
+      <div class="myth-claim">"Seed oils are toxic and cause inflammation."</div>
+      <p class="myth-truth">This is one of 2024–25's most viral nutrition myths. High-quality research shows eating more linoleic acid (the omega-6 in seed oils) does NOT increase inflammatory markers — and higher linoleic acid levels are associated with LOWER inflammation. The body tightly regulates fatty acid levels. A 2020 review found canola oil lowered cholesterol and improved cardiovascular risk factors. Olive oil is preferable for daily cooking, but seed oils are not the health crisis social media claims.</p>
+      <div class="myth-verdict verdict-busted">⚡ Busted — Social Media Panic</div>
+    </div>
+    <div class="myth-card">
+      <div class="myth-label">Myth 10 · Spot Reduction</div>
+      <div class="myth-claim">"You can burn belly fat with specific exercises."</div>
+      <p class="myth-truth">Spot reduction is physiologically impossible. 100 crunches per day will build abdominal muscle — but will not burn the fat layer above it. Fat loss is systemic: your body draws from its entire fat store based on genetics and hormonal patterns — not the muscles being exercised. For most people, the abdomen is the first place fat is stored and the last place it's lost. This is genetically determined. Only a sustained caloric deficit produces fat loss — from wherever your body decides first.</p>
+      <div class="myth-verdict verdict-busted">⚡ Busted — Physiologically Impossible</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 2 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"Nutrition myths persist because they offer simple solutions to complex problems. They cling to our collective consciousness — often causing us to <em>fear perfectly healthy foods or waste money on unnecessary protocols.</em>"</p>
+  <p class="quote-attr">— The Nutrimaster · Nutritional Epidemiology Review · December 2025</p>
+</div>
+
+<!-- ─── 03: VEGETARIAN PROTEIN ─── -->
+<section class="section" id="protein">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 03</div>
+    <div class="s-meta">
+      <div class="s-cat">EUFIC 2025 · Amino Acid Science · Complete Protein Combinations</div>
+      <h2 class="s-title">Vegetarian<br/><span>Complete Protein</span></h2>
+      <p class="s-desc">EUFIC 2025 is unequivocal: "Plant proteins can fully meet dietary needs — eating a variety ensures all essential amino acids without meat." The myth that vegetarians cannot get complete protein is genuinely outdated. Here are the specific food combinations that provide all 9 essential amino acids — and the science behind why they work.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">9</span><span class="s-stat-l">essential amino acids the body cannot produce — must come from food</span></div>
+    <div class="s-stat"><span class="s-stat-n">Complete</span><span class="s-stat-l">protein = contains all 9 essential amino acids in adequate quantities</span></div>
+    <div class="s-stat"><span class="s-stat-n">Pool</span><span class="s-stat-l">amino acids from different meals throughout the day combine to form complete proteins</span></div>
+    <div class="s-stat"><span class="s-stat-n">Soy</span><span class="s-stat-l">quinoa, hemp, and buckwheat are the only complete plant proteins without combination</span></div>
+  </div>
+
+  <div class="protein-table">
+    <div class="pt-row" style="background:var(--card2);border-bottom:1px solid var(--border)">
+      <div class="pt-icon" style="font-size:14px;font-family:'JetBrains Mono',monospace;color:var(--gold);letter-spacing:1px">COMBO</div>
+      <div class="pt-body" style="display:grid;grid-template-columns:1fr 2fr;gap:20px;align-items:center">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--gold);text-transform:uppercase">Combination</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--gold);text-transform:uppercase">Why It Works</div>
+      </div>
+      <div class="pt-complete"><div class="pt-complete-label">PROTEIN<br/>STATUS</div></div>
+    </div>
+    <div class="pt-row">
+      <div class="pt-icon">🍚</div>
+      <div class="pt-body">
+        <div class="pt-combo">Rice + Lentils / Dhal</div>
+        <p class="pt-detail">Rice is low in lysine but high in methionine. Lentils are high in lysine but low in methionine. Together they provide all 9 essential amino acids. The classic Indian dhal-rice combination is nutritionally complete protein science in practice — developed intuitively over centuries. One of the most cost-effective complete protein meals available globally.</p>
+      </div>
+      <div class="pt-complete"><div class="pt-complete-label" style="color:#7aaa88">✓ COMPLETE<br/>PROTEIN</div></div>
+    </div>
+    <div class="pt-row">
+      <div class="pt-icon">🫘</div>
+      <div class="pt-body">
+        <div class="pt-combo">Beans + Whole Grain Bread / Tortilla</div>
+        <p class="pt-detail">Legumes (beans, chickpeas, black beans) complement grains by providing lysine, threonine, and isoleucine that grains lack. Grains contribute methionine and cysteine that legumes are low in. Beans on whole grain toast, a bean burrito in a whole wheat tortilla, or hummus with pita are all nutritionally complete protein combinations. Found across almost every food culture as a staple pairing.</p>
+      </div>
+      <div class="pt-complete"><div class="pt-complete-label" style="color:#7aaa88">✓ COMPLETE<br/>PROTEIN</div></div>
+    </div>
+    <div class="pt-row">
+      <div class="pt-icon">🥛</div>
+      <div class="pt-body">
+        <div class="pt-combo">Any Plant Food + Dairy or Eggs</div>
+        <p class="pt-detail">Dairy (milk, yogurt, cheese) and eggs are complete proteins themselves. Combining them with any plant food — even one that's incomplete on its own — creates a complete amino acid profile. Greek yogurt with nuts, eggs with whole grain toast, cheese and vegetables: all complete combinations. For vegetarians who consume dairy and eggs, getting complete protein is effortless with any mixed meal.</p>
+      </div>
+      <div class="pt-complete"><div class="pt-complete-label" style="color:#7aaa88">✓ COMPLETE<br/>PROTEIN</div></div>
+    </div>
+    <div class="pt-row">
+      <div class="pt-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 21V9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 12C6 12 5 6 5 6s6-1 7 6zM12 12c0-6 6-6.5 6-6.5S18.5 11 12 12z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></div>
+      <div class="pt-body">
+        <div class="pt-combo">Quinoa (Standalone Complete)</div>
+        <p class="pt-detail">One of the rare plant foods that is a complete protein on its own. Contains all 9 essential amino acids in adequate quantities, plus significant fibre, magnesium, iron, and B vitamins. Quinoa has a higher protein content than most grains (8g per cooked cup) and is naturally gluten-free. A versatile base for bowls, salads, and sides — the most nutritionally complete grain alternative available.</p>
+      </div>
+      <div class="pt-complete"><div class="pt-complete-label" style="color:#7aaa88">✓ STANDALONE<br/>COMPLETE</div></div>
+    </div>
+    <div class="pt-row">
+      <div class="pt-icon">🫘</div>
+      <div class="pt-body">
+        <div class="pt-combo">Tofu / Tempeh / Edamame (Soy)</div>
+        <p class="pt-detail">Soy-based foods are complete plant proteins and among the highest quality. Tofu provides ~8g protein per 100g. Tempeh (fermented soy) provides ~19g protein per 100g — higher than most meats by weight. Edamame (young soybeans) contains all essential amino acids and is high in fibre, vitamins, and minerals. For vegans, soy-based foods are among the easiest and most versatile complete protein sources.</p>
+      </div>
+      <div class="pt-complete"><div class="pt-complete-label" style="color:#7aaa88">✓ STANDALONE<br/>COMPLETE</div></div>
+    </div>
+    <div class="pt-row">
+      <div class="pt-icon">🌰</div>
+      <div class="pt-body">
+        <div class="pt-combo">Hummus + Whole Grain Pita / Vegetable Sticks</div>
+        <p class="pt-detail">Hummus (chickpeas + tahini/sesame paste) is a clever traditional combination: chickpeas are high in lysine, sesame is high in methionine and cysteine — together they create a complete amino acid profile. Paired with whole grain pita or any grain-based vehicle, the combination is both nutritionally complete and highly palatable. The Middle Eastern tradition of hummus, pita, and vegetable combinations has been delivering complete plant protein for thousands of years.</p>
+      </div>
+      <div class="pt-complete"><div class="pt-complete-label" style="color:#7aaa88">✓ COMPLETE<br/>PROTEIN</div></div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-head">✅ The Amino Acid Pool — You Don't Need to Combine at Every Meal</div>
+    <p class="tip-text">Modern nutritional science clarified a critical misunderstanding: you do not need to combine complementary proteins at every meal. <strong>The body maintains a free amino acid pool</strong> — drawing from multiple meals throughout the day to assemble complete proteins. As long as you eat a variety of plant proteins across your daily meals, your body constructs complete proteins from the pool. The practical rule: eat a wide variety of legumes, grains, nuts, seeds, and vegetables across your day — and your amino acid needs will be met.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── 04: MEAL TIMING ─── -->
+<section class="section section-alt" id="timing">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 04</div>
+    <div class="s-meta">
+      <div class="s-cat">Circadian Nutrition · Satchin Panda · Time-Restricted Eating Research</div>
+      <h2 class="s-title">Meal Timing<br/><span>Science</span></h2>
+      <p class="s-desc">Emerging research in circadian nutrition — led by Satchin Panda at the Salk Institute — shows that when you eat is almost as important as what you eat. Your organs have their own clocks. Eating in alignment with your circadian rhythm produces measurably different metabolic outcomes than eating the same food at misaligned times.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">8hrs</span><span class="s-stat-l">optimal eating window supported by circadian nutrition research</span></div>
+    <div class="s-stat"><span class="s-stat-n">Insulin</span><span class="s-stat-l">sensitivity is highest in the morning — the best time for carbohydrate-heavy meals</span></div>
+    <div class="s-stat"><span class="s-stat-n">3hrs</span><span class="s-stat-l">before bed — cut off food to protect sleep quality and metabolic health</span></div>
+    <div class="s-stat"><span class="s-stat-n">Breakfast</span><span class="s-stat-l">protein at breakfast reduces appetite and caloric intake for up to 12 hours</span></div>
+  </div>
+
+  <div class="timing-grid">
+    <div class="timing-card">
+      <div class="timing-time">7–9AM</div>
+      <span class="timing-label">Morning Window</span>
+      <div class="timing-title">🌅 Protein + Complex Carbs</div>
+      <p class="timing-text">Insulin sensitivity is highest in the morning — meaning your body processes carbohydrates most efficiently early in the day. Cortisol (the alertness hormone) is also peaking, supporting metabolism. High-protein breakfast reduces appetite hormones (ghrelin) for up to 12 hours. Practical: eggs with whole grain toast, Greek yogurt with berries, or oatmeal with nuts. This is the meal where carbohydrates do the most good with the least metabolic cost.</p>
+    </div>
+    <div class="timing-card">
+      <div class="timing-time">12–2PM</div>
+      <span class="timing-label">Peak Performance</span>
+      <div class="timing-title">💪 Largest Meal of the Day</div>
+      <p class="timing-text">Research consistently supports shifting caloric intake earlier rather than later. Midday is the optimal window for your largest meal: digestive enzymes are at peak activity, insulin sensitivity remains high, and your body can fully use the energy over the active afternoon. Cultures that eat their largest meal at midday (Mediterranean, Latin American) tend to have better metabolic markers than those eating largest at dinner. Include protein, healthy fats, vegetables, and complex carbs.</p>
+    </div>
+    <div class="timing-card">
+      <div class="timing-time">3–5PM</div>
+      <span class="timing-label">Energy Dip Window</span>
+      <div class="timing-title">🍌 Smart Snacking</div>
+      <p class="timing-text">The post-lunch energy dip (2–4PM) is real and circadian — not just a blood sugar crash. A small, nutrient-dense snack at this window maintains energy without spiking insulin. Best options: a small handful of nuts (walnuts, almonds), apple with nut butter, or dark chocolate with a piece of fruit. Avoid high-sugar snacks here — the subsequent blood sugar crash worsens the afternoon dip rather than resolving it.</p>
+    </div>
+    <div class="timing-card">
+      <div class="timing-time">6–7PM</div>
+      <span class="timing-label">Evening Meal</span>
+      <div class="timing-title">🥗 Light + Protein-Rich Dinner</div>
+      <p class="timing-text">Insulin sensitivity declines in the evening — meaning carbohydrates at dinner produce a higher insulin response than the same food at midday. Shifting toward protein and vegetables at dinner and reducing starchy carbohydrates produces measurably better metabolic outcomes over time. This doesn't mean no carbohydrates — it means the ratio should shift. Salmon with roasted vegetables, a lentil soup, or a protein-rich salad are ideal dinner profiles.</p>
+    </div>
+    <div class="timing-card">
+      <div class="timing-time">Stop by 8PM</div>
+      <span class="timing-label">Eating Cutoff</span>
+      <div class="timing-title">🌙 Protect Sleep & Metabolism</div>
+      <p class="timing-text">Eating within 2–3 hours of sleep disrupts melatonin production, raises body temperature (both impair sleep onset), and forces metabolic processing during the body's programmed repair window. Research on time-restricted eating (TRE) consistently shows that compressing eating to an 8–10 hour window produces metabolic benefits even without caloric restriction. The target: a minimum 12-hour fast between your last meal and breakfast. This is achievable without conscious caloric restriction.</p>
+    </div>
+    <div class="timing-card">
+      <div class="timing-time">Consistency</div>
+      <span class="timing-label">The Most Important Variable</span>
+      <div class="timing-title">🔄 Eat at Regular Times</div>
+      <p class="timing-text">Circadian nutrition research reveals that consistent meal timing — eating at roughly the same times each day — synchronises your body's clock genes and optimises metabolic function independently of what you eat. Irregular meal timing (common in modern professional life) disrupts circadian rhythms in organs including the liver, pancreas, and gut — reducing metabolic efficiency and increasing inflammation risk. The practical takeaway: consistent meal timing may be as important as the meals themselves.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 05: GUT-BRAIN AXIS ─── -->
+<section class="section" id="gut">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 05</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · The Gut-Brain Axis · Your Second Brain</div>
+      <h2 class="s-title">The <span>Gut-Brain</span><br/>Axis</h2>
+      <p class="s-desc">The gut contains 500 million neurons — more than the spinal cord. 90% of the body's serotonin is produced in the gut. The bidirectional communication highway between your gut microbiome and your brain is now one of the most researched areas in neuroscience — with direct implications for mood, cognition, anxiety, and even memory.</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon">🦠</span>
+      <div class="col-title">What Your Microbiome Does</div>
+      <p class="col-text">
+        Your gut houses approximately 100 trillion microorganisms — roughly equal to the number of cells in your body. These microbes: produce neurotransmitters (serotonin, GABA, dopamine), regulate immune function (80% of immune cells live in the gut), synthesise vitamins (B12, K2), metabolise nutrients from food, and communicate directly with the brain via the vagus nerve.<br/><br/>
+        <strong>The gut-brain axis</strong> is the bidirectional communication between your enteric nervous system (the gut's neural network) and your central nervous system. This axis means that gut inflammation produces brain inflammation, gut health affects mood directly, and stress produces gut dysfunction simultaneously.<br/><br/>
+        A 2021 meta-analysis found that probiotic supplementation measurably reduced depression and anxiety scores — establishing a direct causal link between microbiome health and mental health outcomes.
+      </p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon">🥦</span>
+      <div class="col-title">How to Feed Your Microbiome</div>
+      <p class="col-text">
+        <strong>Fibre is the foundation.</strong> Gut bacteria ferment fibre into short-chain fatty acids (SCFAs) — particularly butyrate — which reduce inflammation, strengthen the gut lining, and support brain health. Most people get 15–17g of fibre daily; research suggests 25–38g is optimal. Increase gradually to avoid discomfort.<br/><br/>
+        <strong>Diversity is the goal.</strong> The most robust research finding on microbiome health: dietary diversity produces microbiome diversity. Aim for 30+ different plant foods per week — not just 30 servings, but 30 different species. Each plant species feeds different bacterial strains.<br/><br/>
+        <strong>Fermented foods are natural probiotics.</strong> Kimchi, kefir, yogurt, sauerkraut, miso, and tempeh introduce beneficial live bacteria directly. A 2021 Stanford study found that a high-fermented food diet increased microbiome diversity faster than a high-fibre diet alone.
+      </p>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">GUT PRINCIPLE 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M3 18a9 9 0 0 1 18 0" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.5 18a5.5 5.5 0 0 1 11 0" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The 30-Plant-Per-Week Target</div>
+      <p class="card-text">The largest gut microbiome study to date (American Gut Project) found that people who ate 30+ different plant species per week had significantly more diverse microbiomes than those eating under 10. "Plants" includes vegetables, fruits, whole grains, legumes, nuts, seeds, herbs, and spices. One teaspoon of turmeric counts. A tablespoon of mixed seeds counts. The bar is achievable — the diversity is what matters. Track your weekly plant variety for one month and watch your gut health, energy, and mood shift noticeably.</p>
+      <span class="badge ba">Research-Backed Target</span>
+    </div>
+    <div class="card">
+      <div class="card-num">GUT PRINCIPLE 02</div>
+      <span class="card-icon">🍶</span>
+      <div class="card-title">Fermented Foods Daily</div>
+      <p class="card-text">Including one serving of naturally fermented food daily is one of the highest-leverage dietary habits available for gut health. Options: plain kefir (30g protein and billions of live bacteria), Greek yogurt with live cultures, kimchi or sauerkraut as a condiment, miso soup, or kombucha. The key word is "naturally fermented" — commercially produced pickles in vinegar are not fermented and contain no live bacteria. The Stanford study: 10 weeks of high-fermented food diet increased microbiome diversity and reduced inflammatory markers more than high-fibre diet alone.</p>
+      <span class="badge ba">Daily Habit</span>
+    </div>
+    <div class="card">
+      <div class="card-num">GUT PRINCIPLE 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m6 6 12 12" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">What Harms the Microbiome</div>
+      <p class="card-text"><strong style="color:var(--cream)">Ultra-processed food:</strong> Emulsifiers (carboxymethylcellulose, polysorbate 80) found in ultra-processed foods disrupt gut lining integrity and alter microbiome composition within days.<br/><br/><strong style="color:var(--cream)">Unnecessary antibiotics:</strong> A single course of broad-spectrum antibiotics can reduce microbiome diversity by 25–50%, with some bacterial populations taking 6–12 months to recover.<br/><br/><strong style="color:var(--cream)">Chronic stress:</strong> The gut-brain axis runs both ways — chronic psychological stress alters microbiome composition measurably, increasing inflammation and gut permeability.</p>
+      <span class="badge bc">Protect the Microbiome</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 06: ANTI-INFLAMMATION ─── -->
+<section class="section section-alt" id="inflammation">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 06</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · The Root Cause Protocol</div>
+      <h2 class="s-title">Anti-<span>Inflammatory</span><br/>Eating</h2>
+      <p class="s-desc">Chronic low-grade inflammation is now identified as a root cause or major contributor to heart disease, type 2 diabetes, depression, Alzheimer's, cancer, and arthritis. Diet is the most modifiable driver of systemic inflammation. The anti-inflammatory diet is not a specific protocol — it is a set of principles that consistently reduces inflammatory markers across all populations studied.</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 22c4 0 7-2.5 7-6.5C19 11 15 9 15 5c0 3-2 4-2 4-1.5-2-1-5-1-5C8 6 6 9 6 13c0 1 .2 2 .6 2.8C6 15 6 14 6 14c-1 1.5-1 3.2-1 3.2C5 21 8 22 12 22z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">Pro-Inflammatory Foods — Increase Markers</div>
+      <p class="col-text">
+        <strong>Ultra-processed foods:</strong> The strongest dietary driver of inflammation across all research. Refined carbohydrates, artificial additives, trans fats, and seed oils used in commercial frying all elevate CRP (C-reactive protein) — the primary inflammatory marker.<br/><br/>
+        <strong>Added sugar:</strong> Drives inflammation through insulin spikes, advanced glycation end-products (AGEs), and gut microbiome disruption. The average person consumes 20 teaspoons of added sugar daily — 4× the recommended limit.<br/><br/>
+        <strong>Refined vegetable oils used at high heat:</strong> Omega-6 heavy oils (corn, soybean, vegetable oil blends) used for deep-frying produce harmful oxidation products. The issue is cooking method and excessive omega-6:omega-3 ratio — not moderate seed oil consumption itself.
+      </p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon">❄️</span>
+      <div class="col-title">Anti-Inflammatory Foods — Reduce Markers</div>
+      <p class="col-text">
+        <strong>Extra virgin olive oil:</strong> Contains oleocanthal — a compound with similar anti-inflammatory mechanism to ibuprofen. The Mediterranean diet's primary fat source and a consistent predictor of cardiovascular and cognitive health in research.<br/><br/>
+        <strong>Fatty fish (omega-3s):</strong> EPA and DHA directly reduce inflammatory eicosanoids and cytokines — the body's primary inflammatory signalling molecules.<br/><br/>
+        <strong>Turmeric + black pepper:</strong> Curcumin in turmeric is a potent anti-inflammatory compound. Bioavailability increases 2,000% when consumed with piperine (black pepper). The combination rivals anti-inflammatory medications in some research — without the side effects.<br/><br/>
+        <strong>All colourful produce:</strong> The phytochemical pigments that produce colour in fruits and vegetables (anthocyanins, lycopene, beta-carotene, quercetin) are almost universally anti-inflammatory antioxidants.
+      </p>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">ANTI-INFLAM 01</div>
+      <span class="card-icon">🫒</span>
+      <div class="card-title">The Mediterranean Diet — Most Researched Anti-Inflammatory Pattern</div>
+      <p class="card-text">The Mediterranean diet is the most extensively studied dietary pattern in human research — and the most consistently associated with reduced inflammation, lower cardiovascular risk, lower Alzheimer's risk, and higher longevity. Its key elements: abundant olive oil, fish (2–3× weekly), legumes (daily), whole grains, vegetables and fruits (abundant), nuts, moderate dairy, minimal red meat and processed food. No food is forbidden — the pattern, not the individual foods, produces the protective effect. This is not a restriction diet. It is an abundance diet.</p>
+      <span class="badge ba">Best-Evidenced Pattern</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ANTI-INFLAM 02</div>
+      <span class="card-icon">🌶️</span>
+      <div class="card-title">The Power Spices</div>
+      <p class="card-text"><strong style="color:var(--cream)">Turmeric:</strong> Curcumin inhibits NF-κB — the primary switch for inflammation at the cellular level. Add to everything. Requires black pepper for absorption.<br/><br/><strong style="color:var(--cream)">Ginger:</strong> Gingerols and shogaols have documented anti-inflammatory effects equivalent to some NSAIDs in joint pain research.<br/><br/><strong style="color:var(--cream)">Garlic:</strong> Allicin activates anti-inflammatory and antioxidant pathways. Most effective consumed raw or lightly cooked — high heat destroys allicin. Let crushed garlic sit 10 minutes before cooking to stabilise the compound.<br/><br/><strong style="color:var(--cream)">Cinnamon:</strong> Reduces fasting blood glucose and insulin response — indirectly reducing inflammation from chronic blood sugar elevation.</p>
+      <span class="badge ba">Add to Every Meal</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ANTI-INFLAM 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 20V10M12 20V4M19 20v-7" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 20h18" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Omega-3:Omega-6 Ratio</div>
+      <p class="card-text">The optimal omega-3 to omega-6 ratio for anti-inflammatory effect is approximately 1:4. The modern Western diet averages 1:20–1:40 — producing a chronic pro-inflammatory state. The solution is twofold: increase omega-3 intake (fatty fish, walnuts, flaxseed, chia seeds) and reduce omega-6 from ultra-processed and commercially fried food (the largest source). You don't need to eliminate omega-6 — you need to rebalance the ratio. Two portions of fatty fish per week, a daily tablespoon of flaxseed, and reduced processed food will move the ratio measurably within weeks.</p>
+      <span class="badge ba">Ratio Matters</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 07: HYDRATION ─── -->
+<section class="section" id="hydration">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 07</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · The Most Underprescribed Performance Tool</div>
+      <h2 class="s-title">Hydration<br/><span>Science</span></h2>
+      <p class="s-desc">Water is the most abundant compound in the human body (60% of body weight) and the most undervalued performance intervention available. A 2% reduction in hydration status produces measurable cognitive impairment, mood deterioration, and reduced physical performance. And most people are chronically mildly dehydrated without knowing it.</p>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">HYDRATION 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 3s6 7 6 11.5A6 6 0 0 1 6 14.5C6 10 12 3 12 3z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The 2% Rule — When Dehydration Becomes Cognitive Impairment</div>
+      <p class="card-text">Research consistently shows that a 2% reduction in body water produces: reduced working memory, impaired attention and concentration, increased perception of task difficulty, elevated cortisol and mood deterioration, and reduced physical performance in endurance tasks. By the time you feel thirsty, you are already at approximately 1–2% dehydration. The practical implication: thirst is not an early warning system — it is a delayed alarm. For cognitive performance in particular, maintaining hydration throughout the day (not just catching up when thirsty) is the strategy.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 Brain Impact</div>
+        <p class="card-text">The brain is 75% water. Even mild dehydration causes brain tissue to contract — which activates pain receptors inside the skull. The classic "dehydration headache" is the brain physically shrinking. Maintaining hydration keeps the brain at optimal volume, optimal neurotransmitter production, and optimal electrical signal conductivity.</p>
+      </div>
+      <span class="badge ba">Performance Critical</span>
+    </div>
+    <div class="card">
+      <div class="card-num">HYDRATION 02</div>
+      <span class="card-icon">☕</span>
+      <div class="card-title">Coffee, Tea & Other Beverages Count</div>
+      <p class="card-text">The myth that caffeine dehydrates has been comprehensively debunked. Moderate coffee consumption (250–400mg caffeine daily, approximately 3–4 cups) does not cause dehydration in habitual coffee drinkers. The mild diuretic effect of caffeine is outweighed by the fluid volume of the beverage. Tea, herbal drinks, milk, and even moderate fruit juice all contribute to daily fluid intake. The practical guidance: drink a variety of beverages throughout the day and trust thirst as your primary guide — but don't wait until thirst to start your fluid intake.</p>
+      <span class="badge bb">Myth Busted</span>
+    </div>
+    <div class="card">
+      <div class="card-num">HYDRATION 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="1.4" fill="#c8943a"/></svg></span>
+      <div class="card-title">Optimal Hydration Protocol for Performance</div>
+      <p class="card-text"><strong style="color:var(--cream)">Morning:</strong> 500ml of water immediately after waking — you've been 7–8 hours without fluid and lost water through breathing. This is the highest-impact hydration habit available.<br/><br/><strong style="color:var(--cream)">Before meals:</strong> 250–500ml of water 30 minutes before eating supports digestion and can reduce caloric intake by 13–22% (preloading research).<br/><br/><strong style="color:var(--cream)">Colour check:</strong> Urine colour is the most reliable and accessible hydration marker. Pale straw yellow = optimal. Dark yellow = dehydrated. Clear = overhydrated (rare but possible with excessive water forcing).<br/><br/><strong style="color:var(--cream)">Electrolytes:</strong> For intense exercise or hot climates, add sodium, potassium, and magnesium — water alone without electrolytes can cause hyponatremia in endurance contexts.</p>
+      <span class="badge ba">Daily Protocol</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 3 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"Let food be thy medicine and medicine be thy food. In 2026, the research finally confirms <em>what Hippocrates understood 2,400 years ago — nutrition is the most modifiable determinant of health.</em>"</p>
+  <p class="quote-attr">— Hippocrates · 460 BC · Validated by 2025 Nutritional Epidemiology</p>
+</div>
+
+<!-- ─── 08: MASTER CHEATSHEET ─── -->
+<section class="section" id="cheatsheet">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 08</div>
+    <div class="s-meta">
+      <div class="s-cat">Quick Reference</div>
+      <h2 class="s-title">The Master<br/><span>Cheatsheet</span></h2>
+      <p class="s-desc">Every principle from this guide — one quick-reference table. Build these into your daily eating and the compound effect becomes visible within weeks.</p>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Principle</th><th>The Action</th><th>Chapter</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td class="num-cell">01</td><td class="name-cell">DHA Daily</td><td>Fatty fish 2–3× per week (salmon, sardines, mackerel) OR 1g DHA supplement daily. Brain structure depends on it.</td><td>Brain</td><td><span class="badge ba">Core</span></td></tr>
+        <tr><td class="num-cell">02</td><td class="name-cell">Berries Daily</td><td>A handful of berries every day. Frozen works perfectly. Anthocyanins protect neurons and improve blood flow to brain.</td><td>Brain</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">03</td><td class="name-cell">Walnuts Daily</td><td>30g (a small handful) daily. ALA omega-3 + BDNF boost. The highest-impact brain snack available.</td><td>Brain</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">04</td><td class="name-cell">Leafy Greens Daily</td><td>At least one serving of spinach, kale, or Swiss chard daily. Folate for serotonin. Vitamin K for neuroprotection.</td><td>Brain</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">05</td><td class="name-cell">Dark Chocolate</td><td>20–30g of 70%+ dark chocolate daily. Flavanols + magnesium + mood-boosting compounds. Real food, not candy.</td><td>Brain</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">06</td><td class="name-cell">Carbs Aren't Enemies</td><td>Excess calories cause fat gain — not carbs specifically. Choose complex carbs (whole grains, legumes, vegetables).</td><td>Myths</td><td><span class="badge bc">Busted</span></td></tr>
+        <tr><td class="num-cell">07</td><td class="name-cell">Fat Is Essential</td><td>20–35% of daily calories from fat. Prioritise unsaturated fats. "Low-fat" labels = suspect — check for added sugar.</td><td>Myths</td><td><span class="badge bc">Busted</span></td></tr>
+        <tr><td class="num-cell">08</td><td class="name-cell">Eggs: 1–2 Daily</td><td>Healthy adults can eat 1–2 eggs daily without negative cholesterol impact. Choline is irreplaceable for brain health.</td><td>Myths</td><td><span class="badge ba">Cleared</span></td></tr>
+        <tr><td class="num-cell">09</td><td class="name-cell">Buy Frozen Confidently</td><td>Frozen produce is nutritionally equal or superior to fresh. Buy frozen; it's cheaper, less waste, equally nutritious.</td><td>Myths</td><td><span class="badge ba">Practical</span></td></tr>
+        <tr><td class="num-cell">10</td><td class="name-cell">Skip the Multivitamin</td><td>Spend the supplement budget on real food. Whole foods contain thousands of synergistic compounds no pill can replicate.</td><td>Myths</td><td><span class="badge ba">Save Money</span></td></tr>
+        <tr><td class="num-cell">11</td><td class="name-cell">Complementary Proteins</td><td>Rice + lentils, beans + grains, hummus + pita, tofu, quinoa, tempeh. Complete protein without meat. Daily.</td><td>Protein</td><td><span class="badge ba">Combinations</span></td></tr>
+        <tr><td class="num-cell">12</td><td class="name-cell">Amino Acid Pool</td><td>No need to combine proteins at every meal. Eat a variety across the day and your body assembles complete proteins.</td><td>Protein</td><td><span class="badge ba">Flexibility</span></td></tr>
+        <tr><td class="num-cell">13</td><td class="name-cell">Protein at Breakfast</td><td>High-protein breakfast reduces ghrelin (hunger hormone) for up to 12 hours. Sets satiety for the entire day.</td><td>Timing</td><td><span class="badge ba">Every AM</span></td></tr>
+        <tr><td class="num-cell">14</td><td class="name-cell">Largest Meal at Midday</td><td>Insulin sensitivity peaks around midday. Shift calories earlier — largest meal at lunch, lighter at dinner.</td><td>Timing</td><td><span class="badge ba">Circadian</span></td></tr>
+        <tr><td class="num-cell">15</td><td class="name-cell">Stop Eating 2–3hrs Before Bed</td><td>Protects melatonin, sleep quality, and metabolic health. Minimum 12-hour overnight fast. No willpower needed — just timing.</td><td>Timing</td><td><span class="badge ba">Daily Cutoff</span></td></tr>
+        <tr><td class="num-cell">16</td><td class="name-cell">Consistent Meal Times</td><td>Eat at roughly the same times daily. Clock gene synchronisation improves metabolic efficiency independently of what you eat.</td><td>Timing</td><td><span class="badge ba">System</span></td></tr>
+        <tr><td class="num-cell">17</td><td class="name-cell">30 Plants Per Week</td><td>Track your weekly plant variety. 30+ different species (veg, fruit, grains, legumes, nuts, seeds, herbs) for microbiome diversity.</td><td>Gut</td><td><span class="badge ba">Weekly Target</span></td></tr>
+        <tr><td class="num-cell">18</td><td class="name-cell">Fermented Food Daily</td><td>Kefir, yogurt with live cultures, kimchi, sauerkraut, miso, or kombucha. One serving daily builds microbiome diversity.</td><td>Gut</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">19</td><td class="name-cell">Fibre Target</td><td>25–38g of fibre daily. Most people get 15g. Increase gradually. Legumes, whole grains, vegetables, and fruits are the sources.</td><td>Gut</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">20</td><td class="name-cell">Extra Virgin Olive Oil</td><td>Primary cooking fat. Oleocanthal = anti-inflammatory. Use on everything. Genuine EVOO — not light or refined olive oil.</td><td>Anti-Inflam</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">21</td><td class="name-cell">Turmeric + Black Pepper</td><td>Add to everything. Curcumin inhibits NF-κB (primary inflammation switch). Black pepper increases bioavailability 2,000%.</td><td>Anti-Inflam</td><td><span class="badge ba">Every Meal</span></td></tr>
+        <tr><td class="num-cell">22</td><td class="name-cell">Reduce Ultra-Processed Food</td><td>The single highest-impact dietary change for inflammation reduction. Focus on whole foods first — reduction follows naturally.</td><td>Anti-Inflam</td><td><span class="badge ba">Priority #1</span></td></tr>
+        <tr><td class="num-cell">23</td><td class="name-cell">Rebalance Omega Ratio</td><td>Target 1:4 omega-3:omega-6. Add fatty fish + flaxseed + walnuts. Reduce processed/fried food omega-6 sources.</td><td>Anti-Inflam</td><td><span class="badge ba">Weekly</span></td></tr>
+        <tr><td class="num-cell">24</td><td class="name-cell">Mediterranean Pattern</td><td>Fish 2–3×/wk, daily olive oil + vegetables + legumes, whole grains, nuts. The most research-backed dietary pattern for longevity.</td><td>Anti-Inflam</td><td><span class="badge ba">Framework</span></td></tr>
+        <tr><td class="num-cell">25</td><td class="name-cell">500ml Water on Waking</td><td>Highest-impact single hydration habit. You've been 7–8 hours without water. Your brain needs it before your phone does.</td><td>Hydration</td><td><span class="badge ba">Every AM</span></td></tr>
+        <tr><td class="num-cell">26</td><td class="name-cell">Coffee Counts</td><td>3–4 cups daily does not dehydrate habitual drinkers. Coffee, tea, and all beverages contribute to fluid intake. Myth busted.</td><td>Hydration</td><td><span class="badge ba">Cleared</span></td></tr>
+        <tr><td class="num-cell">27</td><td class="name-cell">Urine Colour Check</td><td>Pale straw yellow = optimal. Dark yellow = drink more. The simplest, most accessible hydration monitoring tool available.</td><td>Hydration</td><td><span class="badge bb">Daily Check</span></td></tr>
+        <tr><td class="num-cell">28</td><td class="name-cell">Preload Before Meals</td><td">250–500ml water 30 min before meals supports digestion and reduces caloric intake naturally by 13–22%.</td><td>Hydration</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">29</td><td class="name-cell">Eat the Rainbow</td><td>Each colour = different phytochemicals = different protective compounds. Variety of colours = comprehensive antioxidant coverage.</td><td>All</td><td><span class="badge ba">Every Plate</span></td></tr>
+        <tr><td class="num-cell">30</td><td class="name-cell">Real Food First</td><td>No supplement, protocol, or diet trend outperforms consistent whole food eating. The fundamentals compound. Start there.</td><td>All</td><td><span class="badge ba">Philosophy</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</section>
+
+<footer>
+  <div class="footer-logo">Eat Smart: Nutrition & Diet Simplified</div>
+  <p class="footer-sub">Lifestyle · Nutrition Science · Dietetics · 2025–2026 Edition</p>
+  <p class="footer-sub" style="color:var(--muted);font-size:13px;margin-top:8px">8 Complete Chapters · 30 Core Principles · Research from Amen Clinics, EUFIC 2025, Northwestern Medicine, Mayo Clinic, PMC 2025, APA, Stanford, Satchin Panda & The American Gut Project</p>
+  <p class="footer-tiny">Research compiled May 2026 · Inspired by Parallelogram · Built for everyone who wants to eat smarter, not just eat less</p>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:rgba(200,148,58,.28);margin-top:36px">"Every time you eat or drink, you are either feeding disease or fighting it." — Heather Morgan</p>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const st=document.documentElement.scrollTop;
+  const sh=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('prog').style.width=(st/sh*100)+'%';
+});
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}});
+},{threshold:0.07});
+document.querySelectorAll('.card,.col-card,.s-stat,.bf-card,.myth-card,.pt-row,.timing-card,.fb-cell').forEach(el=>{
+  el.style.opacity='0';el.style.transform='translateY(18px)';
+  el.style.transition='opacity .5s ease, transform .5s ease';
+  obs.observe(el);
+});
+</script>
+</body>
+</html>

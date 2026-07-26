@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Break Free: Quit Any Habit for Good</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07080a;--surface:#0e1014;--card:#13151a;--card2:#181b22;
+  --gold:#c8943a;--gold2:#e8b84b;--golddim:rgba(200,148,58,.13);
+  --cream:#f0e8d5;--muted:#5c5f68;--light:#9a9da8;
+  --border:rgba(200,148,58,.18);--rust:#b84532;
+  --teal:#2c7a72;--ember:#7a3a1a;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--cream);overflow-x:hidden;line-height:1.6}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.5}
+#prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--ember),var(--gold),var(--gold2));width:0%;z-index:2000;transition:width .08s}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:1500;display:flex;align-items:center;justify-content:space-between;padding:14px 48px;background:rgba(7,8,10,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(200,148,58,.1)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
+.nav-links{display:flex;gap:20px;list-style:none}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+@media(max-width:768px){.nav-links{display:none}.hero,.section,.toc-wrap,.quote-block,footer{padding-left:22px!important;padding-right:22px!important}nav{padding:14px 22px}}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px 64px 80px;position:relative;overflow:hidden}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 75% 55% at 92% 8%,rgba(122,58,26,.16) 0%,transparent 55%),radial-gradient(ellipse 55% 70% at 5% 90%,rgba(200,148,58,.1) 0%,transparent 60%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;opacity:.022;background-image:linear-gradient(rgba(200,148,58,1) 1px,transparent 1px),linear-gradient(90deg,rgba(200,148,58,1) 1px,transparent 1px);background-size:68px 68px}
+.hero-inner{position:relative;max-width:1100px}
+.hero-badge{display:inline-flex;align-items:center;background:rgba(122,58,26,.18);border:1px solid rgba(122,58,26,.45);padding:5px 16px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#e8a87a;margin-bottom:22px;opacity:0;animation:fadeup .7s .15s forwards}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:26px;display:flex;align-items:center;gap:14px;opacity:0;animation:fadeup .7s .2s forwards}
+.hero-tag::before{content:'';width:44px;height:1px;background:var(--gold);flex-shrink:0}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(46px,8vw,112px);font-weight:700;line-height:.88;letter-spacing:-4px;margin-bottom:10px;opacity:0;animation:fadeup .8s .4s forwards}
+.hero h1 span{color:var(--gold);font-style:italic}
+.hero h1 .sub{display:block;color:rgba(240,232,213,.2);font-size:clamp(22px,3.6vw,50px);font-weight:400;font-style:italic;letter-spacing:-1px;margin-top:8px}
+.hero-desc{font-size:clamp(15px,1.9vw,18px);color:var(--light);max-width:600px;margin:34px 0 50px;font-weight:300;line-height:1.78;opacity:0;animation:fadeup .8s .6s forwards}
+.hero-stats{display:flex;gap:0;border:1px solid var(--border);width:fit-content;opacity:0;animation:fadeup .8s .8s forwards;flex-wrap:wrap}
+.hstat{padding:18px 32px;border-right:1px solid var(--border);text-align:center}
+.hstat:last-child{border-right:none}
+.hstat-n{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.hstat-l{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-top:4px}
+.scroll-hint{position:absolute;bottom:40px;left:64px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:10px;animation:pulse 2.5s infinite}
+.scroll-hint::before{content:'';width:1px;height:38px;background:var(--gold);opacity:.35}
+@keyframes fadeup{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+
+.toc-wrap{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:56px 64px}
+.toc-inner{max-width:1100px;margin:0 auto}
+.toc-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:36px;display:flex;align-items:center;gap:12px}
+.toc-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px}
+.toc-item{background:var(--card);padding:18px 22px;display:flex;align-items:flex-start;gap:14px;cursor:pointer;transition:background .2s,border-color .2s;border:1px solid transparent;text-decoration:none}
+.toc-item:hover{background:var(--card2);border-color:var(--border)}
+.toc-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);opacity:.55;flex-shrink:0;min-width:26px;margin-top:2px}
+.toc-name{font-size:13.5px;color:var(--light);font-weight:400;transition:color .2s;line-height:1.4}
+.toc-item:hover .toc-name{color:var(--cream)}
+
+.section{padding:96px 64px;position:relative}
+.section-alt{background:var(--surface)}
+.s-inner{max-width:1100px;margin:0 auto}
+.s-head{display:grid;grid-template-columns:90px 1fr;gap:32px;align-items:start;margin-bottom:60px;padding-bottom:44px;border-bottom:1px solid var(--border)}
+.s-num{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;padding-top:8px}
+.s-meta{display:flex;flex-direction:column;gap:10px}
+.s-cat{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:3px;color:var(--rust);text-transform:uppercase}
+.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,60px);font-weight:700;line-height:.92;letter-spacing:-1.5px;color:var(--cream)}
+.s-title span{color:var(--gold);font-style:italic}
+.s-desc{font-size:15.5px;color:var(--light);max-width:660px;font-weight:300;line-height:1.78;margin-top:6px}
+@media(max-width:600px){.s-head{grid-template-columns:1fr;gap:14px}}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:2px}
+@media(max-width:600px){.cards{grid-template-columns:1fr}}
+.card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .25s,background .25s;position:relative;overflow:hidden}
+.card:hover{border-color:var(--border);background:var(--card2)}
+.card::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:linear-gradient(180deg,var(--gold),var(--ember));transition:height .35s}
+.card:hover::before{height:100%}
+.card-num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);opacity:.45;margin-bottom:14px}
+.card-icon{font-size:26px;margin-bottom:11px;display:block}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:700;color:var(--cream);letter-spacing:-.4px;margin-bottom:11px;line-height:1.15}
+.card-sec{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin:16px 0 7px}
+.card-text{font-size:13.5px;color:var(--light);line-height:1.72;font-weight:300}
+.psych{background:rgba(200,148,58,.06);border-left:2px solid var(--gold);padding:15px 18px;margin-top:18px}
+.psych .card-sec{margin-top:0}
+.scibox{background:rgba(44,122,114,.07);border-left:2px solid rgba(44,122,114,.5);padding:15px 18px;margin-top:14px}
+.scibox .card-sec{color:#4aaa9e}
+.badge{display:inline-flex;align-items:center;padding:4px 11px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;margin-top:14px}
+.ba{background:rgba(200,148,58,.11);color:var(--gold);border:1px solid var(--border)}
+.bb{background:rgba(44,122,114,.12);color:#4aaa9e;border:1px solid rgba(44,122,114,.3)}
+.bc{background:rgba(184,69,50,.11);color:#d46040;border:1px solid rgba(184,69,50,.28)}
+.bd{background:rgba(122,58,26,.14);color:#e8a87a;border:1px solid rgba(122,58,26,.35)}
+
+.quote-block{background:var(--surface);padding:72px 64px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center}
+.quote-text{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3.2vw,36px);font-weight:600;font-style:italic;color:var(--cream);max-width:880px;margin:0 auto;line-height:1.4}
+.quote-text em{color:var(--gold)}
+.quote-attr{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:24px}
+
+.stat-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:2px;margin:44px 0}
+.s-stat{background:var(--card);padding:26px 22px;text-align:center;border:1px solid transparent;transition:border-color .2s}
+.s-stat:hover{border-color:var(--border)}
+.s-stat-n{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.s-stat-l{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-top:5px}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}}
+.col-card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .2s}
+.col-card:hover{border-color:var(--border)}
+.col-icon{font-size:30px;margin-bottom:14px;display:block}
+.col-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:11px;letter-spacing:-.4px}
+.col-text{font-size:13.5px;color:var(--light);line-height:1.75;font-weight:300}
+.col-text strong{color:var(--cream);font-weight:500}
+
+/* HABIT LOOP VISUAL */
+.loop-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin:36px 0}
+@media(max-width:640px){.loop-steps{grid-template-columns:1fr}}
+.loop-step{background:var(--card);padding:30px;border:1px solid transparent;transition:border-color .2s,background .2s;position:relative;overflow:hidden;text-align:center}
+.loop-step:hover{border-color:var(--border);background:var(--card2)}
+.loop-num{font-family:'Cormorant Garamond',serif;font-size:80px;font-weight:700;color:var(--gold);opacity:.07;position:absolute;top:4px;right:10px;line-height:1}
+.loop-icon{font-size:36px;margin-bottom:14px;display:block}
+.loop-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+.loop-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--cream);margin-bottom:10px}
+.loop-text{font-size:13.5px;color:var(--light);line-height:1.7;font-weight:300;text-align:left}
+.loop-break{background:rgba(200,148,58,.05);border-left:2px solid rgba(200,148,58,.3);padding:10px 14px;margin-top:14px;font-size:12.5px;color:var(--light);line-height:1.55;text-align:left}
+.loop-break strong{color:var(--cream);font-weight:500}
+
+/* 72-HOUR TIMELINE */
+.timeline{display:flex;flex-direction:column;gap:2px;margin:36px 0}
+.tl-item{display:grid;grid-template-columns:120px 1fr;gap:0;background:var(--card);border:1px solid transparent;transition:border-color .2s}
+.tl-item:hover{border-color:var(--border)}
+.tl-time{background:var(--golddim);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 12px;text-align:center}
+.tl-time-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:1px;line-height:1.3;font-weight:700}
+.tl-time-sub{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:3px}
+.tl-body{padding:20px 26px}
+.tl-title{font-weight:600;color:var(--cream);font-size:15px;margin-bottom:5px}
+.tl-text{font-size:13px;color:var(--light);line-height:1.65;font-weight:300}
+.tl-tip{font-size:12.5px;color:var(--gold);font-style:italic;margin-top:8px;line-height:1.5}
+
+/* TRIGGER MAP */
+.trigger-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:2px;margin:36px 0}
+.trigger-card{background:var(--card);padding:24px;border:1px solid transparent;transition:border-color .2s,background .2s}
+.trigger-card:hover{border-color:var(--border);background:var(--card2)}
+.trigger-icon{font-size:30px;margin-bottom:10px;display:block}
+.trigger-type{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+.trigger-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--cream);margin-bottom:8px;letter-spacing:-.3px}
+.trigger-text{font-size:13px;color:var(--light);line-height:1.65;font-weight:300;margin-bottom:8px}
+.trigger-action{background:rgba(44,122,114,.07);border-left:2px solid rgba(44,122,114,.4);padding:9px 12px;font-size:12.5px;color:var(--light);line-height:1.5}
+.trigger-action strong{color:#4aaa9e;font-weight:500}
+
+/* IDENTITY LADDER */
+.identity-ladder{display:flex;flex-direction:column;gap:2px;margin:36px 0}
+.id-rung{display:grid;grid-template-columns:80px 1fr;gap:0;background:var(--card);border:1px solid transparent;transition:border-color .2s}
+.id-rung:hover{border-color:var(--border)}
+.id-level{background:var(--golddim);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--gold)}
+.id-body{padding:18px 24px}
+.id-statement{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;color:var(--cream);font-style:italic;margin-bottom:5px}
+.id-desc{font-size:13px;color:var(--light);line-height:1.6;font-weight:300}
+
+/* RELAPSE PROTOCOL */
+.relapse-steps{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2px;margin:36px 0}
+.relapse-card{background:var(--card);padding:28px;border:1px solid transparent;transition:border-color .2s,background .2s}
+.relapse-card:hover{border-color:var(--border);background:var(--card2)}
+.relapse-num{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+.relapse-title{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:700;color:var(--cream);margin-bottom:10px}
+.relapse-text{font-size:13.5px;color:var(--light);line-height:1.7;font-weight:300}
+.relapse-phrase{font-size:12.5px;color:var(--gold);font-style:italic;margin-top:12px;line-height:1.5}
+
+/* ALERT / TIP */
+.alert{background:rgba(184,69,50,.07);border:1px solid rgba(184,69,50,.24);padding:22px 26px;margin:28px 0}
+.alert-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:var(--rust);text-transform:uppercase;margin-bottom:9px}
+.alert-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.alert-text strong{color:var(--cream);font-weight:500}
+.tip{background:rgba(44,122,114,.07);border:1px solid rgba(44,122,114,.24);padding:22px 26px;margin:28px 0}
+.tip-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:#4aaa9e;text-transform:uppercase;margin-bottom:9px}
+.tip-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.tip-text strong{color:var(--cream);font-weight:500}
+
+.table-wrap{overflow-x:auto;margin-top:40px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--card2);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);padding:13px 16px;text-align:left;border-bottom:1px solid var(--border)}
+tbody tr{border-bottom:1px solid rgba(200,148,58,.07);transition:background .15s}
+tbody tr:hover{background:var(--card)}
+tbody td{padding:13px 16px;color:var(--light);vertical-align:top;line-height:1.5}
+.num-cell{font-family:'JetBrains Mono',monospace;color:var(--gold);opacity:.55;font-size:11px}
+.name-cell{font-weight:500;color:var(--cream)}
+
+footer{background:var(--bg);border-top:1px solid var(--border);padding:56px 64px 72px;text-align:center}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;letter-spacing:2px;color:var(--gold);margin-bottom:10px}
+.footer-sub{font-size:13.5px;color:var(--muted);margin-bottom:6px}
+.footer-tiny{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(92,95,104,.45);text-transform:uppercase;margin-top:26px}
+
+.pg-hero-art{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:.55;z-index:0}
+.pg-hero-art svg{width:100%;height:100%;display:block}
+[class*="icon"] svg.pg-icon{width:1em;height:1em;display:inline-block;vertical-align:-0.15em}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav>
+  <div class="nav-logo">Break Free</div>
+  <ul class="nav-links">
+    <li><a href="#dopamine">Dopamine Loop</a></li>
+    <li><a href="#triggers">Trigger Stacking</a></li>
+    <li><a href="#72hr">72-Hour Rule</a></li>
+    <li><a href="#identity">Identity</a></li>
+    <li><a href="#replacement">Replacement</a></li>
+    <li><a href="#relapse">Relapse</a></li>
+    <li><a href="#environment">Environment</a></li>
+    <li><a href="#cheatsheet">Cheatsheet</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero"><div class="pg-hero-art" aria-hidden="true"><svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><path d="M235.9 217.6 A141.9 141.9 0 0 1 429.8 49.5" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M568.0 54.6 A128.8 128.8 0 0 1 570.1 266.5" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M183.2 72.8 A240.0 240.0 0 0 1 496.5 -132.4" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><line x1="305.0" y1="146.5" x2="281.9" y2="173.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="305.0" y1="146.5" x2="337.2" y2="124.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="275.0" y1="232.2" x2="259.4" y2="212.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="250.5" y1="149.1" x2="281.9" y2="173.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="759.6" y1="78.3" x2="680.1" y2="115.0" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="759.6" y1="78.3" x2="646.4" y2="94.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="458.1" y1="77.2" x2="467.1" y2="99.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="153.5" y1="151.0" x2="194.3" y2="177.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="61.7" y1="208.1" x2="58.5" y2="166.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="58.5" y1="166.7" x2="75.9" y2="132.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="61.7" y1="208.1" x2="30.2" y2="255.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="58.5" y1="166.7" x2="30.2" y2="255.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="38.7" y1="31.6" x2="75.9" y2="132.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="259.4" y1="212.7" x2="281.9" y2="173.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="592.7" y1="102.8" x2="646.4" y2="94.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="592.7" y1="102.8" x2="642.2" y2="44.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="680.1" y1="115.0" x2="646.4" y2="94.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="646.4" y1="94.7" x2="642.2" y2="44.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><circle cx="305.0" cy="146.5" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="305.0" cy="146.5" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="275.0" cy="232.2" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="250.5" cy="149.1" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="250.5" cy="149.1" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="759.6" cy="78.3" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="458.1" cy="77.2" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="458.1" cy="77.2" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="153.5" cy="151.0" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="61.7" cy="208.1" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="58.5" cy="166.7" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="58.5" cy="166.7" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="30.2" cy="255.8" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="38.7" cy="31.6" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="337.2" cy="124.4" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="337.2" cy="124.4" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="259.4" cy="212.7" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="259.4" cy="212.7" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="592.7" cy="102.8" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="680.1" cy="115.0" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="680.1" cy="115.0" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="194.3" cy="177.3" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="646.4" cy="94.7" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="646.4" cy="94.7" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="281.9" cy="173.6" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="642.2" cy="44.5" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="75.9" cy="132.8" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="467.1" cy="99.6" r="1.4" fill="#c8943a" opacity="0.50"/></svg></div>
+  <div class="hero-glow"></div><div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">Lifestyle · Neuroscience · Behaviour Change · 2025–26</div>
+    <div class="hero-tag">The Complete Habit Quitting Research Guide · 2025–26 Edition</div>
+    <h1>Break Free<br/><span>Quit Any Habit</span><span class="sub">for Good</span></h1>
+    <p class="hero-desc">The neuroscience of why your brain fights you when you try to quit — and the exact systems, protocols, and identity shifts that override it. Not willpower. Not motivation. A structural dismantling of the habit loop that built the behaviour in the first place. 8 deep chapters. Science-first. No judgement.</p>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-n">DLS</span><span class="hstat-l">dorsolateral striatum stores habit sequences — runs on autopilot, no willpower needed</span></div>
+      <div class="hstat"><span class="hstat-n">72hrs</span><span class="hstat-l">the most critical neurochemical window when quitting any habit</span></div>
+      <div class="hstat"><span class="hstat-n">66days</span><span class="hstat-l">average to fully automate a replacement behaviour (UCL, Phillippa Lally)</span></div>
+      <div class="hstat"><span class="hstat-n">Identity</span><span class="hstat-l">the single most powerful long-term quitting mechanism (James Clear)</span></div>
+    </div>
+  </div>
+  <div class="scroll-hint">Scroll to begin</div>
+</section>
+
+<!-- ─── TOC ─── -->
+<div class="toc-wrap">
+  <div class="toc-inner">
+    <div class="toc-label">Everything Inside This Guide</div>
+    <div class="toc-grid">
+      <a href="#dopamine" class="toc-item"><span class="toc-num">01</span><span class="toc-name">The Dopamine Loop — Why your brain fights you when you try to quit</span></a>
+      <a href="#triggers" class="toc-item"><span class="toc-num">02</span><span class="toc-name">Habit Stacking in Reverse — Dismantle triggers before they activate the craving</span></a>
+      <a href="#72hr" class="toc-item"><span class="toc-num">03</span><span class="toc-name">The 72-Hour Rule — What happens in your body & brain in the first 3 days</span></a>
+      <a href="#identity" class="toc-item"><span class="toc-num">04</span><span class="toc-name">Identity Architecture — Build around who you're becoming, not what you're leaving</span></a>
+      <a href="#replacement" class="toc-item"><span class="toc-num">05</span><span class="toc-name">The Replacement Protocol — Why you can't just stop — and what to do instead</span></a>
+      <a href="#relapse" class="toc-item"><span class="toc-num">06</span><span class="toc-name">The Relapse Response — How toppers bounce back without losing momentum</span></a>
+      <a href="#environment" class="toc-item"><span class="toc-num">07</span><span class="toc-name">Environment Architecture — Design your life so the habit can't survive</span></a>
+      <a href="#cheatsheet" class="toc-item"><span class="toc-num">08</span><span class="toc-name">The Master Cheatsheet — Every principle, one table</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- ─── 01: DOPAMINE LOOP ─── -->
+<section class="section" id="dopamine">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 01</div>
+    <div class="s-meta">
+      <div class="s-cat">Grillner 2025 · PNAS · Dorsolateral Striatum · Basal Ganglia</div>
+      <h2 class="s-title">The <span>Dopamine</span><br/>Loop Explained</h2>
+      <p class="s-desc">Most people try to quit a habit by fighting the behaviour directly — through willpower, motivation, and sheer determination. This almost always fails. Not because they lack character. Because they're fighting the wrong thing. The behaviour isn't the problem. The neural loop that triggers it is. Here's what's actually happening in your brain — and why that changes everything.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">DLS</span><span class="s-stat-l">dorsolateral striatum — where habits are stored after becoming automatic (Grillner 2025)</span></div>
+    <div class="s-stat"><span class="s-stat-n">Auto</span><span class="s-stat-l">once a habit consolidates in the basal ganglia — the cortex is no longer needed</span></div>
+    <div class="s-stat"><span class="s-stat-n">Cue</span><span class="s-stat-l">by the time you consciously register the behaviour — it has already started</span></div>
+    <div class="s-stat"><span class="s-stat-n">Loop</span><span class="s-stat-l">every habit is: Cue → Routine → Reward. All 3 must be addressed to break it.</span></div>
+  </div>
+
+  <!-- The 3-part loop -->
+  <div class="loop-steps">
+    <div class="loop-step">
+      <div class="loop-num">C</div>
+      <span class="loop-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M6 17h12l-1.5-2V10a4.5 4.5 0 0 0-9 0v5z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M10 20a2 2 0 0 0 4 0" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="loop-label">Part 1 of 3</div>
+      <div class="loop-title">The Cue</div>
+      <p class="loop-text">A sensory or contextual trigger that fires the habit circuit — automatically, without your conscious decision. Cues can be: a time of day (5PM → pour a drink), a location (couch → reach for the phone), an emotional state (stress → snack), a person (certain friend → smoke), or a sequence that immediately precedes the habit (sit down → light up). By the time you consciously register the craving — the cue already fired the loop 300–500 milliseconds ago.</p>
+      <div class="loop-break"><strong>Break it here:</strong> Identify every cue that fires your specific habit. Map them all. You cannot dismantle a trigger you haven't named. The cue list IS the quitting strategy.</div>
+    </div>
+    <div class="loop-step">
+      <div class="loop-num">R</div>
+      <span class="loop-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M20 11a8 8 0 0 0-14.9-3.5M4 13a8 8 0 0 0 14.9 3.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 4v4h4M19 20v-4h-4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="loop-label">Part 2 of 3</div>
+      <div class="loop-title">The Routine</div>
+      <p class="loop-text">The automatic behaviour itself — stored in the dorsolateral striatum (DLS) as a sequence that runs independently of conscious decision-making. Research published in PNAS (Grillner, 2025) isolated the DLS as the specific structure where habit sequences are encoded. Once a habit is consolidated here, it runs even when you're thinking about something completely different. You can be fully resolved not to do it — and your hands are already doing it. This is not weakness. It is neurology.</p>
+      <div class="loop-break"><strong>Break it here:</strong> You cannot delete a habit routine — only replace it. The neural groove doesn't disappear. You build a parallel groove through a different behaviour that earns the same reward.</div>
+    </div>
+    <div class="loop-step">
+      <div class="loop-num">R</div>
+      <span class="loop-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M13 2 4 14h6l-1 8 9-12h-6z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="loop-label">Part 3 of 3</div>
+      <div class="loop-title">The Reward</div>
+      <p class="loop-text">The neurochemical payoff that reinforces the loop. Rewards can be neurochemical (dopamine, stress relief, temporary pleasure), emotional (distraction from discomfort, sense of control), or social (belonging, acceptance, identity reinforcement). The critical insight: the perceived reward is what matters — not the actual outcome. The cigarette feels stress-relieving even if it's physiologically stress-producing. The loop doesn't care about accuracy. It cares about reinforcement.</p>
+      <div class="loop-break"><strong>Break it here:</strong> Find the reward your habit is actually providing. Not what you think it is. What it actually is. You need to provide that reward through a different mechanism.</div>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">DOPAMINE SCIENCE 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8A3.5 3.5 0 0 0 8 18a3 3 0 0 0 3-2.5V6a2 2 0 0 0-2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 1 5.8A3.5 3.5 0 0 1 16 18a3 3 0 0 1-3-2.5V6a2 2 0 0 1 2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Dopamine Is Not Pleasure — It Is Anticipation</div>
+      <p class="card-text">The most important and most misunderstood fact about dopamine: it is not the pleasure chemical. It is the anticipation chemical. Dopamine spikes before the reward — in the moment of craving and anticipation. After the reward, dopamine actually drops below baseline. This is why habits feel compelling before you engage in them and hollow or shameful after. The loop is engineered to keep you seeking — not satisfied. Understanding this changes your relationship to cravings: the craving is dopamine anticipation, not evidence that you need the thing. It will pass without the behaviour — because the behaviour doesn't actually satisfy it.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Practical Implication</div>
+        <p class="card-text">When a craving peaks — you are at the moment of maximum dopamine anticipation, not maximum need. If you wait 10–15 minutes without acting, the dopamine spike subsides and the craving physically diminishes. This is why "urge surfing" works: the wave is real. It also crests and subsides on its own if you don't act on it.</p>
+      </div>
+      <span class="badge ba">Core Science</span>
+    </div>
+    <div class="card">
+      <div class="card-num">DOPAMINE SCIENCE 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m6 6 12 12" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Why Willpower Doesn't Work</div>
+      <p class="card-text">Willpower operates in the prefrontal cortex — the conscious, rational, planning brain. Bad habits operate in the dorsolateral striatum — the automatic, unconscious, pattern-executing system. These are different neural systems, operating on different timescales, with different priority levels. When the basal ganglia fires a habit sequence, the prefrontal cortex doesn't even know it's happening until the behaviour has already started. You're being outmanoeuvred by your own nervous system before you have a chance to exercise willpower. The solution: change the conditions, not the determination.</p>
+      <span class="badge bc">Critical Truth</span>
+    </div>
+    <div class="card">
+      <div class="card-num">DOPAMINE SCIENCE 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M2 12c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 18c2-2 4-2 6 0s4 2 6 0 4-2 6 0" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Urge Surfing — The Mindful Alternative</div>
+      <p class="card-text">Developed by addiction researcher Alan Marlatt, urge surfing is the practice of observing a craving without acting on it — treating it like a wave that rises, peaks, and falls without requiring you to ride it. The technique: when a craving hits, label it ("I notice an urge to [X]"). Describe its physical sensations without judgment. Watch it with curiosity rather than alarm. Research shows urge surfing significantly reduces acting on cravings — because it interrupts the automatic nature of the cue-routine firing by inserting conscious observation between them. The 10–20 minutes of discomfort always passes. What you do during those minutes determines whether the habit survives.</p>
+      <div class="scibox">
+        <div class="card-sec">🌿 The Research</div>
+        <p class="card-text">Bowen & Marlatt (2009): urge surfing significantly reduced smoking relapse compared to control groups. The mechanism: mindful awareness of a craving as a passing mental event (not a command) breaks the automaticity that gives the loop its power.</p>
+      </div>
+      <span class="badge ba">Best Tool</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 1 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"By the time you consciously register you're about to reach for your phone, your basal ganglia already fired the routine. <em>The battle isn't against the behaviour — it's against the trigger that fired before you noticed.</em>"</p>
+  <p class="quote-attr">— Grillner 2025 · PNAS · Habit Storage in the Dorsolateral Striatum</p>
+</div>
+
+<!-- ─── 02: TRIGGER STACKING ─── -->
+<section class="section section-alt" id="triggers">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 02</div>
+    <div class="s-meta">
+      <div class="s-cat">James Clear · BJ Fogg · Reverse Habit Stacking · 2025</div>
+      <h2 class="s-title">Habit Stacking<br/>in <span>Reverse</span></h2>
+      <p class="s-desc">James Clear's habit stacking says: attach a new good habit to an existing trigger. Reverse habit stacking says: identify every trigger for the bad habit and systematically dismantle it — before it activates the craving. You cannot quit a habit you don't map first. Most people try. They fail. Because they're fighting the fire without removing the fuel.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">5</span><span class="s-stat-l">categories of triggers: Time, Location, Emotional State, People, Preceding Events</span></div>
+    <div class="s-stat"><span class="s-stat-n">Map</span><span class="s-stat-l">the triggers first — you cannot dismantle what you haven't named</span></div>
+    <div class="s-stat"><span class="s-stat-n">Before</span><span class="s-stat-l">interrupt the trigger before it fires the craving — not after</span></div>
+    <div class="s-stat"><span class="s-stat-n">Audit</span><span class="s-stat-l">the trigger audit is the most powerful single day-one action for any habit</span></div>
+  </div>
+
+  <div class="trigger-grid">
+    <div class="trigger-card">
+      <span class="trigger-icon">🕐</span>
+      <div class="trigger-type">Trigger Type 01</div>
+      <div class="trigger-title">Time Triggers</div>
+      <p class="trigger-text">A specific time of day that automatically fires the routine. 5PM → drink. After dinner → scroll. Midnight → snack. The brain associates clock-time with the reward so strongly that the craving begins before you've consciously registered the time.</p>
+      <div class="trigger-action"><strong>Dismantle:</strong> Change your 5PM activity completely — a walk, a workout, a call — before the time-craving association fires. Eliminate the open slot that the habit fills.</div>
+    </div>
+    <div class="trigger-card">
+      <span class="trigger-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 22s7-7.5 7-13a7 7 0 1 0-14 0c0 5.5 7 13 7 13z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><circle cx="12" cy="9" r="2.4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="trigger-type">Trigger Type 02</div>
+      <div class="trigger-title">Location Triggers</div>
+      <p class="trigger-text">Specific places that fire the habit automatically. The couch → TV binge. The car → fast food. The work bathroom → vape. The bar → cigarette. Location is one of the most powerful habit cues because it carries the entire associated context.</p>
+      <div class="trigger-action"><strong>Dismantle:</strong> Change the location entirely, or change what you do immediately upon entering it. Couch = book, not remote. Car = podcast, not drive-through route.</div>
+    </div>
+    <div class="trigger-card">
+      <span class="trigger-icon">😤</span>
+      <div class="trigger-type">Trigger Type 03</div>
+      <div class="trigger-title">Emotional State Triggers</div>
+      <p class="trigger-text">Stress → cigarette. Boredom → scroll. Anxiety → drink. Loneliness → online shopping. The habit provides emotional regulation — and the brain has wired it as the go-to coping response. This is the deepest trigger to address.</p>
+      <div class="trigger-action"><strong>Dismantle:</strong> Name the emotion when it arrives. Then use an alternative regulation tool (exercise, breathing, a phone call) before the habit fires. Emotion awareness precedes habit interruption.</div>
+    </div>
+    <div class="trigger-card">
+      <span class="trigger-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="9" cy="8" r="3.3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 20c0-3.5 2.5-6 5.5-6s5.5 2.5 5.5 6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="17" cy="9" r="2.6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15.5 12.3c2.6.4 4.5 2.5 4.5 5.7" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="trigger-type">Trigger Type 04</div>
+      <div class="trigger-title">People Triggers</div>
+      <p class="trigger-text">Specific people whose presence automatically activates the habit — smoking friends, drinking colleagues, people who enable a pattern. Social contagion is real: we unconsciously adopt the behaviours of those around us as a belonging signal.</p>
+      <div class="trigger-action"><strong>Dismantle:</strong> Change the context of meetings with these people (coffee, not bar), be explicit about your change, or temporarily reduce contact while building the new neural pattern.</div>
+    </div>
+    <div class="trigger-card">
+      <span class="trigger-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 15 15 9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 6.5 13 4.5a3.5 3.5 0 0 1 5 5l-2 2M13 17.5 11 19.5a3.5 3.5 0 0 1-5-5l2-2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="trigger-type">Trigger Type 05</div>
+      <div class="trigger-title">Preceding Events</div>
+      <p class="trigger-text">A specific sequence that always precedes the habit. Finish dinner → sweet. Open laptop → social media. Lock the car → check phone. The preceding event is so consistently followed by the habit that the brain treats them as one unit.</p>
+      <div class="trigger-action"><strong>Dismantle:</strong> Insert a new behaviour between the preceding event and the old habit. Break the sequence. Finish dinner → clean the kitchen (15 min gap that interrupts the automatic connection).</div>
+    </div>
+    <div class="trigger-card">
+      <span class="trigger-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M9 4v14M15 6v14" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="trigger-type">The Trigger Audit</div>
+      <div class="trigger-title">Map Every Trigger</div>
+      <p class="trigger-text">Your most powerful Day 1 action: spend 20 minutes mapping every trigger for your habit across all 5 categories. Write them all down. This single exercise reveals the full architecture of the habit — and transforms a vague intention to quit into a specific, structural plan for dismantling it trigger by trigger.</p>
+      <div class="trigger-action"><strong>Tool:</strong> For each trigger: What fires it? When does it fire? What can I do differently at that exact moment? One page. Twenty minutes. More powerful than a month of willpower.</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 2 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"You don't rise to the level of your goals. You fall to the level of your systems. <em>Every trigger is a flaw in your system — not a flaw in your character.</em>"</p>
+  <p class="quote-attr">— James Clear · Atomic Habits · Based on Charles Duhigg's Habit Loop Research</p>
+</div>
+
+<!-- ─── 03: 72-HOUR RULE ─── -->
+<section class="section" id="72hr">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 03</div>
+    <div class="s-meta">
+      <div class="s-cat">Neurochemistry · Withdrawal Science · Hour-by-Hour Protocol</div>
+      <h2 class="s-title">The <span>72-Hour</span><br/>Rule</h2>
+      <p class="s-desc">The first 72 hours of quitting any habitual behaviour are neurochemically the hardest — because your brain is actively recalibrating its reward system. Understanding what is happening hour by hour transforms the experience from terrifying uncertainty to predictable, survivable biology. This is what your body and brain are doing — and what to do about it.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">72hrs</span><span class="s-stat-l">most critical window — dopamine system is actively recalibrating</span></div>
+    <div class="s-stat"><span class="s-stat-n">Peak</span><span class="s-stat-l">cravings peak at 24–48 hours for most behavioural habits — then begin declining</span></div>
+    <div class="s-stat"><span class="s-stat-n">Biology</span><span class="s-stat-l">the discomfort is neurochemical recalibration — not evidence you can't do this</span></div>
+    <div class="s-stat"><span class="s-stat-n">If</span><span class="s-stat-l">you survive 72 hours — the neurochemical storm is passing and the path gets clearer</span></div>
+  </div>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-time"><div class="tl-time-label">Hour 0–6</div><div class="tl-time-sub">The Decision</div></div>
+      <div class="tl-body">
+        <div class="tl-title">🚀 Decision Fatigue Is Coming — Prepare Now</div>
+        <p class="tl-text">In the first hours, motivation is high. This is the most dangerous phase because it creates overconfidence. Don't rely on willpower — set up your environment now, while you have clarity. Remove the substance or device that enables the habit. Tell at least one person. Activate your replacement behaviour immediately. Don't wait until the craving hits to figure out what you'll do instead.</p>
+        <p class="tl-tip">→ Action: Write down your reasons for quitting. Read them when the dopamine storm hits. You won't be able to think clearly then — write it clearly now.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time"><div class="tl-time-label">Hour 6–24</div><div class="tl-time-sub">First Wave</div></div>
+      <div class="tl-body">
+        <div class="tl-title">🌊 The First Craving Wave — It Feels Bigger Than It Is</div>
+        <p class="tl-text">The dopamine system begins its loudest protest. Cravings intensify because the brain is expecting its usual reinforcement and not receiving it. This produces restlessness, irritability, difficulty concentrating, and an overwhelming sense that the habit is the only thing that will help. This feeling is completely neurochemical — not evidence that you need the thing. It is evidence that the loop was deeply wired. That's all. Urge surf through it. Each wave you survive weakens the next one.</p>
+        <p class="tl-tip">→ Action: Use urge surfing. Set a timer for 15 minutes when a craving hits. Do something physical. The wave will pass before the timer ends.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time"><div class="tl-time-label">Hour 24–48</div><div class="tl-time-sub">Peak Storm</div></div>
+      <div class="tl-body">
+        <div class="tl-title">⚡ The 24-48 Hour Peak — The Hardest Window</div>
+        <p class="tl-text">For most behavioural habits, cravings peak between 24 and 48 hours. Sleep may be disrupted. Mood may be low. The brain's reward system is operating at deficit — dopamine baseline has dropped because the usual source has been removed and the new system hasn't yet kicked in. This is temporary. Every person who has successfully quit anything has passed through this exact window. It is not a sign that you cannot do this. It is a sign that you are doing it.</p>
+        <p class="tl-tip">→ Action: Plan this window in advance. Fill it with high-engagement activities. Don't spend it alone, bored, with access to the habit. Remove yourself from the trigger environment entirely.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time"><div class="tl-time-label">Hour 48–72</div><div class="tl-time-sub">The Turn</div></div>
+      <div class="tl-body">
+        <div class="tl-title">🌅 Hour 48–72: The Neurochemical Turn Begins</div>
+        <p class="tl-text">By 48–72 hours, for most behavioural habits, the acute neurochemical storm begins to subside. Dopamine is recalibrating toward baseline without the external stimulus. Clarity improves. Sleep begins normalising. The emotional case for quitting starts becoming more accessible than the craving case. This doesn't mean the work is done — it means the critical survival phase is passing. The psychological battle shifts from "can I survive this?" to "can I maintain this?" — which is a fundamentally different and more manageable question.</p>
+        <p class="tl-tip">→ Action: Acknowledge the 72-hour mark deliberately. It is a real neurobiological milestone. Celebrate it — not with the old habit, with something that genuinely rewards the achievement.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time"><div class="tl-time-label">Day 4–21</div><div class="tl-time-sub">New Path</div></div>
+      <div class="tl-body">
+        <div class="tl-title">🌿 Days 4–21: Building the New Neural Pathway</div>
+        <p class="tl-text">After 72 hours, the acute phase is over. Now the longer work begins: consistently choosing the replacement behaviour and allowing the new neural path to strengthen through repetition. Cravings will still occur — especially when old triggers fire. But they will be shorter, less intense, and less compelling each time you don't act on them. Each time you choose differently, you are literally reshaping the architecture of your brain. This is neuroplasticity in action — not a metaphor, but measurable structural change in neural connectivity.</p>
+        <p class="tl-tip">→ Action: Track every day with a simple mark. The chain becomes a source of identity and motivation. Every mark says: "I am becoming someone who doesn't do this."</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-head">✅ The 72-Hour Emergency Kit — Prepare It Before Day 1</div>
+    <p class="tip-text">Before your quit date, prepare: <strong>Written list of your reasons.</strong> Read it when the storm hits. <strong>Three replacement activities</strong> for when cravings peak (exercise, call a friend, cold shower — all neurochemically interrupt the craving cycle). <strong>One person on standby</strong> who knows you're quitting and will pick up the phone. <strong>Your environment cleared</strong> of all objects, substances, or devices that enable the habit. The 72-hour window is survivable with preparation. It is very difficult without it.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── 04: IDENTITY ─── -->
+<section class="section section-alt" id="identity">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 04</div>
+    <div class="s-meta">
+      <div class="s-cat">James Clear · Atomic Habits · Identity-Based Change</div>
+      <h2 class="s-title">Building<br/><span>Identity</span></h2>
+      <p class="s-desc">Every sustainable behaviour change at its deepest level is an identity change. Most people try to quit habits from the outside in: "I'm trying to stop smoking." The most powerful shift is from the inside out: "I am a non-smoker." The behaviour follows the identity — not the reverse. Here is how to build the identity before you've earned all the evidence for it.</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 5l14 14M19 5 5 19" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">Outcome-Based Quitting (Why It Fails)</div>
+      <p class="col-text">
+        "I want to stop scrolling social media."<br/>
+        "I'm trying to quit smoking."<br/>
+        "I'm going to cut back on alcohol."<br/>
+        "I need to stop eating junk food."<br/><br/>
+        All of these frame the identity as someone who has a bad habit they're fighting. The internal story is: "I am a person who does this — I'm trying not to." Every craving, every moment of weakness, confirms the original identity. <strong>The behaviour and the identity reinforce each other in the wrong direction.</strong><br/><br/>
+        Outcome-based quitting relies entirely on motivation — which is finite, variable, and exhausted by the neurochemical storm of the first 72 hours.
+      </p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m7.5 12.5 3 3 6-6.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">Identity-Based Quitting (Why It Works)</div>
+      <p class="col-text">
+        "I am a non-smoker."<br/>
+        "I am someone who doesn't drink."<br/>
+        "I am a person who protects their sleep."<br/>
+        "I am becoming someone who runs."<br/><br/>
+        The identity is declared first. The behaviour follows as <em>evidence</em> of the identity — not as a struggle against the old one. Every time you choose differently, you cast a vote for the new identity. <strong>The behaviour and the identity now reinforce each other in the right direction.</strong><br/><br/>
+        James Clear: "Every action you take is a vote for the type of person you wish to become." You don't need to win unanimously. You just need the majority of votes to shift.
+      </p>
+    </div>
+  </div>
+
+  <p style="font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:var(--gold);margin:28px 0 16px">The Identity Ladder — From "I'm Trying to Quit" to "This Is Who I Am"</p>
+  <div class="identity-ladder">
+    <div class="id-rung">
+      <div class="id-level">1</div>
+      <div class="id-body">
+        <div class="id-statement">"I'm going to try to cut back."</div>
+        <p class="id-desc">The weakest identity position. Implies the old identity is still dominant. "Trying" is hope without commitment. Every relapse confirms "trying" doesn't work — which becomes the story.</p>
+      </div>
+    </div>
+    <div class="id-rung">
+      <div class="id-level">2</div>
+      <div class="id-body">
+        <div class="id-statement">"I'm in the process of quitting [habit]."</div>
+        <p class="id-desc">Stronger. Acknowledges the journey without the old identity. The word "process" creates psychological permission for imperfection while maintaining direction. Respectable starting identity statement.</p>
+      </div>
+    </div>
+    <div class="id-rung">
+      <div class="id-level">3</div>
+      <div class="id-body">
+        <div class="id-statement">"I don't do [habit]. It's not something I do."</div>
+        <p class="id-desc">Significantly more powerful. "I don't" is categorically different from "I can't." "I can't" implies external restriction. "I don't" implies internal identity. Research shows "I don't" language reduces cravings and improves quit rates vs "I can't."</p>
+      </div>
+    </div>
+    <div class="id-rung">
+      <div class="id-level">4</div>
+      <div class="id-body">
+        <div class="id-statement">"I am someone who prioritises [value the habit was violating]."</div>
+        <p class="id-desc">Moves from "not X" to "actively Y." "I am someone who protects their health/sleep/clarity/finances." This frames the identity in terms of what you're moving toward — not what you're leaving. The pull forward is more sustainable than the push away.</p>
+      </div>
+    </div>
+    <div class="id-rung">
+      <div class="id-level">5</div>
+      <div class="id-body">
+        <div class="id-statement">"This is simply who I am. I don't relate to that option."</div>
+        <p class="id-desc">The final identity state. The old habit has been so thoroughly integrated out of the identity that it no longer feels like temptation or effort — just an option that doesn't apply to you. This is the goal. It takes months to reach. Every vote builds it.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 05: REPLACEMENT PROTOCOL ─── -->
+<section class="section" id="replacement">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 05</div>
+    <div class="s-meta">
+      <div class="s-cat">Charles Duhigg · The Power of Habit · Replacement Not Removal</div>
+      <h2 class="s-title">The <span>Replacement</span><br/>Protocol</h2>
+      <p class="s-desc">The single most important practical insight in all of habit science: you cannot simply stop a habit. The neural loop does not disappear when you stop feeding it. It lies dormant — waiting for the cue to fire again. The only reliable method is replacement: keeping the cue and the reward, changing the routine. This is why cold turkey often fails — and strategic replacement often succeeds.</p>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">REPLACEMENT RULE 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 3v7.5L5.5 17a2 2 0 0 0 1.8 3h9.4a2 2 0 0 0 1.8-3L15 10.5V3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 3h6M6.5 15h11" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Golden Rule of Habit Change</div>
+      <p class="card-text">Charles Duhigg's "Golden Rule": you can never truly extinguish a bad habit — you can only change it. The cue and the reward stay the same. The routine changes. This is why Alcoholics Anonymous works: it keeps the same social ritual (meetings, community, conversation) — but replaces the substance with connection. The brain gets its social reward through a different mechanism. The loop is restructured, not deleted. Identify the reward your habit is providing, then find a behaviour that provides the same reward through a healthier mechanism.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Evidence</div>
+        <p class="card-text">Studies on smoking cessation consistently show that replacement behaviours (exercise, nicotine replacement, mindfulness) produce significantly higher quit rates than pure abstinence strategies. The brain needs an alternative route to the reward — not just a blocked road.</p>
+      </div>
+      <span class="badge ba">Core Rule</span>
+    </div>
+    <div class="card">
+      <div class="card-num">REPLACEMENT RULE 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="1.4" fill="#c8943a"/></svg></span>
+      <div class="card-title">Match the Replacement to the Real Reward</div>
+      <p class="card-text">The replacement behaviour must provide the same core reward as the old one — or the brain will reject it and route back to the original. Diagnostic questions: <strong style="color:var(--cream)">What does this habit give me?</strong> Stress relief → try exercise, breathing, cold water. Social belonging → try a group activity, a call. Distraction from boredom → try a stimulating book, a project. Pleasure/sensation → try a strong sensory experience (coffee, dark chocolate, spicy food). The match must be honest, not optimistic. "I'll just meditate instead of smoking" fails if meditation doesn't actually meet the stress-relief need in the moment.</p>
+      <span class="badge ba">Diagnostic Tool</span>
+    </div>
+    <div class="card">
+      <div class="card-num">REPLACEMENT RULE 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M13 2 4 14h6l-1 8 9-12h-6z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Make the Replacement Immediately Rewarding</div>
+      <p class="card-text">The replacement behaviour must be immediately rewarding — not just good for you in the future. The brain's habit system runs on immediate feedback. Exercise is good for you in 6 weeks — but if there's no immediate reward, it won't compete with the instant gratification of the old habit in the craving moment. Solutions: exercise with music you love, call a friend you genuinely enjoy, make the replacement genuinely pleasurable in the moment. The long-term benefits are irrelevant to the dopamine system that runs habits. Immediate reward is the only currency that matters during the transition.</p>
+      <span class="badge ba">Non-Negotiable</span>
+    </div>
+    <div class="card">
+      <div class="card-num">REPLACEMENT EXAMPLES</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M20 11a8 8 0 0 0-14.9-3.5M4 13a8 8 0 0 0 14.9 3.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 4v4h4M19 20v-4h-4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Replacement Pairings That Work</div>
+      <div class="card-sec">Same Reward, Different Route</div>
+      <p class="card-text"><strong style="color:var(--cream)">Smoking → Stress relief:</strong> Ice cold glass of water, box breathing (4-4-4-4), 10-minute walk outside.<br/><br/><strong style="color:var(--cream)">Social media → Distraction/novelty:</strong> A podcast, a book, a genuinely interesting game or puzzle.<br/><br/><strong style="color:var(--cream)">Alcohol → Social belonging/relaxation:</strong> Non-alcoholic rituals (sparkling water, a specific glass), social settings without drinking cues.<br/><br/><strong style="color:var(--cream)">Late-night snacking → Comfort/oral stimulation:</strong> Herbal tea, dark chocolate (1–2 pieces), a specific ritual that signals "day is done."<br/><br/><strong style="color:var(--cream)">Doom-scrolling → Boredom escape:</strong> Skill-based games, journaling, reading, anything requiring active engagement.</p>
+      <span class="badge bb">Applied</span>
+    </div>
+    <div class="card">
+      <div class="card-num">REPLACEMENT SCIENCE</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="3.5" y="5" width="17" height="15" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 10h17M8 3v4M16 3v4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">How Long the Replacement Takes</div>
+      <p class="card-text">Phillippa Lally's UCL research (2010) found the average time to automate a new habit is 66 days — with a range of 18 to 254 days depending on complexity and individual differences. The popular "21-day habit" claim significantly underestimates the real timeline. Practically: the replacement behaviour will feel deliberate and effortful for the first 3–6 weeks. Between 6–10 weeks, it begins feeling more natural. By week 10–12 for simple behaviours, it becomes the default. Give it the actual time it requires — not the time you wish it required.</p>
+      <span class="badge bd">Realistic Timeline</span>
+    </div>
+    <div class="card">
+      <div class="card-num">REPLACEMENT ADVANCED</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 15V9a2 2 0 0 1 2-2 2 2 0 0 1 2 2M9 9V6a2 2 0 0 1 4 0v6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 9a2 2 0 0 1 4 0v3.5c0 3-2 6-6 6H8a3 3 0 0 1-3-3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Opposite Habit Strategy</div>
+      <p class="card-text">For the most entrenched habits, consider building the opposite habit — one that is physically or neurologically incompatible with the old one. Running and smoking are physiologically incompatible at high intensity. Mindful eating and binge eating are neurologically incompatible. Cold water immersion and alcohol cravings are neurochemically incompatible (cold exposure floods the system with norepinephrine, which overrides the dopamine craving signal). Building the opposite habit doesn't just replace — it structurally undermines the neurological conditions that support the old one.</p>
+      <span class="badge ba">Advanced Strategy</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 06: RELAPSE RESPONSE ─── -->
+<section class="section section-alt" id="relapse">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 06</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · The Missed-Habit Protocol</div>
+      <h2 class="s-title">The <span>Relapse</span><br/>Response</h2>
+      <p class="s-desc">Most people who relapse don't fail because they returned to the habit once. They fail because they interpret the relapse as evidence of failure — and that interpretation ends the attempt. Research consistently shows the difference between successful and unsuccessful quitters is not whether they slipped — it's what they did the moment after they slipped.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">Never</span><span class="s-stat-l">miss twice. Once is an accident. Twice is the start of a new habit.</span></div>
+    <div class="s-stat"><span class="s-stat-n">Slip ≠</span><span class="s-stat-l">Relapse. A slip is one moment. Relapse is the interpretation that follows it.</span></div>
+    <div class="s-stat"><span class="s-stat-n">Research</span><span class="s-stat-l">most successful ex-smokers quit 3–5 times before quitting permanently</span></div>
+    <div class="s-stat"><span class="s-stat-n">Shame</span><span class="s-stat-l">is the primary cause of full relapse — not the slip itself (Marlatt & Gordon)</span></div>
+  </div>
+
+  <div class="relapse-steps">
+    <div class="relapse-card">
+      <div class="relapse-num">Step 01 · Immediately After</div>
+      <div class="relapse-title">Respond, Don't React</div>
+      <p class="relapse-text">The 5 minutes immediately after a slip are the most consequential of the entire quitting process. The brain will generate a cascade of shame, catastrophising, and "I knew I couldn't do it" narratives. These narratives are themselves the addiction talking — the habit is trying to use the slip as justification for full return. Respond deliberately: name what happened factually. "I slipped. I did the behaviour once. That's what happened."</p>
+      <p class="relapse-phrase">"I slipped. I haven't quit — I had a setback. I return to the plan now."</p>
+    </div>
+    <div class="relapse-card">
+      <div class="relapse-num">Step 02 · Within 1 Hour</div>
+      <div class="relapse-title">Diagnose Without Judgment</div>
+      <p class="relapse-text">Every slip is data — extremely valuable data. Which trigger fired? Was it a time, location, emotion, person, or preceding event you hadn't mapped? What was the state of your replacement behaviour at the moment it happened? Had you slept? Eaten? Were you under unusual stress? The slip tells you exactly where your system has a gap. A diagnostic response to a slip is the fastest path to a stronger plan. A shame response produces only paralysis and full relapse.</p>
+      <p class="relapse-phrase">"What exactly triggered this? What was I feeling? What can I add to my system?"</p>
+    </div>
+    <div class="relapse-card">
+      <div class="relapse-num">Step 03 · Same Day</div>
+      <div class="relapse-title">Never Miss Twice — The Critical Rule</div>
+      <p class="relapse-text">James Clear's most powerful relapse principle: never miss twice. Missing once is an accident. Missing twice is the beginning of a new habit. After a slip — no matter how bad — your singular focus is on executing the replacement behaviour before the day is over. Not tomorrow. Not "I'll start fresh on Monday." Today. The chain doesn't need to be unbroken. It needs to never have two breaks in a row.</p>
+      <p class="relapse-phrase">"One slip does not define me. Two in a row would start to. I act now."</p>
+    </div>
+    <div class="relapse-card">
+      <div class="relapse-num">Step 04 · Ongoing</div>
+      <div class="relapse-title">Reframe Slips as Learning Events</div>
+      <p class="relapse-text">Research on successful long-term quitters (Prochaska's Transtheoretical Model) shows that most people who permanently change a behaviour do so after multiple attempts. Each attempt provides data. Each slip reveals a gap in the system. People who view slips as evidence they "can't quit" have a fundamental misunderstanding of how behaviour change actually works — it is almost never linear, and multiple attempts before success is the statistical norm, not the exception.</p>
+      <p class="relapse-phrase">"Every attempt teaches me something. I am not failing — I am learning how to succeed at this."</p>
+    </div>
+    <div class="relapse-card">
+      <div class="relapse-num">Prevention</div>
+      <div class="relapse-title">Pre-Mortems — Plan for Failure Before It Happens</div>
+      <p class="relapse-text">One of the highest-leverage relapse prevention tools: before your quit date, spend 15 minutes writing your pre-mortem. "In 6 weeks, I've relapsed. What are the 3 most likely reasons why?" Then build specific countermeasures for each. This exercise forces you to engage with your own vulnerability honestly — which is exactly what most people avoid. The scenarios you can name in advance are the ones you can prepare for. The ones you don't name are the ones that catch you unprepared.</p>
+      <p class="relapse-phrase">"What are my 3 most likely failure scenarios? What do I do if each one happens?"</p>
+    </div>
+    <div class="relapse-card">
+      <div class="relapse-num">Support</div>
+      <div class="relapse-title">Accountability Changes the Neurochemistry</div>
+      <p class="relapse-text">Research on group support for habit change (AA, Smoke-Free programmes, Weight Watchers) consistently shows that social accountability improves long-term success rates more than any individual technique. The mechanism is neurological: the social pain of letting someone down activates similar neural circuits to physical pain — making accountability a genuine biological deterrent. Tell someone. Check in weekly. The relationship changes the behaviour — not just the strategy.</p>
+      <p class="relapse-phrase">"Who do I trust to check in with me about this, honestly and without judgment, once a week?"</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 07: ENVIRONMENT ─── -->
+<section class="section" id="environment">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 07</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · Make the Bad Habit Hard, Good Habit Easy</div>
+      <h2 class="s-title">Environment<br/><span>Architecture</span></h2>
+      <p class="s-desc">BJ Fogg's research at Stanford established that behaviour is a function of motivation, ability, and prompt — and that ability (friction) is the most modifiable. You cannot reliably out-motivate a frictionless bad habit. But you can out-architect it. Design your environment so that the habit physically cannot run on autopilot — and the replacement behaviour is the path of least resistance.</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M4 20 8 8h8l4 12z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M6.5 13h11M5.5 16.5h13" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">Add Friction to the Bad Habit</div>
+      <p class="col-text">
+        Every additional step between the cue and the routine reduces the probability that the habit fires.<br/><br/>
+        <strong>Phone addiction:</strong> Put your phone in a drawer (not the table) when working. Delete the apps that trigger mindless use. Set a 60-second delay screen before social media opens. Each friction point forces conscious decision rather than automatic response.<br/><br/>
+        <strong>Alcohol:</strong> Don't keep it in the house. The friction of a shop trip during a craving is often enough to interrupt the loop.<br/><br/>
+        <strong>Smoking:</strong> Never keep cigarettes on your person. Carry them in the car, not your pocket. Distance = friction = survival time during a craving.<br/><br/>
+        <strong>Late-night snacking:</strong> Don't keep trigger foods in visible locations. Put them in opaque containers at the back of cupboards. The research: people eat 3× more when food is visible vs hidden.
+      </p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon">🛤️</span>
+      <div class="col-title">Remove Friction from the Replacement</div>
+      <p class="col-text">
+        Every additional step between the trigger and the replacement behaviour reduces the probability that the replacement fires.<br/><br/>
+        <strong>Exercise:</strong> Sleep in your workout clothes. Running shoes at the door, not in the wardrobe. Gym bag packed and visible. Each friction removal increases the probability that the replacement happens automatically.<br/><br/>
+        <strong>Reading:</strong> Leave the book on your pillow where the phone used to be. Make it the visible option.<br/><br/>
+        <strong>Healthy eating:</strong> Pre-cut vegetables at eye level in the fridge. Healthy snacks on the counter. Unhealthy ones in opaque containers at the back.<br/><br/>
+        James Clear's rule: make good habits 2 steps easier and bad habits 2 steps harder. This single environmental redesign produces more behaviour change than months of willpower.
+      </p>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">ENVIRONMENT 01</div>
+      <span class="card-icon">🆕</span>
+      <div class="card-title">Context Change — The Nuclear Option</div>
+      <p class="card-text">The most powerful environmental habit-breaking tool available: change your context entirely. Moving house, changing jobs, starting a new relationship — all have been documented to produce spontaneous, effort-free habit change at rates far exceeding deliberate attempts in the same context. The reason: habits are stored in association with specific contextual cues. Remove the context and many of the cues disappear with it. When you can't change your whole context, change your micro-context: a different route to work, a new desk position, a different morning location. New contexts give new habits room to form without competing with the old cue architecture.</p>
+      <span class="badge ba">Highest Leverage</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ENVIRONMENT 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Visibility Is Behaviour</div>
+      <p class="card-text">Cornell food researcher Brian Wansink: people eat 3× more candy when it's in a clear bowl vs an opaque one. The same quantity. The same person. The only difference: visibility. What you see, you do. What you don't see, you don't do — at least not automatically. Apply this universally: make the replacement behaviour visible (book on pillow, running shoes at door, healthy food at eye level). Make the bad habit invisible (phone in drawer, cigarettes at a distance, trigger food hidden). Visibility shapes behaviour more reliably than intention.</p>
+      <span class="badge ba">Simple & Powerful</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ENVIRONMENT 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="7" y="3" width="10" height="18" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 18h2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Digital Environment</div>
+      <p class="card-text">For digital habits (social media, gaming, streaming, pornography): the environment architecture is almost entirely within app settings and device configuration. Delete apps entirely (reinstalling takes more friction than the craving window). Move remaining apps off the home screen and into folders 3 layers deep. Set screen time limits with a passcode managed by someone else. Use website blockers (Cold Turkey, Freedom) with scheduled access windows. Turn off all notifications. The goal: make the digital environment work for your quit, not against it.</p>
+      <span class="badge bb">Digital Habits</span>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-head">✅ The Environment Audit — Do This on Day 1</div>
+    <p class="tip-text">Before your quit date, walk through your physical and digital environment and ask: <strong>"Where does this habit live — and what would happen if I removed every trace of it from this space?"</strong> Remove the alcohol from the house. Delete the apps. Put the cigarettes in the garage. Move the trigger food. Reorganise the visible objects on your desk. A clean environment doesn't guarantee success — but a contaminated environment almost guarantees failure. Every object that supports the old habit is an invitation your brain will eventually accept.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── 08: MASTER CHEATSHEET ─── -->
+<section class="section" id="cheatsheet">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 08</div>
+    <div class="s-meta">
+      <div class="s-cat">Quick Reference</div>
+      <h2 class="s-title">The Master<br/><span>Cheatsheet</span></h2>
+      <p class="s-desc">Every principle from this guide — one quick-reference table. Your operating system for breaking free from any habit for good.</p>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Principle</th><th>The Action</th><th>Chapter</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td class="num-cell">01</td><td class="name-cell">Understand the Loop</td><td>Map: Cue → Routine → Reward for your specific habit. You cannot break what you haven't named.</td><td>Dopamine</td><td><span class="badge ba">Day 1 Action</span></td></tr>
+        <tr><td class="num-cell">02</td><td class="name-cell">Dopamine Is Anticipation</td><td>The craving is a dopamine spike — not evidence you need the thing. Wait 15 min. Every wave passes.</td><td>Dopamine</td><td><span class="badge ba">Core Science</span></td></tr>
+        <tr><td class="num-cell">03</td><td class="name-cell">Urge Surfing</td><td>When craving hits: label it, observe it physically, set a 15-min timer, do something physical. Don't act.</td><td>Dopamine</td><td><span class="badge ba">Daily Tool</span></td></tr>
+        <tr><td class="num-cell">04</td><td class="name-cell">Don't Use Willpower</td><td>Change the conditions, not the determination. Willpower and the habit run on different neural systems.</td><td>Dopamine</td><td><span class="badge bc">Critical Truth</span></td></tr>
+        <tr><td class="num-cell">05</td><td class="name-cell">The Trigger Audit</td><td>Map all 5 trigger types: Time, Location, Emotional State, People, Preceding Events. All of them. Now.</td><td>Triggers</td><td><span class="badge ba">Day 1 Action</span></td></tr>
+        <tr><td class="num-cell">06</td><td class="name-cell">Dismantle Before It Fires</td><td>Interrupt triggers before the craving activates — not after. Change the context that contains the cue.</td><td>Triggers</td><td><span class="badge ba">Strategy</span></td></tr>
+        <tr><td class="num-cell">07</td><td class="name-cell">Break the Sequence</td><td>For preceding-event triggers: insert a new activity between the event and the old habit. Break the chain.</td><td>Triggers</td><td><span class="badge ba">Technique</span></td></tr>
+        <tr><td class="num-cell">08</td><td class="name-cell">Prepare the 72hr Kit</td><td>Before Day 1: written reasons list + 3 replacement activities + 1 person on standby + cleared environment.</td><td>72hrs</td><td><span class="badge ba">Before You Start</span></td></tr>
+        <tr><td class="num-cell">09</td><td class="name-cell">Know the 24–48hr Peak</td><td>Cravings peak at 24–48 hours. Plan this window deliberately. Fill it with high-engagement alternatives.</td><td>72hrs</td><td><span class="badge ba">Plan This</span></td></tr>
+        <tr><td class="num-cell">10</td><td class="name-cell">Celebrate 72 Hours</td><td>Acknowledge the 72hr mark deliberately. It is a real neurobiological milestone. Mark it with intention.</td><td>72hrs</td><td><span class="badge ba">Milestone</span></td></tr>
+        <tr><td class="num-cell">11</td><td class="name-cell">The Discomfort Is Biology</td><td>The storm in the first 72hrs is neurochemical recalibration — not evidence you can't do this.</td><td>72hrs</td><td><span class="badge bd">Reframe</span></td></tr>
+        <tr><td class="num-cell">12</td><td class="name-cell">Declare the New Identity</td><td>"I am a non-smoker / I don't drink / I am someone who protects my sleep." Say it before you've earned all the evidence.</td><td>Identity</td><td><span class="badge ba">From Day 1</span></td></tr>
+        <tr><td class="num-cell">13</td><td class="name-cell">"I Don't" Not "I Can't"</td><td>"I don't drink" → internal identity. "I can't drink" → external restriction. Language shapes neural reality.</td><td>Identity</td><td><span class="badge ba">Language Rule</span></td></tr>
+        <tr><td class="num-cell">14</td><td class="name-cell">Cast Votes for the New Self</td><td>Every time you choose differently → one vote for the new identity. You don't need unanimous votes. Just the majority.</td><td>Identity</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">15</td><td class="name-cell">Move Toward, Not Away</td><td>"I am becoming someone who prioritises [X]" > "I am trying to stop [Y]." Pull is more sustainable than push.</td><td>Identity</td><td><span class="badge ba">Philosophy</span></td></tr>
+        <tr><td class="num-cell">16</td><td class="name-cell">The Golden Rule</td><td>You can't delete a habit — only replace it. Keep cue + reward. Change the routine. Always.</td><td>Replacement</td><td><span class="badge ba">Core Rule</span></td></tr>
+        <tr><td class="num-cell">17</td><td class="name-cell">Match the Real Reward</td><td>Identify what reward the habit is actually providing. Match that exact reward through a different mechanism.</td><td>Replacement</td><td><span class="badge ba">Diagnostic</span></td></tr>
+        <tr><td class="num-cell">18</td><td class="name-cell">Immediate Reward Only</td><td>The replacement must feel good now — not in 6 weeks. The dopamine system only responds to immediate reinforcement.</td><td>Replacement</td><td><span class="badge ba">Non-Negotiable</span></td></tr>
+        <tr><td class="num-cell">19</td><td class="name-cell">66-Day Timeline</td><td>Give the replacement 66 days minimum to feel automatic. 21 days is a myth. Plan for the real timeline.</td><td>Replacement</td><td><span class="badge ba">Realistic</span></td></tr>
+        <tr><td class="num-cell">20</td><td class="name-cell">Slip ≠ Relapse</td><td>A slip is one moment. Full relapse is the shame interpretation that follows. They are different events.</td><td>Relapse</td><td><span class="badge ba">Critical Distinction</span></td></tr>
+        <tr><td class="num-cell">21</td><td class="name-cell">Never Miss Twice</td><td>After any slip — execute the replacement behaviour today, before the day ends. One slip. Never two in a row.</td><td>Relapse</td><td><span class="badge ba">Iron Rule</span></td></tr>
+        <tr><td class="num-cell">22</td><td class="name-cell">Diagnose Every Slip</td><td>Which trigger fired? What was the emotional state? What gap in your system does this reveal? Fix the system.</td><td>Relapse</td><td><span class="badge ba">Data Use</span></td></tr>
+        <tr><td class="num-cell">23</td><td class="name-cell">Pre-Mortem Before Day 1</td><td>Write: "In 6 weeks I've relapsed — what are the 3 most likely causes?" Build countermeasures now.</td><td>Relapse</td><td><span class="badge ba">Prevention</span></td></tr>
+        <tr><td class="num-cell">24</td><td class="name-cell">Tell Someone</td><td>Social accountability changes the neurochemistry. One person. Weekly check-in. Honest, not performative.</td><td>Relapse</td><td><span class="badge ba">System</span></td></tr>
+        <tr><td class="num-cell">25</td><td class="name-cell">Add Friction to Bad Habit</td><td>Every additional step between cue and routine reduces habit probability. Remove → drawer, delete, distance, hide.</td><td>Environment</td><td><span class="badge ba">Day 1</span></td></tr>
+        <tr><td class="num-cell">26</td><td class="name-cell">Remove Friction from Replacement</td><td>Shoes at door. Book on pillow. Healthy food visible. Make the good path the path of least resistance.</td><td>Environment</td><td><span class="badge ba">Day 1</span></td></tr>
+        <tr><td class="num-cell">27</td><td class="name-cell">Visibility Is Behaviour</td><td>What you see, you do. What you don't see, you don't do automatically. Make good visible, bad invisible.</td><td>Environment</td><td><span class="badge ba">Simple Rule</span></td></tr>
+        <tr><td class="num-cell">28</td><td class="name-cell">Context Change</td><td>New contexts break old cue associations automatically. When possible — change the environment, not just the intention.</td><td>Environment</td><td><span class="badge ba">Highest Leverage</span></td></tr>
+        <tr><td class="num-cell">29</td><td class="name-cell">Digital Environment Audit</td><td>Delete apps. Move triggers 3 folders deep. Passcode-protect limits. Turn off all notifications. Today.</td><td>Environment</td><td><span class="badge bb">Digital</span></td></tr>
+        <tr><td class="num-cell">30</td><td class="name-cell">The System Is the Strategy</td><td>You don't rise to the level of your goals. You fall to the level of your systems. Build the system first.</td><td>All</td><td><span class="badge ba">Philosophy</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</section>
+
+<footer>
+  <div class="footer-logo">Break Free: Quit Any Habit for Good</div>
+  <p class="footer-sub">Lifestyle · Neuroscience · Behaviour Change · 2025–2026 Edition</p>
+  <p class="footer-sub" style="color:var(--muted);font-size:13px;margin-top:8px">8 Complete Chapters · 30 Core Principles · Research from Grillner 2025 (PNAS), Charles Duhigg, James Clear, BJ Fogg, Alan Marlatt, Phillippa Lally (UCL), Richard Prochaska & Brian Wansink</p>
+  <p class="footer-tiny">Research compiled May 2026 · Inspired by Parallelogram · Built for anyone who is ready to stop trying and start building</p>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:rgba(200,148,58,.28);margin-top:36px">"You don't rise to the level of your goals. You fall to the level of your systems." — James Clear</p>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const st=document.documentElement.scrollTop;
+  const sh=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('prog').style.width=(st/sh*100)+'%';
+});
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}});
+},{threshold:0.07});
+document.querySelectorAll('.card,.col-card,.s-stat,.loop-step,.tl-item,.trigger-card,.id-rung,.relapse-card').forEach(el=>{
+  el.style.opacity='0';el.style.transform='translateY(18px)';
+  el.style.transition='opacity .5s ease, transform .5s ease';
+  obs.observe(el);
+});
+</script>
+</body>
+</html>

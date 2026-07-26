@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Score Higher Without Studying More</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07080a;--surface:#0e1014;--card:#13151a;--card2:#181b22;
+  --gold:#c8943a;--gold2:#e8b84b;--golddim:rgba(200,148,58,.13);
+  --cream:#f0e8d5;--muted:#5c5f68;--light:#9a9da8;
+  --border:rgba(200,148,58,.18);--rust:#b84532;
+  --teal:#2c7a72;--emerald:#1a6b4a;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--cream);overflow-x:hidden;line-height:1.6}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.5}
+#prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--emerald),var(--gold),var(--gold2));width:0%;z-index:2000;transition:width .08s}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:1500;display:flex;align-items:center;justify-content:space-between;padding:14px 48px;background:rgba(7,8,10,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(200,148,58,.1)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
+.nav-links{display:flex;gap:20px;list-style:none}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+@media(max-width:768px){.nav-links{display:none}.hero,.section,.toc-wrap,.quote-block,footer{padding-left:22px!important;padding-right:22px!important}nav{padding:14px 22px}}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px 64px 80px;position:relative;overflow:hidden}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 75% 55% at 92% 8%,rgba(26,107,74,.14) 0%,transparent 55%),radial-gradient(ellipse 55% 70% at 5% 90%,rgba(200,148,58,.1) 0%,transparent 60%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;opacity:.022;background-image:linear-gradient(rgba(200,148,58,1) 1px,transparent 1px),linear-gradient(90deg,rgba(200,148,58,1) 1px,transparent 1px);background-size:68px 68px}
+.hero-inner{position:relative;max-width:1100px}
+.hero-badge{display:inline-flex;align-items:center;background:rgba(26,107,74,.15);border:1px solid rgba(26,107,74,.4);padding:5px 16px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#6aaa8e;margin-bottom:22px;opacity:0;animation:fadeup .7s .15s forwards}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:26px;display:flex;align-items:center;gap:14px;opacity:0;animation:fadeup .7s .2s forwards}
+.hero-tag::before{content:'';width:44px;height:1px;background:var(--gold);flex-shrink:0}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(46px,8vw,112px);font-weight:700;line-height:.88;letter-spacing:-4px;margin-bottom:10px;opacity:0;animation:fadeup .8s .4s forwards}
+.hero h1 span{color:var(--gold);font-style:italic}
+.hero h1 .sub{display:block;color:rgba(240,232,213,.2);font-size:clamp(22px,3.6vw,50px);font-weight:400;font-style:italic;letter-spacing:-1px;margin-top:8px}
+.hero-desc{font-size:clamp(15px,1.9vw,18px);color:var(--light);max-width:600px;margin:34px 0 50px;font-weight:300;line-height:1.78;opacity:0;animation:fadeup .8s .6s forwards}
+.hero-stats{display:flex;gap:0;border:1px solid var(--border);width:fit-content;opacity:0;animation:fadeup .8s .8s forwards;flex-wrap:wrap}
+.hstat{padding:18px 32px;border-right:1px solid var(--border);text-align:center}
+.hstat:last-child{border-right:none}
+.hstat-n{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.hstat-l{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-top:4px}
+.scroll-hint{position:absolute;bottom:40px;left:64px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:10px;animation:pulse 2.5s infinite}
+.scroll-hint::before{content:'';width:1px;height:38px;background:var(--gold);opacity:.35}
+@keyframes fadeup{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+
+/* TOC */
+.toc-wrap{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:56px 64px}
+.toc-inner{max-width:1100px;margin:0 auto}
+.toc-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:36px;display:flex;align-items:center;gap:12px}
+.toc-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px}
+.toc-item{background:var(--card);padding:18px 22px;display:flex;align-items:flex-start;gap:14px;cursor:pointer;transition:background .2s,border-color .2s;border:1px solid transparent;text-decoration:none}
+.toc-item:hover{background:var(--card2);border-color:var(--border)}
+.toc-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);opacity:.55;flex-shrink:0;min-width:26px;margin-top:2px}
+.toc-name{font-size:13.5px;color:var(--light);font-weight:400;transition:color .2s;line-height:1.4}
+.toc-item:hover .toc-name{color:var(--cream)}
+
+/* SECTIONS */
+.section{padding:96px 64px;position:relative}
+.section-alt{background:var(--surface)}
+.s-inner{max-width:1100px;margin:0 auto}
+.s-head{display:grid;grid-template-columns:90px 1fr;gap:32px;align-items:start;margin-bottom:60px;padding-bottom:44px;border-bottom:1px solid var(--border)}
+.s-num{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;padding-top:8px}
+.s-meta{display:flex;flex-direction:column;gap:10px}
+.s-cat{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:3px;color:var(--rust);text-transform:uppercase}
+.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,60px);font-weight:700;line-height:.92;letter-spacing:-1.5px;color:var(--cream)}
+.s-title span{color:var(--gold);font-style:italic}
+.s-desc{font-size:15.5px;color:var(--light);max-width:660px;font-weight:300;line-height:1.78;margin-top:6px}
+@media(max-width:600px){.s-head{grid-template-columns:1fr;gap:14px}}
+
+/* CARDS */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:2px}
+@media(max-width:600px){.cards{grid-template-columns:1fr}}
+.card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .25s,background .25s;position:relative;overflow:hidden}
+.card:hover{border-color:var(--border);background:var(--card2)}
+.card::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:linear-gradient(180deg,var(--gold),var(--emerald));transition:height .35s}
+.card:hover::before{height:100%}
+.card-num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);opacity:.45;margin-bottom:14px}
+.card-icon{font-size:26px;margin-bottom:11px;display:block}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:700;color:var(--cream);letter-spacing:-.4px;margin-bottom:11px;line-height:1.15}
+.card-sec{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin:16px 0 7px}
+.card-text{font-size:13.5px;color:var(--light);line-height:1.72;font-weight:300}
+.psych{background:rgba(200,148,58,.06);border-left:2px solid var(--gold);padding:15px 18px;margin-top:18px}
+.psych .card-sec{margin-top:0}
+.scibox{background:rgba(26,107,74,.07);border-left:2px solid rgba(26,107,74,.5);padding:15px 18px;margin-top:14px}
+.scibox .card-sec{color:#6aaa8e}
+.badge{display:inline-flex;align-items:center;padding:4px 11px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;margin-top:14px}
+.ba{background:rgba(200,148,58,.11);color:var(--gold);border:1px solid var(--border)}
+.bb{background:rgba(26,107,74,.12);color:#6aaa8e;border:1px solid rgba(26,107,74,.3)}
+.bc{background:rgba(184,69,50,.11);color:#d46040;border:1px solid rgba(184,69,50,.28)}
+.bd{background:rgba(44,122,114,.12);color:#4aaa9e;border:1px solid rgba(44,122,114,.3)}
+
+/* QUOTE */
+.quote-block{background:var(--surface);padding:72px 64px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center}
+.quote-text{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3.2vw,36px);font-weight:600;font-style:italic;color:var(--cream);max-width:880px;margin:0 auto;line-height:1.4}
+.quote-text em{color:var(--gold)}
+.quote-attr{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:24px}
+
+/* STAT ROW */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:2px;margin:44px 0}
+.s-stat{background:var(--card);padding:26px 22px;text-align:center;border:1px solid transparent;transition:border-color .2s}
+.s-stat:hover{border-color:var(--border)}
+.s-stat-n{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.s-stat-l{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-top:5px}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}}
+.col-card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .2s}
+.col-card:hover{border-color:var(--border)}
+.col-icon{font-size:30px;margin-bottom:14px;display:block}
+.col-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:11px;letter-spacing:-.4px}
+.col-text{font-size:13.5px;color:var(--light);line-height:1.75;font-weight:300}
+.col-text strong{color:var(--cream);font-weight:500}
+
+/* PAST PAPER TIMELINE */
+.pp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:2px;margin:36px 0}
+.pp-cell{background:var(--card);padding:22px;border:1px solid transparent;transition:border-color .2s,background .2s;position:relative}
+.pp-cell:hover{border-color:var(--border);background:var(--card2)}
+.pp-year{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.pp-label{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-top:4px;display:block}
+.pp-action{font-size:13px;color:var(--light);margin-top:10px;line-height:1.55;font-weight:300}
+.pp-bar{position:absolute;bottom:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2))}
+
+/* BREATHING PROTOCOL */
+.breath-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin:36px 0}
+@media(max-width:640px){.breath-steps{grid-template-columns:1fr 1fr}}
+.breath-step{background:var(--card);padding:24px 16px;border:1px solid transparent;transition:border-color .2s,background .2s;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.breath-step:hover{border-color:var(--border);background:var(--card2)}
+.breath-count{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:700;color:var(--gold);line-height:1}
+.breath-action{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--gold);text-transform:uppercase}
+.breath-desc{font-size:12.5px;color:var(--light);line-height:1.5;font-weight:300}
+
+/* ANSWER FRAMEWORK */
+.ans-framework{display:flex;flex-direction:column;gap:2px;margin:36px 0}
+.ans-row{display:grid;grid-template-columns:72px 1fr;gap:0;background:var(--card);border:1px solid transparent;transition:border-color .2s}
+.ans-row:hover{border-color:var(--border)}
+.ans-letter{background:var(--golddim);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:var(--gold)}
+.ans-body{padding:20px 26px}
+.ans-title{font-weight:600;color:var(--cream);font-size:15px;margin-bottom:5px;display:flex;align-items:center;gap:10px}
+.ans-marks{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--gold);background:var(--golddim);padding:3px 8px;border-radius:1px;text-transform:uppercase}
+.ans-text{font-size:13px;color:var(--light);line-height:1.65;font-weight:300}
+.ans-example{font-size:12.5px;color:var(--gold);font-style:italic;margin-top:8px;line-height:1.5}
+
+/* EXAM DAY TIMELINE */
+.exam-timeline{display:flex;flex-direction:column;gap:2px;margin:36px 0}
+.et-item{display:grid;grid-template-columns:110px 1fr;gap:0;background:var(--card);border:1px solid transparent;transition:border-color .2s}
+.et-item:hover{border-color:var(--border)}
+.et-time{background:var(--golddim);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 8px;text-align:center}
+.et-time-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:1px;line-height:1.3}
+.et-body{padding:20px 26px}
+.et-title{font-weight:600;color:var(--cream);font-size:14.5px;margin-bottom:5px}
+.et-text{font-size:13px;color:var(--light);line-height:1.65;font-weight:300}
+
+/* ALERT / TIP */
+.alert{background:rgba(184,69,50,.07);border:1px solid rgba(184,69,50,.24);padding:22px 26px;margin:28px 0}
+.alert-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:var(--rust);text-transform:uppercase;margin-bottom:9px}
+.alert-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.alert-text strong{color:var(--cream);font-weight:500}
+.tip{background:rgba(26,107,74,.07);border:1px solid rgba(26,107,74,.24);padding:22px 26px;margin:28px 0}
+.tip-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:#6aaa8e;text-transform:uppercase;margin-bottom:9px}
+.tip-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.tip-text strong{color:var(--cream);font-weight:500}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;margin-top:40px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--card2);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);padding:13px 16px;text-align:left;border-bottom:1px solid var(--border)}
+tbody tr{border-bottom:1px solid rgba(200,148,58,.07);transition:background .15s}
+tbody tr:hover{background:var(--card)}
+tbody td{padding:13px 16px;color:var(--light);vertical-align:top;line-height:1.5}
+.num-cell{font-family:'JetBrains Mono',monospace;color:var(--gold);opacity:.55;font-size:11px}
+.name-cell{font-weight:500;color:var(--cream)}
+
+/* FOOTER */
+footer{background:var(--bg);border-top:1px solid var(--border);padding:56px 64px 72px;text-align:center}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;letter-spacing:2px;color:var(--gold);margin-bottom:10px}
+.footer-sub{font-size:13.5px;color:var(--muted);margin-bottom:6px}
+.footer-tiny{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(92,95,104,.45);text-transform:uppercase;margin-top:26px}
+
+.pg-hero-art{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:.55;z-index:0}
+.pg-hero-art svg{width:100%;height:100%;display:block}
+[class*="icon"] svg.pg-icon{width:1em;height:1em;display:inline-block;vertical-align:-0.15em}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav>
+  <div class="nav-logo">Score Higher</div>
+  <ul class="nav-links">
+    <li><a href="#pareto">80/20 Rule</a></li>
+    <li><a href="#pastpapers">Past Papers</a></li>
+    <li><a href="#answers">Answer Tricks</a></li>
+    <li><a href="#anxiety">Anxiety</a></li>
+    <li><a href="#memory">Memory</a></li>
+    <li><a href="#examday">Exam Day</a></li>
+    <li><a href="#mindset">Topper Mindset</a></li>
+    <li><a href="#cheatsheet">Cheatsheet</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero"><div class="pg-hero-art" aria-hidden="true"><svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><path d="M460.9 38.0 A242.2 242.2 0 0 1 767.1 33.7" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M489.3 320.7 A232.5 232.5 0 0 1 128.2 198.3" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><line x1="424.8" y1="22.0" x2="401.0" y2="71.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="402.5" y1="120.1" x2="371.2" y2="135.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="62.9" y1="242.1" x2="332.4" y2="197.0" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="525.7" y1="37.3" x2="528.0" y2="76.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="823.1" y1="161.6" x2="878.6" y2="166.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="823.1" y1="161.6" x2="685.5" y2="140.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="674.2" y1="61.6" x2="668.9" y2="41.1" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="332.4" y1="197.0" x2="362.3" y2="200.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="402.5" y1="120.1" x2="401.0" y2="71.9" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="466.1" y1="136.3" x2="482.7" y2="123.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="402.5" y1="120.1" x2="466.1" y2="136.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="674.2" y1="61.6" x2="773.9" y2="29.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="773.9" y1="29.5" x2="668.9" y2="41.1" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="685.5" y1="140.7" x2="671.4" y2="170.1" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="674.2" y1="61.6" x2="671.4" y2="170.1" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="362.3" y1="200.9" x2="371.2" y2="135.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><circle cx="424.8" cy="22.0" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="424.8" cy="22.0" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="402.5" cy="120.1" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="62.9" cy="242.1" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="62.9" cy="242.1" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="525.7" cy="37.3" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="823.1" cy="161.6" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="674.2" cy="61.6" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="674.2" cy="61.6" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="332.4" cy="197.0" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="362.3" cy="200.9" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="401.0" cy="71.9" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="878.6" cy="166.7" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="466.1" cy="136.3" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="773.9" cy="29.5" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="528.0" cy="76.9" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="528.0" cy="76.9" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="685.5" cy="140.7" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="685.5" cy="140.7" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="671.4" cy="170.1" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="371.2" cy="135.8" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="482.7" cy="123.3" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="668.9" cy="41.1" r="1.4" fill="#c8943a" opacity="0.50"/></svg></div>
+  <div class="hero-glow"></div><div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">Academics · Exam Strategy · Performance Science · 2025–26</div>
+    <div class="hero-tag">The Complete Exam Performance Research Guide · 2025–26 Edition</div>
+    <h1>Score Higher<br/><span>Without</span><span class="sub">Studying More</span></h1>
+    <p class="hero-desc">The strategy-first approach to academic performance — backed by the Pareto Principle, cognitive science, exam psychology, and what actual toppers do differently. Not more hours. Smarter hours. 8 research-backed chapters. Every trick examiners hate. Every system toppers quietly use.</p>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-n">80%</span><span class="hstat-l">of exam marks come from just 20% of the syllabus</span></div>
+      <div class="hstat"><span class="hstat-n">+22%</span><span class="hstat-l">performance boost from interleaved practice (UCLA research)</span></div>
+      <div class="hstat"><span class="hstat-n">60sec</span><span class="hstat-l">box breathing reduces anxiety to baseline (Frontiers in Psychology)</span></div>
+      <div class="hstat"><span class="hstat-n">5–10yrs</span><span class="hstat-l">of past papers contains 80%+ of every likely exam question</span></div>
+    </div>
+  </div>
+  <div class="scroll-hint">Scroll to begin</div>
+</section>
+
+<!-- ─── TOC ─── -->
+<div class="toc-wrap">
+  <div class="toc-inner">
+    <div class="toc-label">Everything Inside This Guide</div>
+    <div class="toc-grid">
+      <a href="#pareto" class="toc-item"><span class="toc-num">01</span><span class="toc-name">The 80/20 Syllabus Rule — 20% of topics appear in 80% of exam questions every year</span></a>
+      <a href="#pastpapers" class="toc-item"><span class="toc-num">02</span><span class="toc-name">Past Paper Pattern Analysis — The fastest method to predict what's coming next</span></a>
+      <a href="#answers" class="toc-item"><span class="toc-num">03</span><span class="toc-name">Answer Presentation Tricks — Earn partial marks even when you don't know the full answer</span></a>
+      <a href="#anxiety" class="toc-item"><span class="toc-num">04</span><span class="toc-name">How Toppers Manage Exam Anxiety — The pre-paper breathing & mental reset protocol</span></a>
+      <a href="#memory" class="toc-item"><span class="toc-num">05</span><span class="toc-name">Last-Mile Memory — What to do in the 48 hours before any exam</span></a>
+      <a href="#examday" class="toc-item"><span class="toc-num">06</span><span class="toc-name">The Exam Day System — Minute-by-minute from wake-up to submission</span></a>
+      <a href="#mindset" class="toc-item"><span class="toc-num">07</span><span class="toc-name">The Topper Mindset — How rank-holders think about marks, mistakes, and momentum</span></a>
+      <a href="#cheatsheet" class="toc-item"><span class="toc-num">08</span><span class="toc-name">The Master Cheatsheet — Every strategy, one table</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- ─── 01: 80/20 SYLLABUS RULE ─── -->
+<section class="section" id="pareto">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 01</div>
+    <div class="s-meta">
+      <div class="s-cat">Vilfredo Pareto · University of York · JEE / NEET / Board Exam Data</div>
+      <h2 class="s-title">The <span>80/20</span><br/>Syllabus Rule</h2>
+      <p class="s-desc">The Pareto Principle states that 80% of results come from 20% of efforts. In every exam — board, competitive, professional — a small set of high-weightage topics recurs year after year. Identifying and mastering that 20% is the single highest-leverage study strategy available to any student.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">80%</span><span class="s-stat-l">of exam questions consistently come from approximately 20% of topics (Pareto applied)</span></div>
+    <div class="s-stat"><span class="s-stat-n">5–10yrs</span><span class="s-stat-l">of past papers reveals the high-frequency 20% with striking clarity</span></div>
+    <div class="s-stat"><span class="s-stat-n">York</span><span class="s-stat-l">University study guide: "Not all topics are created equal — identify the high-impact 20%"</span></div>
+    <div class="s-stat"><span class="s-stat-n">JEE/NEET</span><span class="s-stat-l">analysis confirms 80%+ of marks come from consistent high-weightage chapters year after year</span></div>
+  </div>
+
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="1.4" fill="#c8943a"/></svg></span>
+      <div class="col-title">What the 80/20 Rule Actually Means for Exams</div>
+      <p class="col-text">
+        Every syllabus has foundational topics — the critical 20% that the remaining 80% revolves around. These foundational concepts are not just key to understanding your current course; they are often building blocks for future topics, which is exactly why examiners test them repeatedly.<br/><br/>
+        <strong>The strategic insight:</strong> Most students study all topics with equal effort. Toppers study strategically — spending 80% of their time on the 20% of topics that drive 80% of the marks.<br/><br/>
+        <strong>University of York's guidance:</strong> "Identify the important stuff — the roughly 20% of material that will contribute to about 80% of your exams. Focus on going through that information first."<br/><br/>
+        <strong>The critical nuance:</strong> This is not permission to skip 80% of the syllabus. It is a prioritisation system. Master the 20% deeply. Then cover the remaining 80% more lightly.
+      </p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 3v7.5L5.5 17a2 2 0 0 0 1.8 3h9.4a2 2 0 0 0 1.8-3L15 10.5V3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 3h6M6.5 15h11" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">How to Find YOUR 20%</div>
+      <p class="col-text">
+        <strong>Step 1 — Gather past papers.</strong> 5–10 years of previous exam papers for your specific subject and board. No exceptions.<br/><br/>
+        <strong>Step 2 — Categorise every question.</strong> Map each question to its corresponding chapter or topic. Create a tally chart.<br/><br/>
+        <strong>Step 3 — Calculate frequency.</strong> Which chapters appear in 8 out of the last 10 papers? Those are your gold-mine topics.<br/><br/>
+        <strong>Step 4 — Calculate mark weightage.</strong> High-frequency topics that also carry high marks = your absolute priority.<br/><br/>
+        <strong>Step 5 — Build your priority list.</strong> Rank topics by (frequency × marks). Study in that exact order — highest priority first, every session.<br/><br/>
+        <strong>Step 6 — Review after mock tests.</strong> Did the 20% you identified actually yield 80% of marks? If not — refine your analysis. This is a living system, not a one-time exercise.
+      </p>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">80/20 PRINCIPLE 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M4 4.5h4a2 2 0 0 1 2 2V20a1.7 1.7 0 0 0-2-1.5H4zM20 4.5h-4a2 2 0 0 0-2 2V20a1.7 1.7 0 0 1 2-1.5h4z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Pay Attention to Teacher Emphasis</div>
+      <div class="card-sec">The Hidden Signal</div>
+      <p class="card-text">Larissa Press University study guide: "Pay attention to how lecturers emphasise certain topics — these often fall into that crucial 20% that determines 80% of your exam success." Teachers spend disproportionate time on topics they know matter. Every time a teacher says "this is important," "you'll definitely see this," or "make sure you understand this concept" — that is a real signal from someone who has seen the pattern. Document these moments. They are your 20% being handed to you for free.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Examiner Psychology</div>
+        <p class="card-text">Examiners are constrained by the syllabus and by the need for consistent year-on-year comparison. This means they return to the same foundational topics repeatedly — simply in different formats, question styles, or levels of complexity. The topic is the constant. The question format is the variable. Master the topic deeply and every format becomes solvable.</p>
+      </div>
+      <span class="badge ba">First Priority</span>
+    </div>
+    <div class="card">
+      <div class="card-num">80/20 PRINCIPLE 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="13" r="8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 9v4l3 2M4 6 2 4M20 6l2-2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Time Allocation by Priority</div>
+      <div class="card-sec">The Strategic Split</div>
+      <p class="card-text"><strong style="color:var(--cream)">80% of study time →</strong> Your identified top 20% high-frequency, high-weightage topics. Go deep here. Multiple practice formats. Different question styles. Timed practice. Connect to adjacent topics.<br/><br/><strong style="color:var(--cream)">20% of study time →</strong> The remaining syllabus. Cover with lighter touch — enough to recognise and attempt, not enough to master. One read-through, one practice set, key formulas noted.<br/><br/>This is not about gambling on the exam. It is about rational resource allocation. You have limited study hours. Distribute them where returns are highest.</p>
+      <span class="badge ba">Time Strategy</span>
+    </div>
+    <div class="card">
+      <div class="card-num">80/20 WARNING</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 3 2 20h20z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M12 10v4.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="17.3" r="0.9" fill="#c8943a"/></svg></span>
+      <div class="card-title">The Critical Mistake to Avoid</div>
+      <div class="card-sec">When the 80/20 Rule Backfires</div>
+      <p class="card-text">StudyForFE research is direct: "Do not get fooled by the idea of focusing on 20% of the syllabus and neglecting the rest. If you label the least critical topics as your 20%, you will suffer." Three failure modes: identifying the wrong 20% (poor past paper analysis), completely skipping low-weightage topics that unexpectedly appear, and using the rule as justification for laziness rather than strategic prioritisation. The rule is about effort allocation — not syllabus reduction. Done correctly, you study everything. You just study the important things better.</p>
+      <span class="badge bc">Critical Warning</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 1 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"It's not about studying more, it's about <em>studying right.</em> Focus on the top 20% of topics, the top 20% of your mistakes, and the top 20% of your most effective study hours."</p>
+  <p class="quote-attr">— Narayana Coaching Centers · JEE/NEET Analysis · 2025 Edition</p>
+</div>
+
+<!-- ─── 02: PAST PAPER ANALYSIS ─── -->
+<section class="section section-alt" id="pastpapers">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 02</div>
+    <div class="s-meta">
+      <div class="s-cat">Pattern Recognition · Examiner Psychology · Predictive Analysis</div>
+      <h2 class="s-title">Past Paper<br/><span>Pattern Analysis</span></h2>
+      <p class="s-desc">Past papers are not just practice tools. They are the examiner's revealed preferences — a detailed map of exactly what has been valued, how it has been asked, and how many marks each type of answer earns. Mining them systematically is the fastest method to predict what's coming next. It is also one of the highest-impact, lowest-effort strategies available to any student.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">5–10yrs</span><span class="s-stat-l">of past papers needed to identify recurring patterns with statistical confidence</span></div>
+    <div class="s-stat"><span class="s-stat-n">3</span><span class="s-stat-l">core analysis dimensions: Topic frequency, Question format, Mark allocation</span></div>
+    <div class="s-stat"><span class="s-stat-n">Pattern</span><span class="s-stat-l">recognition from past papers is used by every rank-holder in every competitive exam</span></div>
+    <div class="s-stat"><span class="s-stat-n">Examiner</span><span class="s-stat-l">returns to the same foundational topics — only the question format changes year to year</span></div>
+  </div>
+
+  <p style="font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:var(--gold);margin-bottom:16px">Step-by-Step: How to Mine 10 Years of Past Papers in One Weekend</p>
+  <div class="pp-grid">
+    <div class="pp-cell">
+      <div class="pp-bar" style="width:100%"></div>
+      <span class="pp-year">Step 1</span>
+      <span class="pp-label">Collect</span>
+      <p class="pp-action">Download or print the last 5–10 years of papers for your specific board, exam, and subject. Not just one or two — statistical patterns need volume to be reliable.</p>
+    </div>
+    <div class="pp-cell">
+      <div class="pp-bar" style="width:85%"></div>
+      <span class="pp-year">Step 2</span>
+      <span class="pp-label">Map</span>
+      <p class="pp-action">For every question, note: (1) Which chapter/topic? (2) What question type? (Short answer, MCQ, long answer, diagram?) (3) How many marks? Create a simple spreadsheet or table.</p>
+    </div>
+    <div class="pp-cell">
+      <div class="pp-bar" style="width:70%"></div>
+      <span class="pp-year">Step 3</span>
+      <span class="pp-label">Tally</span>
+      <p class="pp-action">Count how many times each topic appeared across all papers. Multiply by marks. Rank topics by (frequency × marks). This is your priority order.</p>
+    </div>
+    <div class="pp-cell">
+      <div class="pp-bar" style="width:55%"></div>
+      <span class="pp-year">Step 4</span>
+      <span class="pp-label">Format Study</span>
+      <p class="pp-action">For your top 20% topics, study the specific format in which they are tested. Long answer vs MCQ vs diagram requires different preparation. Practice in exact exam format.</p>
+    </div>
+    <div class="pp-cell">
+      <div class="pp-bar" style="width:40%"></div>
+      <span class="pp-year">Step 5</span>
+      <span class="pp-label">Gap Analysis</span>
+      <p class="pp-action">Which of your top-priority topics haven't appeared in the last 2 years? These are statistically more likely this year. Flag them as "due" topics. Give them extra attention.</p>
+    </div>
+    <div class="pp-cell">
+      <div class="pp-bar" style="width:25%"></div>
+      <span class="pp-year">Step 6</span>
+      <span class="pp-label">Mark Schemes</span>
+      <p class="pp-action">Read the official mark schemes for every paper you analyse. Understand exactly what language earns full marks, what earns partial marks, and what earns zero — even for correct answers presented incorrectly.</p>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">PATTERN INSIGHT 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M20 11a8 8 0 0 0-14.9-3.5M4 13a8 8 0 0 0 14.9 3.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 4v4h4M19 20v-4h-4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Topics Cycle — Not Disappear</div>
+      <div class="card-sec">The Rotation Pattern</div>
+      <p class="card-text">Experienced teachers and toppers know: topics rarely disappear from exams permanently. They cycle. A topic that appeared heavily 3 years ago and has been absent since is statistically more likely to return than a topic that appeared last year. Track absence patterns alongside frequency patterns. A high-frequency topic that skipped last year is often a strong prediction for this year. Flag these in your study plan as "overdue" topics and prioritise accordingly.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Examiner Logic</div>
+        <p class="card-text">Examiners must maintain year-on-year syllabus coverage and difficulty balance. They cannot heavily repeat the same topic two consecutive years without criticism — but they must return to foundational topics regularly. This creates a predictable rotation that pattern analysis reveals clearly over 5+ years of data.</p>
+      </div>
+      <span class="badge ba">Prediction Tool</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PATTERN INSIGHT 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 3h9l5 5v13H5z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M14 3v5h5M8 12h8M8 16h8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Study the Mark Scheme — Not Just the Questions</div>
+      <div class="card-sec">Where Most Students Lose Marks</div>
+      <p class="card-text">Most students practise questions but never study the mark schemes. This is the single biggest mark-leaving mistake in structured examinations. Mark schemes reveal: the exact key words examiners look for, how many points earn full marks vs partial, which errors cost marks vs which are condoned, and the precise format of an ideal answer. A student who understands the mark scheme writes answers that look like model answers — because they know exactly what an examiner is looking for and writes directly to those criteria.</p>
+      <span class="badge ba">Highest ROI Action</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PATTERN INSIGHT 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="13" r="8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 9v4l3 2M9.5 2.5h5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Timed Past Paper Practice — The Non-Negotiable</div>
+      <div class="card-sec">Why Untimed Practice Produces False Confidence</div>
+      <p class="card-text">Practising past papers without a timer creates a false sense of preparedness. You may know the content perfectly but still underperform dramatically in timed conditions — because time pressure activates anxiety, changes recall patterns, and exposes prioritisation weaknesses. Rule: every past paper you attempt in the final 4 weeks before an exam must be done under strict exam conditions — same time limit, no notes, no phone, sit at a desk. Then mark against the official scheme. Track your timed score. This number is your actual current grade.</p>
+      <span class="badge bc">Non-Negotiable</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 2 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"The student who studies the answer first — then reads the question — is the student who <em>writes directly to what the examiner actually needs.</em> Everyone else writes around it."</p>
+  <p class="quote-attr">— Cambridge International Education · Mark Scheme Guidance · 2025</p>
+</div>
+
+<!-- ─── 03: ANSWER PRESENTATION ─── -->
+<section class="section" id="answers">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 03</div>
+    <div class="s-meta">
+      <div class="s-cat">Examiner Psychology · Partial Credit · Mark Scheme Science</div>
+      <h2 class="s-title">Answer<br/><span>Presentation</span> Tricks</h2>
+      <p class="s-desc">You can earn significantly more marks on questions you don't fully know — and lose marks on questions you do know — purely through how you present your answers. Examiners are human, under time pressure, and working from structured mark schemes. Understanding their psychology changes how you write everything.</p>
+    </div>
+  </div>
+
+  <div class="ans-framework">
+    <div class="ans-row">
+      <div class="ans-letter">P</div>
+      <div class="ans-body">
+        <div class="ans-title">Point <span class="ans-marks">1–2 Marks</span></div>
+        <p class="ans-text">Make your key claim directly and immediately. Do not build to it. Examiners read fast — they are scanning for mark-earning content. Your first sentence must contain your core argument or answer. If the examiner stops reading after line one, they should have found something worth marking.</p>
+        <p class="ans-example">"Photosynthesis is the process by which plants convert light energy into chemical energy stored as glucose."</p>
+      </div>
+    </div>
+    <div class="ans-row">
+      <div class="ans-letter">E</div>
+      <div class="ans-body">
+        <div class="ans-title">Evidence / Explanation <span class="ans-marks">2–4 Marks</span></div>
+        <p class="ans-text">Explain the mechanism, cause, or evidence behind your point. Use subject-specific terminology — mark schemes explicitly look for key vocabulary. Vague explanations that could apply to any topic earn zero or partial marks. Precise, subject-specific language earns full marks.</p>
+        <p class="ans-example">"This process occurs in the chloroplasts, where chlorophyll absorbs light, which provides energy for the light-dependent reactions in the thylakoid membranes, producing ATP and NADPH."</p>
+      </div>
+    </div>
+    <div class="ans-row">
+      <div class="ans-letter">E</div>
+      <div class="ans-body">
+        <div class="ans-title">Example / Application <span class="ans-marks">+1 Mark</span></div>
+        <p class="ans-text">Ground your explanation in a concrete example, case study, or real-world application. This demonstrates understanding beyond memorisation — and earns application marks that most students miss because they stop at explanation.</p>
+        <p class="ans-example">"For example, C4 plants like maize have evolved a specialised form of photosynthesis that concentrates CO₂ around RuBisCO, increasing efficiency in hot, bright conditions."</p>
+      </div>
+    </div>
+    <div class="ans-row">
+      <div class="ans-letter">L</div>
+      <div class="ans-body">
+        <div class="ans-title">Link Back / Conclusion <span class="ans-marks">+1–2 Marks</span></div>
+        <p class="ans-text">Connect your answer back to the original question. For essay and long answers, this is the mark that most students leave unclaimed — because they assume the connection is obvious. It is not obvious to an examiner who has read 200 answers. Make the link explicit, direct, and specific to the exact wording of the question.</p>
+        <p class="ans-example">"Therefore, photosynthesis is essential to the survival of the organism as it is the primary means of energy acquisition — without which cellular respiration and all metabolic processes would cease."</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">PARTIAL MARKS TRICK 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="1.4" fill="#c8943a"/></svg></span>
+      <div class="card-title">The "Something is Always Markable" Rule</div>
+      <div class="card-sec">Never Leave a Blank Answer</div>
+      <p class="card-text">For any question you don't fully know: write what you do know. Mark schemes for structured questions often have multiple mark-earning points — and you only need some of them for partial credit. Even if you write only one correct point out of four, that is one mark gained versus zero for a blank page. On a 10-mark question, this principle alone can recover 2–3 marks per uncertain question across an exam. Examiners cannot award marks for what isn't there. Every attempt gets more than every blank. Always.</p>
+      <div class="psych">
+        <div class="card-sec">📋 The Formula for When You're Unsure</div>
+        <p class="card-text">Write: what you know (related content), what you think (reasoned guess), what the answer probably involves (key terms from the topic), and a link to the question. Show your reasoning process. Many mark schemes award "ecf" (error carried forward) marks for correct methodology applied to an incorrect earlier answer.</p>
+      </div>
+      <span class="badge ba">Mark Recovery</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PARTIAL MARKS TRICK 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="7.5" cy="15.5" r="4.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m11 12 8-8M16 6l2.5 2.5M13.5 8.5 16 11" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Key Words Are Worth Marks</div>
+      <div class="card-sec">The Vocabulary Advantage</div>
+      <p class="card-text">Mark schemes list specific key terms that must appear in answers to earn full marks. If you know the topic but don't use the right vocabulary — you lose marks for correct understanding. If you know the vocabulary but only partially understand the topic — you can often still earn partial marks. The practical implication: for every topic in your 20%, learn the 5–8 key terms that examiners look for. Embed them naturally in every practice answer. They are worth marks independently of the surrounding explanation.</p>
+      <span class="badge ba">Mark Earning</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PARTIAL MARKS TRICK 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M3 8V6a1 1 0 0 1 1-1h5l2 2h9a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Structure Signals Competence</div>
+      <div class="card-sec">How Presentation Changes Perception</div>
+      <p class="card-text">Examiners are under significant time pressure. An answer that is clearly structured — numbered points, logical sequence, clear headings for long answers — is faster to mark and less likely to have mark-earning content missed. An identical answer in a dense, unbroken paragraph is harder to mark and more likely to be undermarked through scanning. The content is identical; the presentation is not. Rule: numbered points for multi-mark structured questions. Clear paragraphs for essays. Never a wall of text that forces the examiner to hunt for your answer.</p>
+      <span class="badge ba">Presentation Rule</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PARTIAL MARKS TRICK 04</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="13" r="8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 9v4l3 2M9.5 2.5h5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Mark Per Minute Allocation</div>
+      <div class="card-sec">The Time Management Formula</div>
+      <p class="card-text">Every mark in an exam should take approximately the same number of minutes. Standard rule: divide total exam time by total marks. A 3-hour paper worth 100 marks = 1.8 minutes per mark. A 10-mark question should take 18 minutes maximum. Apply this ruthlessly. A student who spends 45 minutes on a 10-mark question and then rushes a 20-mark question has made a mechanical time error that no amount of knowledge can fix. Set a time budget before you start. Stick to it. Move on if you hit the limit — return only if time remains.</p>
+      <span class="badge bc">Time Rule</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PARTIAL MARKS TRICK 05</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M20 11a8 8 0 0 0-14.9-3.5M4 13a8 8 0 0 0 14.9 3.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 4v4h4M19 20v-4h-4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Three-Pass Strategy</div>
+      <div class="card-sec">How Toppers Work Through a Paper</div>
+      <p class="card-text"><strong style="color:var(--cream)">Pass 1 — Quick wins.</strong> Answer all questions you know confidently. Skip anything uncertain. This fills in easy marks without time pressure and builds momentum.<br/><br/><strong style="color:var(--cream)">Pass 2 — Partial credit.</strong> Return to uncertain questions. Apply the PEEL framework. Write what you know. Earn partial marks.<br/><br/><strong style="color:var(--cream)">Pass 3 — Review and fill.</strong> Check all answers for: is the key vocabulary present? Is the link back to the question explicit? Have you filled every blank? Adjust any answer where you can add a mark-earning point.</p>
+      <span class="badge ba">Exam Technique</span>
+    </div>
+    <div class="card">
+      <div class="card-num">PARTIAL MARKS TRICK 06</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 20V10M12 20V4M19 20v-7" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 20h18" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Diagrams Earn Marks Independently</div>
+      <div class="card-sec">The Visual Mark Strategy</div>
+      <p class="card-text">In sciences, geography, and technical subjects: a correctly labelled diagram earns marks whether or not your written explanation is complete. Many students underestimate this. A clear, labelled diagram alongside a partial written answer can earn significantly more than the written answer alone. Rule: whenever a topic permits a diagram — draw one. Label it clearly. Add a brief explanatory note. This creates multiple mark-earning points from a single topic — and examiners can award marks from diagrams that they may have missed in adjacent written text.</p>
+      <span class="badge bb">Science/Technical</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 04: EXAM ANXIETY ─── -->
+<section class="section section-alt" id="anxiety">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 04</div>
+    <div class="s-meta">
+      <div class="s-cat">Frontiers in Psychology · ScienceDirect 2025 · PMC Research</div>
+      <h2 class="s-title">How Toppers<br/>Manage <span>Exam Anxiety</span></h2>
+      <p class="s-desc">Exam anxiety is not psychological weakness — it is a physiological response. When anxiety spikes, the amygdala activates the fight-or-flight response: heart rate rises, breathing becomes shallow, blood flow redirects away from the prefrontal cortex (where exam thinking happens). Toppers don't feel less anxiety. They manage it faster and more deliberately.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">98.2%</span><span class="s-stat-l">of students show moderate-high anxiety before exams (University nursing study, PMC)</span></div>
+    <div class="s-stat"><span class="s-stat-n">60sec</span><span class="s-stat-l">box breathing reduces anxiety to baseline within 60–90 seconds (Frontiers in Psychology)</span></div>
+    <div class="s-stat"><span class="s-stat-n">Optimal</span><span class="s-stat-l">moderate anxiety improves performance; peak anxiety impairs it — the Yerkes-Dodson curve</span></div>
+    <div class="s-stat"><span class="s-stat-n">20min</span><span class="s-stat-l">physiological reset time after full amygdala hijack — you need the techniques before that</span></div>
+  </div>
+
+  <p style="font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:var(--gold);margin-bottom:16px">The Pre-Paper Protocol — 4 Steps Before You Open the Paper</p>
+  <div class="breath-steps">
+    <div class="breath-step">
+      <span class="breath-count">4</span>
+      <div class="breath-action">Inhale</div>
+      <p class="breath-desc">Breathe in through the nose for 4 full counts. Expand the belly — not the chest.</p>
+    </div>
+    <div class="breath-step">
+      <span class="breath-count">4</span>
+      <div class="breath-action">Hold</div>
+      <p class="breath-desc">Hold the breath for 4 counts. This activates parasympathetic response — the calm system.</p>
+    </div>
+    <div class="breath-step">
+      <span class="breath-count">4</span>
+      <div class="breath-action">Exhale</div>
+      <p class="breath-desc">Exhale fully through the mouth for 4 counts. This is the release signal to the nervous system.</p>
+    </div>
+    <div class="breath-step">
+      <span class="breath-count">4</span>
+      <div class="breath-action">Hold Empty</div>
+      <p class="breath-desc">Hold the empty lungs for 4 counts before inhaling again. Complete one full box cycle.</p>
+    </div>
+  </div>
+  <p style="font-size:13px;color:var(--muted);text-align:center;margin-top:-20px;margin-bottom:32px;font-family:'JetBrains Mono',monospace;letter-spacing:1.5px;font-size:10px">REPEAT FOR 4 FULL CYCLES · TOTAL TIME: 60–90 SECONDS · RESEARCH CONFIRMED: FRONTIERS IN PSYCHOLOGY 2022</p>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">ANXIETY TOOL 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8A3.5 3.5 0 0 0 8 18a3 3 0 0 0 3-2.5V6a2 2 0 0 0-2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 1 5.8A3.5 3.5 0 0 1 16 18a3 3 0 0 1-3-2.5V6a2 2 0 0 1 2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Reframe Anxiety as Excitement</div>
+      <div class="card-sec">The Harvard Alison Wood Brooks Reframe</div>
+      <p class="card-text">Harvard researcher Alison Wood Brooks (2014) found that simply saying "I am excited" instead of "I am anxious" before a high-stakes performance measurably improved outcomes. The physiological symptoms of anxiety and excitement are nearly identical — rapid heart rate, heightened alertness, activated nervous system. The only difference is the cognitive label. By reframing: "I'm not nervous, I'm ready" — you harness the same physiological activation as a performance enhancer rather than a performance impairment.</p>
+      <div class="scibox">
+        <div class="card-sec">🌿 Practice Phrase</div>
+        <p class="card-text">Before entering the exam hall: "I have prepared for this. My body is activated and ready. This feeling is fuel — not fear." Repeat three times. The repetition is not performative — it is neurological priming. What you say to yourself in the 5 minutes before an exam influences the neural state you enter it in.</p>
+      </div>
+      <span class="badge ba">Game Changer</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ANXIETY TOOL 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="7" y="3" width="10" height="18" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 18h2M4 4l16 16" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Night-Before Protocol</div>
+      <div class="card-sec">What Toppers Do the Evening Before</div>
+      <p class="card-text">SWTP research: "Heavy studying the night before increases anxiety without improving performance. Your knowledge won't meaningfully change in the final 12 hours." Instead of cramming, the night before should be: review 10–15 questions you've previously answered correctly (confidence-building, not knowledge-adding), light reading of summary notes only, a normal meal, no screens after 9PM, sleep by 10–10:30PM. The marginal knowledge gain from 3 hours of late-night cramming is outweighed by the performance loss from impaired sleep and elevated cortisol.</p>
+      <span class="badge ba">Evening Rule</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ANXIETY TOOL 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="1.4" fill="#c8943a"/></svg></span>
+      <div class="card-title">In-Paper Reset Protocol</div>
+      <div class="card-sec">When Panic Hits Mid-Exam</div>
+      <p class="card-text">If anxiety spikes during the exam — you blank on a question, see something unexpected, or feel the spiral starting:<br/><br/><strong style="color:var(--cream)">1.</strong> Put your pen down. Sit back slightly.<br/><strong style="color:var(--cream)">2.</strong> One cycle of box breathing (30 seconds).<br/><strong style="color:var(--cream)">3.</strong> Skip the triggering question. Move to the next one you know.<br/><strong style="color:var(--cream)">4.</strong> Answer one easy question fully — the small success releases dopamine and restores confidence.<br/><strong style="color:var(--cream)">5.</strong> Return to the difficult question with a reset nervous system.<br/><br/>SWTP: "Taking 30 seconds to reset won't hurt your time management and can prevent a much longer anxiety spiral."</p>
+      <span class="badge ba">Emergency Protocol</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ANXIETY SCIENCE</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="m4 16 5-5 4 3 7-8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 6h5v5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Yerkes-Dodson Curve — Optimal Arousal</div>
+      <div class="card-sec">Anxiety is Not the Enemy</div>
+      <p class="card-text">The Yerkes-Dodson Law (1908, validated repeatedly since): performance improves as arousal increases — but only to a point. Moderate anxiety sharpens focus, improves recall, and increases speed. Peak anxiety impairs all three. The goal is not to eliminate all exam anxiety — it is to stay in the optimal zone. Students who feel no anxiety often underperform through insufficient activation. Students who feel overwhelming anxiety underperform through cognitive overload. The protocols in this chapter keep you in the productive middle zone where your preparation is most accessible.</p>
+      <span class="badge bd">Science</span>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-head">✅ The Single Most Effective Anxiety Intervention</div>
+    <p class="tip-text">Guided breathing has been confirmed across multiple peer-reviewed studies (PMC, ScienceDirect 2025, Frontiers in Psychology) as one of the most reliably effective interventions for pre-exam anxiety. <strong>It works within 60–90 seconds. It is invisible to everyone around you. It requires no equipment and no prior training.</strong> The only requirement is that you actually do it — not think about doing it, not intend to do it, but actually do it before you open the paper. Students who use it consistently report both subjectively lower anxiety and measurably higher scores on performance assessments.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── 05: LAST-MILE MEMORY ─── -->
+<section class="section" id="memory">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 05</div>
+    <div class="s-meta">
+      <div class="s-cat">Spaced Repetition · Ebbinghaus · 48-Hour Final Window</div>
+      <h2 class="s-title">Last-Mile<br/><span>Memory</span></h2>
+      <p class="s-desc">The 48 hours before an exam is not for learning new content. It is for consolidating what you already know. Used correctly, this window can shift your accessible recall by 20–30%. Used incorrectly (cramming new content), it degrades what you already have. Here is the exact protocol.</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m7.5 12.5 3 3 6-6.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">What to Do in the 48 Hours Before</div>
+      <p class="col-text">
+        <strong>48 hours out:</strong> One complete active recall session of all high-priority topics. Blank page method — write everything you can recall without notes. Then check. This is your final gap identification session. Only re-study identified gaps, not full topics again.<br/><br/>
+        <strong>24 hours out:</strong> Review condensed notes only. No textbooks. Practice 10–15 mark-scheme-reviewed questions from past papers. Revisit any formulas, key terms, or diagrams that feel uncertain. Stop studying 2 hours before your planned sleep time.<br/><br/>
+        <strong>Morning of:</strong> Light review only — 20–30 minutes maximum. Read your one-page summary notes. Practise 2–3 questions you know well (confidence, not learning). Then stop. No new information.
+      </p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 5l14 14M19 5 5 19" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">What Destroys Your Memory the Night Before</div>
+      <p class="col-text">
+        <strong>Learning new topics for the first time.</strong> New information presented without prior context has almost no consolidation time before the exam. It creates interference with existing memories without adding reliable new ones.<br/><br/>
+        <strong>Cramming 6+ hours the night before.</strong> Cognitive fatigue impairs both encoding of last-minute material AND recall of previously learned content. You arrive at the exam depleted.<br/><br/>
+        <strong>Studying until midnight or beyond.</strong> Sleep is the brain's consolidation mechanism. Every hour of sleep lost in the night before an exam costs you more than an equivalent hour of additional studying gained. Sleep wins. Always.<br/><br/>
+        <strong>Passive re-reading of notes.</strong> Creates familiarity without retrieval strength. The night before is for active recall only.
+      </p>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">MEMORY TOOL 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M9 4v14M15 6v14" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The One-Page Summary Sheet</div>
+      <div class="card-sec">The Most Powerful Revision Tool</div>
+      <p class="card-text">For each subject, create one A4 page that contains: the 10 highest-priority topics, the key formula or concept for each, the key vocabulary terms, and 2–3 typical question types. This summary sheet is created during your main study phase (not the day before). It is reviewed — not re-created — in the final 48 hours. The process of making the sheet is itself a powerful active recall exercise. The result is a revision anchor that takes 15 minutes to review and surfaces the most important 80% of what you know.</p>
+      <span class="badge ba">Most Powerful Tool</span>
+    </div>
+    <div class="card">
+      <div class="card-num">MEMORY TOOL 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 15 15 9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 6.5 13 4.5a3.5 3.5 0 0 1 5 5l-2 2M13 17.5 11 19.5a3.5 3.5 0 0 1-5-5l2-2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Association Chains — For Hard-to-Remember Facts</div>
+      <div class="card-sec">Memory Science Applied</div>
+      <p class="card-text">The brain stores information associatively — connected to existing frameworks, not in isolation. Hard-to-remember facts become memorable when attached to something vivid, emotional, or spatially linked. Techniques: <strong style="color:var(--cream)">Mnemonics</strong> (first-letter sequences), <strong style="color:var(--cream)">Method of Loci</strong> (place facts in imagined locations on a route), <strong style="color:var(--cream)">Story chains</strong> (link sequential facts in a narrative), and <strong style="color:var(--cream)">Rhyme</strong> (the oldest human memory tool — still one of the most effective). The more vivid and emotional the association, the more durable the memory.</p>
+      <span class="badge bb">Memory Science</span>
+    </div>
+    <div class="card">
+      <div class="card-num">MEMORY TOOL 03</div>
+      <span class="card-icon">😴</span>
+      <div class="card-title">Sleep Wins — Every Time</div>
+      <div class="card-sec">The Research Is Unambiguous</div>
+      <p class="card-text">Matthew Walker's UC Berkeley research found that sleep-deprived students showed a 40% deficit in forming new memories compared to fully rested students. For exam performance specifically: the hippocampus replays and consolidates memories primarily during deep sleep stages 3–4. An all-nighter before an exam doesn't just fail to add knowledge — it actively disrupts the consolidation of everything learned in the weeks prior. The rule: sleep before exams consolidates weeks of learning. No study session in the final night is worth the consolidation you sacrifice. <strong style="color:var(--cream)">7–8 hours. Non-negotiable.</strong></p>
+      <span class="badge bc">Hard Rule</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 06: EXAM DAY SYSTEM ─── -->
+<section class="section section-alt" id="examday">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 06</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · From Wake-Up to Submission</div>
+      <h2 class="s-title">The Exam<br/><span>Day System</span></h2>
+      <p class="s-desc">Most students treat exam day as the result of preparation. Toppers treat exam day as a performance — with a deliberate pre-performance protocol that creates the optimal physical and mental state before they answer a single question. Here is the complete minute-by-minute system.</p>
+    </div>
+  </div>
+
+  <div class="exam-timeline">
+    <div class="et-item">
+      <div class="et-time"><div class="et-time-num">Wake Up<br/>2.5hrs Before</div></div>
+      <div class="et-body">
+        <div class="et-title">🌅 Wake & Hydrate — The Cortisol Window</div>
+        <p class="et-text">Wake up at least 2.5 hours before the exam starts. Your Cortisol Awakening Response (CAR) peaks 30–45 minutes after waking — this is your natural cognitive performance boost. Drink 500ml of water immediately. No phone for the first 30 minutes. Let the CAR do its work without interference.</p>
+      </div>
+    </div>
+    <div class="et-item">
+      <div class="et-time"><div class="et-time-num">T-minus<br/>2 Hours</div></div>
+      <div class="et-body">
+        <div class="et-title">🍳 Eat a Real Breakfast — Protein First</div>
+        <p class="et-text">A protein-rich breakfast (eggs, yogurt, lean meat) stabilises blood sugar and supports sustained cognitive function through the exam period. Avoid high-sugar foods that produce a spike and crash within 90 minutes — exactly when your exam is most critical. Avoid heavy, fatty foods that divert blood flow to digestion. Moderate, real food. Eat at least 90 minutes before the exam starts.</p>
+      </div>
+    </div>
+    <div class="et-item">
+      <div class="et-time"><div class="et-time-num">T-minus<br/>90 Minutes</div></div>
+      <div class="et-body">
+        <div class="et-title">📋 Light Review Only — Confidence, Not Learning</div>
+        <p class="et-text">20–30 minutes maximum. Read your one-page summary sheet. Review 5 questions you've previously answered correctly. The goal is not adding knowledge — it is activating existing knowledge. You are priming the retrieval pathways, not filling them for the first time.</p>
+      </div>
+    </div>
+    <div class="et-item">
+      <div class="et-time"><div class="et-time-num">T-minus<br/>30 Minutes</div></div>
+      <div class="et-body">
+        <div class="et-title">📵 Close the Books. Stop Studying. Completely.</div>
+        <p class="et-text">30 minutes before the exam: stop all study. Any new information encountered at this stage creates anxiety without adding accessible knowledge. Last-minute reading of unfamiliar topics replaces confident recall with panicked uncertainty. Use this 30 minutes for light physical movement (a walk), hydration, and the pre-paper breathing protocol from Chapter 04. Arrive calm and ready — not cramming on the way in.</p>
+      </div>
+    </div>
+    <div class="et-item">
+      <div class="et-time"><div class="et-time-num">T-minus<br/>20 Minutes</div></div>
+      <div class="et-body">
+        <div class="et-title">🚶 Arrive Early — Strategic, Not Anxious</div>
+        <p class="et-text">SWTP research: "Arrive 20–25 minutes before your scheduled time. Use the drive to listen to music that helps you feel calm and focused — not to mentally quiz yourself or worry about what might be on the exam." Arriving rushed creates panic. Arriving too early and sitting in anticipation creates anxiety. 20 minutes is the optimal window: enough to settle, not enough to spiral.</p>
+      </div>
+    </div>
+    <div class="et-item">
+      <div class="et-time"><div class="et-time-num">Before<br/>Opening</div></div>
+      <div class="et-body">
+        <div class="et-title">🔲 Box Breathing Protocol — 4 Full Cycles</div>
+        <p class="et-text">Before you open the paper: 4 full cycles of box breathing (4-4-4-4). This takes 60–90 seconds. It activates the parasympathetic nervous system, lowers cortisol, and returns blood flow to the prefrontal cortex where exam thinking happens. This is not optional. This is your performance warm-up. Athletes do it. Surgeons do it. Toppers do it.</p>
+      </div>
+    </div>
+    <div class="et-item">
+      <div class="et-time"><div class="et-time-num">First<br/>5 Minutes</div></div>
+      <div class="et-body">
+        <div class="et-title">👁️ Read the Whole Paper First — Before Writing Anything</div>
+        <p class="et-text">Spend the first 5 minutes reading the entire paper before answering anything. This: identifies the questions you know best (start there), reveals the relative mark allocations (time budget), surfaces any unexpected topics (so there are no mid-exam surprises), and allows your subconscious to begin working on harder questions while you answer easier ones. This 5-minute investment consistently earns significantly more than the same 5 minutes spent rushing to answer Question 1 immediately.</p>
+      </div>
+    </div>
+    <div class="et-item">
+      <div class="et-time"><div class="et-time-num">Final<br/>10 Minutes</div></div>
+      <div class="et-body">
+        <div class="et-title">✅ The Final Review — Three Checks</div>
+        <p class="et-text">Reserve 10 minutes at the end for a systematic final review: (1) Have you answered every question? (2) For each answer: is the PEEL structure present? Is the key vocabulary there? Is the link to the question explicit? (3) Are all blanks filled — even partially? A 10-minute final review consistently recovers 3–5 marks per exam through small additions, corrections, and completions. It is the highest mark-per-minute activity available in the final moments.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 07: TOPPER MINDSET ─── -->
+<section class="section" id="mindset">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 07</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · Growth Mindset · Carol Dweck · Performance Psychology</div>
+      <h2 class="s-title">The <span>Topper</span><br/>Mindset</h2>
+      <p class="s-desc">Toppers are not born with better brains. They hold fundamentally different beliefs about marks, mistakes, preparation, and their own capacity to improve. These beliefs — all of which can be adopted deliberately — change how they study, respond to setbacks, and perform under pressure.</p>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">TOPPER BELIEF 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 3v7.5L5.5 17a2 2 0 0 0 1.8 3h9.4a2 2 0 0 0 1.8-3L15 10.5V3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 3h6M6.5 15h11" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Mistakes Are Data — Not Verdicts</div>
+      <p class="card-text">The single most important mindset difference between toppers and average students is how they treat mistakes. Average students feel shame and avoid confronting errors — which means they never fix them. Toppers treat every incorrect answer as information: "What didn't I know? What pattern did I miss? What do I need to do differently?" Geniebook research: "We encourage thinking of exam setbacks as data points on the road to mastery, not as judgments of worth." This reframe removes the emotional cost of being wrong and replaces it with the practical benefit of knowing exactly where to improve.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 Carol Dweck's Research</div>
+        <p class="card-text">Students with growth mindsets (intelligence is developable) consistently outperform those with fixed mindsets (intelligence is fixed) — especially after setbacks. The setback that makes a fixed-mindset student give up is the same event that makes a growth-mindset student study harder. The belief determines the trajectory — not the intelligence level.</p>
+      </div>
+      <span class="badge ba">Core Mindset</span>
+    </div>
+    <div class="card">
+      <div class="card-num">TOPPER BELIEF 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 20V10M12 20V4M19 20v-7" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 20h18" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Track Everything — Improve Specifically</div>
+      <p class="card-text">Toppers track their mock test scores, their error patterns, and their mark-per-topic performance over time. This is not obsession — it is intelligence. You cannot improve what you don't measure. After every practice test: which topics produced which scores? Which types of questions (calculation, explanation, application) are weakest? Is the weakness in content knowledge or in presentation? Each answer points to a specific, fixable action. Vague "I need to study more" produces vague results. Specific "I lose marks on 6-mark explanations in Chapter 3 because I skip the application step" produces specific improvement.</p>
+      <span class="badge ba">System</span>
+    </div>
+    <div class="card">
+      <div class="card-num">TOPPER BELIEF 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="1.4" fill="#c8943a"/></svg></span>
+      <div class="card-title">Process Over Result</div>
+      <p class="card-text">Toppers focus on the process — the quality of their study session, the accuracy of their practice answers, the consistency of their revision schedule — rather than the result. This is not indifference to results. It is the understanding that results are the lagging indicator of process quality. "I will do 3 timed past paper questions from Chapter 4 today" is a process goal. "I will score 90%" is a result goal. Process goals are within your daily control. Result goals are not. By optimising the process consistently, the results emerge naturally.</p>
+      <span class="badge bd">Philosophy</span>
+    </div>
+    <div class="card">
+      <div class="card-num">TOPPER BELIEF 04</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M13 2 4 14h6l-1 8 9-12h-6z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Confidence is a Practice — Not a Feeling</div>
+      <p class="card-text">Confidence before an exam is not a feeling that arrives spontaneously. It is the output of a deliberate preparation process: past papers completed, mark schemes studied, gaps identified and closed, summary notes built, timed practices attempted. Students who feel unconfident before exams are almost always students who have been studying without a system — lots of reading, minimal structured practice. The protocol in this guide produces confidence as a by-product — because you arrive at the exam having simulated it repeatedly, under conditions close enough to the real thing to know you can navigate it.</p>
+      <span class="badge ba">Built, Not Found</span>
+    </div>
+    <div class="card">
+      <div class="card-num">TOPPER BELIEF 05</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M20 11a8 8 0 0 0-14.9-3.5M4 13a8 8 0 0 0 14.9 3.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 4v4h4M19 20v-4h-4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Every Mock Is a Diagnostic — Not a Rehearsal</div>
+      <p class="card-text">Most students take mock tests to practice "what it feels like." Toppers take mock tests to find out exactly what they don't know. The difference: after a mock, a topper spends more time analysing it than they spent taking it. Which questions were wrong? Why were they wrong? Content gap or presentation gap? Which topics appear weakest? This analysis, applied consistently, is the most reliable driver of score improvement available — and it is almost entirely neglected by average students who move on to the next mock without mining the last one.</p>
+      <span class="badge ba">Highest ROI</span>
+    </div>
+    <div class="card">
+      <div class="card-num">TOPPER BELIEF 06</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Recovery Is Part of the System</div>
+      <p class="card-text">Sustainable exam performance requires recovery cycles — not just study cycles. Toppers schedule rest deliberately. They protect sleep. They take real breaks. They do not treat exhaustion as a badge of effort. Research on cognitive performance confirms that output quality per hour drops sharply after 4–5 hours of demanding study — and that short breaks (10–15 minutes every hour) produce more total learning per session than marathon 6-hour blocks. The topper who studies 4 focused hours outperforms the average student who studies 10 depleted ones. Effort is not the metric. Effective hours are the metric.</p>
+      <span class="badge bb">Sustainability</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 3 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"The secret of toppers is not that they study more. It is that they study with <em>purpose, system, and the discipline to fix what's actually wrong</em> — rather than study what's already right."</p>
+  <p class="quote-attr">— Studyinghead.com · Academic Performance Research Compilation · 2025</p>
+</div>
+
+<!-- ─── 08: MASTER CHEATSHEET ─── -->
+<section class="section" id="cheatsheet">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 08</div>
+    <div class="s-meta">
+      <div class="s-cat">Quick Reference</div>
+      <h2 class="s-title">The Master<br/><span>Cheatsheet</span></h2>
+      <p class="s-desc">Every strategy from this guide — one quick-reference table. Print it. Build it into your study system. Use it before every exam cycle.</p>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Strategy</th><th>The Action</th><th>Chapter</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td class="num-cell">01</td><td class="name-cell">Identify the 20%</td><td>Analyse 5–10 years of past papers. Rank topics by (frequency × marks). Study in that order.</td><td>80/20</td><td><span class="badge ba">First Step</span></td></tr>
+        <tr><td class="num-cell">02</td><td class="name-cell">Teacher Emphasis Signal</td><td>Every time a teacher says "this is important" — document it. It is your 20% being given to you.</td><td>80/20</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">03</td><td class="name-cell">80/20 Time Split</td><td>80% of study time on top 20% topics. 20% of time on remaining syllabus. Non-negotiable.</td><td>80/20</td><td><span class="badge ba">Time System</span></td></tr>
+        <tr><td class="num-cell">04</td><td class="name-cell">80/20 Warning</td><td>This is prioritisation, not syllabus reduction. Cover everything — just study the 20% better.</td><td>80/20</td><td><span class="badge bc">Critical</span></td></tr>
+        <tr><td class="num-cell">05</td><td class="name-cell">Past Paper Collection</td><td>Collect 5–10 years of papers for every subject. Analyse all of them — not just the last one.</td><td>Past Papers</td><td><span class="badge ba">Non-Negotiable</span></td></tr>
+        <tr><td class="num-cell">06</td><td class="name-cell">Topic Frequency Tally</td><td>Map every question to its chapter. Count frequency across all years. Rank by (frequency × marks).</td><td>Past Papers</td><td><span class="badge ba">Analysis Tool</span></td></tr>
+        <tr><td class="num-cell">07</td><td class="name-cell">Overdue Topics</td><td>Which high-frequency topics haven't appeared in 2+ years? These are "due." Flag and prioritise.</td><td>Past Papers</td><td><span class="badge ba">Prediction</span></td></tr>
+        <tr><td class="num-cell">08</td><td class="name-cell">Study the Mark Scheme</td><td>Read the official mark scheme for every past paper question. Know exactly what earns marks.</td><td>Past Papers</td><td><span class="badge ba">Highest ROI</span></td></tr>
+        <tr><td class="num-cell">09</td><td class="name-cell">Timed Past Papers</td><td>Every past paper in final 4 weeks: strict exam conditions. No notes, no phone, exact time limit.</td><td>Past Papers</td><td><span class="badge bc">Non-Negotiable</span></td></tr>
+        <tr><td class="num-cell">10</td><td class="name-cell">PEEL Answer Structure</td><td>Point → Evidence/Explanation → Example → Link Back. For every structured answer above 3 marks.</td><td>Answers</td><td><span class="badge ba">Always Use</span></td></tr>
+        <tr><td class="num-cell">11</td><td class="name-cell">Never Leave Blank</td><td>Write something for every question — even if partial. Blanks score zero. Attempts score more.</td><td>Answers</td><td><span class="badge ba">Hard Rule</span></td></tr>
+        <tr><td class="num-cell">12</td><td class="name-cell">Key Vocabulary per Topic</td><td>For each priority topic, learn the 5–8 key terms examiners look for. Embed in every answer.</td><td>Answers</td><td><span class="badge ba">Mark Earning</span></td></tr>
+        <tr><td class="num-cell">13</td><td class="name-cell">Structured Presentation</td><td>Numbered points for multi-mark questions. Clear paragraphs for essays. Never a wall of text.</td><td>Answers</td><td><span class="badge ba">Presentation</span></td></tr>
+        <tr><td class="num-cell">14</td><td class="name-cell">Marks Per Minute</td><td>Total time ÷ total marks = time per mark. Set a time budget per question. Stick to it. Move on.</td><td>Answers</td><td><span class="badge bc">Time Rule</span></td></tr>
+        <tr><td class="num-cell">15</td><td class="name-cell">Three-Pass Strategy</td><td>Pass 1: easy questions. Pass 2: uncertain questions. Pass 3: review and fill all remaining marks.</td><td>Answers</td><td><span class="badge ba">Exam Technique</span></td></tr>
+        <tr><td class="num-cell">16</td><td class="name-cell">Box Breathing — 4 Cycles</td><td>4-4-4-4 box breathing before the paper. Repeat mid-paper if anxiety spikes.</td><td>Anxiety</td><td><span class="badge ba">Non-Negotiable</span></td></tr>
+        <tr><td class="num-cell">17</td><td class="name-cell">Reframe: Excited Not Anxious</td><td>"I'm not nervous, I'm ready." Say it 3× before entering the hall. Neurological priming is real.</td><td>Anxiety</td><td><span class="badge ba">Pre-Paper</span></td></tr>
+        <tr><td class="num-cell">18</td><td class="name-cell">Night-Before Protocol</td><td>Review 10–15 questions you know. Summary notes only. No new topics. Stop studying 2hrs before sleep.</td><td>Anxiety</td><td><span class="badge ba">Evening Rule</span></td></tr>
+        <tr><td class="num-cell">19</td><td class="name-cell">In-Paper Reset</td><td>Blank out? Pen down. One box breath. Skip to easy question. Answer it. Return to hard question.</td><td>Anxiety</td><td><span class="badge ba">Emergency</span></td></tr>
+        <tr><td class="num-cell">20</td><td class="name-cell">One-Page Summary Sheet</td><td">Per subject: top 10 topics, key concept, key vocabulary, typical question types. Review — don't recreate.</td><td>Memory</td><td><span class="badge ba">Best Tool</span></td></tr>
+        <tr><td class="num-cell">21</td><td class="name-cell">Active Recall Only — Night Before</td><td>No passive reading. Blank page recall of top topics, then check. Active recall only in final 48 hours.</td><td>Memory</td><td><span class="badge ba">Rule</span></td></tr>
+        <tr><td class="num-cell">22</td><td class="name-cell">Sleep — Non-Negotiable</td><td>7–8 hours the night before. Sleep consolidates weeks of learning. No study session is worth it.</td><td>Memory</td><td><span class="badge bc">Hard Rule</span></td></tr>
+        <tr><td class="num-cell">23</td><td class="name-cell">Wake 2.5hrs Before Exam</td><td>CAR peaks 30–45 minutes after waking. You need it active before you sit down to the paper.</td><td>Exam Day</td><td><span class="badge ba">Timing</span></td></tr>
+        <tr><td class="num-cell">24</td><td class="name-cell">Read the Whole Paper First</td><td">Spend first 5 minutes reading every question before answering anything. Start with easiest.</td><td>Exam Day</td><td><span class="badge ba">Critical First Move</span></td></tr>
+        <tr><td class="num-cell">25</td><td class="name-cell">Final 10-Minute Review</td><td>Reserve last 10 minutes: every answer present? Key vocabulary? Link to question? Blanks filled?</td><td>Exam Day</td><td><span class="badge ba">Mark Recovery</span></td></tr>
+        <tr><td class="num-cell">26</td><td class="name-cell">Mistakes = Data</td><td>Every wrong answer is a fixable gap. Treat it as information — not as a judgment on your ability.</td><td>Mindset</td><td><span class="badge bd">Core Belief</span></td></tr>
+        <tr><td class="num-cell">27</td><td class="name-cell">Mine Every Mock</td><td>After every mock: spend more time analysing it than you spent taking it. Find the specific error pattern.</td><td>Mindset</td><td><span class="badge ba">Highest ROI</span></td></tr>
+        <tr><td class="num-cell">28</td><td class="name-cell">Process Over Result Goals</td><td>"I will do 3 timed questions from Chapter 4 today" beats "I will score 90%." Control the input.</td><td>Mindset</td><td><span class="badge bd">Philosophy</span></td></tr>
+        <tr><td class="num-cell">29</td><td class="name-cell">Recovery Is Part of the System</td><td>10–15 min breaks per hour. 7–8 hrs sleep. 4 focused study hours beats 10 depleted ones.</td><td>Mindset</td><td><span class="badge bb">Sustainability</span></td></tr>
+        <tr><td class="num-cell">30</td><td class="name-cell">Confidence Formula</td><td>Confidence = past papers completed + mark schemes studied + gaps closed + timed practice done.</td><td>Mindset</td><td><span class="badge ba">Built Not Found</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</section>
+
+<footer>
+  <div class="footer-logo">Score Higher Without Studying More</div>
+  <p class="footer-sub">Academics · Exam Strategy · Performance Science · 2025–2026 Edition</p>
+  <p class="footer-sub" style="color:var(--muted);font-size:13px;margin-top:8px">8 Complete Chapters · 30 Core Strategies · Research from Pareto, University of York, Narayana Coaching, Frontiers in Psychology, ScienceDirect 2025, PMC, SWTP, Carol Dweck & Matthew Walker</p>
+  <p class="footer-tiny">Research compiled May 2026 · Inspired by Parallelogram · Built for every student who works hard and deserves to score higher</p>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:rgba(200,148,58,.28);margin-top:36px">"It's not about studying more — it's about knowing what actually earns marks, and doing exactly that."</p>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const st=document.documentElement.scrollTop;
+  const sh=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('prog').style.width=(st/sh*100)+'%';
+});
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}});
+},{threshold:0.07});
+document.querySelectorAll('.card,.col-card,.s-stat,.pp-cell,.ans-row,.breath-step,.et-item').forEach(el=>{
+  el.style.opacity='0';el.style.transform='translateY(18px)';
+  el.style.transition='opacity .5s ease, transform .5s ease';
+  obs.observe(el);
+});
+</script>
+</body>
+</html>

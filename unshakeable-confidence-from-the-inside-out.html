@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Unshakeable Confidence — Parallelogram</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&family=JetBrains+Mono:wght@300;400;500;700&family=Outfit:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#05060a;--bg2:#080a0f;--surface:#0c0e14;--card:#121520;--card2:#161a24;--card3:#1a1f2c;
+  --gold:#c8943a;--gold2:#e8b84b;--gold-dim:rgba(200,148,58,.11);--gold-glow:rgba(200,148,58,.05);
+  --gold-line:rgba(200,148,58,.18);--gold-line2:rgba(200,148,58,.08);
+  --cream:#f0e8d5;--cream2:#d8cfbc;--light:#8a8e9a;--muted:#4a4d58;
+  --rust:#a83428;--teal:#1e6b5a;--ease:cubic-bezier(.2,0,.1,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{font-family:"Outfit",sans-serif;background:var(--bg);color:var(--cream);overflow-x:hidden;line-height:1.65;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.032'/%3E%3C/svg%3E");pointer-events:none;z-index:9998;opacity:.5}
+#prog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),var(--gold2),transparent);width:0%;z-index:9999;box-shadow:0 0 12px rgba(200,148,58,.5);transition:width .1s linear}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 64px;height:64px;background:rgba(5,6,10,.9);backdrop-filter:blur(28px) saturate(1.8);border-bottom:1px solid var(--gold-line2)}
+.nav-logo{font-family:"Cormorant Garamond",serif;font-size:15px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:10px}
+.nav-logo::before{content:"";width:6px;height:6px;background:var(--gold);border-radius:50%;box-shadow:0 0 8px var(--gold)}
+.nav-links{display:flex;list-style:none}
+.nav-links a{font-family:"JetBrains Mono",monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:0 11px;line-height:64px;display:block;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+@media(max-width:900px){nav{padding:0 20px}.nav-links{display:none}}
+@media(max-width:600px){.cover,.section,.toc-wrap,.quote-wrap,.about-s,footer{padding-left:20px!important;padding-right:20px!important}}
+/* COVER */
+.cover{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:110px 64px 72px;position:relative;overflow:hidden}
+.cover-bg{position:absolute;inset:0;background:radial-gradient(ellipse 90% 70% at 100% 0%,rgba(200,148,58,.08) 0%,transparent 55%),radial-gradient(ellipse 60% 80% at 0% 100%,rgba(18,21,42,.9) 0%,transparent 65%);pointer-events:none}
+.cover-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(200,148,58,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(200,148,58,.022) 1px,transparent 1px);background-size:80px 80px;pointer-events:none}
+.cover-inner{position:relative;max-width:1100px;display:grid;grid-template-columns:1fr auto;gap:72px;align-items:center}
+@media(max-width:900px){.cover-inner{grid-template-columns:1fr}.cvspiral{display:none}}
+.cover-brand{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:32px;display:flex;align-items:center;gap:14px;opacity:0;animation:fadeUp .7s .1s var(--ease) forwards}
+.cover-brand::before{content:"";width:36px;height:1px;background:var(--gold)}
+.cover-brand span{background:var(--gold-dim);border:1px solid var(--gold-line);padding:4px 11px;border-radius:2px;color:var(--gold2);font-size:8px}
+.cover-h1{font-family:"Cormorant Garamond",serif;font-size:clamp(50px,8vw,114px);font-weight:700;line-height:.84;letter-spacing:-4px;opacity:0;animation:fadeUp .9s .25s var(--ease) forwards}
+.cover-h1 .g{color:var(--gold);font-style:italic}
+.cover-h1 .d{display:block;font-size:clamp(20px,3.5vw,44px);font-weight:300;letter-spacing:-1px;color:rgba(240,232,213,.15);font-style:italic;margin-top:12px;line-height:1}
+.cover-desc{font-size:clamp(14px,1.8vw,17px);font-weight:300;color:var(--light);line-height:1.78;max-width:520px;margin:34px 0 50px;opacity:0;animation:fadeUp .9s .4s var(--ease) forwards}
+.cover-desc strong{color:var(--cream);font-weight:500}
+.cover-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--gold-line);opacity:0;animation:fadeUp .9s .55s var(--ease) forwards}
+@media(max-width:700px){.cover-stats{grid-template-columns:repeat(2,1fr)}}
+.cstat{padding:20px 14px;border-right:1px solid var(--gold-line);text-align:center;transition:background .3s}
+.cstat:last-child{border-right:none}
+.cstat:hover{background:var(--gold-glow)}
+.cstat-n{font-family:"Cormorant Garamond",serif;font-size:clamp(28px,4.5vw,44px);font-weight:700;color:var(--gold2);line-height:1;display:block;margin-bottom:5px}
+.cstat-l{font-family:"JetBrains Mono",monospace;font-size:7.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);line-height:1.45}
+.cover-scroll{margin-top:40px;display:flex;align-items:center;gap:12px;font-family:"JetBrains Mono",monospace;font-size:8.5px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;opacity:0;animation:fadeUp .8s .8s var(--ease) forwards}
+.cover-scroll::before{content:"";width:36px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
+/* TOC */
+.toc-wrap{background:var(--surface);border-top:1px solid var(--gold-line2);border-bottom:1px solid var(--gold-line2);padding:60px 64px}
+.toc-inner{max-width:1100px;margin:0 auto}
+.toc-hdr{display:flex;align-items:center;gap:16px;margin-bottom:36px}
+.toc-hdr-t{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);flex-shrink:0}
+.toc-hdr::after{content:"";flex:1;height:1px;background:var(--gold-line2)}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(245px,1fr));gap:1px;background:var(--gold-line2)}
+.toc-item{background:var(--card);padding:20px 22px;display:flex;align-items:flex-start;gap:14px;text-decoration:none;transition:background .2s;position:relative;overflow:hidden}
+.toc-item::after{content:"";position:absolute;bottom:0;left:0;width:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .3s var(--ease)}
+.toc-item:hover{background:var(--card2)}
+.toc-item:hover::after{width:100%}
+.tn{font-family:"Cormorant Garamond",serif;font-size:24px;font-weight:700;color:var(--gold);opacity:.2;line-height:1;flex-shrink:0;margin-top:-1px}
+.tt{font-size:13px;font-weight:500;color:var(--cream2);line-height:1.4;transition:color .2s}
+.toc-item:hover .tt{color:var(--cream)}
+.ts{font-family:"JetBrains Mono",monospace;font-size:7.5px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-top:4px}
+/* SECTION */
+.section{padding:104px 64px;position:relative}
+.section-alt{background:var(--surface)}
+.si{max-width:1100px;margin:0 auto}
+/* Chapter head */
+.ch-head{display:grid;grid-template-columns:1fr auto;gap:52px;align-items:start;padding-bottom:48px;border-bottom:1px solid var(--gold-line2);margin-bottom:64px;position:relative}
+@media(max-width:768px){.ch-head{grid-template-columns:1fr}.ch-aside{display:none}}
+.ch-head::before{content:attr(data-n);position:absolute;right:0;top:-22px;font-family:"Cormorant Garamond",serif;font-size:clamp(88px,14vw,165px);font-weight:700;color:var(--gold);opacity:.028;line-height:1;pointer-events:none;letter-spacing:-8px}
+.ch-n{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;opacity:.6}
+.ch-cat{display:inline-flex;align-items:center;gap:7px;font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:2.5px;text-transform:uppercase;color:var(--rust);margin-bottom:16px}
+.ch-cat::before{content:"";width:4px;height:4px;background:var(--rust);border-radius:50%}
+.ch-title{font-family:"Cormorant Garamond",serif;font-size:clamp(34px,5.5vw,65px);font-weight:700;line-height:.88;letter-spacing:-2px;color:var(--cream);margin-bottom:16px}
+.ch-title .g{color:var(--gold);font-style:italic}
+.ch-desc{font-size:15px;font-weight:300;color:var(--light);line-height:1.78;max-width:570px}
+.ch-aside{display:flex;flex-direction:column;align-items:center;gap:10px;flex-shrink:0;padding-top:4px}
+.ch-aside-l{font-family:"JetBrains Mono",monospace;font-size:7.5px;letter-spacing:2.5px;color:var(--muted);text-transform:uppercase;text-align:center;max-width:110px;line-height:1.5}
+/* Stat band */
+.stat-band{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1px;background:var(--gold-line2);margin:48px 0}
+.ss{background:var(--card);padding:24px 20px;position:relative;overflow:hidden;transition:background .2s}
+.ss:hover{background:var(--card2)}
+.ss::before{content:"";position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity .3s}
+.ss:hover::before{opacity:.5}
+.ss-n{font-family:"Cormorant Garamond",serif;font-size:clamp(32px,4.8vw,48px);font-weight:700;color:var(--gold);line-height:1;display:block;margin-bottom:7px}
+.ss-l{font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;line-height:1.5}
+/* Cards */
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1px;background:var(--gold-line2)}
+@media(max-width:600px){.cg{grid-template-columns:1fr}}
+.card{background:var(--card);padding:32px;position:relative;overflow:hidden;transition:background .25s}
+.card:hover{background:var(--card2)}
+.card::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,var(--gold-glow) 0%,transparent 50%);opacity:0;transition:opacity .3s}
+.card:hover::before{opacity:1}
+.card-bar{position:absolute;top:0;left:0;width:2px;height:0;background:linear-gradient(180deg,var(--gold2),var(--gold),transparent);transition:height .4s var(--ease)}
+.card:hover .card-bar{height:100%}
+.card-tag{font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:3px;color:var(--gold);opacity:.48;text-transform:uppercase;margin-bottom:14px;display:block}
+.card-title{font-family:"Cormorant Garamond",serif;font-size:20px;font-weight:700;color:var(--cream);letter-spacing:-.4px;margin-bottom:12px;line-height:1.15}
+.card-body{font-size:13.5px;font-weight:300;color:var(--light);line-height:1.75}
+.card-body strong{color:var(--cream2);font-weight:500}
+.ci{background:var(--gold-glow);border-left:2px solid var(--gold);padding:13px 17px;margin-top:16px}
+.ci-l{font-family:"JetBrains Mono",monospace;font-size:7.5px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:7px;display:block;opacity:.65}
+.ci-b{font-size:12.5px;font-weight:300;color:var(--light);line-height:1.62}
+/* badges */
+.badge{display:inline-flex;align-items:center;padding:4px 11px;font-family:"JetBrains Mono",monospace;font-size:7.5px;letter-spacing:2px;text-transform:uppercase;border-radius:2px;margin-top:14px}
+.bg{background:var(--gold-dim);color:var(--gold);border:1px solid var(--gold-line)}
+.bt{background:rgba(30,107,90,.12);color:#4aaa9e;border:1px solid rgba(44,122,114,.3)}
+.br{background:rgba(168,52,40,.12);color:#d46040;border:1px solid rgba(184,69,50,.28)}
+/* Two col */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--gold-line2)}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}}
+.cp{background:var(--card);padding:36px;transition:background .2s}
+.cp:hover{background:var(--card2)}
+.cp-icon{font-size:26px;margin-bottom:14px;display:block}
+.cp-h{font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:12px;letter-spacing:-.3px}
+.cp-b{font-size:13.5px;font-weight:300;color:var(--light);line-height:1.78}
+.cp-b strong{color:var(--cream2);font-weight:500}
+/* Quote */
+.quote-wrap{background:var(--surface);border-top:1px solid var(--gold-line2);border-bottom:1px solid var(--gold-line2);padding:84px 64px;position:relative;overflow:hidden;text-align:center}
+.quote-wrap::before{content:"\201C";position:absolute;top:-28px;left:50%;transform:translateX(-50%);font-family:"Cormorant Garamond",serif;font-size:230px;font-weight:700;color:var(--gold);opacity:.034;line-height:1;pointer-events:none;user-select:none}
+.qi{max-width:860px;margin:0 auto;position:relative}
+.qt{font-family:"Cormorant Garamond",serif;font-size:clamp(20px,3.2vw,35px);font-weight:400;font-style:italic;color:var(--cream);line-height:1.36;margin-bottom:26px}
+.qt em{color:var(--gold);font-style:normal;font-weight:600}
+.ql{width:52px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 17px}
+.qa{font-family:"JetBrains Mono",monospace;font-size:8.5px;letter-spacing:2.5px;color:var(--muted);text-transform:uppercase;line-height:1.7}
+/* Protocol */
+.protocol{display:flex;flex-direction:column;gap:1px;background:var(--gold-line2);margin:48px 0}
+.ps{display:grid;grid-template-columns:74px 1fr;gap:0;background:var(--card);transition:background .2s}
+.ps:hover{background:var(--card2)}
+.pm{background:var(--gold-glow);border-right:1px solid var(--gold-line2);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 12px;gap:5px}
+.pn{font-family:"Cormorant Garamond",serif;font-size:28px;font-weight:700;color:var(--gold);line-height:1}
+.pi{font-size:14px;opacity:.55}
+.pb{padding:20px 24px}
+.pt{font-weight:600;color:var(--cream);font-size:14px;margin-bottom:5px}
+.pp{font-size:13px;font-weight:300;color:var(--light);line-height:1.65}
+.pq{font-size:12.5px;color:var(--gold);font-style:italic;margin-top:8px;padding:9px 13px;background:var(--gold-glow);border-left:2px solid rgba(200,148,58,.35);line-height:1.5;display:block}
+/* BL grid */
+.bl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1px;background:var(--gold-line2);margin:48px 0}
+.bl{background:var(--card);padding:27px;position:relative;transition:background .2s}
+.bl:hover{background:var(--card2)}
+.bl-tag{font-family:"JetBrains Mono",monospace;font-size:7.5px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;opacity:.48;margin-bottom:8px;display:block}
+.bl-title{font-family:"Cormorant Garamond",serif;font-size:20px;font-weight:700;color:var(--cream);margin-bottom:8px;letter-spacing:-.2px}
+.bl-body{font-size:13px;font-weight:300;color:var(--light);line-height:1.66;margin-bottom:10px}
+.bl-rule{font-size:11.5px;color:var(--muted);padding:8px 12px;background:rgba(200,148,58,.04);border-left:1px solid rgba(200,148,58,.25);line-height:1.55;font-style:italic}
+/* Critic compare */
+.cc{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--gold-line2);margin:48px 0}
+@media(max-width:640px){.cc{grid-template-columns:1fr}}
+.cp2{background:var(--card);padding:32px}
+.cc-h{font-family:"JetBrains Mono",monospace;font-size:8.5px;letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--gold-line2)}
+.cc-h.bad{color:#d46040}
+.cc-h.good{color:#4aaa9e}
+.cc-row{display:flex;gap:10px;margin-bottom:12px;font-size:13px;color:var(--light);line-height:1.6;font-weight:300;align-items:flex-start}
+.cdot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:6px}
+.cdot.bad{background:#d46040;opacity:.55}
+.cdot.good{background:#4aaa9e;opacity:.55}
+/* Evidence grid */
+.ev-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1px;background:var(--gold-line2);margin:48px 0}
+.ev{background:var(--card);padding:28px;position:relative;overflow:hidden;transition:background .2s}
+.ev:hover{background:var(--card2)}
+.ev-wm{position:absolute;bottom:-8px;right:-4px;font-family:"Cormorant Garamond",serif;font-size:85px;font-weight:700;color:var(--gold);opacity:.05;line-height:1;pointer-events:none;user-select:none}
+.ev-tag{font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:7px;display:block;opacity:.55}
+.ev-title{font-family:"Cormorant Garamond",serif;font-size:20px;font-weight:700;color:var(--cream);margin-bottom:10px;letter-spacing:-.2px;line-height:1.1}
+.ev-body{font-size:13px;font-weight:300;color:var(--light);line-height:1.68}
+/* Social list */
+.sl{display:flex;flex-direction:column;gap:1px;background:var(--gold-line2);margin:48px 0}
+.sr{background:var(--card);display:grid;grid-template-columns:1fr auto;gap:20px;align-items:start;padding:26px 28px;transition:background .2s}
+.sr:hover{background:var(--card2)}
+.sr-t{font-weight:600;color:var(--cream);font-size:14px;margin-bottom:5px}
+.sr-b{font-size:13px;font-weight:300;color:var(--light);line-height:1.65}
+/* Infobox */
+.ib{padding:20px 24px;margin:24px 0}
+.ib-tip{background:rgba(30,107,90,.07);border:1px solid rgba(44,122,114,.2)}
+.ib-gold{background:var(--gold-glow);border:1px solid var(--gold-line)}
+.ib-h{font-family:"JetBrains Mono",monospace;font-size:8.5px;letter-spacing:3px;text-transform:uppercase;margin-bottom:9px;display:flex;align-items:center;gap:7px}
+.ib-tip .ib-h{color:#4aaa9e}
+.ib-gold .ib-h{color:var(--gold)}
+.ib-b{font-size:13px;font-weight:300;color:var(--light);line-height:1.72}
+.ib-b strong{color:var(--cream);font-weight:500}
+/* ============ WORKSHEET ============ */
+.ws{background:var(--card3);border:1px solid var(--gold-line);padding:34px;margin:48px 0;position:relative;overflow:hidden}
+.ws::before{content:"";position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2),transparent)}
+.ws-hdr{display:flex;align-items:center;gap:13px;margin-bottom:6px}
+.ws-ico{font-size:20px}
+.ws-title{font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:700;color:var(--cream);letter-spacing:-.3px}
+.ws-sub{font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:24px;opacity:.7;margin-top:4px}
+.ws-q{font-size:13.5px;font-weight:500;color:var(--cream2);margin-bottom:8px;line-height:1.5;margin-top:18px}
+.ws-lines{display:flex;flex-direction:column;gap:10px;margin-bottom:4px}
+.ws-line{height:1px;background:rgba(200,148,58,.18);border-radius:1px}
+.ws-foot{font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-top:18px;padding-top:14px;border-top:1px solid var(--gold-line2);line-height:1.6}
+/* Loop box */
+.loop-box{display:grid;grid-template-columns:170px 1fr;gap:40px;align-items:start;background:var(--card);border:1px solid var(--gold-line2);padding:36px;margin:48px 0;position:relative;overflow:hidden}
+@media(max-width:700px){.loop-box{grid-template-columns:1fr}}
+.loop-box::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 55% 55% at 12% 50%,var(--gold-glow),transparent);pointer-events:none}
+.ls{display:flex;flex-direction:column}
+.lstep{display:grid;grid-template-columns:38px 1fr;gap:13px;align-items:start;padding:16px 0;border-bottom:1px solid var(--gold-line2)}
+.lstep:last-child{border-bottom:none;padding-bottom:0}
+.lstep:first-child{padding-top:0}
+.lsn{font-family:"Cormorant Garamond",serif;font-size:38px;font-weight:700;color:var(--gold);opacity:.17;line-height:1}
+.lst{font-weight:600;color:var(--cream);font-size:13.5px;margin-bottom:4px}
+.lsb{font-size:13px;font-weight:300;color:var(--light);line-height:1.65}
+/* Cheatsheet */
+.cst-wrap{overflow-x:auto;margin-top:48px}
+.cst{width:100%;border-collapse:collapse}
+.cst thead tr{background:var(--card3)}
+.cst thead th{font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);padding:13px 16px;text-align:left;border-bottom:1px solid var(--gold-line);font-weight:400}
+.cst tbody tr{border-bottom:1px solid var(--gold-line2);transition:background .15s}
+.cst tbody tr:hover{background:var(--card)}
+.cst tbody td{padding:12px 16px;color:var(--light);vertical-align:top;line-height:1.5;font-size:12.5px}
+.td-n{font-family:"JetBrains Mono",monospace;color:var(--gold);opacity:.38;font-size:10.5px;width:34px}
+.td-nm{font-weight:500;color:var(--cream2);font-size:13px;width:180px}
+.td-ch{font-family:"JetBrains Mono",monospace;font-size:9px;color:var(--muted);white-space:nowrap}
+/* About */
+.about-s{background:var(--surface);border-top:1px solid var(--gold-line2);padding:88px 64px}
+.about-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 280px;gap:56px;align-items:start}
+@media(max-width:800px){.about-inner{grid-template-columns:1fr}}
+.about-lbl{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:18px;opacity:.7}
+.about-name{font-family:"Cormorant Garamond",serif;font-size:clamp(30px,4.5vw,50px);font-weight:700;letter-spacing:-1.5px;color:var(--cream);margin-bottom:18px;line-height:.9}
+.about-name .g{color:var(--gold);font-style:italic}
+.about-body{font-size:14.5px;font-weight:300;color:var(--light);line-height:1.8;max-width:520px}
+.about-body p+p{margin-top:14px}
+.about-body strong{color:var(--cream);font-weight:500}
+.about-card{background:var(--card);border:1px solid var(--gold-line2);padding:26px}
+.about-card-lbl{font-family:"JetBrains Mono",monospace;font-size:7.5px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:13px;opacity:.58}
+.astat{display:flex;align-items:baseline;gap:8px;margin-bottom:11px;padding-bottom:11px;border-bottom:1px solid var(--gold-line2)}
+.astat:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.astat-n{font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:700;color:var(--gold)}
+.astat-l{font-size:12px;color:var(--light);font-weight:300}
+/* Footer */
+footer{background:var(--bg2);border-top:1px solid var(--gold-line2);padding:68px 64px;text-align:center}
+.fl{font-family:"Cormorant Garamond",serif;font-size:25px;font-weight:700;letter-spacing:2px;color:var(--gold);margin-bottom:9px}
+.ft{font-size:13.5px;font-weight:300;color:var(--muted);margin-bottom:8px}
+.fc{font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:1.5px;color:var(--muted);opacity:.42;text-transform:uppercase;max-width:660px;margin:0 auto 40px;line-height:1.9}
+.fg{font-family:"Cormorant Garamond",serif;font-size:18px;font-style:italic;color:rgba(200,148,58,.2);max-width:560px;margin:0 auto;line-height:1.5}
+/* Animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(17px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.reveal.vis{opacity:1;transform:translateY(0)}
+
+.pg-hero-art{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:.55;z-index:0}
+.pg-hero-art svg{width:100%;height:100%;display:block}
+[class*="icon"] svg.pg-icon{width:1em;height:1em;display:inline-block;vertical-align:-0.15em}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav>
+  <div class="nav-logo">Parallelogram</div>
+  <ul class="nav-links">
+    <li><a href="#decision">Decision</a></li>
+    <li><a href="#loop">Loop</a></li>
+    <li><a href="#rejection">Rejection</a></li>
+    <li><a href="#bodylang">Body Language</a></li>
+    <li><a href="#critic">Inner Critic</a></li>
+    <li><a href="#evidence">Evidence Bank</a></li>
+    <li><a href="#social">Social</a></li>
+    <li><a href="#cheatsheet">Cheatsheet</a></li>
+  </ul>
+</nav>
+<!-- COVER -->
+<section class="cover" id="top"><div class="pg-hero-art" aria-hidden="true"><svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><path d="M630.3 -49.4 A247.7 247.7 0 0 1 763.6 300.7" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M134.6 394.8 A191.1 191.1 0 0 1 181.9 62.5" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M681.0 348.7 A254.3 254.3 0 0 1 615.0 3.2" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><line x1="851.9" y1="105.5" x2="819.7" y2="90.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="851.9" y1="105.5" x2="753.6" y2="60.0" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="51.4" y1="78.8" x2="66.2" y2="53.1" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="684.7" y1="153.3" x2="677.6" y2="156.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="410.6" y1="256.9" x2="522.8" y2="126.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="410.6" y1="256.9" x2="585.9" y2="247.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="543.8" y1="140.9" x2="522.8" y2="126.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="543.8" y1="140.9" x2="585.9" y2="247.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="507.6" y1="29.3" x2="522.8" y2="126.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="507.6" y1="29.3" x2="409.5" y2="45.1" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="377.3" y1="25.8" x2="409.5" y2="45.1" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="585.9" y1="247.3" x2="680.8" y2="225.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="753.6" y1="60.0" x2="747.3" y2="64.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="753.6" y1="60.0" x2="819.7" y2="90.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="636.6" y1="23.9" x2="644.5" y2="39.0" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="301.3" y1="118.5" x2="226.3" y2="55.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="66.2" y1="53.1" x2="226.3" y2="55.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="680.8" y1="225.4" x2="677.6" y2="156.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="684.7" y1="153.3" x2="680.8" y2="225.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><circle cx="851.9" cy="105.5" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="851.9" cy="105.5" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="51.4" cy="78.8" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="51.4" cy="78.8" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="684.7" cy="153.3" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="410.6" cy="256.9" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="543.8" cy="140.9" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="507.6" cy="29.3" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="507.6" cy="29.3" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="377.3" cy="25.8" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="585.9" cy="247.3" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="753.6" cy="60.0" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="636.6" cy="23.9" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="644.5" cy="39.0" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="301.3" cy="118.5" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="301.3" cy="118.5" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="66.2" cy="53.1" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="819.7" cy="90.7" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="819.7" cy="90.7" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="747.3" cy="64.3" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="747.3" cy="64.3" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="680.8" cy="225.4" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="226.3" cy="55.4" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="409.5" cy="45.1" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="409.5" cy="45.1" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="677.6" cy="156.7" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="677.6" cy="156.7" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="522.8" cy="126.3" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="522.8" cy="126.3" r="2.2" fill="#e8b84b" opacity="0.85"/></svg></div>
+  <div class="cover-bg"></div><div class="cover-grid"></div>
+  <div class="cover-inner">
+    <div>
+      <div class="cover-brand">Parallelogram Guides · Mindset Series <span>2025–26</span></div>
+      <h1 class="cover-h1">Unshake<span class="g">able</span><span class="d">Confidence from the Inside Out</span></h1>
+      <p class="cover-desc">The research-backed truth about what confidence is — and how to build it permanently. From the confidence-competence loop to body chemistry shifts, from rejection detachment to evidence-based self-belief. <strong>8 chapters · 30 principles · 8 worksheets. Real confidence — built, not borrowed.</strong></p>
+      <div class="cover-stats">
+        <div class="cstat"><span class="cstat-n">3 Days</span><span class="cstat-l">to see the first shift when you start the Action Loop in Chapter 01</span></div>
+        <div class="cstat"><span class="cstat-n">40+ Yrs</span><span class="cstat-l">of Bandura, Neff &amp; Cuddy research distilled into one actionable guide</span></div>
+        <div class="cstat"><span class="cstat-n">1 Shift</span><span class="cstat-l">from "I act when I feel confident" to "I act to become confident"</span></div>
+        <div class="cstat"><span class="cstat-n">8 Wins</span><span class="cstat-l">one hands-on worksheet per chapter — not just insights, but action</span></div>
+      </div>
+      <div class="cover-scroll">Begin reading · 8 chapters · 30 principles · 8 worksheets</div>
+    </div>
+    <div class="cvspiral" style="opacity:0;animation:fadeUp 1s .6s var(--ease) forwards">
+      <svg width="310" height="400" viewBox="0 0 310 400" fill="none">
+        <defs>
+          <radialGradient id="cbg" cx="50%" cy="50%" r="55%"><stop offset="0%" stop-color="#12150f"/><stop offset="100%" stop-color="#05060a"/></radialGradient>
+          <filter id="gl"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <filter id="sg"><feGaussianBlur stdDeviation="13" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <rect width="310" height="400" fill="url(#cbg)"/>
+        <line x1="155" y1="32" x2="155" y2="350" stroke="#c8943a" stroke-opacity="0.07" stroke-width="1" stroke-dasharray="4,9"/>
+        <ellipse cx="155" cy="310" rx="88" ry="20" fill="none" stroke="#c8943a" stroke-opacity="0.1" stroke-width="1"/>
+        <ellipse cx="155" cy="240" rx="66" ry="15" fill="none" stroke="#c8943a" stroke-opacity="0.18" stroke-width="1.2"/>
+        <ellipse cx="155" cy="172" rx="45" ry="11" fill="none" stroke="#c8943a" stroke-opacity="0.3" stroke-width="1.4"/>
+        <ellipse cx="155" cy="104" rx="24" ry="6.5" fill="none" stroke="#e8b84b" stroke-opacity="0.5" stroke-width="1.7"/>
+        <ellipse cx="155" cy="60" rx="12" ry="3.5" fill="none" stroke="#e8b84b" stroke-opacity="0.75" stroke-width="2"/>
+        <path d="M67 310 Q92 240 112 172 Q134 104 145 60" stroke="#c8943a" stroke-opacity="0.2" stroke-width="1.3" fill="none"/>
+        <path d="M243 310 Q218 240 198 172 Q176 104 165 60" stroke="#c8943a" stroke-opacity="0.2" stroke-width="1.3" fill="none"/>
+        <path d="M155 348 Q212 326 226 268 Q240 212 210 174 Q180 136 186 101 Q192 72 174 52" stroke="#e8b84b" stroke-opacity="0.6" stroke-width="2.4" fill="none" filter="url(#gl)"/>
+        <circle cx="226" cy="268" r="8" fill="#c8943a" opacity="0.14" stroke="#c8943a" stroke-opacity="0.6" stroke-width="1.4"/>
+        <circle cx="226" cy="268" r="3.5" fill="#c8943a" opacity="0.8"/>
+        <circle cx="182" cy="148" r="8" fill="#c8943a" opacity="0.14" stroke="#c8943a" stroke-opacity="0.68" stroke-width="1.4"/>
+        <circle cx="182" cy="148" r="3.5" fill="#c8943a" opacity="0.85"/>
+        <circle cx="140" cy="97" r="8" fill="#e8b84b" opacity="0.14" stroke="#e8b84b" stroke-opacity="0.68" stroke-width="1.4"/>
+        <circle cx="140" cy="97" r="3.5" fill="#e8b84b" opacity="0.85"/>
+        <circle cx="172" cy="50" r="7" fill="#e8b84b" opacity="0.2" stroke="#e8b84b" stroke-opacity="0.9" stroke-width="2"/>
+        <circle cx="172" cy="50" r="3" fill="#e8b84b" opacity="1"/>
+        <circle cx="172" cy="50" r="15" fill="#e8b84b" opacity="0.05" filter="url(#sg)"/>
+        <line x1="226" y1="268" x2="256" y2="268" stroke="#c8943a" stroke-opacity="0.26" stroke-width="0.8"/>
+        <text x="260" y="265" font-family="JetBrains Mono" font-size="8.5" fill="#c8943a" opacity="0.58" letter-spacing="2">ACTION</text>
+        <line x1="182" y1="148" x2="212" y2="141" stroke="#c8943a" stroke-opacity="0.26" stroke-width="0.8"/>
+        <text x="216" y="145" font-family="JetBrains Mono" font-size="8.5" fill="#c8943a" opacity="0.52" letter-spacing="2">EVIDENCE</text>
+        <line x1="140" y1="97" x2="108" y2="91" stroke="#e8b84b" stroke-opacity="0.28" stroke-width="0.8"/>
+        <text x="18" y="95" font-family="JetBrains Mono" font-size="8.5" fill="#e8b84b" opacity="0.6" letter-spacing="2">BELIEF</text>
+        <line x1="172" y1="42" x2="172" y2="24" stroke="#e8b84b" stroke-opacity="0.36" stroke-width="0.8"/>
+        <text x="116" y="19" font-family="JetBrains Mono" font-size="7.5" fill="#e8b84b" opacity="0.65" letter-spacing="2">MORE ACTION</text>
+        <text x="132" y="370" font-family="JetBrains Mono" font-size="7.5" fill="#c8943a" opacity="0.26" letter-spacing="2">START HERE</text>
+        <text x="155" y="390" font-family="Cormorant Garamond" font-size="13" font-style="italic" fill="#c8943a" opacity="0.36" text-anchor="middle" font-weight="600">The Upward Spiral</text>
+        <line x1="16" y1="16" x2="36" y2="16" stroke="#c8943a" stroke-opacity="0.22" stroke-width="1"/>
+        <line x1="16" y1="16" x2="16" y2="36" stroke="#c8943a" stroke-opacity="0.22" stroke-width="1"/>
+        <line x1="274" y1="384" x2="294" y2="384" stroke="#c8943a" stroke-opacity="0.22" stroke-width="1"/>
+        <line x1="294" y1="364" x2="294" y2="384" stroke="#c8943a" stroke-opacity="0.22" stroke-width="1"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- TOC -->
+<div class="toc-wrap">
+  <div class="toc-inner">
+    <div class="toc-hdr"><span class="toc-hdr-t">Everything Inside This Guide</span></div>
+    <div class="toc-grid">
+      <a href="#decision" class="toc-item reveal"><span class="tn">01</span><div><div class="tt">Confidence Is Not a Feeling</div><div class="ts">Decision + action, not a state you wait for</div></div></a>
+      <a href="#loop" class="toc-item reveal"><span class="tn">02</span><div><div class="tt">The Confidence-Competence Loop</div><div class="ts">Evidence builds belief — not affirmations</div></div></a>
+      <a href="#rejection" class="toc-item reveal"><span class="tn">03</span><div><div class="tt">Handle Rejection Without the Hit</div><div class="ts">5-step detachment method</div></div></a>
+      <a href="#bodylang" class="toc-item reveal"><span class="tn">04</span><div><div class="tt">Body Language &amp; Brain Chemistry</div><div class="ts">Cuddy et al. (Harvard, 2012)</div></div></a>
+      <a href="#critic" class="toc-item reveal"><span class="tn">05</span><div><div class="tt">The Inner Critic</div><div class="ts">CBT + ACT dismantling protocol</div></div></a>
+      <a href="#evidence" class="toc-item reveal"><span class="tn">06</span><div><div class="tt">The Evidence Bank</div><div class="ts">Your personal archive of proof</div></div></a>
+      <a href="#social" class="toc-item reveal"><span class="tn">07</span><div><div class="tt">Social Confidence</div><div class="ts">Learnable skills — not personality traits</div></div></a>
+      <a href="#cheatsheet" class="toc-item reveal"><span class="tn">08</span><div><div class="tt">Master Cheatsheet</div><div class="ts">Every principle, one table</div></div></a>
+    </div>
+  </div>
+</div>
+<!-- ═══ 01 CONFIDENCE AS DECISION ═══ -->
+<section class="section" id="decision">
+<div class="si">
+  <div class="ch-head" data-n="01">
+    <div>
+      <div class="ch-n">Chapter 01</div>
+      <div class="ch-cat">Bandura (1977) · Draganski et al. (2004) · Amabile &amp; Kramer (2011)</div>
+      <h2 class="ch-title">Confidence Is Not<br/>a <span class="g">Feeling</span></h2>
+      <p class="ch-desc">The most common mistake: treating confidence as a prerequisite for action. "I'll do it when I feel more confident." This waiting is the trap. The science is unambiguous — confidence is built by acting first, then feeling the evidence accumulate. The decision to act despite uncertainty is the beginning of confidence — not the result of it.</p>
+    </div>
+    <div class="ch-aside">
+      <svg width="120" height="140" viewBox="0 0 120 140" fill="none">
+        <defs><radialGradient id="nbg" cx="50%" cy="50%" r="55%"><stop offset="0%" stop-color="#14120a"/><stop offset="100%" stop-color="#05060a"/></radialGradient></defs>
+        <rect width="120" height="140" fill="url(#nbg)"/>
+        <circle cx="60" cy="26" r="7" fill="#c8943a" opacity="0.14" stroke="#c8943a" stroke-opacity="0.5" stroke-width="1.2"/>
+        <circle cx="26" cy="58" r="5.5" fill="#c8943a" opacity="0.11" stroke="#c8943a" stroke-opacity="0.38" stroke-width="1"/>
+        <circle cx="94" cy="56" r="5.5" fill="#c8943a" opacity="0.11" stroke="#c8943a" stroke-opacity="0.38" stroke-width="1"/>
+        <circle cx="42" cy="90" r="7" fill="#e8b84b" opacity="0.13" stroke="#e8b84b" stroke-opacity="0.5" stroke-width="1.2"/>
+        <circle cx="82" cy="92" r="5.5" fill="#c8943a" opacity="0.11" stroke="#c8943a" stroke-opacity="0.38" stroke-width="1"/>
+        <circle cx="60" cy="120" r="9" fill="#c8943a" opacity="0.17" stroke="#e8b84b" stroke-opacity="0.58" stroke-width="1.5"/>
+        <line x1="60" y1="33" x2="26" y2="52" stroke="#c8943a" stroke-opacity="0.22" stroke-width="1"/>
+        <line x1="60" y1="33" x2="94" y2="50" stroke="#c8943a" stroke-opacity="0.22" stroke-width="1"/>
+        <line x1="26" y1="64" x2="42" y2="83" stroke="#c8943a" stroke-opacity="0.18" stroke-width="1"/>
+        <line x1="94" y1="62" x2="82" y2="86" stroke="#c8943a" stroke-opacity="0.18" stroke-width="1"/>
+        <line x1="42" y1="97" x2="60" y2="111" stroke="#e8b84b" stroke-opacity="0.32" stroke-width="1.2"/>
+        <line x1="82" y1="98" x2="60" y2="111" stroke="#e8b84b" stroke-opacity="0.32" stroke-width="1.2"/>
+        <circle cx="60" cy="26" r="2.5" fill="#c8943a" opacity="0.6"/>
+        <circle cx="42" cy="90" r="2.5" fill="#e8b84b" opacity="0.7"/>
+        <circle cx="60" cy="120" r="3.5" fill="#e8b84b" opacity="0.8"/>
+        <text x="60" y="134" font-family="JetBrains Mono" font-size="6" fill="#c8943a" opacity="0.38" text-anchor="middle" letter-spacing="1.5">NEURAL GROWTH</text>
+      </svg>
+      <div class="ch-aside-l">Neuroplasticity<br/>&amp; Self-Efficacy</div>
+    </div>
+  </div>
+
+  <div class="stat-band">
+    <div class="ss reveal"><span class="ss-n">Action</span><span class="ss-l">Creates motivation — research confirms action always precedes lasting confidence</span></div>
+    <div class="ss reveal"><span class="ss-n">10×</span><span class="ss-l">Mastery experiences are 10× more powerful than affirmations (Bandura, 1977)</span></div>
+    <div class="ss reveal"><span class="ss-n">Dopamine</span><span class="ss-l">Even micro-progress triggers the neurochemical reward that drives the next action</span></div>
+    <div class="ss reveal"><span class="ss-n">100%</span><span class="ss-l">Survival rate on your worst days so far — your most powerful resilience evidence</span></div>
+  </div>
+
+  <div class="two-col">
+    <div class="cp reveal">
+      <span class="cp-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M6 3h12M6 21h12" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 3c0 6 12 6 12 0M6 21c0-6 12-6 12 0" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="cp-h">The Waiting Trap</div>
+      <div class="cp-b">
+        <p>"I'll speak up when I feel confident." "I'll apply when I feel ready." All share the same flaw: they make confidence a precondition for action, when confidence is actually a consequence of action.</p><br/>
+        <p><strong>The neurological reality:</strong> Confidence is the brain's prediction that a future action will succeed, based on evidence from past actions. No past action = no evidence = no confidence. The waiting never ends.</p><br/>
+        <p>The only exit: act without the feeling. Action provides evidence. Evidence changes the prediction. The changed prediction is what confidence feels like from the inside.</p>
+      </div>
+    </div>
+    <div class="cp reveal">
+      <span class="cp-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M13 2 4 14h6l-1 8 9-12h-6z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="cp-h">Confidence as Daily Architecture</div>
+      <div class="cp-b">
+        <p>Confidence is a daily architecture of decisions — small, repeated choices to act toward what matters despite the discomfort of uncertainty.</p><br/>
+        <p><strong>The 4-step daily protocol:</strong><br/>
+        1. Notice what you're avoiding because you don't "feel ready."<br/>
+        2. Ask: "Is this protecting me from genuine danger — or from being seen?"<br/>
+        3. Take the smallest real version today — imperfectly.<br/>
+        4. Write it down. That is your first piece of evidence.</p><br/>
+        <p>Across hundreds of small moments, this builds a person who is — by neural architecture and identity — genuinely confident.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cg" style="margin-top:1px">
+    <div class="card reveal">
+      <div class="card-bar"></div>
+      <span class="card-tag">Principle 01 · Bandura (1977)</span>
+      <div class="card-title">Self-Efficacy — Four Sources</div>
+      <div class="card-body"><p>Bandura identified four sources of confidence-building, in order of power: <strong>Mastery experiences</strong> (doing things and surviving), <strong>vicarious experiences</strong> (watching similar people succeed), <strong>social persuasion</strong> (being told you can), and <strong>physiological state</strong> (how your body feels before acting).</p>
+      <div class="ci"><span class="ci-l">The Hierarchy</span><div class="ci-b">Mastery experiences are dramatically more powerful than all other sources combined. Affirmations are weak social persuasion — category 3 of 4. Every time you do the hard thing and survive, you build the strongest possible form of confidence. No shortcut exists.</div></div></div>
+      <span class="badge bg">Foundational Research</span>
+    </div>
+    <div class="card reveal">
+      <div class="card-bar"></div>
+      <span class="card-tag">Principle 02 · Draganski et al. (2004) Nature</span>
+      <div class="card-title">Every Action Rewires the Brain</div>
+      <div class="card-body"><p>Draganski et al. confirmed using MRI that skill practice produces measurable structural changes in grey matter. Every time you practise — leading a meeting, speaking up, making a hard call — you reinforce neural pathways that make that action physically easier next time. The person who has done something 50 times has built different neural architecture. That architecture manifests as confidence.</p>
+      <div class="ci"><span class="ci-l">Amabile &amp; Kramer (2011) — Harvard</span><div class="ci-b">Small, consistent wins are among the most significant factors in long-term motivation. Even micro-progress triggers dopamine, reinforcing the behaviour and making the next action more likely. Every small win is neurochemical fuel for the next one.</div></div></div>
+      <span class="badge bg">The Neuroscience</span>
+    </div>
+    <div class="card reveal">
+      <div class="card-bar"></div>
+      <span class="card-tag">Principle 03 · Wood et al. (2009) Psych Science</span>
+      <div class="card-title">Why Affirmations Alone Backfire</div>
+      <div class="card-body"><p>Wood et al. (2009): affirmations work for people with moderate-to-high self-esteem, and backfire for people with low self-esteem — producing a contrast effect where the gap between the affirmation and felt reality increases shame. The brain's confidence system is evidence-based, not assertion-based. "I am fearless" when you feel fearful produces cognitive dissonance, not confidence.</p>
+      <div class="ci"><span class="ci-l">The Correct Order</span><div class="ci-b">Evidence first, affirmations second — as acknowledgment of what you've built. "I handled that difficult conversation — I am someone who can do hard things" is powerful. "I am fearless" without evidence is noise. Reverse the order and both become genuine.</div></div></div>
+      <span class="badge br">Critical Distinction</span>
+    </div>
+  </div>
+
+  <!-- WORKSHEET 01 -->
+  <div class="ws reveal">
+    <div class="ws-hdr"><span class="ws-ico">✏️</span><div class="ws-title">Chapter 01 Worksheet — The Action Inventory</div></div>
+    <div class="ws-sub">Do This Now · 5 Minutes · The First Step Is Everything</div>
+    <div class="ws-q">1. What is the one thing you are currently avoiding because you don't "feel ready"?</div>
+    <div class="ws-lines"><div class="ws-line"></div><div class="ws-line"></div></div>
+    <div class="ws-q">2. Is this protecting you from genuine danger — or from being seen? Circle one: <strong style="color:#d46040">Genuine Danger</strong> &nbsp;/&nbsp; <strong style="color:#4aaa9e">Being Seen</strong></div>
+    <div class="ws-lines"><div class="ws-line"></div></div>
+    <div class="ws-q">3. What is the smallest possible real version of this action you could take in the next 24 hours?</div>
+    <div class="ws-lines"><div class="ws-line"></div><div class="ws-line"></div></div>
+    <div class="ws-q">4. After you take it — write one sentence proving you functioned under uncertainty. (This is your first evidence bank entry.)</div>
+    <div class="ws-lines"><div class="ws-line"></div><div class="ws-line"></div></div>
+    <div class="ws-foot">The action does not need to go well. It needs to be real. Imperfect real action beats perfect imagined action — always. Write the entry today.</div>
+  </div>
+</div>
+</section>
+
+<!-- QUOTE 1 -->
+<div class="quote-wrap">
+  <div class="qi">
+    <p class="qt">"Confidence is not something you feel and then act on. It is something you build by acting first, and letting <em>the evidence of action change what you believe about yourself.</em>"</p>
+    <div class="ql"></div>
+    <span class="qa">Derived from Bandura (1977) · Self-Efficacy: Toward a Unifying Theory of Behavioral Change<br/>Psychological Review, 84(2), 191–215 · The most-cited psychology paper of the last 50 years</span>
+  </div>
+</div>
+
+<!-- ═══ 02 THE LOOP ═══ -->
+<section class="section section-alt" id="loop">
+<div class="si">
+  <div class="ch-head" data-n="02">
+    <div>
+      <div class="ch-n">Chapter 02</div>
+      <div class="ch-cat">Eikenberry (2012) · Amabile &amp; Kramer (2011) · Self-Efficacy Theory</div>
+      <h2 class="ch-title">The Confidence-<br/><span class="g">Competence</span> Loop</h2>
+      <p class="ch-desc">The confidence-competence loop is the core mechanism through which real, durable confidence is built. Not through affirmation or visualisation — through a behavioural cycle. Action creates competence. Competence creates evidence. Evidence creates belief. Belief creates more action. Each rotation slightly more powerful than the last: an upward spiral, not a plateau.</p>
+    </div>
+  </div>
+
+  <div class="loop-box reveal">
+    <div style="display:flex;align-items:center;justify-content:center">
+      <svg width="155" height="275" viewBox="0 0 155 275" fill="none">
+        <defs><radialGradient id="lbg" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#14120a"/><stop offset="100%" stop-color="#05060a"/></radialGradient></defs>
+        <rect width="155" height="275" fill="url(#lbg)"/>
+        <line x1="28" y1="42" x2="28" y2="245" stroke="#c8943a" stroke-opacity="0.13" stroke-width="1" stroke-dasharray="3,6"/>
+        <circle cx="28" cy="42" r="12" fill="#c8943a" opacity="0.1" stroke="#c8943a" stroke-opacity="0.42" stroke-width="1.2"/>
+        <circle cx="28" cy="42" r="4" fill="#c8943a" opacity="0.65"/>
+        <circle cx="28" cy="110" r="12" fill="#c8943a" opacity="0.1" stroke="#c8943a" stroke-opacity="0.42" stroke-width="1.2"/>
+        <circle cx="28" cy="110" r="4" fill="#c8943a" opacity="0.55"/>
+        <circle cx="28" cy="178" r="12" fill="#e8b84b" opacity="0.11" stroke="#e8b84b" stroke-opacity="0.48" stroke-width="1.2"/>
+        <circle cx="28" cy="178" r="4" fill="#e8b84b" opacity="0.72"/>
+        <circle cx="28" cy="243" r="14" fill="#e8b84b" opacity="0.14" stroke="#e8b84b" stroke-opacity="0.62" stroke-width="1.5"/>
+        <circle cx="28" cy="243" r="5" fill="#e8b84b" opacity="0.88"/>
+        <path d="M24 68 L28 76 L32 68" stroke="#c8943a" stroke-opacity="0.28" stroke-width="1" fill="none"/>
+        <path d="M24 136 L28 144 L32 136" stroke="#c8943a" stroke-opacity="0.28" stroke-width="1" fill="none"/>
+        <path d="M24 204 L28 212 L32 204" stroke="#e8b84b" stroke-opacity="0.38" stroke-width="1.2" fill="none"/>
+        <text x="48" y="38" font-family="JetBrains Mono" font-size="7" fill="#c8943a" opacity="0.48" letter-spacing="1.5">STEP 01</text>
+        <text x="48" y="48" font-family="Cormorant Garamond" font-size="12" fill="#c8943a" opacity="0.78" font-weight="600">Action</text>
+        <text x="48" y="106" font-family="JetBrains Mono" font-size="7" fill="#c8943a" opacity="0.48" letter-spacing="1.5">STEP 02</text>
+        <text x="48" y="116" font-family="Cormorant Garamond" font-size="12" fill="#c8943a" opacity="0.72" font-weight="600">Small Win</text>
+        <text x="48" y="174" font-family="JetBrains Mono" font-size="7" fill="#e8b84b" opacity="0.52" letter-spacing="1.5">STEP 03</text>
+        <text x="48" y="184" font-family="Cormorant Garamond" font-size="12" fill="#e8b84b" opacity="0.78" font-weight="600">Evidence</text>
+        <text x="48" y="239" font-family="JetBrains Mono" font-size="7" fill="#e8b84b" opacity="0.58" letter-spacing="1.5">STEP 04</text>
+        <text x="48" y="249" font-family="Cormorant Garamond" font-size="12" fill="#e8b84b" opacity="0.88" font-weight="600">Belief → Repeat</text>
+        <path d="M128 251 Q146 188 146 142 Q146 76 128 40" stroke="#c8943a" stroke-opacity="0.15" stroke-width="1" fill="none" stroke-dasharray="4,4"/>
+        <path d="M124 44 L128 38 L133 44" stroke="#c8943a" stroke-opacity="0.15" stroke-width="1" fill="none"/>
+      </svg>
+    </div>
+    <div class="ls">
+      <div class="lstep"><div class="lsn">1</div><div><div class="lst">Action — Before You Feel Ready</div><p class="lsb">You act toward something that matters, without waiting for the feeling of readiness. The brain only updates its confidence model based on actual behaviour — not intended behaviour. Imperfect real action beats perfect imagined action every time. The action doesn't need to go well. It needs to happen.</p></div></div>
+      <div class="lstep"><div class="lsn">2</div><div><div class="lst">Small Win — You Survived, You Delivered</div><p class="lsb">The action produces a result — even imperfect, even modest. The result doesn't need to be perfect. It needs to be evidence that you functioned under uncertainty — and the world didn't end. That is all the brain needs to update its confidence prediction.</p></div></div>
+      <div class="lstep"><div class="lsn">3</div><div><div class="lst">Evidence — The Archive of Proof</div><p class="lsb">The small win becomes data. Your brain now has a real memory of you doing this thing. Each additional instance strengthens the evidence file. Over time, this file becomes the foundation of genuine, self-generated confidence that nobody can take from you — because it is based entirely in your own history.</p></div></div>
+      <div class="lstep"><div class="lsn">4</div><div><div class="lst">Belief — The Identity Shift</div><p class="lsb">Repeated evidence accumulates into a changed self-image. "I am trying to be someone who does X" becomes "I am someone who does X." This identity shift triggers the loop again at a higher level. Confidence → competence → confidence. An upward spiral — compounding with every rotation.</p></div></div>
+    </div>
+  </div>
+
+  <!-- WORKSHEET 02 -->
+  <div class="ws reveal">
+    <div class="ws-hdr"><span class="ws-ico">✏️</span><div class="ws-title">Chapter 02 Worksheet — Your First Loop Rotation</div></div>
+    <div class="ws-sub">Track One Full Cycle · 5 Minutes · One Rotation Changes Everything</div>
+    <div class="ws-q">1. What small action did you take this week that felt uncomfortable or uncertain?</div>
+    <div class="ws-lines"><div class="ws-line"></div><div class="ws-line"></div></div>
+    <div class="ws-q">2. What was the result — even if imperfect? (Survived = counts as a win. Write it.)</div>
+    <div class="ws-lines"><div class="ws-line"></div><div class="ws-line"></div></div>
+    <div class="ws-q">3. Complete this sentence: "This action is evidence that I am someone who ___________."</div>
+    <div class="ws-lines"><div class="ws-line"></div><div class="ws-line"></div></div>
+    <div class="ws-q">4. What is the next action in this loop — one level harder than this one?</div>
+    <div class="ws-lines"><div class="ws-line"></div></div>
+    <div class="ws-foot">One loop rotation per week. After 8 weeks: 8 rotations. After 6 months: a fundamentally different nervous system — and a fundamentally different person.</div>
+  </div>
+</div>
+</section>
+
+<!-- QUOTE 2 -->
+<div class="quote-wrap">
+  <div class="qi">
+    <p class="qt">"Without confidence, we revert to fear. When fearful, we don't take action. When we act, we build skills. When skills improve, we get more confident. <em>An upward spiral — or a downward one. You choose which loop to start.</em>"</p>
+    <div class="ql"></div>
+    <span class="qa">Eikenberry, K. (2012) · Remarkable Leadership<br/>Synthesising Bandura's Self-Efficacy Theory with the Competence-Confidence Loop Model</span>
+  </div>
+</div>
+<!-- ═══ 03 REJECTION ═══ -->
+<section class="section" id="rejection">
+<div class="si">
+  <div class="ch-head" data-n="03">
+    <div>
+      <div class="ch-n">Chapter 03</div>
+      <div class="ch-cat">Neff (2003) · Eisenberger et al. (2003, Science) · Psychology Today (Jan 2025)</div>
+      <h2 class="ch-title">Handle <span class="g">Rejection</span><br/>Without the Self-Worth Hit</h2>
+      <p class="ch-desc">Eisenberger et al. (2003, Science) showed that rejection activates the same neural circuits as physical pain — the dorsal anterior cingulate cortex processes both. This is not metaphor. The problem is not that rejection hurts. The problem is when rejection is interpreted as evidence about personal worth — which it almost never is. The detachment method separates outcome from identity.</p>
+    </div>
+  </div>
+
+  <div class="stat-band">
+    <div class="ss reveal"><span class="ss-n">Pain</span><span class="ss-l">Rejection activates same neural circuits as physical pain (Eisenberger et al., Science 2003)</span></div>
+    <div class="ss reveal"><span class="ss-n">Worth≠</span><span class="ss-l">Outcome. Rejection reflects external circumstances — almost never intrinsic worth</span></div>
+    <div class="ss reveal"><span class="ss-n">Neff</span><span class="ss-l">Self-compassion outperforms self-esteem for emotional recovery after rejection</span></div>
+    <div class="ss reveal"><span class="ss-n">Next</span><span class="ss-l">Action is the most powerful response to rejection — signals resilience to your own nervous system</span></div>
+  </div>
+
+  <div class="protocol">
+    <div class="ps reveal"><div class="pm"><div class="pn">1</div><div class="pi">🔍</div></div><div class="pb"><div class="pt">The Diagnostic Question — Before Any Interpretation</div><p class="pp">Before any interpretation or emotional spiral: "Does this outcome tell me I'm not worthy — or does it tell me something about fit, timing, context, or this specific person's preferences?" In almost every professional rejection and most personal rejections, the answer to the first part is no. Rejection reflects a mismatch — not a verdict on worth. Mismatches are information about fit. They are not information about you as a person.</p><span class="pq">"What does this rejection actually tell me? And what does it NOT tell me about my worth?"</span></div></div>
+    <div class="ps reveal"><div class="pm"><div class="pn">2</div><div class="pi">🌊</div></div><div class="pb"><div class="pt">Feel It Fully — Then Set a Time Limit</div><p class="pp">Suppressing rejection pain doesn't reduce it — it compounds it into chronic anxiety. Allow yourself to feel it. Name it: "I feel disappointed and a little embarrassed." Then use the worry window: set a specific 15–20 minute period for deliberately processing the rejection. When the window closes — consciously redirect. This prevents both toxic suppression and unproductive rumination spirals that occupy days of mental space without producing any useful insight.</p><span class="pq">"I'm going to feel this fully for 15 minutes. Then I'm going to ask what it's teaching me."</span></div></div>
+    <div class="ps reveal"><div class="pm"><div class="pn">3</div><div class="pi">💌</div></div><div class="pb"><div class="pt">Self-Compassion — Neff (2003)</div><p class="pp">Neff (2003) established that self-compassion is more effective than self-esteem for emotional recovery — especially after failure and rejection. Self-esteem says "I am great" — unconvincing when you feel like you just failed. Self-compassion says "This is painful, and that's okay. Suffering after rejection is part of being human. I deserve kindness right now." The common humanity component — recognising millions of people have experienced exactly this — breaks the isolation of the experience without dismissing the pain.</p><span class="pq">"This hurts. It's supposed to. This is a universal human experience — not evidence that something is permanently wrong with me."</span></div></div>
+    <div class="ps reveal"><div class="pm"><div class="pn">4</div><div class="pi">🔭</div></div><div class="pb"><div class="pt">Extract the Data — Curiosity Over Catastrophising</div><p class="pp">Once the processing period has passed: approach the rejection with intellectual curiosity. Two questions: "Is there specific, actionable feedback embedded in this rejection?" If yes — extract it, apply it, and let the rejection serve its purpose. If no — acknowledge the external nature of the decision and file it under "circumstances beyond my control." Psychology Today (January 2025): "Reframe rejection as feedback, not failure. Breakdowns lead to breakthroughs." The distinction between feedback and failure is not semantic — it is the difference between growth and stagnation.</p><span class="pq">"What specific, actionable thing does this teach me? If the answer is nothing — I release it completely."</span></div></div>
+    <div class="ps reveal"><div class="pm"><div class="pn">5</div><div class="pi">🚀</div></div><div class="pb"><div class="pt">Act Again Immediately — The Most Important Step</div><p class="pp">Take a related action as soon as possible after the rejection. Not despite the pain — with the pain. Submit another application. Make another pitch. The action signals to your brain that the rejection was not catastrophic enough to prevent further action. Confident people are not those who face less rejection. They are those who have acted through more of it — and built a nervous system that registers rejection as uncomfortable rather than catastrophic.</p><span class="pq">"The most powerful statement I can make after a rejection is the next action."</span></div></div>
+  </div>
+
+  <!-- WORKSHEET 03 -->
+  <div class="ws reveal">
+    <div class="ws-hdr"><span class="ws-ico">✏️</span><div class="ws-title">Chapter 03 Worksheet — The Rejection Debrief</div></div>
+    <div class="ws-sub">Use After Any Rejection · 10 Minutes · Changes Your Relationship With Rejection</div>
+    <div class="ws-q">1. What was rejected? (job, pitch, idea, invitation, relationship attempt)</div>
+    <div class="ws-lines"><div class="ws-line"></div></div>
+    <div class="ws-q">2. Does this tell me I am unworthy — or does it tell me about fit, timing, or context? Write your honest answer.</div>
+    <div class="ws-lines"><div class="ws-line"></div><div class="ws-line"></div></div>
+    <div class="ws-q">3. Self-compassion phrase: "This hurts because I care about ___________. That caring makes me human, not weak."</div>
+    <div class="ws-lines"><div class="ws-line"></div></div>
+    <div class="ws-q">4. Is there one specific, actionable thing this rejection teaches me? If yes, write it. If no, write: "Nothing actionable — releasing it."</div>
+    <div class="ws-lines"><div class="ws-line"></div><div class="ws-line"></div></div>
+    <div class="ws-q">5. What is the next related action I will take — and when exactly?</div>
+    <div class="ws-lines"><div class="ws-line"></div></div>
+    <div class="ws-foot">Return to this worksheet for every significant rejection. After 10 uses, your relationship with rejection will have fundamentally changed.</div>
+  </div>
+</div>
+</section>
+
+<!-- ═══ 04 BODY LANGUAGE ═══ -->
+<section class="section section-alt" id="bodylang">
+<div class="si">
+  <div class="ch-head" data-n="04">
+    <div>
+      <div class="ch-n">Chapter 04</div>
+      <div class="ch-cat">Cuddy, Wilmuth &amp; Carney (2012, Psych Science) · Harvard Business School</div>
+      <h2 class="ch-title">Body Language That<br/>Shifts Your <span class="g">Brain Chemistry</span></h2>
+      <p class="ch-desc">Cuddy, Wilmuth &amp; Carney (2012) established a counterintuitive finding: body posture doesn't just communicate confidence to others — it changes the neurochemistry of the person doing it. Participants in high-power poses showed measurably higher testosterone and lower cortisol. The body tells the brain what to feel. This gives you a direct physiological lever for confidence that requires no thought, no belief, and no preparation.</p>
+    </div>
+    <div class="ch-aside">
+      <svg width="100" height="148" viewBox="0 0 100 148" fill="none">
+        <defs><radialGradient id="pbbg" cx="50%" cy="50%" r="55%"><stop offset="0%" stop-color="#14120a"/><stop offset="100%" stop-color="#05060a"/></radialGradient></defs>
+        <rect width="100" height="148" fill="url(#pbbg)"/>
+        <circle cx="50" cy="22" r="12" fill="none" stroke="#c8943a" stroke-opacity="0.42" stroke-width="1.3"/>
+        <circle cx="50" cy="22" r="4" fill="#c8943a" opacity="0.14"/>
+        <line x1="50" y1="34" x2="50" y2="82" stroke="#c8943a" stroke-opacity="0.38" stroke-width="1.5"/>
+        <line x1="50" y1="50" x2="10" y2="30" stroke="#c8943a" stroke-opacity="0.52" stroke-width="1.7"/>
+        <line x1="50" y1="50" x2="90" y2="30" stroke="#c8943a" stroke-opacity="0.52" stroke-width="1.7"/>
+        <line x1="50" y1="82" x2="26" y2="128" stroke="#c8943a" stroke-opacity="0.38" stroke-width="1.5"/>
+        <line x1="50" y1="82" x2="74" y2="128" stroke="#c8943a" stroke-opacity="0.38" stroke-width="1.5"/>
+        <ellipse cx="50" cy="78" rx="44" ry="58" fill="none" stroke="#c8943a" stroke-opacity="0.05" stroke-width="9"/>
+        <text x="50" y="141" font-family="JetBrains Mono" font-size="6.5" fill="#c8943a" opacity="0.38" text-anchor="middle" letter-spacing="1.5">2 MINUTES</text>
+      </svg>
+      <div class="ch-aside-l">Power Posture<br/>Protocol</div>
+    </div>
+  </div>
+
+  <div class="bl-grid">
+    <div class="bl reveal"><span class="bl-tag">Cuddy et al. (2012) Primary Research</span><div class="bl-title">The 2-Minute Protocol</div><div class="bl-body">Arms wide, feet planted, chest open — for exactly 2 minutes before a high-stakes evaluation. Participants showed measurably higher testosterone (dominance) and lower cortisol (stress) vs low-power-pose controls. The body provides proprioceptive feedback that directly shifts the hormonal balance from threat-mode to confidence-mode — before you say a single word.</div><div class="bl-rule">Apply in private. 2 minutes before any interview, presentation, or difficult conversation. Before the event — not during it.</div><span class="badge bg">Hormonal Shift</span></div>
+    <div class="bl reveal"><span class="bl-tag">Posture · Nair et al. (2015)</span><div class="bl-title">Stand Like You Belong</div><div class="bl-body">Sustained upright posture physically reduces cortisol production independently of social evaluation. Slumped posture measurably increases stress hormones and depressive mood (Nair et al., 2015). The body's memory of low-status postures activates the neurological patterns associated with them. Sitting upright, shoulders back, for an entire day changes your baseline hormonal state by evening.</div><div class="bl-rule">Set a phone reminder every 2 hours. Check and realign. 30 days of consistent practice produces measurable change in self-perceived confidence.</div></div>
+    <div class="bl reveal"><span class="bl-tag">Eye Contact</span><div class="bl-title">The Attention Signal</div><div class="bl-body">People who hold eye contact are universally rated as more trustworthy, more intelligent, and more confident — regardless of what they say. For anxious people, eye contact avoidance creates a self-perpetuating cycle: avoidance signals vulnerability, which reduces others' warmth, which reinforces anxiety. Research baseline: 3 seconds of genuine eye contact per conversational exchange is the confident-person's norm. Below 1 second reads as submissive.</div><div class="bl-rule">Practice: hold eye contact a moment longer than feels comfortable. Break sideways, not down. Discomfort diminishes with every repetition.</div></div>
+    <div class="bl reveal"><span class="bl-tag">Voice Science</span><div class="bl-title">Speak Deliberately</div><div class="bl-body">Research on voice-brain feedback shows that speaking more slowly and with more volume activates the same physiological state as genuine confidence. Anxious people speak fast and quietly — both because they feel anxious and because both behaviours reinforce anxiety. The intervention: deliberately slow down 15% from your instinct, project to the back of the room, and pause 2 full seconds after important points. Your nervous system responds to your own vocal signals.</div><div class="bl-rule">The voice speaks to the brain as much as to the audience. Use it deliberately — not reactively.</div></div>
+    <div class="bl reveal"><span class="bl-tag">Physical Space</span><div class="bl-title">Take Up Space</div><div class="bl-body">Physical space occupation is one of the most consistent predictors of perceived status across cultures. Confident people expand — open gestures, relaxed spread, comfortable territory. Anxious people contract. These patterns are simultaneously a signal of internal state and a cause of it. Deliberately expanding into available space shifts your own physiological state through the same proprioceptive feedback mechanism as the power pose.</div><div class="bl-rule">Next important meeting: notice your footprint. Expand deliberately — relax into the chair, open your gestures, claim the space. Notice the internal shift.</div></div>
+    <div class="bl reveal"><span class="bl-tag">Facial Feedback · Strack et al.</span><div class="bl-title">The Genuine Smile</div><div class="bl-body">The facial feedback effect: the physical act of smiling produces mild positive affect — the brain partially reads facial expression as a signal of emotional state. A Duchenne smile (reaching the eyes) activates different neural responses than a performative social smile and produces genuine neurochemical changes. Entering a room with a relaxed, genuine smile changes both your own neurochemistry and others' first impression simultaneously. Requires a genuine positive thought to activate it.</div><div class="bl-rule">The cheapest, fastest confidence tool available. Used by every skilled social performer in every domain.</div></div>
+  </div>
+
+  <!-- WORKSHEET 04 -->
+  <div class="ws reveal">
+    <div class="ws-hdr"><span class="ws-ico">✏️</span><div class="ws-title">Chapter 04 Worksheet — The Body Audit</div></div>
+    <div class="ws-sub">30-Second Check-In · Use Before Any High-Stakes Situation</div>
+    <div class="ws-q">1. Posture check right now: upright or slumped? Adjust. Write what you adjusted.</div>
+    <div class="ws-lines"><div class="ws-line"></div></div>
+    <div class="ws-q">2. Space check: how much physical space are you occupying? Expand deliberately. What changed in how you feel?</div>
+    <div class="ws-lines"><div class="ws-line"></div></div>
+    <div class="ws-q">3. Before your next high-stakes situation: set a 2-minute timer and do a full power pose alone. After, write what you notice in your body.</div>
+    <div class="ws-lines"><div class="ws-line"></div><div class="ws-line"></div></div>
+    <div class="ws-q">4. This week: in how many conversations did you hold eye contact past your comfort threshold? Track the number here.</div>
+    <div class="ws-lines"><div class="ws-line"></div></div>
+    <div class="ws-foot">Body language practice is training your nervous system — not performing for others. The shift you feel internally is the entire point.</div>
+  </div>
+</div>
+</section>
+<!-- ═══ 05 INNER CRITIC ═══ -->
+<section class="section" id="critic">
+<div class="si">
+  <div class="ch-head" data-n="05">
+    <div>
+      <div class="ch-n">Chapter 05</div>
+      <div class="ch-cat">Beck (1979) · Hayes et al. (2006) · Neff (2003) · CBT &amp; ACT Research</div>
+      <h2 class="ch-title">The <span class="g">Inner Critic</span><br/>— Dismantle the Voice</h2>
+      <p class="ch-desc">The inner critic is not your authentic voice. It is a learned pattern — often formed from childhood experiences of conditional approval or harsh comparison — that became automated internal commentary. Beck's Cognitive Therapy (1979) identified that this voice runs through predictable distortions. Once you name the distortion, you can evaluate the claim — and the critic loses its authority.</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="cp reveal">
+      <span class="cp-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 3v7.5L5.5 17a2 2 0 0 0 1.8 3h9.4a2 2 0 0 0 1.8-3L15 10.5V3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 3h6M6.5 15h11" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="cp-h">The 4 Core Distortions (Beck, 1979)</div>
+      <div class="cp-b">
+        <p><strong>Catastrophising:</strong> One mistake = permanent incompetence. ("I failed that presentation — I'll never be good at speaking.")</p><br/>
+        <p><strong>Mind-reading:</strong> Assuming you know others' negative thoughts. ("They could tell I was nervous — everyone noticed.")</p><br/>
+        <p><strong>Overgeneralisation:</strong> One negative event = universal pattern. ("I always freeze when it matters.")</p><br/>
+        <p><strong>Personalisation:</strong> Taking blame for things outside your control. ("The project failed because of me.")</p><br/>
+        <p>These distortions feel like clear perception. They are not — they are systematic filters that the inner critic runs automatically. Once named, they lose most of their power.</p>
+      </div>
+    </div>
+    <div class="cp reveal">
+      <span class="cp-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M14.5 6.5a4 4 0 0 1-5 5L4 17l3 3 5.5-5.5a4 4 0 0 1 5-5l-2.7 2.7-2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="cp-h">The 3-Step Dismantling Protocol</div>
+      <div class="cp-b">
+        <p><strong>Step 1 — ACT Defusion (Hayes et al., 2006):</strong> Instead of "I'm terrible at this" → "I notice I'm having the thought that I'm terrible at this." The linguistic shift from being the thought to observing it creates a gap in which the thought loses authority. One of the most replicated inner-critic interventions in ACT research.</p><br/>
+        <p><strong>Step 2 — The Evidence Test (CBT, Beck 1979):</strong> "What actual evidence supports this criticism? What actual evidence contradicts it?" The inner critic never conducts a balanced assessment. Forcing balance reveals how asymmetric its case always is.</p><br/>
+        <p><strong>Step 3 — The Compassionate Reframe (Neff, 2003):</strong> "What would I say to a close friend who had this exact thought?" Apply that standard to yourself. The gap between how you treat yourself and how you'd treat someone you love is typically enormous — and entirely unjustified.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cc">
+    <div class="cp2 reveal">
+      <div class="cc-h bad">❌ The Critic's Distortions</div>
+      <div class="cc-row bad"><span class="cdot bad"></span>"You always mess up in high-stakes situations." (overgeneralisation)</div>
+      <div class="cc-row bad"><span class="cdot bad"></span>"They could tell you were nervous — everyone noticed." (mind-reading)</div>
+      <div class="cc-row bad"><span class="cdot bad"></span>"One mistake and it's all ruined." (catastrophising)</div>
+      <div class="cc-row bad"><span class="cdot bad"></span>"That project failed because of you specifically." (personalisation)</div>
+      <div class="cc-row bad"><span class="cdot bad"></span>"Look how effortless they make it look — you'll never get there." (comparison + mind-reading)</div>
+    </div>
+    <div class="cp2 reveal">
+      <div class="cc-h good">✅ The Evidence-Based Counter</div>
+      <div class="cc-row good"><span class="cdot good"></span>"I have handled high-stakes situations well before. That is in my evidence bank."</div>
+      <div class="cc-row good"><span class="cdot good"></span>"I cannot read minds. Research shows most people were thinking about themselves."</div>
+      <div class="cc-row good"><span class="cdot good"></span>"This is one data point. My history contains many data points — and I choose which to weight."</div>
+      <div class="cc-row good"><span class="cdot good"></span>"Projects involve many people and conditions. My contribution is part of a complex system."</div>
+      <div class="cc-row good"><span class="cdot good"></span>"I'm comparing my internal experience to their external presentation. That comparison is structurally unfair."</div>
+    </div>
+  </div>
+
+  <div class="ib ib-gold">
+    <div class="ib-h">✦ The Imposter Syndrome Note</div>
+    <div class="ib-b">Imposter syndrome <strong>persists regardless of achievement.</strong> Degrees, promotions, and public recognition do not resolve it — because it is a pattern of self-perception, not a deficit of actual capability. Fix: first, recognise it as an inner critic pattern — not a perceptual fact. Second, build your Evidence Bank (Chapter 06). The documented record of actual competence that the inner critic refuses to spontaneously acknowledge is the antidote.</div>
+  </div>
+
+  <!-- WORKSHEET 05 -->
+  <div class="ws reveal">
+    <div class="ws-hdr"><span class="ws-ico">✏️</span><div class="ws-title">Chapter 05 Worksheet — Catching the Critic</div></div>
+    <div class="ws-sub">Use When the Inner Critic Is Loudest · 5 Minutes · Dismantles It Every Time</div>
+    <div class="ws-q">1. Write the critic's exact thought word-for-word. Don't soften it.</div>
+    <div class="ws-lines"><div class="ws-line"></div><div class="ws-line"></div></div>
+    <div class="ws-q">2. Which distortion is this? Circle one: <strong style="color:#d46040">Catastrophising</strong> / <strong style="color:#d46040">Mind-Reading</strong> / <strong style="color:#d46040">Overgeneralisation</strong> / <strong style="color:#d46040">Personalisation</strong></div>
+    <div class="ws-lines"><div class="ws-line"></div></div>
+    <div class="ws-q">3. ACT Defusion: Rewrite the thought starting with "I notice I'm having the thought that..."</div>
+    <div class="ws-lines"><div class="ws-line"></div></div>
+    <div class="ws-q">4. The Evidence Test: What actual evidence supports this criticism? What contradicts it?</div>
+    <div class="ws-lines"><div class="ws-line"></div><div class="ws-line"></div></div>
+    <div class="ws-q">5. The Compassionate Reframe: What would you say to a close friend who had this exact thought?</div>
+    <div class="ws-lines"><div class="ws-line"></div><div class="ws-line"></div></div>
+    <div class="ws-foot">The critic has opinions. The evidence test has facts. Always run the test before accepting the verdict.</div>
+  </div>
+</div>
+</section>
+
+<!-- ═══ 06 EVIDENCE BANK ═══ -->
+<section class="section section-alt" id="evidence">
+<div class="si">
+  <div class="ch-head" data-n="06">
+    <div>
+      <div class="ch-n">Chapter 06</div>
+      <div class="ch-cat">Applied from Bandura (1977) · Personal Mastery Experiences Archive</div>
+      <h2 class="ch-title">The <span class="g">Evidence</span><br/>Bank</h2>
+      <p class="ch-desc">The evidence bank is the antidote to both the inner critic and empty affirmations. It is a personal, specific, documented archive of real evidence that you are capable — drawn from your own actual history. Unlike affirmations, it makes no claims beyond what has already been proven. Unlike the inner critic, it gives equal weight to your successes. It is the most honest, most powerful confidence tool available.</p>
+    </div>
+  </div>
+
+  <div class="ev-grid">
+    <div class="ev reveal"><div class="ev-wm">1</div><span class="ev-tag">Evidence Category 01</span><div class="ev-title">Times You Did the Hard Thing</div><div class="ev-body">List every instance you can recall of doing something difficult, scary, or uncertain — and surviving. Not just succeeding. Surviving. The interview that terrified you. The conversation you kept avoiding. The presentation that made you nauseous. These are your most powerful confidence evidence — they demonstrate you can function under the exact conditions that currently scare you. The inner critic has no counter-argument for a documented history of doing hard things and emerging intact.</div></div>
+    <div class="ev reveal"><div class="ev-wm">2</div><span class="ev-tag">Evidence Category 02</span><div class="ev-title">Skills Built Through Effort</div><div class="ev-body">List every skill you can now do that you once could not — and that you built through deliberate effort. This list is longer than most people believe, because skills built slowly feel as if they've always existed once they're automatic. Writing. Cooking. A sport. A professional skill. A language. Each item is direct, personal evidence that you are someone who acquires capabilities through effort — the definition of the growth mindset from which all real confidence emerges.</div></div>
+    <div class="ev reveal"><div class="ev-wm">3</div><span class="ev-tag">Evidence Category 03</span><div class="ev-title">Positive Feedback Received and Dismissed</div><div class="ev-body">The inner critic retains criticism and immediately discounts positive feedback as outliers. Write down specific positive feedback from people whose opinions you respect — specific, sourced, quoted. Not "people seem to like my work" but "my manager said this was the most insightful analysis she'd seen on this type of problem." These are evidence. The inner critic calls them outliers. They are data — equal data to the failures it obsessively catalogues. Treat them equally.</div></div>
+    <div class="ev reveal"><div class="ev-wm">4</div><span class="ev-tag">Evidence Category 04</span><div class="ev-title">Obstacles Already Navigated</div><div class="ev-body">List every significant difficulty, setback, or challenge you have already moved through. Relationship failures. Career setbacks. Financial difficulties. Health challenges. Each one is evidence of a fundamental capability: you have survived 100% of your worst days so far. That is the most robust evidence of resilience available — and it is entirely, unambiguously yours. The inner critic routinely forgets this history. The evidence bank does not.</div></div>
+  </div>
+
+  <div class="ib ib-tip">
+    <div class="ib-h">✅ The Daily Practice — 2 Minutes Every Evening</div>
+    <div class="ib-b">Set a 2-minute evening ritual: <strong>write down one specific thing from today that belongs in the evidence bank.</strong> One moment of competence, resilience, courage, or growth. Over 90 days: 90 documented pieces of evidence. Over 6 months: 180. Read it when the inner critic is loudest. The critic has opinions. The bank has evidence. <strong>Evidence wins — always.</strong></div>
+  </div>
+
+  <!-- WORKSHEET 06 -->
+  <div class="ws reveal">
+    <div class="ws-hdr"><span class="ws-ico">✏️</span><div class="ws-title">Chapter 06 Worksheet — Build Your First Deposit</div></div>
+    <div class="ws-sub">Start Your Evidence Bank Right Now · 10 Minutes · 9 Deposits in One Sitting</div>
+    <div class="ws-q">Hard Things Done — list 3 times you did something difficult and survived, regardless of outcome:</div>
+    <div class="ws-lines"><div class="ws-line"></div><div class="ws-line"></div><div class="ws-line"></div></div>
+    <div class="ws-q">Skills Built Through Effort — list 3 things you can do now that you once could not, built through practice:</div>
+    <div class="ws-lines"><div class="ws-line"></div><div class="ws-line"></div><div class="ws-line"></div></div>
+    <div class="ws-q">Feedback Received and Dismissed — list 2 specific positive things people whose opinions you respect have said about you:</div>
+    <div class="ws-lines"><div class="ws-line"></div><div class="ws-line"></div></div>
+    <div class="ws-q">Survival Rate: "I have survived ___% of my hardest days. The evidence that I am resilient is: ___________."</div>
+    <div class="ws-lines"><div class="ws-line"></div></div>
+    <div class="ws-foot">This worksheet is your first 9 deposits. Your ongoing daily practice adds one per day. The compound interest on this investment is unshakeable confidence.</div>
+  </div>
+</div>
+</section>
+
+<!-- ═══ 07 SOCIAL CONFIDENCE ═══ -->
+<section class="section" id="social">
+<div class="si">
+  <div class="ch-head" data-n="07">
+    <div>
+      <div class="ch-n">Chapter 07</div>
+      <div class="ch-cat">Gilovich et al. (2000) · Huang et al. (2017) · Foa &amp; Kozak (1986) · Harvard</div>
+      <h2 class="ch-title">Social<br/><span class="g">Confidence</span></h2>
+      <p class="ch-desc">Social confidence is not an innate personality trait. It is a set of specific, learnable skills — conversational habits, perceptual reframes, and interaction protocols — that anyone can build through deliberate exposure and practice. The most socially confident people are not those who feel no anxiety. They are those who have built enough skill and evidence to function effectively with it.</p>
+    </div>
+  </div>
+
+  <div class="stat-band">
+    <div class="ss reveal"><span class="ss-n">Spotlight</span><span class="ss-l">Effect: people dramatically overestimate how much others notice and judge them (Gilovich et al., 2000)</span></div>
+    <div class="ss reveal"><span class="ss-n">Questions</span><span class="ss-l">People who ask more follow-up questions are rated more likeable — even while speaking less (Huang et al., 2017)</span></div>
+    <div class="ss reveal"><span class="ss-n">30–90</span><span class="ss-l">days of consistent social exposure produces measurable, durable social confidence</span></div>
+    <div class="ss reveal"><span class="ss-n">Focus</span><span class="ss-l">Shifting attention from self to other is the single most effective social anxiety intervention available</span></div>
+  </div>
+
+  <div class="sl">
+    <div class="sr reveal"><div><div class="sr-t">Shift Focus from Self to Other — The Primary Technique</div><div class="sr-b">The single most effective social confidence technique: redirect attention from "how am I coming across?" to "what is this person saying, feeling, and needing?" Social anxiety is almost entirely self-focused — a continuous self-monitoring loop that consumes the cognitive resources needed for genuine interaction. When you shift focus to the other person, the self-monitoring loop quiets because attention has moved. Simultaneously, you become a dramatically better conversation partner. People describe focused-attention listeners as "magnetic" — because genuine other-focus is rare and immediately felt as significant.</div></div><div><span class="badge bg">Primary Tool</span></div></div>
+    <div class="sr reveal"><div><div class="sr-t">Questions Are Your Confidence Shield</div><div class="sr-b">When social anxiety is high, asking genuine open questions is the lowest-risk, highest-return social move available. Huang et al. (2017, JPSP) found that people who asked more follow-up questions were rated significantly more likeable — even though they spoke less. Closed questions return conversational weight to you immediately. Open questions ("what brought you to this?" "how did that come about?") produce extended responses, giving you time to listen, think, and find genuine engagement. Questions redirect focus, build rapport, and fill silence — all three problems of social anxiety, solved in one move.</div></div><div><span class="badge bg">Lowest Risk</span></div></div>
+    <div class="sr reveal"><div><div class="sr-t">The Spotlight Effect — The Reframe That Ends Most Social Anxiety</div><div class="sr-b">Gilovich et al. (2000) documented the spotlight effect: people consistently and dramatically overestimate how much others notice and evaluate them. In one study, participants wearing an embarrassing T-shirt estimated 46% of people in a room noticed it — the actual number was 21%. The spotlight effect shows that we experience ourselves as the centre of others' attentional focus — when in reality, everyone is managing their own version of the same internal spotlight. The practical implication: most of the judgment you fear is occurring entirely inside your own mind.</div></div><div><span class="badge bg">Core Reframe</span></div></div>
+    <div class="sr reveal"><div><div class="sr-t">Progressive Exposure — The Only System That Actually Builds It</div><div class="sr-b">Social confidence is built through progressive, systematic exposure to social situations in order of anxiety level — derived from Foa &amp; Kozak's (1986) emotional processing theory. The ladder: start with one low-stakes interaction per day (compliment a cashier, make small talk, ask someone for directions). Move to slightly more demanding interactions when each level becomes comfortable. Then higher. The key: regular exposure at the edge of your current comfort level. Consistent exposure over 30–90 days produces measurable, durable social confidence that no amount of reading about social skills can replicate.</div></div><div><span class="badge bt">The System</span></div></div>
+  </div>
+
+  <!-- WORKSHEET 07 -->
+  <div class="ws reveal">
+    <div class="ws-hdr"><span class="ws-ico">✏️</span><div class="ws-title">Chapter 07 Worksheet — Your Social Exposure Ladder</div></div>
+    <div class="ws-sub">Design Your 30-Day Social Confidence Build · 10 Minutes</div>
+    <div class="ws-q">Level 1 — Near-Zero Anxiety: list 3 social interactions you could do today with almost no anxiety.</div>
+    <div class="ws-lines"><div class="ws-line"></div><div class="ws-line"></div><div class="ws-line"></div></div>
+    <div class="ws-q">Level 2 — Mild Discomfort: list 2 interactions that would feel slightly uncomfortable but not terrifying.</div>
+    <div class="ws-lines"><div class="ws-line"></div><div class="ws-line"></div></div>
+    <div class="ws-q">Level 3 — Genuine Stretch: list 1 interaction that feels like a real stretch — but not impossible.</div>
+    <div class="ws-lines"><div class="ws-line"></div></div>
+    <div class="ws-q">This week's commitment: I will do _____ from Level 1, _____ from Level 2, and _____ from Level 3.</div>
+    <div class="ws-lines"><div class="ws-line"></div></div>
+    <div class="ws-foot">When Level 1 becomes comfortable — it is no longer Level 1. Move it down and add a new Level 3. The ladder always has a next rung.</div>
+  </div>
+</div>
+</section>
+
+<!-- QUOTE 3 -->
+<div class="quote-wrap">
+  <div class="qi">
+    <p class="qt">"The confident person is not someone who has no self-doubt. They are someone who has built enough evidence, enough skills, and enough resilience that <em>self-doubt is no longer the deciding vote.</em>"</p>
+    <div class="ql"></div>
+    <span class="qa">Synthesised from Bandura (1977) · Neff (2003) · Cuddy et al. (2012) · Amabile &amp; Kramer (2011)<br/>70+ years of self-efficacy, compassion &amp; performance psychology research</span>
+  </div>
+</div>
+<!-- ═══ 08 CHEATSHEET ═══ -->
+<section class="section section-alt" id="cheatsheet">
+<div class="si">
+  <div class="ch-head" data-n="08">
+    <div>
+      <div class="ch-n">Chapter 08</div>
+      <div class="ch-cat">Quick Reference · Every Principle · One Table</div>
+      <h2 class="ch-title">The Master<br/><span class="g">Cheatsheet</span></h2>
+      <p class="ch-desc">Every principle from this guide — one quick-reference table. Return to this whenever you need a reminder of which tool applies to which situation. Your complete operating system for building unshakeable confidence from the inside out.</p>
+    </div>
+  </div>
+  <div class="cst-wrap">
+    <table class="cst">
+      <thead><tr><th class="td-n">#</th><th class="td-nm">Principle</th><th>The Action</th><th class="td-ch">Chapter</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td class="td-n">01</td><td class="td-nm">Confidence Is Not a Feeling</td><td>Stop waiting to feel ready. Act first. Let the evidence accumulate. The feeling follows action — always.</td><td class="td-ch">01</td><td><span class="badge bg">Core Truth</span></td></tr>
+        <tr><td class="td-n">02</td><td class="td-nm">Act Before Feeling Ready</td><td>Identify one thing you're avoiding. Take the smallest real version today — imperfectly. Write it down.</td><td class="td-ch">01</td><td><span class="badge bg">Today</span></td></tr>
+        <tr><td class="td-n">03</td><td class="td-nm">Mastery Experiences First</td><td>Bandura (1977): mastery experiences are 10× more powerful than affirmations. Do the thing. Then believe.</td><td class="td-ch">01</td><td><span class="badge bg">Framework</span></td></tr>
+        <tr><td class="td-n">04</td><td class="td-nm">Affirmations After Evidence</td><td>Affirmations = acknowledgment of what you've built. Not assertion of what you wish were true. Reverse the order.</td><td class="td-ch">01</td><td><span class="badge br">Reorder</span></td></tr>
+        <tr><td class="td-n">05</td><td class="td-nm">The Confidence-Competence Loop</td><td>Act → Small Win → Evidence → Belief → More Action. Each rotation builds the next. Start one loop today.</td><td class="td-ch">02</td><td><span class="badge bg">The System</span></td></tr>
+        <tr><td class="td-n">06</td><td class="td-nm">Small Wins Are Neurochemical</td><td>Even micro-progress triggers dopamine that reinforces the next action (Amabile &amp; Kramer, 2011). Never dismiss a small win.</td><td class="td-ch">02</td><td><span class="badge bg">Daily</span></td></tr>
+        <tr><td class="td-n">07</td><td class="td-nm">Imperfect Action &gt; Perfect Inaction</td><td>The brain updates its confidence model only from actual behaviour — not intended or visualised behaviour.</td><td class="td-ch">02</td><td><span class="badge bg">Always</span></td></tr>
+        <tr><td class="td-n">08</td><td class="td-nm">Rejection ≠ Worth</td><td>"Does this tell me I'm unworthy — or does it tell me about fit/timing/context?" Answer: almost always the latter.</td><td class="td-ch">03</td><td><span class="badge bg">Every Rejection</span></td></tr>
+        <tr><td class="td-n">09</td><td class="td-nm">The Worry Window</td><td>15–20 minutes of deliberate processing. Then consciously redirect. Prevents suppression and rumination both.</td><td class="td-ch">03</td><td><span class="badge bg">Protocol</span></td></tr>
+        <tr><td class="td-n">10</td><td class="td-nm">Self-Compassion Over Self-Esteem</td><td>Neff (2003): "This hurts. Suffering is human. I deserve kindness." More resilient than "I am great" under rejection.</td><td class="td-ch">03</td><td><span class="badge bg">Phrase</span></td></tr>
+        <tr><td class="td-n">11</td><td class="td-nm">Act Again Immediately</td><td>After rejection — take a related action as soon as possible. Signals resilience to your own nervous system.</td><td class="td-ch">03</td><td><span class="badge bg">Most Important</span></td></tr>
+        <tr><td class="td-n">12</td><td class="td-nm">Rejection as Data</td><td>"What actionable thing does this teach me? If nothing — release it completely." Feedback, not failure.</td><td class="td-ch">03</td><td><span class="badge bg">Framework</span></td></tr>
+        <tr><td class="td-n">13</td><td class="td-nm">2-Minute Power Posture</td><td>Arms wide, chest open, feet planted — 2 minutes before any high-stakes situation. Cuddy et al. (2012) confirmed.</td><td class="td-ch">04</td><td><span class="badge bg">Before Events</span></td></tr>
+        <tr><td class="td-n">14</td><td class="td-nm">Upright Posture All Day</td><td>Reduces cortisol production throughout the day (Nair et al., 2015). The body tells the brain what to feel.</td><td class="td-ch">04</td><td><span class="badge bg">Daily</span></td></tr>
+        <tr><td class="td-n">15</td><td class="td-nm">3-Second Eye Contact</td><td>Hold eye contact 3 full seconds per person before breaking naturally — sideways, never down.</td><td class="td-ch">04</td><td><span class="badge bg">Daily Practice</span></td></tr>
+        <tr><td class="td-n">16</td><td class="td-nm">Expand Into Space</td><td>Open gestures. Relax into your seat. Claim available space. Proprioceptive feedback shifts your own state.</td><td class="td-ch">04</td><td><span class="badge bg">Every Room</span></td></tr>
+        <tr><td class="td-n">17</td><td class="td-nm">Name the Inner Critic</td><td>Give it a name and persona separate from yourself. Distance allows evaluation rather than fusion with the thought.</td><td class="td-ch">05</td><td><span class="badge bg">Name It Today</span></td></tr>
+        <tr><td class="td-n">18</td><td class="td-nm">ACT Defusion (Hayes et al., 2006)</td><td>"I notice I'm having the thought that..." — not "I am..." The linguistic shift removes the thought's authority.</td><td class="td-ch">05</td><td><span class="badge bg">Technique</span></td></tr>
+        <tr><td class="td-n">19</td><td class="td-nm">The Evidence Test</td><td>"What actual evidence supports this criticism? What contradicts it?" Force the balance every time the critic speaks.</td><td class="td-ch">05</td><td><span class="badge bg">When Critic Speaks</span></td></tr>
+        <tr><td class="td-n">20</td><td class="td-nm">The Compassionate Reframe</td><td>"What would I say to a close friend with this same thought?" Apply that standard to yourself. Always.</td><td class="td-ch">05</td><td><span class="badge bg">Daily</span></td></tr>
+        <tr><td class="td-n">21</td><td class="td-nm">Document Hard Things Done</td><td>Every time you did something difficult and survived. Your most powerful confidence evidence. Record it that day.</td><td class="td-ch">06</td><td><span class="badge bg">Build This</span></td></tr>
+        <tr><td class="td-n">22</td><td class="td-nm">Document Skills Built</td><td>Everything you can now do that you once couldn't. Proof you acquire capabilities through deliberate effort.</td><td class="td-ch">06</td><td><span class="badge bg">Build This</span></td></tr>
+        <tr><td class="td-n">23</td><td class="td-nm">The Daily Evidence Entry</td><td>2 minutes each evening. One specific piece of evidence from today. 90 days = 90 documented pieces.</td><td class="td-ch">06</td><td><span class="badge bg">Daily Ritual</span></td></tr>
+        <tr><td class="td-n">24</td><td class="td-nm">Shift Focus from Self to Other</td><td>From "how am I coming across?" to "what is this person experiencing?" Social anxiety quiets immediately.</td><td class="td-ch">07</td><td><span class="badge bg">Every Interaction</span></td></tr>
+        <tr><td class="td-n">25</td><td class="td-nm">Ask Open Questions</td><td>Huang et al. (2017): people who ask more follow-up questions are rated more likeable. Open questions build rapport.</td><td class="td-ch">07</td><td><span class="badge bg">Daily</span></td></tr>
+        <tr><td class="td-n">26</td><td class="td-nm">The Spotlight Effect</td><td>Gilovich et al. (2000): people notice you half as much as you think. Most judgment you fear is in your own mind.</td><td class="td-ch">07</td><td><span class="badge bg">Core Reframe</span></td></tr>
+        <tr><td class="td-n">27</td><td class="td-nm">Progressive Social Exposure</td><td>Low-stakes daily → gradually escalate. 30–90 days consistent exposure = durable social confidence. Only way is through.</td><td class="td-ch">07</td><td><span class="badge bt">The System</span></td></tr>
+        <tr><td class="td-n">28</td><td class="td-nm">Survival Rate Is 100%</td><td>You have survived 100% of your worst days so far. The most robust resilience evidence available to you.</td><td class="td-ch">All</td><td><span class="badge bg">When Doubting</span></td></tr>
+        <tr><td class="td-n">29</td><td class="td-nm">Identity Through Action</td><td>Every action is a vote for who you're becoming. Confidence is not declared — it is accumulated vote by vote.</td><td class="td-ch">All</td><td><span class="badge bg">Always</span></td></tr>
+        <tr><td class="td-n">30</td><td class="td-nm">The Unshakeable Standard</td><td>Unshakeable confidence is not the absence of doubt. It is a relationship with doubt where doubt is no longer the deciding vote.</td><td class="td-ch">All</td><td><span class="badge bg">The Goal</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- WORKSHEET 08 -->
+  <div class="ws reveal" style="margin-top:48px">
+    <div class="ws-hdr"><span class="ws-ico">✏️</span><div class="ws-title">Chapter 08 Worksheet — Your Weekly Confidence Protocol</div></div>
+    <div class="ws-sub">Use Every Sunday · 5 Minutes · The Compound Interest of Confidence</div>
+    <div class="ws-q">This week's Evidence Bank entry: one moment this week where you functioned under uncertainty.</div>
+    <div class="ws-lines"><div class="ws-line"></div><div class="ws-line"></div></div>
+    <div class="ws-q">This week's loop rotation: what action did I take? What evidence did it produce?</div>
+    <div class="ws-lines"><div class="ws-line"></div><div class="ws-line"></div></div>
+    <div class="ws-q">Inner critic moment this week: what did it say — and which distortion was it?</div>
+    <div class="ws-lines"><div class="ws-line"></div></div>
+    <div class="ws-q">Next week's commitment: one action I will take from the 30-principle cheatsheet above, and when.</div>
+    <div class="ws-lines"><div class="ws-line"></div></div>
+    <div class="ws-foot">52 weeks of this practice = 52 evidence entries + 52 loop rotations + 52 critic dismantlings. That is a fundamentally different person. The compound interest of confidence is unshakeable.</div>
+  </div>
+</div>
+</section>
+
+<!-- ABOUT -->
+<div class="about-s">
+  <div class="about-inner">
+    <div>
+      <div class="about-lbl">About This Guide</div>
+      <h2 class="about-name">Built by<br/><span class="g">Parallelogram</span></h2>
+      <div class="about-body">
+        <p>Parallelogram is a research-first content studio building premium knowledge guides on the topics that shape how people think, work, and live. Every guide begins with deep research — primary studies, peer-reviewed journals, and current data — before a single word of content is written.</p>
+        <p>This guide on Unshakeable Confidence draws on 40+ years of peer-reviewed psychology research: Bandura's self-efficacy theory (1977), Neff's self-compassion framework (2003), Cuddy et al.'s power posture research (2012), Amabile and Kramer's progress principle (2011), Beck's cognitive distortions (1979), Hayes et al.'s ACT defusion techniques (2006), Eisenberger et al.'s rejection neuroscience (2003), Gilovich et al.'s spotlight effect (2000), Draganski et al.'s neuroplasticity study (2004), and Wood et al. on affirmations (2009).</p>
+        <p><strong>Our standard:</strong> Every principle in this guide is either directly research-backed or derived from research-backed principles. Citations are in the text — not decorative references at the back. What you read here, you can verify.</p>
+      </div>
+    </div>
+    <div>
+      <div class="about-card">
+        <div class="about-card-lbl">This Guide by the Numbers</div>
+        <div class="astat"><span class="astat-n">40+</span><span class="astat-l">years of psychology research distilled into 30 actionable principles</span></div>
+        <div class="astat"><span class="astat-n">8</span><span class="astat-l">chapters, each with a hands-on worksheet for immediate application</span></div>
+        <div class="astat"><span class="astat-n">10</span><span class="astat-l">peer-reviewed papers directly cited in the content</span></div>
+        <div class="astat"><span class="astat-n">3 Days</span><span class="astat-l">to see the first measurable shift when you start the Action Loop from Chapter 01</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="fl">Parallelogram</div>
+  <p class="ft">Unshakeable Confidence from the Inside Out · Mindset Series · 2025–2026</p>
+  <p class="fc">Primary Sources: Bandura (1977) Psychological Review · Neff (2003) Self and Identity · Cuddy, Wilmuth &amp; Carney (2012) Psychological Science · Amabile &amp; Kramer (2011) HBR · Beck (1979) Cognitive Therapy · Hayes et al. (2006) JCCP · Eisenberger et al. (2003) Science · Gilovich et al. (2000) JPSP · Draganski et al. (2004) Nature · Wood et al. (2009) Psychological Science</p>
+  <p class="fg">"You don't build confidence waiting. You build it doing — one imperfect, real, evidence-creating action at a time."</p>
+</footer>
+
+<script>
+window.addEventListener("scroll",()=>{
+  const h=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById("prog").style.width=(scrollY/h*100)+"%";
+},{passive:true});
+
+const ro=new IntersectionObserver(e=>{
+  e.forEach(x=>{if(x.isIntersecting)x.target.classList.add("vis")});
+},{threshold:0.08,rootMargin:"0px 0px -36px 0px"});
+document.querySelectorAll(".reveal").forEach(el=>ro.observe(el));
+
+const so=new IntersectionObserver(e=>{
+  e.forEach(x=>{
+    if(x.isIntersecting){
+      const el=x.target;
+      const siblings=Array.from(el.parentElement.children);
+      const idx=siblings.indexOf(el);
+      setTimeout(()=>{
+        el.style.opacity="1";
+        el.style.transform="translateY(0)";
+      },idx*72);
+      so.unobserve(el);
+    }
+  });
+},{threshold:0.06,rootMargin:"0px 0px -28px 0px"});
+
+const ease="cubic-bezier(.2,0,.1,1)";
+document.querySelectorAll(".card,.cp,.ss,.bl,.ps,.ev,.lstep,.sr,.toc-item,.cstat,.cp2").forEach(el=>{
+  el.style.opacity="0";
+  el.style.transform="translateY(14px)";
+  el.style.transition=`opacity .55s ${ease}, transform .55s ${ease}`;
+  so.observe(el);
+});
+</script>
+</body>
+</html>

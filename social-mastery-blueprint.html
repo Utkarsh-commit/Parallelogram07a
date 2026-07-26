@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>The Social Mastery Blueprint</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07080a;
+  --surface:#0e1014;
+  --card:#13151a;
+  --card2:#181b22;
+  --gold:#c8943a;
+  --gold2:#e8b84b;
+  --golddim:rgba(200,148,58,.13);
+  --cream:#f0e8d5;
+  --muted:#5c5f68;
+  --light:#9a9da8;
+  --border:rgba(200,148,58,.18);
+  --rust:#b84532;
+  --teal:#2c7a72;
+  --rose:#9c3a5a;
+  --white:#faf9f6;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--cream);overflow-x:hidden;line-height:1.6}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.5}
+
+/* PROGRESS */
+#prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--rose),var(--gold),var(--gold2));width:0%;z-index:2000;transition:width .08s}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1500;display:flex;align-items:center;justify-content:space-between;padding:14px 48px;background:rgba(7,8,10,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(200,148,58,.1)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
+.nav-links{display:flex;gap:22px;list-style:none}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+@media(max-width:768px){.nav-links{display:none}.hero,.section,.toc-wrap,.quote-block,footer{padding-left:22px!important;padding-right:22px!important}nav{padding:14px 22px}}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px 64px 80px;position:relative;overflow:hidden;background:var(--bg)}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 75% 55% at 90% 8%,rgba(156,58,90,.12) 0%,transparent 55%),radial-gradient(ellipse 55% 70% at 5% 90%,rgba(200,148,58,.09) 0%,transparent 60%),radial-gradient(ellipse 40% 40% at 50% 50%,rgba(44,122,114,.04) 0%,transparent 70%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;opacity:.022;background-image:linear-gradient(rgba(200,148,58,1) 1px,transparent 1px),linear-gradient(90deg,rgba(200,148,58,1) 1px,transparent 1px);background-size:68px 68px}
+.hero-inner{position:relative;max-width:1100px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(156,58,90,.15);border:1px solid rgba(156,58,90,.4);padding:5px 16px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#d47898;margin-bottom:22px;opacity:0;animation:fadeup .7s .15s forwards}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:26px;display:flex;align-items:center;gap:14px;opacity:0;animation:fadeup .7s .2s forwards}
+.hero-tag::before{content:'';width:44px;height:1px;background:var(--gold);flex-shrink:0}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(50px,9vw,126px);font-weight:700;line-height:.88;letter-spacing:-4px;margin-bottom:10px;opacity:0;animation:fadeup .8s .4s forwards}
+.hero h1 span{color:var(--gold);font-style:italic}
+.hero h1 .sub{display:block;color:rgba(240,232,213,.2);font-size:clamp(22px,3.8vw,54px);font-weight:400;font-style:italic;letter-spacing:-1px;margin-top:8px}
+.hero-desc{font-size:clamp(15px,1.9vw,18px);color:var(--light);max-width:580px;margin:34px 0 50px;font-weight:300;line-height:1.78;opacity:0;animation:fadeup .8s .6s forwards}
+.hero-stats{display:flex;gap:0;border:1px solid var(--border);width:fit-content;opacity:0;animation:fadeup .8s .8s forwards;flex-wrap:wrap}
+.hstat{padding:18px 32px;border-right:1px solid var(--border);text-align:center}
+.hstat:last-child{border-right:none}
+.hstat-n{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.hstat-l{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-top:4px}
+.scroll-hint{position:absolute;bottom:40px;left:64px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:10px;animation:pulse 2.5s infinite}
+.scroll-hint::before{content:'';width:1px;height:38px;background:var(--gold);opacity:.35}
+@keyframes fadeup{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+
+/* TOC */
+.toc-wrap{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:56px 64px}
+.toc-inner{max-width:1100px;margin:0 auto}
+.toc-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:36px;display:flex;align-items:center;gap:12px}
+.toc-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px}
+.toc-item{background:var(--card);padding:18px 22px;display:flex;align-items:flex-start;gap:14px;cursor:pointer;transition:background .2s,border-color .2s;border:1px solid transparent;text-decoration:none}
+.toc-item:hover{background:var(--card2);border-color:var(--border)}
+.toc-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);opacity:.55;flex-shrink:0;min-width:26px;margin-top:2px}
+.toc-name{font-size:13.5px;color:var(--light);font-weight:400;transition:color .2s;line-height:1.4}
+.toc-item:hover .toc-name{color:var(--cream)}
+
+/* SECTIONS */
+.section{padding:96px 64px;position:relative}
+.section-alt{background:var(--surface)}
+.s-inner{max-width:1100px;margin:0 auto}
+.s-head{display:grid;grid-template-columns:90px 1fr;gap:32px;align-items:start;margin-bottom:60px;padding-bottom:44px;border-bottom:1px solid var(--border)}
+.s-num{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;padding-top:8px}
+.s-meta{display:flex;flex-direction:column;gap:10px}
+.s-cat{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:3px;color:var(--rust);text-transform:uppercase}
+.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,60px);font-weight:700;line-height:.92;letter-spacing:-1.5px;color:var(--cream)}
+.s-title span{color:var(--gold);font-style:italic}
+.s-desc{font-size:15.5px;color:var(--light);max-width:660px;font-weight:300;line-height:1.78;margin-top:6px}
+@media(max-width:600px){.s-head{grid-template-columns:1fr;gap:14px}}
+
+/* CARDS */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:2px}
+@media(max-width:600px){.cards{grid-template-columns:1fr}}
+.card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .25s,background .25s;position:relative;overflow:hidden}
+.card:hover{border-color:var(--border);background:var(--card2)}
+.card::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:linear-gradient(180deg,var(--gold),var(--rose));transition:height .35s}
+.card:hover::before{height:100%}
+.card-num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);opacity:.45;margin-bottom:14px}
+.card-icon{font-size:26px;margin-bottom:11px;display:block}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:700;color:var(--cream);letter-spacing:-.4px;margin-bottom:11px;line-height:1.15}
+.card-sec{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin:16px 0 7px}
+.card-text{font-size:13.5px;color:var(--light);line-height:1.72;font-weight:300}
+.psych{background:rgba(200,148,58,.06);border-left:2px solid var(--gold);padding:15px 18px;margin-top:18px}
+.psych .card-sec{margin-top:0}
+.realworld{background:rgba(156,58,90,.07);border-left:2px solid rgba(156,58,90,.5);padding:15px 18px;margin-top:14px}
+.realworld .card-sec{color:#d47898}
+.badge{display:inline-flex;align-items:center;padding:4px 11px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;margin-top:14px}
+.ba{background:rgba(200,148,58,.11);color:var(--gold);border:1px solid var(--border)}
+.bb{background:rgba(44,122,114,.12);color:#4aaa9e;border:1px solid rgba(44,122,114,.3)}
+.bc{background:rgba(184,69,50,.11);color:#d46040;border:1px solid rgba(184,69,50,.28)}
+.bd{background:rgba(156,58,90,.12);color:#d47898;border:1px solid rgba(156,58,90,.3)}
+
+/* QUOTE */
+.quote-block{background:var(--surface);padding:72px 64px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center}
+.quote-text{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3.2vw,36px);font-weight:600;font-style:italic;color:var(--cream);max-width:880px;margin:0 auto;line-height:1.4}
+.quote-text em{color:var(--gold)}
+.quote-attr{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:24px}
+
+/* STAT ROW */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:2px;margin:44px 0}
+.s-stat{background:var(--card);padding:26px 22px;text-align:center;border:1px solid transparent;transition:border-color .2s}
+.s-stat:hover{border-color:var(--border)}
+.s-stat-n{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.s-stat-l{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-top:5px}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}}
+.col-card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .2s}
+.col-card:hover{border-color:var(--border)}
+.col-icon{font-size:30px;margin-bottom:14px;display:block}
+.col-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:11px;letter-spacing:-.4px}
+.col-text{font-size:13.5px;color:var(--light);line-height:1.75;font-weight:300}
+.col-text strong{color:var(--cream);font-weight:500}
+
+/* EMOTION GRID */
+.emotion-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2px;margin-top:36px}
+.emo-card{background:var(--card);padding:28px;border:1px solid transparent;transition:border-color .25s,background .25s;position:relative;overflow:hidden}
+.emo-card:hover{border-color:var(--border);background:var(--card2)}
+.emo-top{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.emo-emoji{font-size:32px;flex-shrink:0}
+.emo-name{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--cream)}
+.emo-signal{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
+.emo-text{font-size:13px;color:var(--light);line-height:1.7;font-weight:300}
+.emo-tell{background:rgba(200,148,58,.06);border-left:2px solid var(--gold);padding:10px 14px;margin-top:12px;font-size:12.5px;color:var(--light);line-height:1.6;font-weight:300}
+.emo-tell strong{color:var(--cream);font-weight:500}
+.emo-dot{position:absolute;top:0;right:0;width:40px;height:40px;opacity:.08}
+
+/* FORD TABLE */
+.ford-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;margin:36px 0}
+@media(max-width:640px){.ford-grid{grid-template-columns:1fr}}
+.ford-card{background:var(--card);padding:30px;border:1px solid transparent;transition:border-color .2s,background .2s;position:relative}
+.ford-card:hover{border-color:var(--border);background:var(--card2)}
+.ford-letter{font-family:'Cormorant Garamond',serif;font-size:72px;font-weight:700;color:var(--gold);opacity:.12;position:absolute;top:10px;right:20px;line-height:1}
+.ford-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+.ford-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--cream);margin-bottom:12px}
+.ford-text{font-size:13.5px;color:var(--light);line-height:1.7;font-weight:300}
+.ford-qs{margin-top:16px;display:flex;flex-direction:column;gap:8px}
+.ford-q{font-size:13px;color:var(--light);padding:8px 12px;background:rgba(200,148,58,.05);border-left:2px solid rgba(200,148,58,.3);font-style:italic;line-height:1.5}
+
+/* CHARISMA HABITS */
+.habit-list{display:flex;flex-direction:column;gap:2px;margin-top:36px}
+.habit{display:grid;grid-template-columns:56px 1fr;gap:0;background:var(--card);border:1px solid transparent;transition:border-color .2s}
+.habit:hover{border-color:var(--border)}
+.habit-num{background:var(--golddim);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:var(--gold)}
+.habit-body{padding:22px 26px}
+.habit-title{font-weight:600;color:var(--cream);font-size:15px;margin-bottom:6px}
+.habit-text{font-size:13.5px;color:var(--light);line-height:1.65;font-weight:300}
+.habit-sci{background:rgba(200,148,58,.05);border-left:2px solid rgba(200,148,58,.25);padding:10px 14px;margin-top:12px;font-size:12.5px;color:var(--light);line-height:1.6;font-weight:300}
+.habit-sci strong{color:var(--gold);font-weight:500}
+
+/* LISTENING */
+.listen-compare{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:36px 0}
+@media(max-width:640px){.listen-compare{grid-template-columns:1fr}}
+.lc-side{background:var(--card);padding:28px 26px}
+.lc-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.lc-head.bad{color:#d46040}
+.lc-head.good{color:#4aaa9e}
+.lc-row{display:flex;gap:10px;margin-bottom:13px;font-size:13px;color:var(--light);line-height:1.6;font-weight:300}
+.lc-row::before{content:'→';color:var(--gold);flex-shrink:0;font-size:11px;margin-top:3px}
+
+/* ALERT / TIP */
+.alert{background:rgba(184,69,50,.07);border:1px solid rgba(184,69,50,.24);padding:22px 26px;margin:28px 0}
+.alert-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:var(--rust);text-transform:uppercase;margin-bottom:9px}
+.alert-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.alert-text strong{color:var(--cream);font-weight:500}
+.tip{background:rgba(44,122,114,.07);border:1px solid rgba(44,122,114,.24);padding:22px 26px;margin:28px 0}
+.tip-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:#4aaa9e;text-transform:uppercase;margin-bottom:9px}
+.tip-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.tip-text strong{color:var(--cream);font-weight:500}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;margin-top:40px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--card2);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);padding:13px 16px;text-align:left;border-bottom:1px solid var(--border)}
+tbody tr{border-bottom:1px solid rgba(200,148,58,.07);transition:background .15s}
+tbody tr:hover{background:var(--card)}
+tbody td{padding:13px 16px;color:var(--light);vertical-align:top;line-height:1.5}
+.num-cell{font-family:'JetBrains Mono',monospace;color:var(--gold);opacity:.55;font-size:11px}
+.name-cell{font-weight:500;color:var(--cream)}
+
+/* FOOTER */
+footer{background:var(--bg);border-top:1px solid var(--border);padding:56px 64px 72px;text-align:center}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;letter-spacing:2px;color:var(--gold);margin-bottom:10px}
+.footer-sub{font-size:13.5px;color:var(--muted);margin-bottom:6px}
+.footer-tiny{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(92,95,104,.45);text-transform:uppercase;margin-top:26px}
+
+.pg-hero-art{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:.55;z-index:0}
+.pg-hero-art svg{width:100%;height:100%;display:block}
+[class*="icon"] svg.pg-icon{width:1em;height:1em;display:inline-block;vertical-align:-0.15em}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<nav>
+  <div class="nav-logo">Social Mastery</div>
+  <ul class="nav-links">
+    <li><a href="#ford">FORD</a></li>
+    <li><a href="#charisma">Charisma</a></li>
+    <li><a href="#listening">Listening</a></li>
+    <li><a href="#microexpressions">Micro-Expressions</a></li>
+    <li><a href="#bodylanguage">Body Language</a></li>
+    <li><a href="#rapport">Rapport</a></li>
+    <li><a href="#conflict">Conflict</a></li>
+    <li><a href="#cheatsheet">Cheatsheet</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero"><div class="pg-hero-art" aria-hidden="true"><svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><path d="M-179.7 60.8 A211.5 211.5 0 0 1 136.4 -153.7" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M384.3 229.9 A178.0 178.0 0 0 1 150.3 232.7" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M454.7 351.7 A149.3 149.3 0 0 1 442.0 78.4" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><line x1="306.3" y1="109.1" x2="305.1" y2="94.1" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="190.3" y1="38.9" x2="128.0" y2="141.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="190.3" y1="38.9" x2="305.1" y2="94.1" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="305.1" y1="94.1" x2="371.7" y2="135.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="468.0" y1="105.3" x2="494.3" y2="109.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="468.0" y1="105.3" x2="425.5" y2="156.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="306.3" y1="109.1" x2="244.6" y2="172.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="371.7" y1="135.7" x2="425.5" y2="156.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="80.5" y1="185.8" x2="128.0" y2="141.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="830.4" y1="123.7" x2="796.5" y2="137.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="800.4" y1="154.2" x2="796.5" y2="137.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="800.4" y1="154.2" x2="758.9" y2="148.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="244.6" y1="172.5" x2="296.6" y2="253.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="296.6" y1="253.7" x2="381.6" y2="206.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="602.8" y1="100.4" x2="547.5" y2="57.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="796.5" y1="137.8" x2="758.9" y2="148.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="830.4" y1="123.7" x2="868.3" y2="185.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="381.6" y1="206.4" x2="426.0" y2="184.2" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="381.6" y1="206.4" x2="425.5" y2="156.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="426.0" y1="184.2" x2="425.5" y2="156.8" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><circle cx="306.3" cy="109.1" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="190.3" cy="38.9" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="305.1" cy="94.1" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="468.0" cy="105.3" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="468.0" cy="105.3" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="244.6" cy="172.5" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="244.6" cy="172.5" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="371.7" cy="135.7" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="80.5" cy="185.8" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="830.4" cy="123.7" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="830.4" cy="123.7" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="800.4" cy="154.2" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="800.4" cy="154.2" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="796.5" cy="137.8" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="796.5" cy="137.8" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="296.6" cy="253.7" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="494.3" cy="109.3" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="128.0" cy="141.3" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="602.8" cy="100.4" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="758.9" cy="148.8" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="758.9" cy="148.8" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="547.5" cy="57.3" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="868.3" cy="185.3" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="381.6" cy="206.4" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="381.6" cy="206.4" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="426.0" cy="184.2" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="425.5" cy="156.8" r="1.8" fill="#c8943a" opacity="0.50"/></svg></div>
+  <div class="hero-glow"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">Social Skills · Psychology · Human Behaviour</div>
+    <div class="hero-tag">The Complete Social Intelligence Research Guide · 2025–26 Edition</div>
+    <h1>The Social<br/><span>Mastery</span><span class="sub">Blueprint</span></h1>
+    <p class="hero-desc">The science of being magnetic — backed by Paul Ekman, Dale Carnegie, Harvard research, and 60 years of social psychology. 8 deep chapters. Real frameworks. Zero awkward silence, ever again.</p>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-n">93%</span><span class="hstat-l">of communication is nonverbal</span></div>
+      <div class="hstat"><span class="hstat-n">1/25</span><span class="hstat-l">of a second — how fast micro-expressions flash</span></div>
+      <div class="hstat"><span class="hstat-n">90%</span><span class="hstat-l">of people miss micro-expressions entirely</span></div>
+      <div class="hstat"><span class="hstat-n">7</span><span class="hstat-l">universal emotions on every human face</span></div>
+    </div>
+  </div>
+  <div class="scroll-hint">Scroll to begin</div>
+</section>
+
+<!-- ─── TOC ─── -->
+<div class="toc-wrap">
+  <div class="toc-inner">
+    <div class="toc-label">Everything Inside This Guide</div>
+    <div class="toc-grid">
+      <a href="#ford" class="toc-item"><span class="toc-num">01</span><span class="toc-name">The FORD Framework — Never face awkward silence again in any situation</span></a>
+      <a href="#charisma" class="toc-item"><span class="toc-num">02</span><span class="toc-name">Charisma Is Learnable — The 4 observable habits of people everyone is drawn to</span></a>
+      <a href="#listening" class="toc-item"><span class="toc-num">03</span><span class="toc-name">Active Listening Decoded — Most people hear, few actually listen</span></a>
+      <a href="#microexpressions" class="toc-item"><span class="toc-num">04</span><span class="toc-name">Micro-Expressions — The 7 emotions written on every face before words are spoken</span></a>
+      <a href="#bodylanguage" class="toc-item"><span class="toc-num">05</span><span class="toc-name">Body Language Mastery — The silent signals that dominate every room</span></a>
+      <a href="#rapport" class="toc-item"><span class="toc-num">06</span><span class="toc-name">Rapport Building — How to make anyone feel instantly understood</span></a>
+      <a href="#conflict" class="toc-item"><span class="toc-num">07</span><span class="toc-name">Conflict & Difficult Conversations — Navigate any tension without losing the relationship</span></a>
+      <a href="#cheatsheet" class="toc-item"><span class="toc-num">08</span><span class="toc-name">The Master Cheatsheet — Every principle, one table</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- ─── 01: FORD FRAMEWORK ─── -->
+<section class="section" id="ford">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 01</div>
+    <div class="s-meta">
+      <div class="s-cat">The Conversation Starter System</div>
+      <h2 class="s-title">The <span>FORD</span><br/>Framework</h2>
+      <p class="s-desc">The single most powerful conversation tool ever created. Four categories. Infinite directions. Zero awkward silence — with anyone, in any situation, forever. Master this and you'll never dread small talk again.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">2min</span><span class="s-stat-l">is all it takes to establish trust using structured conversation</span></div>
+    <div class="s-stat"><span class="s-stat-n">73%</span><span class="s-stat-l">of people report feeling socially anxious in new conversations</span></div>
+    <div class="s-stat"><span class="s-stat-n">4</span><span class="s-stat-l">FORD topics cover 95%+ of all meaningful human interests</span></div>
+    <div class="s-stat"><span class="s-stat-n">∞</span><span class="s-stat-l">conversation directions from any single FORD entry point</span></div>
+  </div>
+
+  <div class="ford-grid">
+    <div class="ford-card">
+      <div class="ford-letter">F</div>
+      <div class="ford-label">F · Family</div>
+      <div class="ford-title">Family</div>
+      <p class="ford-text">Every human being has a family story — biological, chosen, complicated, or proud. Family is an emotionally safe, universally relatable entry point that opens up into values, background, and identity. People light up when talking about people they love.</p>
+      <div class="ford-qs">
+        <div class="ford-q">"Are you from here originally, or did you grow up somewhere else?"</div>
+        <div class="ford-q">"Do you have siblings? Are you close?"</div>
+        <div class="ford-q">"What's your family like — big family gatherings or more quiet?"</div>
+        <div class="ford-q">"Did growing up where you did shape how you think about things?"</div>
+      </div>
+    </div>
+    <div class="ford-card">
+      <div class="ford-letter">O</div>
+      <div class="ford-label">O · Occupation</div>
+      <div class="ford-title">Occupation</div>
+      <p class="ford-text">Work is the single largest time investment in most people's lives — and most people have complex feelings about it. Occupation opens doors to passion, frustration, ambition, and identity. The trick: don't ask "what do you do?" Ask what they enjoy about it.</p>
+      <div class="ford-qs">
+        <div class="ford-q">"What's the most interesting part of your work?"</div>
+        <div class="ford-q">"How did you end up in that field — was it planned or did it find you?"</div>
+        <div class="ford-q">"What does a typical day actually look like for you?"</div>
+        <div class="ford-q">"If you could change one thing about your industry, what would it be?"</div>
+      </div>
+    </div>
+    <div class="ford-card">
+      <div class="ford-letter">R</div>
+      <div class="ford-label">R · Recreation</div>
+      <div class="ford-title">Recreation</div>
+      <p class="ford-text">What someone does with their free time is who they truly are — not their job title. Recreation unlocks authentic personality, passion, and creativity. This is where conversations transform from polite to genuinely interesting. People are most alive talking about what they love.</p>
+      <div class="ford-qs">
+        <div class="ford-q">"What do you do to actually switch off when work is done?"</div>
+        <div class="ford-q">"Have you always been into [that hobby], or did something spark it?"</div>
+        <div class="ford-q">"What's the best trip or experience you've had in the last year?"</div>
+        <div class="ford-q">"Is there something you've always wanted to try but haven't yet?"</div>
+      </div>
+    </div>
+    <div class="ford-card">
+      <div class="ford-letter">D</div>
+      <div class="ford-label">D · Dreams</div>
+      <div class="ford-title">Dreams</div>
+      <p class="ford-text">Dreams is the deepest level — the level where real connection is made. Few people ask about dreams. When you do, you stand apart immediately. People rarely feel seen this deeply in casual conversation. Dreams questions create the kind of conversations people remember for years.</p>
+      <div class="ford-qs">
+        <div class="ford-q">"If you could spend a year doing absolutely anything, what would it be?"</div>
+        <div class="ford-q">"Is there something you've always known you wanted to do with your life?"</div>
+        <div class="ford-q">"What does success actually look like to you — not on paper, but genuinely?"</div>
+        <div class="ford-q">"What's one thing you'd regret not having tried in 20 years?"</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">FORD PRINCIPLE 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M20 11a8 8 0 0 0-14.9-3.5M4 13a8 8 0 0 0 14.9 3.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 4v4h4M19 20v-4h-4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Use FORD as a Loop, Not a List</div>
+      <div class="card-sec">The Key to Flow</div>
+      <p class="card-text">FORD isn't a checklist to power through. It's a navigation system. Start anywhere. Follow genuine interest. When a thread runs dry, pivot naturally to another FORD category. Great conversation feels like a river — fluid, responsive, alive. FORD gives you the map. Your curiosity is the current.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Science</div>
+        <p class="card-text">Harvard neuroscience research found that talking about ourselves activates the same pleasure centres in the brain as food and money. Giving someone the gift of being asked great questions about their own life is one of the most powerful connection tools in existence.</p>
+      </div>
+      <span class="badge ba">Core Technique</span>
+    </div>
+    <div class="card">
+      <div class="card-num">FORD PRINCIPLE 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="9" cy="10" r="6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="14" r="6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Open Questions, Always</div>
+      <div class="card-sec">The Non-Negotiable</div>
+      <p class="card-text">Closed questions kill conversations. "Do you have siblings?" ends in yes/no. "What are your siblings like?" opens a world. Every FORD question should begin with What, How, Why, Tell me about, or Walk me through. These five openers are the difference between interrogation and genuine conversation.</p>
+      <div class="card-sec">The Conversation Multiplier</div>
+      <p class="card-text">After each answer, reflect something back: "That's interesting — what made you choose that?" This signals genuine attention, deepens the conversation, and eliminates the pressure to constantly generate new questions. One question + genuine reflection = 15 minutes of natural conversation.</p>
+      <span class="badge ba">Technique</span>
+    </div>
+    <div class="card">
+      <div class="card-num">FORD PRINCIPLE 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M13 2 4 14h6l-1 8 9-12h-6z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">FORD in 5 Difficult Situations</div>
+      <div class="card-sec">Where It Saves You</div>
+      <p class="card-text"><strong style="color:var(--cream)">At a networking event:</strong> "How did you first get into [their field]?" → Occupation → Dreams.<br/><br/><strong style="color:var(--cream)">On a first date:</strong> "What does a perfect weekend look like for you?" → Recreation → Dreams.<br/><br/><strong style="color:var(--cream)">At a family event:</strong> "What have you been excited about lately?" → Any direction.<br/><br/><strong style="color:var(--cream)">In an interview:</strong> "What drew you to this company?" → Occupation + Dreams.<br/><br/><strong style="color:var(--cream)">With a stranger on a flight:</strong> "Coming from or going home?" → Family or Recreation.</p>
+      <span class="badge bb">Applied</span>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-head">✅ The 70/30 Rule of Great Conversation</div>
+    <p class="tip-text">The best conversationalists listen 70% of the time and speak 30%. This isn't passivity — it's power. When you let the other person fill 70% of the space, they feel genuinely heard, they like you more, and they find the conversation far more satisfying. <strong>The paradox: the less you talk about yourself, the more impressive you seem.</strong></p>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 1 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"You can make more friends in two months by becoming interested in other people than you can in two years by trying to get other people <em>interested in you.</em>"</p>
+  <p class="quote-attr">— Dale Carnegie, How to Win Friends and Influence People</p>
+</div>
+
+<!-- ─── 02: CHARISMA ─── -->
+<section class="section section-alt" id="charisma">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 02</div>
+    <div class="s-meta">
+      <div class="s-cat">The Learnable Superpower</div>
+      <h2 class="s-title">Charisma<br/>Is <span>Learnable</span></h2>
+      <p class="s-desc">Science has settled this debate: charisma is not a gift. It's a set of observable, repeatable behaviours that anyone can build. Harvard Business Review, Olivia Fox Cabane, and decades of social psychology all agree: charisma is a skill, not a trait.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">∅</span><span class="s-stat-l">genetic component — charisma is entirely behavioural</span></div>
+    <div class="s-stat"><span class="s-stat-n">3</span><span class="s-stat-l">core components: Presence, Power, and Warmth (Cabane)</span></div>
+    <div class="s-stat"><span class="s-stat-n">7sec</span><span class="s-stat-l">average time for first impression formation</span></div>
+    <div class="s-stat"><span class="s-stat-n">55%</span><span class="s-stat-l">of first impressions determined by body language alone</span></div>
+  </div>
+
+  <div class="habit-list">
+    <div class="habit">
+      <div class="habit-num">1</div>
+      <div class="habit-body">
+        <div class="habit-title">🎯 Full Presence — The Rarest Gift You Can Give</div>
+        <p class="habit-text">Charismatic people make you feel like you're the only person in the room. This isn't magic — it's the deliberate choice to put your phone away, silence the internal monologue, and be fully available to the person in front of you. Most people are mentally elsewhere during conversations: planning their response, checking their phone, distracted by the environment. Full presence — genuinely rare — is felt immediately.</p>
+        <div class="habit-sci"><strong>The Science:</strong> A University of Essex study found that even the mere presence of a phone on a table reduces conversation quality and connection depth — even if nobody touches it. Put the phone away. Fully. Every time.</div>
+      </div>
+    </div>
+    <div class="habit">
+      <div class="habit-num">2</div>
+      <div class="habit-body">
+        <div class="habit-title">🌡️ Warmth — The Non-Negotiable Foundation</div>
+        <p class="habit-text">Olivia Fox Cabane's research found warmth is the fastest-read charisma signal — people detect it before power, before wit, before anything else. Warmth signals goodwill, genuine care, and safety. Without warmth, power becomes threatening. With it, everything amplifies. The daily practice: smile authentically, remember names, follow up on things people told you last time, celebrate others' wins with no agenda.</p>
+        <div class="habit-sci"><strong>The Science:</strong> Warmth activates mirror neurons in the listener, triggering a feeling of being cared for — which releases oxytocin. This is the neurochemical of trust and bonding. Warm people don't just feel nice to be around — they literally change brain chemistry in those they interact with.</div>
+      </div>
+    </div>
+    <div class="habit">
+      <div class="habit-num">3</div>
+      <div class="habit-body">
+        <div class="habit-title">💎 The Power of Deliberate Pause</div>
+        <p class="habit-text">Charismatic people don't rush. They pause before answering. They let silences breathe. They think before they speak — not because they're slow, but because they choose every word deliberately. This creates an aura of authority, confidence, and gravitas that nervously fast talkers never achieve. The pause signals: "I'm not anxious. I'm in control. I'm choosing what to share."</p>
+        <div class="habit-sci"><strong>Technique:</strong> When asked a hard question, look slightly upward (signals thinking), pause for 2–3 full seconds, then answer. This alone shifts how the room perceives your confidence by a measurable degree.</div>
+      </div>
+    </div>
+    <div class="habit">
+      <div class="habit-num">4</div>
+      <div class="habit-body">
+        <div class="habit-title">🔮 Specific Compliments & Remembering Details</div>
+        <p class="habit-text">Generic compliments register as nothing. Specific ones land hard. "I love your jacket" disappears in 10 minutes. "I remember you mentioned last time that you were working on a difficult project — how did that go?" stays forever. The habit of remembering and referencing small details signals something most people desperately want and rarely receive: that you actually listened, you actually cared, and they actually mattered to you.</p>
+        <div class="habit-sci"><strong>The Science:</strong> Research shows that people who ask follow-up questions about previously shared details are rated as significantly more likeable, trustworthy, and socially skilled than those who don't — regardless of other personality factors. Memory is a social superpower.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">CHARISMA TRAP 01</div>
+      <span class="card-icon">🎪</span>
+      <div class="card-title">Performed vs. Genuine Charisma</div>
+      <p class="card-text">Performed charisma — trying to seem interesting, impressive, or warm — is detectable and off-putting. Real charisma isn't about what you project. It's about how you make others feel. The most charismatic people in any room are often the ones who talk least about themselves and ask the best questions. The shift: stop trying to be interesting. Be interested.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Research</div>
+        <p class="card-text">Harvard studies consistently find that asking questions, especially follow-up questions that show genuine interest, is the single biggest predictor of being perceived as charismatic in a conversation. Not storytelling, not wit, not confidence. Curiosity.</p>
+      </div>
+      <span class="badge bc">Critical Insight</span>
+    </div>
+    <div class="card">
+      <div class="card-num">CHARISMA TRAP 02</div>
+      <span class="card-icon">😬</span>
+      <div class="card-title">The Approval Trap</div>
+      <p class="card-text">The most charisma-destroying behaviour is seeking approval. People can sense desperation for validation — and it creates the opposite of the intended effect. The counterintuitive truth: the less you need people to like you, the more they do. This is why confident people who occasionally disagree, who have genuine opinions, and who don't laugh at every joke are often more compelling than people-pleasers.</p>
+      <div class="card-sec">The Practice</div>
+      <p class="card-text">Hold your genuine opinion in low-stakes moments. Disagree warmly but clearly. Don't laugh unless something genuinely strikes you as funny. These small acts of social courage build real magnetic presence over time.</p>
+      <span class="badge bc">Warning</span>
+    </div>
+    <div class="card">
+      <div class="card-num">CHARISMA HABIT DAILY</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 18h18M5 15l1.5-1.5M19 15l-1.5-1.5M12 6V4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Daily Charisma Protocol</div>
+      <p class="card-text"><strong style="color:var(--cream)">Morning:</strong> Set intention — "Today I will be fully present in every conversation."<br/><br/><strong style="color:var(--cream)">In every interaction:</strong> Put phone away. Make eye contact. Use the person's name once early.<br/><br/><strong style="color:var(--cream)">Listen actively:</strong> Nod, reflect, ask one follow-up per conversation.<br/><br/><strong style="color:var(--cream)">End every interaction:</strong> Leave people feeling better than before you arrived — with one genuine specific compliment or acknowledgment.<br/><br/><strong style="color:var(--cream)">Evening:</strong> Who did I make feel seen today? Where did I lose presence?</p>
+      <span class="badge bb">Daily Practice</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 2 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"Charisma is not something you have. It is something you do. The good news: <em>everything charismatic people do can be learned, practiced, and owned.</em>"</p>
+  <p class="quote-attr">— Olivia Fox Cabane, The Charisma Myth</p>
+</div>
+
+<!-- ─── 03: ACTIVE LISTENING ─── -->
+<section class="section" id="listening">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 03</div>
+    <div class="s-meta">
+      <div class="s-cat">The Skill Nobody Was Taught</div>
+      <h2 class="s-title">Active<br/><span>Listening</span> Decoded</h2>
+      <p class="s-desc">Most people hear. Almost nobody actually listens. The difference is not subtle — it is the difference between a conversation that changes nothing and one that changes everything. Active listening is the most underrated social skill on earth.</p>
+    </div>
+  </div>
+
+  <div class="listen-compare">
+    <div class="lc-side">
+      <div class="lc-head bad">😶 Passive Hearing</div>
+      <div class="lc-row">Waits for their turn to speak — thinking about what they'll say next</div>
+      <div class="lc-row">Gives generic responses: "Yeah," "Totally," "I know what you mean"</div>
+      <div class="lc-row">Misses emotional subtext — only hears the surface words</div>
+      <div class="lc-row">Checks phone, looks around the room, fidgets</div>
+      <div class="lc-row">Jumps to advice or solutions without being asked</div>
+      <div class="lc-row">Compares: "Oh that reminds me, when I was..."</div>
+      <div class="lc-row">Finishes people's sentences. Often incorrectly.</div>
+      <div class="lc-row">Asks questions only about surface facts, not feelings</div>
+    </div>
+    <div class="lc-side">
+      <div class="lc-head good">👂 Active Listening</div>
+      <div class="lc-row">Listens to understand — not to respond. Comfortable with silence after answers</div>
+      <div class="lc-row">Mirrors: "It sounds like you're feeling..." or "What I'm hearing is..."</div>
+      <div class="lc-row">Reads between the lines — picks up what's unsaid, body language, tone</div>
+      <div class="lc-row">Full eye contact, open body, phone out of sight and mind</div>
+      <div class="lc-row">Asks "what kind of support would be helpful for you right now?"</div>
+      <div class="lc-row">Keeps the focus: "Tell me more about that" — not their own story</div>
+      <div class="lc-row">Pauses. Lets the person fully complete their thought.</div>
+      <div class="lc-row">Asks about feelings: "How did that make you feel?" or "What was that like?"</div>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">LISTENING TOOL 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><ellipse cx="12" cy="10" rx="6" ry="7.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 17.5V21M9 21h6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Mirror Technique</div>
+      <div class="card-sec">FBI Negotiator Tool</div>
+      <p class="card-text">Chris Voss, former FBI hostage negotiator, identifies mirroring as the single most powerful listening tool in existence. Simply repeat the last 1–3 words someone says as a question. "I'm just really frustrated with how this is going." → "Frustrated with how it's going?" This triggers the speaker to elaborate, feel heard, and open up. It works in hostage negotiations, boardrooms, first dates, and everywhere in between.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Neuroscience</div>
+        <p class="card-text">Mirroring activates the brain's safety response — it signals that you are "in sync" with the other person. When we feel mirrored, we trust faster, share more, and feel less defensive. This is the neurological basis of rapport — and mirroring is its fastest trigger.</p>
+      </div>
+      <span class="badge ba">Highest ROI Tool</span>
+    </div>
+    <div class="card">
+      <div class="card-num">LISTENING TOOL 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M2 12c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 18c2-2 4-2 6 0s4 2 6 0 4-2 6 0" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Emotional Labelling</div>
+      <div class="card-sec">Name What You See</div>
+      <p class="card-text">Label the emotion you observe without making it a statement: "It sounds like this has been really exhausting for you." "It seems like you're genuinely excited about this." "It looks like there might be some frustration underneath that." Emotional labelling defuses negative emotions and amplifies positive ones. When someone feels their emotion has been named accurately, they feel profoundly understood — often for the first time in that conversation.</p>
+      <span class="badge ba">Empathy Tool</span>
+    </div>
+    <div class="card">
+      <div class="card-num">LISTENING TOOL 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="6" y="4" width="4" height="16" rx="1" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="14" y="4" width="4" height="16" rx="1" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Power of Silence</div>
+      <div class="card-sec">The Most Underused Tool</div>
+      <p class="card-text">After someone finishes speaking, wait 3 full seconds before responding. Most people rush to fill silences — treating them as social failures. The opposite is true. A 3-second pause after someone speaks signals: "I'm actually thinking about what you just said." This produces two effects: you seem more thoughtful and deliberate, and the other person often adds the most revealing, important part of what they were saying — because silence invites depth.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 Research</div>
+        <p class="card-text">Studies in therapeutic listening found that the most important information in conversations is often shared in the pause after the initial answer — not in the initial answer itself. The best listeners know how to wait for it.</p>
+      </div>
+      <span class="badge bb">Advanced Technique</span>
+    </div>
+    <div class="card">
+      <div class="card-num">LISTENING TOOL 04</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="7.5" cy="15.5" r="4.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m11 12 8-8M16 6l2.5 2.5M13.5 8.5 16 11" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Key Question</div>
+      <div class="card-sec">Before Giving Advice</div>
+      <p class="card-text">Before offering any advice, solution, or perspective — ask one question: <strong style="color:var(--cream)">"What kind of support are you looking for right now?"</strong> This is the most underused question in human conversation. People often don't want solutions — they want to be heard. Jumping to advice when someone wants empathy destroys connection. This one question prevents that mistake entirely, every single time.</p>
+      <span class="badge bb">Relationship Saver</span>
+    </div>
+    <div class="card">
+      <div class="card-num">LISTENING TOOL 05</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 6c-2-1.5-5-2-8-1.5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-13c-3-.5-6 0-8 1.5z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M12 6v13" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">HEAR — The 4-Step Active Listening Model</div>
+      <div class="card-sec">Structure It</div>
+      <p class="card-text"><strong style="color:var(--cream)">H — Halt:</strong> Stop whatever you're doing. Give full physical and mental attention.<br/><br/><strong style="color:var(--cream)">E — Engage:</strong> Make eye contact. Turn your body. Show with your posture that you're fully here.<br/><br/><strong style="color:var(--cream)">A — Anticipate:</strong> Lean slightly forward. Expect that what's being said matters.<br/><br/><strong style="color:var(--cream)">R — Reflect:</strong> Before responding, summarize what you heard. "So what I'm hearing is..." This closes the loop and ensures nothing was lost in translation.</p>
+      <span class="badge ba">Framework</span>
+    </div>
+    <div class="card">
+      <div class="card-num">LISTENING TRAP</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="9" cy="10" r="6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="14" r="6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Performative Listening</div>
+      <div class="card-sec">The Subtle Fraud</div>
+      <p class="card-text">Nodding constantly while your mind drifts. Saying "mmm-hmm" on autopilot. Maintaining eye contact while planning your next sentence. This is performative listening — and people feel it. They can't name exactly what's off, but they feel less connected, less safe, and less understood. The cure isn't a technique. It's genuine curiosity. If you're not actually interested, ask a question that makes you genuinely curious. Find the angle that does interest you — and go there.</p>
+      <span class="badge bc">Common Trap</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 3 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"Most people do not listen with the intent to understand. They listen with the intent to reply. <em>The biggest communication problem is we do not listen to understand — we listen to respond.</em>"</p>
+  <p class="quote-attr">— Stephen Covey, The 7 Habits of Highly Effective People</p>
+</div>
+
+<!-- ─── 04: MICRO-EXPRESSIONS ─── -->
+<section class="section section-alt" id="microexpressions">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 04</div>
+    <div class="s-meta">
+      <div class="s-cat">Dr. Paul Ekman's Life Work</div>
+      <h2 class="s-title">The 7<br/><span>Micro-Expressions</span></h2>
+      <p class="s-desc">In 1/25th of a second, a face tells the truth the mouth is trying to hide. Dr. Paul Ekman (1934–2025) spent 60 years proving that seven emotions are written on every human face — across every culture, language, and era. Here they all are.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">1/25</span><span class="s-stat-l">of a second — how fast micro-expressions appear</span></div>
+    <div class="s-stat"><span class="s-stat-n">90%</span><span class="s-stat-l">of untrained observers miss them entirely</span></div>
+    <div class="s-stat"><span class="s-stat-n">10,000+</span><span class="s-stat-l">distinct facial expressions the human face can make</span></div>
+    <div class="s-stat"><span class="s-stat-n">90%</span><span class="s-stat-l">accuracy — Gottman predicts divorce from contempt micro-expression</span></div>
+  </div>
+
+  <div class="emotion-grid">
+    <div class="emo-card">
+      <div class="emo-top"><span class="emo-emoji">😊</span><div class="emo-name">Happiness</div></div>
+      <div class="emo-signal">Easiest to Detect · Most Faked</div>
+      <p class="emo-text">The most recognisable — and the most faked. The key distinction is the Duchenne smile: a genuine smile reaches the eyes, creating crow's feet wrinkles at the corners. A social (fake) smile only moves the mouth.</p>
+      <div class="emo-tell"><strong>Real vs. Fake:</strong> Look for the orbicularis oculi muscle around the eyes. It can't be deliberately contracted — it only fires during genuine joy. If the eyes aren't smiling, the smile isn't real.</div>
+    </div>
+    <div class="emo-card">
+      <div class="emo-top"><span class="emo-emoji">😢</span><div class="emo-name">Sadness</div></div>
+      <div class="emo-signal">Most Often Suppressed</div>
+      <p class="emo-text">The most difficult emotion to fake and the most commonly hidden. When someone tries to suppress sadness, it often leaks as a downward pull at the corners of the mouth, a slight trembling of the lower lip, or a glassy unfocused look in the eyes.</p>
+      <div class="emo-tell"><strong>Key Signal:</strong> Inner corners of eyebrows pull upward and inward — creating the classic oblique brow. This movement is almost impossible to fake voluntarily, making it one of the most reliable indicators of genuine sadness.</div>
+    </div>
+    <div class="emo-card">
+      <div class="emo-top"><span class="emo-emoji">😡</span><div class="emo-name">Anger</div></div>
+      <div class="emo-signal">High Stakes · Read Carefully</div>
+      <p class="emo-text">Anger is a fight-or-flight activation — the body is preparing for conflict. It shows in the brows first: lowered and drawn together, creating vertical lines between them. Lips press together firmly or are pulled back, revealing teeth.</p>
+      <div class="emo-tell"><strong>Key Signal:</strong> The jaw tightens and muscles along the jawline become visible. Eyes widen and have an intense, fixed quality. A flash of anger in a negotiation or meeting often predicts escalation — even when the person's words are still polite.</div>
+    </div>
+    <div class="emo-card">
+      <div class="emo-top"><span class="emo-emoji">😨</span><div class="emo-name">Fear</div></div>
+      <div class="emo-signal">Most Misread as Surprise</div>
+      <p class="emo-text">Fear and surprise look similar at a glance — both involve raised eyebrows and wide eyes. The critical difference: in fear, eyebrows are raised AND pulled together (creating a tense, horizontal wrinkle). In surprise, they're just raised. Fear also shows in a tense lower eyelid.</p>
+      <div class="emo-tell"><strong>Key Signal:</strong> The mouth opens and stretches back horizontally — creating a grimace, not a gasp. The skin under the eyes tightens. When you see fear in a conversation, the person is not just surprised — something has triggered a threat response.</div>
+    </div>
+    <div class="emo-card">
+      <div class="emo-top"><span class="emo-emoji">😲</span><div class="emo-name">Surprise</div></div>
+      <div class="emo-signal">The Most Fleeting</div>
+      <p class="emo-text">Surprise is the briefest emotion — the brain processes unexpected information for a fraction of a second before categorising it as pleasant or threatening (shifting immediately into happiness or fear). A genuine surprise expression that lasts more than a second is usually performed.</p>
+      <div class="emo-tell"><strong>Key Signal:</strong> Eyebrows arch upward into a curve. Eyes fully widen. Jaw drops and mouth opens. If this expression lasts more than 2 seconds, it's being displayed socially — not felt genuinely. Real surprise is fast.</div>
+    </div>
+    <div class="emo-card">
+      <div class="emo-top"><span class="emo-emoji">🤢</span><div class="emo-name">Disgust</div></div>
+      <div class="emo-signal">The Rejection Signal</div>
+      <p class="emo-text">Disgust evolved as a survival mechanism — originally to reject contaminated food or dangerous substances. In modern social contexts, it signals moral rejection, disapproval, or contempt for something said or shown. Crucial to catch in negotiations and pitches.</p>
+      <div class="emo-tell"><strong>Key Signal:</strong> The upper lip raises, the nose wrinkles, and cheeks lift. It can affect only the upper face or the full face. When someone flashes disgust during your presentation or pitch — they've heard something that violated their values or beliefs, even if they say nothing.</div>
+    </div>
+    <div class="emo-card">
+      <div class="emo-top"><span class="emo-emoji">😏</span><div class="emo-name">Contempt</div></div>
+      <div class="emo-signal">The Most Dangerous · Predicts Relationship End</div>
+      <p class="emo-text">Contempt is the only asymmetrical micro-expression — it appears on one side of the face only. A single raised lip corner, creating a half sneer. Ekman identifies contempt as a feeling of moral superiority over another person. It's the most dangerous emotion in any relationship.</p>
+      <div class="emo-tell"><strong>Research Finding:</strong> Dr. John Gottman's 40-year study found that contempt in a partnership predicts divorce with over 90% accuracy. A single contempt micro-expression during an argument signals: "I am morally superior to you" — the most corrosive thing one person can feel about another. In business, a flash of contempt toward a client or partner is a critical warning sign.</div>
+    </div>
+  </div>
+
+  <div class="alert">
+    <div class="alert-head">⚠️ The Ethics of Reading Micro-Expressions</div>
+    <p class="alert-text">Paul Ekman was explicit: reading micro-expressions gives you a signal of emotional state — not a window into thoughts, intentions, or truth. <strong>A micro-expression of fear does not mean someone is lying.</strong> It means they feel afraid — which may have a dozen different causes. Use this knowledge to build empathy and understanding, not to judge or accuse. The goal is connection — not interrogation.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── 05: BODY LANGUAGE ─── -->
+<section class="section" id="bodylanguage">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 05</div>
+    <div class="s-meta">
+      <div class="s-cat">The Silent Language</div>
+      <h2 class="s-title">Body<br/><span>Language</span> Mastery</h2>
+      <p class="s-desc">Between 70–93% of communication is nonverbal. Your body is talking before you open your mouth — and after you close it. Master these signals and you control the entire room without saying a word.</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 15V9a2 2 0 0 1 2-2 2 2 0 0 1 2 2M9 9V6a2 2 0 0 1 4 0v6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 9a2 2 0 0 1 4 0v3.5c0 3-2 6-6 6H8a3 3 0 0 1-3-3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">High-Status Body Language</div>
+      <p class="col-text">
+        <strong>Open posture.</strong> Uncrossed arms and legs, shoulders back, chest slightly open. Signals confidence, safety, and social ease.<br/><br/>
+        <strong>Slow, deliberate movements.</strong> Fast movements signal anxiety and submissiveness. Slow, intentional movement signals authority and control.<br/><br/>
+        <strong>Space ownership.</strong> High-status individuals take up more physical space — not aggressively, but naturally. They don't compress themselves.<br/><br/>
+        <strong>Eye contact that leads.</strong> Confident eye contact is broken by looking to the side — not down. Looking down signals submission or shame.<br/><br/>
+        <strong>The nod cadence.</strong> Nodding rapidly while someone speaks signals submission. A single slow nod signals authority and considered agreement.
+      </p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon">📡</span>
+      <div class="col-title">Signals That Undermine You</div>
+      <p class="col-text">
+        <strong>Self-touching.</strong> Touching your face, neck, or hair during conversation signals anxiety, deception or discomfort. Hands visible and still signals confidence.<br/><br/>
+        <strong>Crossed arms.</strong> Can signal defensiveness, discomfort, or disagreement — even when none is intended. Creates a literal barrier between you and the other person.<br/><br/>
+        <strong>Avoiding eye contact.</strong> Signals dishonesty, anxiety, or low confidence — even if none of those are true. Aim for 60–70% eye contact while speaking, 80% while listening.<br/><br/>
+        <strong>Upspeak.</strong> Ending statements as questions (voice rising at end) signals uncertainty. Lower your voice at the end of statements to convey conviction.<br/><br/>
+        <strong>Mirroring anxiety.</strong> Fidgeting, foot-tapping, or pen-clicking signals nervousness and transfers it to the other person unconsciously.
+      </p>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">BODY LANGUAGE TOOL 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Eye Contact Formula</div>
+      <p class="card-text">The optimal eye contact ratio: <strong style="color:var(--cream)">60–70% while speaking, 80% while listening.</strong> In a group, move eye contact person to person as you make each point — distributing inclusion evenly. The "eye contact triangle" for romantic or deeply personal conversations: alternate between left eye, right eye, and mouth every 5–7 seconds. This creates intimacy without the discomfort of an unbroken stare.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 Science</div>
+        <p class="card-text">Research shows eye contact increases perceived trustworthiness, confidence, and sincerity simultaneously. It also releases oxytocin in both parties — creating genuine feelings of connection. The sweet spot is steady but not staring: aim for natural, warm contact that breaks periodically.</p>
+      </div>
+      <span class="badge ba">Core Skill</span>
+    </div>
+    <div class="card">
+      <div class="card-num">BODY LANGUAGE TOOL 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><ellipse cx="12" cy="10" rx="6" ry="7.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 17.5V21M9 21h6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Strategic Mirroring</div>
+      <p class="card-text">Subtly mirroring the body language of the person you're speaking with — their posture, gesture pace, energy level — builds unconscious rapport within minutes. This is not mimicry (which is obvious and offensive). It's the natural, slightly delayed reflection of their physical state. People feel inexplicably comfortable with those who mirror them — and rarely notice why.</p>
+      <div class="card-sec">The Rule</div>
+      <p class="card-text">Mirror energy, posture, and pace — not individual gestures. If they're relaxed and leaning back, gradually settle into a similar ease. If they're animated and energetic, match that vitality. If they speak slowly and quietly — slow down and lower your volume. Emotional synchrony is the goal.</p>
+      <span class="badge bb">Rapport Accelerator</span>
+    </div>
+    <div class="card">
+      <div class="card-num">BODY LANGUAGE TOOL 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M4 21h16M5 21V10M19 21V10M3 10l9-6 9 6M7 10v11M11 10v11M13 10v11M17 10v11" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Power Pose — What the Science Actually Says</div>
+      <p class="card-text">Amy Cuddy's original "power pose" research (2010) suggested that expansive postures changed cortisol and testosterone levels. This specific claim has not fully replicated. What the research does consistently confirm: expansive body posture before high-stakes situations increases subjective confidence and is perceived as more authoritative by observers. The takeaway: open, expansive posture before a presentation, interview, or negotiation shifts how you enter the room — and that matters.</p>
+      <span class="badge ba">Evidence-Based</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 06: RAPPORT ─── -->
+<section class="section section-alt" id="rapport">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 06</div>
+    <div class="s-meta">
+      <div class="s-cat">The Chemistry of Connection</div>
+      <h2 class="s-title">Rapport<br/><span>Building</span></h2>
+      <p class="s-desc">Rapport is the feeling of being genuinely understood and accepted — and it is the foundation of every deep relationship, successful negotiation, and lasting first impression. It can be built deliberately, quickly, and authentically.</p>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">RAPPORT 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="7.5" cy="15.5" r="4.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m11 12 8-8M16 6l2.5 2.5M13.5 8.5 16 11" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Names Are Magic</div>
+      <p class="card-text">Dale Carnegie called a person's name the sweetest sound in their own language. Neuroscience agrees: hearing your own name activates unique regions of the brain that few other inputs trigger. Use someone's name once in the first 30 seconds of conversation. Use it again when you ask a meaningful question. Don't overuse it — that becomes manipulative and cold. Twice per conversation is the sweet spot.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 Memory Hack</div>
+        <p class="card-text">To remember names: when introduced, use it immediately — "Great to meet you, [Name]." Create a mental image linking their name to a distinctive feature or a word it rhymes with. Review it twice during the conversation and once silently when you part. Names retained = connections strengthened.</p>
+      </div>
+      <span class="badge ba">Highest ROI Habit</span>
+    </div>
+    <div class="card">
+      <div class="card-num">RAPPORT 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="9" cy="10" r="6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="14" r="6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Vulnerability as a Bridge</div>
+      <p class="card-text">Brené Brown's research is definitive: vulnerability is the birthplace of authentic connection. Sharing something real and slightly vulnerable — not oversharing, but genuine — invites the other person to meet you at the same level. "To be honest, I was really nervous about this" or "This is actually something I've been struggling to figure out" creates a human-to-human moment that polished performance never can.</p>
+      <div class="card-sec">The Proportion Rule</div>
+      <p class="card-text">Match the vulnerability level of what the other person shares. Going deeper than them too early feels intense. Going shallower makes them feel exposed and regretful for sharing. Calibrate carefully — follow, don't lead.</p>
+      <span class="badge bd">Connection Catalyst</span>
+    </div>
+    <div class="card">
+      <div class="card-num">RAPPORT 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 15 15 9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 6.5 13 4.5a3.5 3.5 0 0 1 5 5l-2 2M13 17.5 11 19.5a3.5 3.5 0 0 1-5-5l2-2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Find the Third Thing</div>
+      <p class="card-text">Beyond two people talking to each other, rapport accelerates when you discover a shared third thing — a common interest, experience, belief, or frustration. "Wait, you grew up there too?" "You love that book? I read it twice." "That's my exact frustration with that too." Shared thirds create instant tribal belonging — a neurological "you are like me" signal that deepens trust remarkably fast.</p>
+      <span class="badge bb">Connection Hack</span>
+    </div>
+    <div class="card">
+      <div class="card-num">RAPPORT 04</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="m12 3 2.6 5.9L21 10l-4.7 4.2L17.5 21 12 17.6 6.5 21l1.2-6.8L3 10l6.4-1.1z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Follow-Up Superpower</div>
+      <p class="card-text">Most rapport is built — or destroyed — not in the first meeting but in what happens after. Following up on something specific someone shared with you ("You mentioned your daughter's recital last week — how did it go?") signals that they mattered enough for you to remember. In a world of performative connection and forgettable small talk, this one habit makes you genuinely unforgettable.</p>
+      <span class="badge bb">Long-Term Relationship Builder</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 07: CONFLICT ─── -->
+<section class="section" id="conflict">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 07</div>
+    <div class="s-meta">
+      <div class="s-cat">Navigate Any Tension</div>
+      <h2 class="s-title">Difficult<br/><span>Conversations</span></h2>
+      <p class="s-desc">The people who handle conflict best aren't the toughest or the most aggressive. They're the most emotionally intelligent. Here's the framework for navigating any hard conversation without losing the relationship — or yourself.</p>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">CONFLICT 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="6" y="4" width="4" height="16" rx="1" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="14" y="4" width="4" height="16" rx="1" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Pause Before You React</div>
+      <p class="card-text">Victor Frankl: "Between stimulus and response there is a space. In that space is our power to choose our response." The most socially intelligent move in any heated moment is the deliberate pause. Before reacting — breathe. Literally. Diaphragmatic breathing for 3–5 seconds activates the parasympathetic nervous system, reduces cortisol, and returns executive function to the prefrontal cortex. You respond instead of react.</p>
+      <span class="badge ba">Foundational</span>
+    </div>
+    <div class="card">
+      <div class="card-num">CONFLICT 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 4h4v2.2a1.8 1.8 0 0 0 3.4 0V4H20v4h-2.2a1.8 1.8 0 0 0 0 3.4H20V15h-3.6v-2.2a1.8 1.8 0 0 0-3.4 0V15H9v-4H6.8a1.8 1.8 0 0 0 0 3.4H9V20H5v-3.6H2.8a1.8 1.8 0 0 1 0-3.4H5V9h4z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Separate the Person from the Problem</div>
+      <p class="card-text">Harvard's Getting to Yes framework: attack problems, not people. Separate the human relationship from the substantive disagreement. "I think the strategy needs work" vs. "You made a bad call." One targets an idea. The other targets an identity. When people feel personally attacked, they cannot think clearly — they can only defend. Address the issue. Protect the person's dignity. Both things simultaneously.</p>
+      <span class="badge ba">Conflict Frame</span>
+    </div>
+    <div class="card">
+      <div class="card-num">CONFLICT 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="1.4" fill="#c8943a"/></svg></span>
+      <div class="card-title">The "I" Statement Formula</div>
+      <p class="card-text">Replace "You always..." (accusation) with: <strong style="color:var(--cream)">"When [specific behaviour], I feel [emotion], because [impact]. What I need is [clear request]."</strong> This format makes you impossible to argue with — because you're describing your own experience, not accusing the other person. It keeps the conversation factual, specific, and productive. "You always dismiss my ideas" becomes "When my suggestions aren't acknowledged in meetings, I feel invisible — and it affects my engagement."</p>
+      <span class="badge bb">Language Tool</span>
+    </div>
+    <div class="card">
+      <div class="card-num">CONFLICT 04</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="10.5" cy="10.5" r="6.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m20 20-4.8-4.8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Seek to Understand the Other Story</div>
+      <p class="card-text">Every conflict has two stories. Yours — which feels completely justified. And theirs — which also feels completely justified, from inside their experience. Before defending your position, make it your job to understand their story so thoroughly that you could argue it more convincingly than they can. This isn't weakness. It's the most powerful move in any negotiation — and it almost always creates a path forward that neither person saw before they tried.</p>
+      <span class="badge bd">Advanced</span>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-head">✅ The One Rule of Difficult Conversations</div>
+    <p class="tip-text">Harvard's Douglas Stone: <strong>"Assume positive or neutral intent until evidence proves otherwise."</strong> Most difficult conversations begin with the assumption that the other person is careless, selfish, or deliberately harmful. That assumption is almost always wrong — and it makes every conversation harder before it starts. Begin with curiosity instead of accusation: "Help me understand what was going through your mind when..." This one shift changes the entire trajectory of the conversation.</p>
+  </div>
+</div>
+</section>
+
+<!-- ─── 08: MASTER CHEATSHEET ─── -->
+<section class="section section-alt" id="cheatsheet">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 08</div>
+    <div class="s-meta">
+      <div class="s-cat">Quick Reference</div>
+      <h2 class="s-title">The Master<br/><span>Cheatsheet</span></h2>
+      <p class="s-desc">Every principle from this guide — condensed into one reference table. Screenshot it. Print it. Build it into your daily practice.</p>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>#</th><th>Principle</th><th>The Action</th><th>Chapter</th><th>Level</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="num-cell">01</td><td class="name-cell">FORD Framework</td><td>Use Family → Occupation → Recreation → Dreams as conversation nav system</td><td>FORD</td><td><span class="badge ba">Always Use</span></td></tr>
+        <tr><td class="num-cell">02</td><td class="name-cell">Open Questions</td><td>Every question starts with What, How, Why, Tell me about, Walk me through</td><td>FORD</td><td><span class="badge ba">Non-Negotiable</span></td></tr>
+        <tr><td class="num-cell">03</td><td class="name-cell">70/30 Rule</td><td>Listen 70%, speak 30%. Let others fill the space.</td><td>FORD</td><td><span class="badge ba">Core Habit</span></td></tr>
+        <tr><td class="num-cell">04</td><td class="name-cell">Conversation Multiplier</td><td>After each answer: reflect + one follow-up question</td><td>FORD</td><td><span class="badge ba">Technique</span></td></tr>
+        <tr><td class="num-cell">05</td><td class="name-cell">Full Presence</td><td>Phone away. Body toward. Mind fully here.</td><td>Charisma</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">06</td><td class="name-cell">Warmth First</td><td>Smile genuinely. Remember names. Celebrate others.</td><td>Charisma</td><td><span class="badge ba">Foundation</span></td></tr>
+        <tr><td class="num-cell">07</td><td class="name-cell">Deliberate Pause</td><td>Wait 2–3 seconds before answering any meaningful question</td><td>Charisma</td><td><span class="badge bb">Authority Signal</span></td></tr>
+        <tr><td class="num-cell">08</td><td class="name-cell">Specific Memory</td><td>Reference details from previous conversations with genuine follow-up</td><td>Charisma</td><td><span class="badge bb">Unforgettable</span></td></tr>
+        <tr><td class="num-cell">09</td><td class="name-cell">Be Interested, Not Interesting</td><td>Stop trying to impress. Start trying to understand.</td><td>Charisma</td><td><span class="badge bc">Mindset Shift</span></td></tr>
+        <tr><td class="num-cell">10</td><td class="name-cell">Mirror Technique</td><td>Repeat last 3 words as a question to deepen any conversation</td><td>Listening</td><td><span class="badge ba">FBI Tool</span></td></tr>
+        <tr><td class="num-cell">11</td><td class="name-cell">Emotional Labelling</td><td>"It sounds like you're feeling..." before all else</td><td>Listening</td><td><span class="badge ba">Empathy Tool</span></td></tr>
+        <tr><td class="num-cell">12</td><td class="name-cell">3-Second Pause</td><td>After someone finishes — wait 3 full seconds before responding</td><td>Listening</td><td><span class="badge bb">Advanced</span></td></tr>
+        <tr><td class="num-cell">13</td><td class="name-cell">Support Question</td><td>"What kind of support are you looking for right now?" — always before advice</td><td>Listening</td><td><span class="badge bb">Relationship Saver</span></td></tr>
+        <tr><td class="num-cell">14</td><td class="name-cell">HEAR Model</td><td>Halt → Engage → Anticipate → Reflect</td><td>Listening</td><td><span class="badge ba">Framework</span></td></tr>
+        <tr><td class="num-cell">15</td><td class="name-cell">Happiness (Duchenne)</td><td>Real smile: eyes crinkle. Fake smile: mouth only.</td><td>Micro-Expressions</td><td><span class="badge bd">Detection</span></td></tr>
+        <tr><td class="num-cell">16</td><td class="name-cell">Contempt Detection</td><td>One-sided lip raise = contempt. Most dangerous signal in any relationship.</td><td>Micro-Expressions</td><td><span class="badge bc">Critical</span></td></tr>
+        <tr><td class="num-cell">17</td><td class="name-cell">Anger Signal</td><td>Brows lowered + pressed together + jaw tightened = anger incoming</td><td>Micro-Expressions</td><td><span class="badge bc">High Stakes</span></td></tr>
+        <tr><td class="num-cell">18</td><td class="name-cell">Fear vs. Surprise</td><td>Fear: brows together + horizontal mouth. Surprise: brows up + open jaw only</td><td>Micro-Expressions</td><td><span class="badge bd">Nuance</span></td></tr>
+        <tr><td class="num-cell">19</td><td class="name-cell">Eye Contact Formula</td><td>60–70% while speaking. 80% while listening. Break by looking sideways, not down.</td><td>Body Language</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">20</td><td class="name-cell">Open Posture</td><td>Uncrossed limbs, shoulders back, facing the person fully</td><td>Body Language</td><td><span class="badge ba">Always</span></td></tr>
+        <tr><td class="num-cell">21</td><td class="name-cell">Strategic Mirroring</td><td>Subtly match energy, pace, and posture — not individual gestures</td><td>Body Language</td><td><span class="badge bb">Rapport Tool</span></td></tr>
+        <tr><td class="num-cell">22</td><td class="name-cell">Slow Movements</td><td>Move deliberately. Fast = anxious. Slow = confident.</td><td>Body Language</td><td><span class="badge bb">Authority</span></td></tr>
+        <tr><td class="num-cell">23</td><td class="name-cell">Names Are Magic</td><td>Use name once in first 30 seconds, once on meaningful question. Not more.</td><td>Rapport</td><td><span class="badge ba">Highest ROI</span></td></tr>
+        <tr><td class="num-cell">24</td><td class="name-cell">Calibrated Vulnerability</td><td>Match the depth of what the other person shares. Follow, don't lead.</td><td>Rapport</td><td><span class="badge bd">Connection</span></td></tr>
+        <tr><td class="num-cell">25</td><td class="name-cell">Find the Third Thing</td><td>Actively look for a shared interest, experience, or frustration</td><td>Rapport</td><td><span class="badge bb">Tribal Bond</span></td></tr>
+        <tr><td class="num-cell">26</td><td class="name-cell">The Follow-Up</td><td>Reference something specific from last time you spoke. Every time.</td><td>Rapport</td><td><span class="badge bb">Unforgettable</span></td></tr>
+        <tr><td class="num-cell">27</td><td class="name-cell">Pause Before Reacting</td><td>3–5 deep breaths before responding to anything that triggered you</td><td>Conflict</td><td><span class="badge ba">Foundation</span></td></tr>
+        <tr><td class="num-cell">28</td><td class="name-cell">Attack the Problem</td><td>Always separate the person from the issue. Protect dignity.</td><td>Conflict</td><td><span class="badge ba">Rule</span></td></tr>
+        <tr><td class="num-cell">29</td><td class="name-cell">"I" Statement Formula</td><td>"When [X], I feel [Y], because [Z]. I need [request]."</td><td>Conflict</td><td><span class="badge bb">Language Tool</span></td></tr>
+        <tr><td class="num-cell">30</td><td class="name-cell">Assume Positive Intent</td><td>Begin every difficult conversation with curiosity, not accusation</td><td>Conflict</td><td><span class="badge bc">Mindset</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-logo">The Social Mastery Blueprint</div>
+  <p class="footer-sub">Social Skills · Psychology · Human Behaviour · 2025–2026 Edition</p>
+  <p class="footer-sub" style="color:var(--muted);font-size:13px;margin-top:8px">8 Complete Chapters · 30 Core Principles · Research sourced from Paul Ekman, Dale Carnegie, Chris Voss, Brené Brown, Harvard Negotiation Project, Olivia Fox Cabane & Stephen Covey</p>
+  <p class="footer-tiny">Research compiled May 2026 · Inspired by Parallelogram · Built for socially intelligent humans</p>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:rgba(200,148,58,.28);margin-top:36px">"The quality of your relationships determines the quality of your life."</p>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const st=document.documentElement.scrollTop;
+  const sh=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('prog').style.width=(st/sh*100)+'%';
+});
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}
+  });
+},{threshold:0.07});
+document.querySelectorAll('.card,.col-card,.habit,.s-stat,.emo-card,.ford-card,.lc-side').forEach(el=>{
+  el.style.opacity='0';el.style.transform='translateY(18px)';
+  el.style.transition='opacity .5s ease, transform .5s ease';
+  obs.observe(el);
+});
+</script>
+</body>
+</html>

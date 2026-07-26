@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Start Your YouTube Channel from Zero</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07080a;--surface:#0e1014;--card:#13151a;--card2:#181b22;
+  --gold:#c8943a;--gold2:#e8b84b;--golddim:rgba(200,148,58,.13);
+  --cream:#f0e8d5;--muted:#5c5f68;--light:#9a9da8;
+  --border:rgba(200,148,58,.18);--rust:#b84532;
+  --red:#cc2222;--teal:#2c7a72;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--cream);overflow-x:hidden;line-height:1.6}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.5}
+#prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--red),var(--gold),var(--gold2));width:0%;z-index:2000;transition:width .08s}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:1500;display:flex;align-items:center;justify-content:space-between;padding:14px 48px;background:rgba(7,8,10,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(200,148,58,.1)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
+.nav-links{display:flex;gap:20px;list-style:none}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+@media(max-width:768px){.nav-links{display:none}.hero,.section,.toc-wrap,.quote-block,footer{padding-left:22px!important;padding-right:22px!important}nav{padding:14px 22px}}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px 64px 80px;position:relative;overflow:hidden}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 75% 55% at 92% 8%,rgba(204,34,34,.12) 0%,transparent 55%),radial-gradient(ellipse 55% 70% at 5% 90%,rgba(200,148,58,.1) 0%,transparent 60%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;opacity:.022;background-image:linear-gradient(rgba(200,148,58,1) 1px,transparent 1px),linear-gradient(90deg,rgba(200,148,58,1) 1px,transparent 1px);background-size:68px 68px}
+.hero-inner{position:relative;max-width:1100px}
+.hero-badge{display:inline-flex;align-items:center;background:rgba(204,34,34,.15);border:1px solid rgba(204,34,34,.4);padding:5px 16px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#e88a8a;margin-bottom:22px;opacity:0;animation:fadeup .7s .15s forwards}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:26px;display:flex;align-items:center;gap:14px;opacity:0;animation:fadeup .7s .2s forwards}
+.hero-tag::before{content:'';width:44px;height:1px;background:var(--gold);flex-shrink:0}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(46px,8vw,114px);font-weight:700;line-height:.88;letter-spacing:-4px;margin-bottom:10px;opacity:0;animation:fadeup .8s .4s forwards}
+.hero h1 span{color:var(--gold);font-style:italic}
+.hero h1 .sub{display:block;color:rgba(240,232,213,.2);font-size:clamp(22px,3.6vw,50px);font-weight:400;font-style:italic;letter-spacing:-1px;margin-top:8px}
+.hero-desc{font-size:clamp(15px,1.9vw,18px);color:var(--light);max-width:600px;margin:34px 0 50px;font-weight:300;line-height:1.78;opacity:0;animation:fadeup .8s .6s forwards}
+.hero-stats{display:flex;gap:0;border:1px solid var(--border);width:fit-content;opacity:0;animation:fadeup .8s .8s forwards;flex-wrap:wrap}
+.hstat{padding:18px 32px;border-right:1px solid var(--border);text-align:center}
+.hstat:last-child{border-right:none}
+.hstat-n{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.hstat-l{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-top:4px}
+.scroll-hint{position:absolute;bottom:40px;left:64px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:10px;animation:pulse 2.5s infinite}
+.scroll-hint::before{content:'';width:1px;height:38px;background:var(--gold);opacity:.35}
+@keyframes fadeup{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+
+.toc-wrap{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:56px 64px}
+.toc-inner{max-width:1100px;margin:0 auto}
+.toc-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:36px;display:flex;align-items:center;gap:12px}
+.toc-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px}
+.toc-item{background:var(--card);padding:18px 22px;display:flex;align-items:flex-start;gap:14px;cursor:pointer;transition:background .2s,border-color .2s;border:1px solid transparent;text-decoration:none}
+.toc-item:hover{background:var(--card2);border-color:var(--border)}
+.toc-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);opacity:.55;flex-shrink:0;min-width:26px;margin-top:2px}
+.toc-name{font-size:13.5px;color:var(--light);font-weight:400;transition:color .2s;line-height:1.4}
+.toc-item:hover .toc-name{color:var(--cream)}
+
+.section{padding:96px 64px;position:relative}
+.section-alt{background:var(--surface)}
+.s-inner{max-width:1100px;margin:0 auto}
+.s-head{display:grid;grid-template-columns:90px 1fr;gap:32px;align-items:start;margin-bottom:60px;padding-bottom:44px;border-bottom:1px solid var(--border)}
+.s-num{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;padding-top:8px}
+.s-meta{display:flex;flex-direction:column;gap:10px}
+.s-cat{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:3px;color:var(--rust);text-transform:uppercase}
+.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,60px);font-weight:700;line-height:.92;letter-spacing:-1.5px;color:var(--cream)}
+.s-title span{color:var(--gold);font-style:italic}
+.s-desc{font-size:15.5px;color:var(--light);max-width:660px;font-weight:300;line-height:1.78;margin-top:6px}
+@media(max-width:600px){.s-head{grid-template-columns:1fr;gap:14px}}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:2px}
+@media(max-width:600px){.cards{grid-template-columns:1fr}}
+.card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .25s,background .25s;position:relative;overflow:hidden}
+.card:hover{border-color:var(--border);background:var(--card2)}
+.card::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:linear-gradient(180deg,var(--gold),var(--red));transition:height .35s}
+.card:hover::before{height:100%}
+.card-num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);opacity:.45;margin-bottom:14px}
+.card-icon{font-size:26px;margin-bottom:11px;display:block}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:700;color:var(--cream);letter-spacing:-.4px;margin-bottom:11px;line-height:1.15}
+.card-sec{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin:16px 0 7px}
+.card-text{font-size:13.5px;color:var(--light);line-height:1.72;font-weight:300}
+.psych{background:rgba(200,148,58,.06);border-left:2px solid var(--gold);padding:15px 18px;margin-top:18px}
+.psych .card-sec{margin-top:0}
+.databox{background:rgba(204,34,34,.07);border-left:2px solid rgba(204,34,34,.5);padding:15px 18px;margin-top:14px}
+.databox .card-sec{color:#e88a8a}
+.badge{display:inline-flex;align-items:center;padding:4px 11px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;margin-top:14px}
+.ba{background:rgba(200,148,58,.11);color:var(--gold);border:1px solid var(--border)}
+.bb{background:rgba(44,122,114,.12);color:#4aaa9e;border:1px solid rgba(44,122,114,.3)}
+.bc{background:rgba(184,69,50,.11);color:#d46040;border:1px solid rgba(184,69,50,.28)}
+.bd{background:rgba(204,34,34,.12);color:#e88a8a;border:1px solid rgba(204,34,34,.3)}
+
+.quote-block{background:var(--surface);padding:72px 64px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center}
+.quote-text{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3.2vw,36px);font-weight:600;font-style:italic;color:var(--cream);max-width:880px;margin:0 auto;line-height:1.4}
+.quote-text em{color:var(--gold)}
+.quote-attr{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:24px}
+
+.stat-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:2px;margin:44px 0}
+.s-stat{background:var(--card);padding:26px 22px;text-align:center;border:1px solid transparent;transition:border-color .2s}
+.s-stat:hover{border-color:var(--border)}
+.s-stat-n{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.s-stat-l{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-top:5px}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}}
+.col-card{background:var(--card);padding:34px;border:1px solid transparent;transition:border-color .2s}
+.col-card:hover{border-color:var(--border)}
+.col-icon{font-size:30px;margin-bottom:14px;display:block}
+.col-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:11px;letter-spacing:-.4px}
+.col-text{font-size:13.5px;color:var(--light);line-height:1.75;font-weight:300}
+.col-text strong{color:var(--cream);font-weight:500}
+
+/* NICHE FRAMEWORK */
+.niche-venn{background:var(--card);border:1px solid var(--border);padding:36px;margin:36px 0;position:relative;overflow:hidden}
+.niche-venn-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--cream);margin-bottom:24px}
+.venn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+@media(max-width:640px){.venn-grid{grid-template-columns:1fr}}
+.venn-circle{padding:28px 22px;text-align:center;border:1px solid transparent;transition:border-color .2s}
+.venn-circle:hover{border-color:var(--border)}
+.venn-emoji{font-size:36px;margin-bottom:12px;display:block}
+.venn-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+.venn-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:8px}
+.venn-text{font-size:13px;color:var(--light);line-height:1.6;font-weight:300}
+.venn-center{background:rgba(200,148,58,.06);border:1px solid var(--border);padding:20px;text-align:center;margin-top:2px;grid-column:1/-1}
+.venn-center-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+.venn-center-text{font-size:13.5px;color:var(--light);font-weight:300;line-height:1.6}
+
+/* ALGORITHM METRICS */
+.algo-metrics{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:2px;margin:36px 0}
+.algo-metric{background:var(--card);padding:26px;border:1px solid transparent;transition:border-color .2s,background .2s;position:relative}
+.algo-metric:hover{border-color:var(--border);background:var(--card2)}
+.algo-metric-name{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+.algo-metric-value{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:var(--gold);line-height:1;margin-bottom:6px}
+.algo-metric-label{font-size:12px;color:var(--muted);margin-bottom:10px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase}
+.algo-metric-bar{height:4px;background:rgba(200,148,58,.15);border-radius:2px;margin-bottom:10px;overflow:hidden}
+.algo-metric-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:2px;transition:width .5s}
+.algo-metric-text{font-size:12.5px;color:var(--light);line-height:1.5;font-weight:300}
+.algo-metric-badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:1px;font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:2px;text-transform:uppercase;margin-top:8px}
+.weight-critical{background:rgba(204,34,34,.12);color:#e88a8a;border:1px solid rgba(204,34,34,.3)}
+.weight-high{background:rgba(200,148,58,.12);color:var(--gold);border:1px solid var(--border)}
+.weight-medium{background:rgba(44,122,114,.1);color:#4aaa9e;border:1px solid rgba(44,122,114,.28)}
+
+/* GEAR LIST */
+.gear-list{display:flex;flex-direction:column;gap:2px;margin:36px 0}
+.gear-item{display:grid;grid-template-columns:72px 1fr auto;align-items:center;gap:0;background:var(--card);border:1px solid transparent;transition:border-color .2s}
+.gear-item:hover{border-color:var(--border)}
+.gear-icon{background:var(--golddim);display:flex;align-items:center;justify-content:center;height:100%;font-size:22px;padding:16px}
+.gear-body{padding:18px 22px}
+.gear-name{font-weight:600;color:var(--cream);font-size:14.5px;margin-bottom:3px}
+.gear-desc{font-size:12.5px;color:var(--light);line-height:1.5;font-weight:300}
+.gear-rec{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);margin-top:5px}
+.gear-price{padding:18px 22px;text-align:right;flex-shrink:0}
+.gear-price-num{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--gold);line-height:1;display:block}
+.gear-price-label{font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block;margin-top:2px}
+.gear-total{background:var(--golddim);border:1px solid var(--border);padding:20px 22px;display:flex;justify-content:space-between;align-items:center;margin-top:0}
+.gear-total-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase}
+.gear-total-num{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:700;color:var(--gold)}
+
+/* HOOK FORMULA */
+.hook-formula{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin:36px 0}
+@media(max-width:640px){.hook-formula{grid-template-columns:1fr 1fr}}
+.hook-step{background:var(--card);padding:24px 18px;border:1px solid transparent;transition:border-color .2s,background .2s;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;position:relative}
+.hook-step:hover{border-color:var(--border);background:var(--card2)}
+.hook-step:not(:last-child)::after{content:'→';position:absolute;right:-10px;top:50%;transform:translateY(-50%);color:var(--gold);opacity:.5;font-size:14px;z-index:1}
+@media(max-width:640px){.hook-step:nth-child(2n)::after{display:none}}
+.hook-num{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:700;color:var(--gold);line-height:1;opacity:.3}
+.hook-label{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;color:var(--gold);text-transform:uppercase}
+.hook-text{font-size:12.5px;color:var(--light);line-height:1.5;font-weight:300}
+
+/* MONETIZATION PATH */
+.mono-path{display:flex;flex-direction:column;gap:2px;margin:36px 0}
+.mono-step{display:grid;grid-template-columns:90px 1fr;gap:0;background:var(--card);border:1px solid transparent;transition:border-color .2s}
+.mono-step:hover{border-color:var(--border)}
+.mono-subs{background:var(--golddim);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 8px;text-align:center}
+.mono-subs-num{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--gold);line-height:1.1}
+.mono-subs-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-top:2px}
+.mono-body{padding:18px 24px}
+.mono-title{font-weight:600;color:var(--cream);font-size:14.5px;margin-bottom:4px}
+.mono-text{font-size:13px;color:var(--light);line-height:1.6;font-weight:300}
+
+/* ALERT / TIP */
+.alert{background:rgba(184,69,50,.07);border:1px solid rgba(184,69,50,.24);padding:22px 26px;margin:28px 0}
+.alert-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:var(--rust);text-transform:uppercase;margin-bottom:9px}
+.alert-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.alert-text strong{color:var(--cream);font-weight:500}
+.tip{background:rgba(44,122,114,.07);border:1px solid rgba(44,122,114,.24);padding:22px 26px;margin:28px 0}
+.tip-head{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:2.5px;color:#4aaa9e;text-transform:uppercase;margin-bottom:9px}
+.tip-text{font-size:13.5px;color:var(--light);line-height:1.7}
+.tip-text strong{color:var(--cream);font-weight:500}
+
+.table-wrap{overflow-x:auto;margin-top:40px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--card2);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);padding:13px 16px;text-align:left;border-bottom:1px solid var(--border)}
+tbody tr{border-bottom:1px solid rgba(200,148,58,.07);transition:background .15s}
+tbody tr:hover{background:var(--card)}
+tbody td{padding:13px 16px;color:var(--light);vertical-align:top;line-height:1.5}
+.num-cell{font-family:'JetBrains Mono',monospace;color:var(--gold);opacity:.55;font-size:11px}
+.name-cell{font-weight:500;color:var(--cream)}
+
+footer{background:var(--bg);border-top:1px solid var(--border);padding:56px 64px 72px;text-align:center}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;letter-spacing:2px;color:var(--gold);margin-bottom:10px}
+.footer-sub{font-size:13.5px;color:var(--muted);margin-bottom:6px}
+.footer-tiny{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(92,95,104,.45);text-transform:uppercase;margin-top:26px}
+
+.pg-hero-art{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:.55;z-index:0}
+.pg-hero-art svg{width:100%;height:100%;display:block}
+[class*="icon"] svg.pg-icon{width:1em;height:1em;display:inline-block;vertical-align:-0.15em}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav>
+  <div class="nav-logo">YouTube Zero</div>
+  <ul class="nav-links">
+    <li><a href="#niche">Niche</a></li>
+    <li><a href="#hook">4-Second Hook</a></li>
+    <li><a href="#gear">$80 Setup</a></li>
+    <li><a href="#algorithm">Algorithm</a></li>
+    <li><a href="#content">Content System</a></li>
+    <li><a href="#growth">Growth</a></li>
+    <li><a href="#monetise">Monetise</a></li>
+    <li><a href="#cheatsheet">Cheatsheet</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero"><div class="pg-hero-art" aria-hidden="true"><svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><path d="M654.7 68.8 A127.3 127.3 0 0 1 412.3 54.9" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><path d="M443.7 138.0 A163.0 163.0 0 0 1 279.3 194.4" stroke="#c8943a" stroke-width="1" fill="none" opacity="0.16"/><line x1="662.4" y1="124.4" x2="705.2" y2="154.1" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="662.4" y1="124.4" x2="605.3" y2="117.0" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="78.6" y1="202.2" x2="131.4" y2="94.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="518.1" y1="165.1" x2="540.3" y2="187.1" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="475.7" y1="151.0" x2="441.5" y2="124.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="307.6" y1="129.3" x2="325.4" y2="238.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="578.1" y1="99.3" x2="605.3" y2="117.0" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="475.7" y1="151.0" x2="540.3" y2="187.1" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="762.5" y1="168.2" x2="811.5" y2="156.3" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="762.5" y1="168.2" x2="705.2" y2="154.1" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="131.4" y1="94.5" x2="196.2" y2="47.4" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="441.5" y1="124.3" x2="406.2" y2="181.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="404.9" y1="229.6" x2="406.2" y2="181.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="522.5" y1="31.2" x2="470.3" y2="32.5" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="578.1" y1="99.3" x2="522.5" y2="31.2" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="404.9" y1="229.6" x2="325.4" y2="238.6" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="325.4" y1="238.6" x2="406.2" y2="181.7" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><line x1="540.3" y1="187.1" x2="601.4" y2="255.0" stroke="#c8943a" stroke-width="0.7" opacity="0.28"/><circle cx="662.4" cy="124.4" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="662.4" cy="124.4" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="78.6" cy="202.2" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="518.1" cy="165.1" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="475.7" cy="151.0" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="475.7" cy="151.0" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="307.6" cy="129.3" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="307.6" cy="129.3" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="578.1" cy="99.3" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="540.3" cy="187.1" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="540.3" cy="187.1" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="605.3" cy="117.0" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="762.5" cy="168.2" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="811.5" cy="156.3" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="131.4" cy="94.5" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="441.5" cy="124.3" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="404.9" cy="229.6" r="1.8" fill="#c8943a" opacity="0.50"/><circle cx="522.5" cy="31.2" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="522.5" cy="31.2" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="325.4" cy="238.6" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="325.4" cy="238.6" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="196.2" cy="47.4" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="406.2" cy="181.7" r="6.6" fill="#c8943a" opacity="0.07"/><circle cx="406.2" cy="181.7" r="2.2" fill="#e8b84b" opacity="0.85"/><circle cx="470.3" cy="32.5" r="1.4" fill="#c8943a" opacity="0.50"/><circle cx="601.4" cy="255.0" r="9.6" fill="#c8943a" opacity="0.07"/><circle cx="601.4" cy="255.0" r="3.2" fill="#e8b84b" opacity="0.85"/><circle cx="705.2" cy="154.1" r="1.8" fill="#c8943a" opacity="0.50"/></svg></div>
+  <div class="hero-glow"></div><div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">Creator · YouTube Strategy · Content Science · 2025–26</div>
+    <div class="hero-tag">The Complete YouTube Zero-to-Channel Research Guide · 2025–26</div>
+    <h1>Start Your<br/><span>YouTube</span><span class="sub">Channel from Zero</span></h1>
+    <p class="hero-desc">The strategy-first guide to building a YouTube channel that actually grows — backed by 2026 algorithm data, niche selection science, creator economics, and what the top 1% of new channels do differently. No expensive gear. No luck required. Pure system.</p>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-n">500hrs</span><span class="hstat-l">of video uploaded per minute — positioning is everything</span></div>
+      <div class="hstat"><span class="hstat-n">4sec</span><span class="hstat-l">for YouTube to decide whether to recommend your video</span></div>
+      <div class="hstat"><span class="hstat-n">$0–80</span><span class="hstat-l">total budget needed for a premium-looking setup</span></div>
+      <div class="hstat"><span class="hstat-n">70%</span><span class="hstat-l">of all YouTube views come from the recommendation engine</span></div>
+    </div>
+  </div>
+  <div class="scroll-hint">Scroll to begin</div>
+</section>
+
+<!-- ─── TOC ─── -->
+<div class="toc-wrap">
+  <div class="toc-inner">
+    <div class="toc-label">Everything Inside This Guide</div>
+    <div class="toc-grid">
+      <a href="#niche" class="toc-item"><span class="toc-num">01</span><span class="toc-name">Niche Selection Framework — The intersection of passion, demand & low competition</span></a>
+      <a href="#hook" class="toc-item"><span class="toc-num">02</span><span class="toc-name">The 4-Second Hook Rule — YouTube decides to recommend your video in the first 4 seconds</span></a>
+      <a href="#gear" class="toc-item"><span class="toc-num">03</span><span class="toc-name">Zero-Budget Setup — Exact gear list under $80 that looks premium</span></a>
+      <a href="#algorithm" class="toc-item"><span class="toc-num">04</span><span class="toc-name">The Algorithm Decoded — Watch time, CTR, and the one metric that matters most in 2026</span></a>
+      <a href="#content" class="toc-item"><span class="toc-num">05</span><span class="toc-name">The Content System — Batch filming, consistency without burnout</span></a>
+      <a href="#growth" class="toc-item"><span class="toc-num">06</span><span class="toc-name">0 to 1,000 Subscribers — The fastest legitimate growth path for new channels</span></a>
+      <a href="#monetise" class="toc-item"><span class="toc-num">07</span><span class="toc-name">Monetisation Before 1,000 Subs — Revenue streams most beginners ignore</span></a>
+      <a href="#cheatsheet" class="toc-item"><span class="toc-num">08</span><span class="toc-name">The Master Cheatsheet — Every principle, one table</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- ─── 01: NICHE SELECTION ─── -->
+<section class="section" id="niche">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 01</div>
+    <div class="s-meta">
+      <div class="s-cat">TubeBuddy · vidIQ · OutlierKit · 2025–26 Research</div>
+      <h2 class="s-title">Niche<br/><span>Selection</span> Framework</h2>
+      <p class="s-desc">Most channels fail before they film a single video — by choosing the wrong niche. The right niche is not the most popular one. It's the one at the precise intersection of what you can sustain creating, what people are actively searching for, and what few quality creators are already serving. This three-part framework finds it.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">Passion</span><span class="s-stat-l">alone leads to burnout when demand isn't there</span></div>
+    <div class="s-stat"><span class="s-stat-n">Demand</span><span class="s-stat-l">alone with no passion produces hollow content that doesn't retain</span></div>
+    <div class="s-stat"><span class="s-stat-n">Low</span><span class="s-stat-l">competition gives new channels a real path to rank and grow</span></div>
+    <div class="s-stat"><span class="s-stat-n">Micro-</span><span class="s-stat-l">niches convert 40–60% faster than broad niches for new creators</span></div>
+  </div>
+
+  <div class="niche-venn">
+    <div class="niche-venn-title">The 3-Factor Niche Framework</div>
+    <div class="venn-grid">
+      <div class="venn-circle">
+        <span class="venn-emoji">❤️</span>
+        <div class="venn-label">Factor 01</div>
+        <div class="venn-title">Passion & Sustainability</div>
+        <p class="venn-text">Can you create 100+ videos on this topic? Not 10. A hundred. Passion that survives the first 50 videos with zero views is the kind that builds real channels. Ask: "Would I talk about this for free for 2 years before it paid off?"</p>
+      </div>
+      <div class="venn-circle">
+        <span class="venn-emoji">🔍</span>
+        <div class="venn-label">Factor 02</div>
+        <div class="venn-title">Measurable Demand</div>
+        <p class="venn-text">People must be actively searching for this content. Validate using TubeBuddy's Keyword Explorer or vidIQ. Look for: consistent search volume, questions being asked in communities, existing channels with real engagement. No searches = no discovery.</p>
+      </div>
+      <div class="venn-circle">
+        <span class="venn-emoji">🎯</span>
+        <div class="venn-label">Factor 03</div>
+        <div class="venn-title">Low Competition</div>
+        <p class="venn-text">Fewer quality creators in your space means faster ranking in search, more algorithmic exposure, and a genuine path to standing out. Look for: search results with older, lower-quality videos. High search volume + poor existing content = your opportunity.</p>
+      </div>
+      <div class="venn-center">
+        <div class="venn-center-label">The Sweet Spot — Your Niche</div>
+        <p class="venn-center-text">Where all three overlap: you can sustain it, people want it, and few quality creators are serving it. Example: not "fitness" but "resistance band workouts for office workers over 40." Not "food" but "budget Indian vegetarian meal prep under 500 calories." The more specific the niche, the faster the initial growth.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">NICHE TOOL 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><ellipse cx="12" cy="8" rx="8" ry="4.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 8v8c0 2.5 3.6 4.5 8 4.5s8-2 8-4.5V8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 13c0 2.5 3.6 4.5 8 4.5s8-2 8-4.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">High-CPM Niches — Where the Money Is</div>
+      <div class="card-sec">Revenue Per 1,000 Views Data — 2026</div>
+      <p class="card-text">Not all niches earn equally. CPM (cost per mille) is what advertisers pay per 1,000 ad views — and it varies enormously by niche. The highest-earning niches in 2026:<br/><br/><strong style="color:var(--cream)">Finance, Investing, Business:</strong> $8–20 CPM<br/><strong style="color:var(--cream)">Software, SaaS, Tech:</strong> $6–15 CPM<br/><strong style="color:var(--cream)">Health Optimisation, Med:</strong> $5–12 CPM<br/><strong style="color:var(--cream)">B2B Education:</strong> $8–18 CPM<br/><strong style="color:var(--cream)">Betrayal/Drama Narratives:</strong> $12.82 CPM<br/><strong style="color:var(--cream)">Entertainment/Gaming:</strong> $1–3 CPM<br/><br/>A smaller, high-intent niche often outperforms a broad entertainment niche by 5–10× in ad revenue per view.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Audience Intent Principle</div>
+        <p class="card-text">Advertisers pay more for audiences who are actively making decisions. A viewer researching "best index funds for beginners" is more valuable to advertisers than one watching gaming highlights — regardless of view count. Audience intent determines CPM more than topic popularity.</p>
+      </div>
+      <span class="badge ba">Revenue Data</span>
+    </div>
+    <div class="card">
+      <div class="card-num">NICHE TOOL 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 3v7.5L5.5 17a2 2 0 0 0 1.8 3h9.4a2 2 0 0 0 1.8-3L15 10.5V3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 3h6M6.5 15h11" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">How to Validate Your Niche Before Filming</div>
+      <div class="card-sec">The 4-Check Validation</div>
+      <p class="card-text"><strong style="color:var(--cream)">Check 1 — Search Volume:</strong> Use TubeBuddy or vidIQ Keyword Explorer. Is there consistent search volume for your main topic keywords?<br/><br/><strong style="color:var(--cream)">Check 2 — Community Demand:</strong> Search Reddit, Quora, and Facebook groups for your topic. Are people asking questions you could answer in videos?<br/><br/><strong style="color:var(--cream)">Check 3 — Competition Quality:</strong> Search your exact niche on YouTube. Are the top results 5+ years old, low-production, or failing to fully answer questions? That's your gap.<br/><br/><strong style="color:var(--cream)">Check 4 — Monetisation Path:</strong> Is there affiliate potential? Are brands in this space looking for creators? Can you create a digital product? A niche without a monetisation path is a hobby, not a channel.</p>
+      <span class="badge ba">Before You Film</span>
+    </div>
+    <div class="card">
+      <div class="card-num">NICHE TOOL 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 2c3 2 5 6 5 10 0 2-1 4-2 5l-3 3-3-3c-1-1-2-3-2-5 0-4 2-8 5-10z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="1.6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 17c-2 1-2 3-3 5 2-1 4-1 5-3M15 17c2 1 2 3 3 5-2-1-4-1-5-3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Low-Competition Niches That Work in 2026</div>
+      <div class="card-sec">Research-Confirmed Opportunities</div>
+      <p class="card-text"><strong style="color:var(--cream)">Niche Hobby Tutorials:</strong> Bookbinding, aquascaping, mechanical keyboards, urban sketching — passionate audiences, barely any quality content.<br/><br/><strong style="color:var(--cream)">B2B Professional Skills:</strong> Excel advanced, project management frameworks, industry-specific tools — high search volume, surprisingly few quality creators.<br/><br/><strong style="color:var(--cream)">Local & Regional:</strong> City guides, local restaurant reviews, regional content — built-in audiences, almost no competition.<br/><br/><strong style="color:var(--cream)">Micro-Fitness:</strong> Resistance band workouts, desk stretches, postpartum fitness, mobility for specific sports.<br/><br/><strong style="color:var(--cream)">Emerging Tech:</strong> EV deep dives, 3D printing tutorials, smart home integration — first-mover advantage before saturation.</p>
+      <span class="badge bb">2026 Opportunities</span>
+    </div>
+    <div class="card">
+      <div class="card-num">NICHE MISTAKE</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 3 2 20h20z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M12 10v4.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="17.3" r="0.9" fill="#c8943a"/></svg></span>
+      <div class="card-title">The Niche Mistakes That Kill Channels Before They Start</div>
+      <div class="card-sec">Most Common Failure Points</div>
+      <p class="card-text"><strong style="color:var(--cream)">Too broad:</strong> "Fitness" and "cooking" are categories, not niches. You need a specific enough focus that your ideal viewer feels like the channel was made specifically for them.<br/><br/><strong style="color:var(--cream)">Passion with zero demand:</strong> You love medieval tapestry history. If 30 people per month are searching for it — that's a blog, not a channel.<br/><br/><strong style="color:var(--cream)">Chasing CPM without passion:</strong> Starting a finance channel because it pays well — when you have zero interest in finance — produces content that doesn't retain viewers and burns out the creator within 20 videos.<br/><br/><strong style="color:var(--cream)">Mixing unrelated niches before 10K subs:</strong> Audience expectations become confused. The algorithm doesn't know who to recommend you to. Stay in your lane until you have significant traction.</p>
+      <span class="badge bc">Avoid These</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 1 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"Specific audiences grow faster than generic ones. Most YouTube channels don't fail because of editing quality or bad cameras. They fail because of <em>strategic mistakes made before the first video was filmed.</em>"</p>
+  <p class="quote-attr">— Packapop · YouTube Niche Research 2026 · 500+ Channel Analysis</p>
+</div>
+
+<!-- ─── 02: THE 4-SECOND HOOK ─── -->
+<section class="section section-alt" id="hook">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 02</div>
+    <div class="s-meta">
+      <div class="s-cat">YouTube Algorithm · Audience Retention Science · 2026 Data</div>
+      <h2 class="s-title">The <span>4-Second</span><br/>Hook Rule</h2>
+      <p class="s-desc">YouTube monitors every video in the first 4–7 seconds after someone clicks. If viewers drop off in that window — YouTube stops recommending your video entirely. If they stay — YouTube expands distribution. The hook is not about being entertaining. It is about making a promise that the viewer believes is worth their next 5 minutes.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">30–40%</span><span class="s-stat-l">of viewers leave within the first 30 seconds of most videos (2026 retention data)</span></div>
+    <div class="s-stat"><span class="s-stat-n">70%+</span><span class="s-stat-l">AVD earns priority placement in suggested videos — the growth engine</span></div>
+    <div class="s-stat"><span class="s-stat-n">5sec</span><span class="s-stat-l">maximum intro before you must deliver the promised value or lose the viewer</span></div>
+    <div class="s-stat"><span class="s-stat-n">48hrs</span><span class="s-stat-l">is your golden window — if performance is strong, YouTube expands distribution</span></div>
+  </div>
+
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m7.5 12.5 3 3 6-6.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">What a Great Hook Does</div>
+      <p class="col-text">
+        A great hook does three things simultaneously in under 4 seconds:<br/><br/>
+        <strong>1. States the payoff clearly.</strong> The viewer must know exactly what they will gain by watching to the end. Not a vague "I'm going to show you something amazing." Specific: "In this video you'll know exactly which 3 funds a beginner should buy — and why everyone else gets this wrong."<br/><br/>
+        <strong>2. Creates a curiosity gap.</strong> The brain is wired to close open loops. A hook that creates a question the viewer doesn't yet know the answer to keeps them watching until the question is resolved. "I made one change to my titles and my views tripled — here's what it was."<br/><br/>
+        <strong>3. Signals credibility.</strong> Why should the viewer trust you to deliver this? A credential, a result, or a surprising claim that makes the promise believable.
+      </p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 5l14 14M19 5 5 19" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">What Kills Views in the First 4 Seconds</div>
+      <p class="col-text">
+        <strong>The "Hey guys, welcome back" intro.</strong> Every second spent on pleasantries before delivering value is a second the viewer might leave. The algorithm sees this as your retention curve dropping — and reduces distribution.<br/><br/>
+        <strong>The slow wind-up.</strong> "Today I want to talk about something I've been thinking about for a while..." Nobody cares about your process. They care about their problem.<br/><br/>
+        <strong>Teasing without promising.</strong> "You won't believe what I found out" — without immediately telling them — creates frustration, not curiosity. The gap needs to be specific enough to feel worth closing.<br/><br/>
+        <strong>Asking viewers to subscribe before delivering value.</strong> This is the fastest way to signal that your channel is more focused on what it wants from viewers than on what it's giving them.
+      </p>
+    </div>
+  </div>
+
+  <p style="font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:var(--gold);margin:28px 0 16px">The 4-Step Hook Formula — Works for Every Video Type</p>
+  <div class="hook-formula">
+    <div class="hook-step">
+      <span class="hook-num">1</span>
+      <div class="hook-label">State the Payoff</div>
+      <p class="hook-text">Tell viewers exactly what they'll know or be able to do by the end. Specific outcome, not a category.</p>
+    </div>
+    <div class="hook-step">
+      <span class="hook-num">2</span>
+      <div class="hook-label">Create the Gap</div>
+      <p class="hook-text">Raise a question, reveal a counterintuitive truth, or show something surprising that the rest of the video will resolve.</p>
+    </div>
+    <div class="hook-step">
+      <span class="hook-num">3</span>
+      <div class="hook-label">Signal Authority</div>
+      <p class="hook-text">One sentence of credibility — a result, a specific experience, or a number that makes the promise believable.</p>
+    </div>
+    <div class="hook-step">
+      <span class="hook-num">4</span>
+      <div class="hook-label">Cut to Content</div>
+      <p class="hook-text">Begin delivering immediately. No music montages. No intros. No "smash like." Deliver on the promise now.</p>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">HOOK EXAMPLES</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 3h9l5 5v13H5z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M14 3v5h5M8 12h8M8 16h8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Hook Templates That Work — By Video Type</div>
+      <div class="card-sec">Copy. Adapt. Test.</div>
+      <p class="card-text"><strong style="color:var(--cream)">Tutorial/How-To:</strong> "This [task] takes most people 3 hours. I'll show you how to do it in 20 minutes using one technique most tutorials skip."<br/><br/><strong style="color:var(--cream)">Review:</strong> "I tested [product] for 90 days. By the end I was either buying 5 more — or returning it immediately. Here's what I found."<br/><br/><strong style="color:var(--cream)">Educational:</strong> "The reason [common belief] is wrong — and what the science actually says."<br/><br/><strong style="color:var(--cream)">Personal Story:</strong> "One year ago I had [problem]. Today I have [result]. This is the exact thing I changed that made the difference."<br/><br/><strong style="color:var(--cream)">Listicle:</strong> "Most [list videos] miss the most important one. Number [X] is the one that actually changed everything."</p>
+      <span class="badge ba">Use These</span>
+    </div>
+    <div class="card">
+      <div class="card-num">RETENTION SCIENCE</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 20V10M12 20V4M19 20v-7" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 20h18" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Pattern Interrupts — Keep Viewers Past the Hook</div>
+      <div class="card-sec">The Every-90-Second Rule</div>
+      <p class="card-text">The hook gets viewers to stay for the first 30 seconds. Retention hooks — brief re-engagement moments scattered through your video — keep them to the end. The rule: something must change every 90 seconds. This can be: a visual cut to B-roll, an on-screen text overlay, a different camera angle, a new chapter beginning, a question posed to the viewer, or a surprising stat. Each pattern interrupt resets the viewer's attention and gives them a micro-reason to keep watching for the next 90 seconds.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Research</div>
+        <p class="card-text">YTShark 2026 analysis: channels that trimmed videos from 15 minutes to 8 minutes and added pattern interrupts saw suggested traffic increase 40%. Efficiency now matters more than length. Make videos as long as they need to be — then cut 30% more.</p>
+      </div>
+      <span class="badge ba">Retention Tool</span>
+    </div>
+    <div class="card">
+      <div class="card-num">THUMBNAIL SCIENCE</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M12 3a9 9 0 1 0 0 18c1.2 0 1.8-1 1.2-2-.5-.7-.2-1.7.7-1.9 3.5-.7 6.1-3.6 6.1-7.1A9 9 0 0 0 12 3z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><circle cx="7.5" cy="10.5" r="1.1" fill="#c8943a"/><circle cx="12" cy="7.5" r="1.1" fill="#c8943a"/><circle cx="16" cy="10" r="1.1" fill="#c8943a"/></svg></span>
+      <div class="card-title">The Thumbnail Is the Real Hook</div>
+      <div class="card-sec">Before the Video Plays, the Thumbnail Sells</div>
+      <p class="card-text">90% of YouTube traffic is on mobile — and on a small screen, the thumbnail dominates before the title. The thumbnail must communicate the video's value without the title. Rules for a high-CTR thumbnail in 2026: One clear focal point (face with expression OR bold text OR striking visual — not all three). High-contrast colours that stand out from YouTube's dark interface. Human faces with readable emotions significantly outperform text-only thumbnails. Keep text under 4 words if used. Test 2–3 variations per video. Below 4% CTR = fix your thumbnail first, always.</p>
+      <span class="badge ba">Before Views Come</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── QUOTE 2 ─── -->
+<div class="quote-block">
+  <p class="quote-text">"A great video with a bad thumbnail dies in silence. A mediocre video with a great thumbnail and a great hook gets recommended. <em>Packaging is the product</em> — until viewers experience the content."</p>
+  <p class="quote-attr">— YTShark · YouTube Algorithm Guide 2026 · 3M+ Creator Data</p>
+</div>
+
+<!-- ─── 03: GEAR SETUP ─── -->
+<section class="section" id="gear">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 03</div>
+    <div class="s-meta">
+      <div class="s-cat">Zero Budget · Premium Results · 2025–26 Creator Research</div>
+      <h2 class="s-title">The <span>Zero-Budget</span><br/>Setup</h2>
+      <p class="s-desc">The most common reason people don't start their channel is the myth that professional equipment is required. It isn't. Three things determine video quality: audio (most important), lighting (second), camera (third). The camera in your pocket already beats what most professionals used 5 years ago. Here's the complete setup for under $80.</p>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="s-stat"><span class="s-stat-n">Audio</span><span class="s-stat-l">is #1 — viewers will forgive bad video but never bad audio</span></div>
+    <div class="s-stat"><span class="s-stat-n">4K</span><span class="s-stat-l">already in your pocket — iPhone 13+ / Galaxy S21+ shoots cinematic quality</span></div>
+    <div class="s-stat"><span class="s-stat-n">Free</span><span class="s-stat-l">editing tools (DaVinci Resolve, CapCut) are professional-grade in 2026</span></div>
+    <div class="s-stat"><span class="s-stat-n">Window</span><span class="s-stat-l">light = free professional lighting when used correctly</span></div>
+  </div>
+
+  <div class="gear-list">
+    <div class="gear-item">
+      <div class="gear-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="7" y="3" width="10" height="18" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 18h2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="gear-body">
+        <div class="gear-name">Your Smartphone — The Camera</div>
+        <p class="gear-desc">iPhone 13+ or Galaxy S21+ (or equivalent Android) shoots 4K that rivals dedicated cameras costing $500+. Do not buy a camera until you have proven your channel concept works and earns enough to justify the upgrade. The phone you already own is your best starting camera.</p>
+        <div class="gear-rec">→ Best setting: 1080p 30fps for beginners / 4K 24fps for a cinematic look</div>
+      </div>
+      <div class="gear-price"><span class="gear-price-num">$0</span><span class="gear-price-label">Already own</span></div>
+    </div>
+    <div class="gear-item">
+      <div class="gear-icon">🎙️</div>
+      <div class="gear-body">
+        <div class="gear-name">Lavalier Clip-On Microphone</div>
+        <p class="gear-desc">The single most impactful purchase for video quality. Bad audio loses viewers in seconds. A $20–30 clip-on lav mic plugged directly into your phone eliminates room echo, reduces background noise, and produces a clear, warm voice — exactly what listeners need to stay engaged. BOYA BY-M1 or Rode smartLav+ are the benchmark options at this price.</p>
+        <div class="gear-rec">→ BOYA BY-M1 (~$20) or Rode SmartLav+ (~$60) — clip close to mouth, under clothing</div>
+      </div>
+      <div class="gear-price"><span class="gear-price-num">$20</span><span class="gear-price-label">~$20–60</span></div>
+    </div>
+    <div class="gear-item">
+      <div class="gear-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 18h6M10 21h4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 3a6.5 6.5 0 0 0-3.5 12c.6.4 1 1.1 1 1.9V17h5v-.1c0-.8.4-1.5 1-1.9A6.5 6.5 0 0 0 12 3z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></div>
+      <div class="gear-body">
+        <div class="gear-name">Ring Light or Window Light</div>
+        <p class="gear-desc">Good lighting eliminates the single biggest visual quality problem: dark, shadow-heavy footage that looks amateur. Option 1 (free): Film facing a large window during daylight — soft, flattering, professional. Option 2 ($25–40): A 10" LED ring light from Amazon produces consistent studio-quality illumination regardless of time of day. Position it at eye level, slightly to the side for a natural look.</p>
+        <div class="gear-rec">→ Neewer 10" LED Ring Light with stand (~$35) — consistent, adjustable brightness and colour temp</div>
+      </div>
+      <div class="gear-price"><span class="gear-price-num">$35</span><span class="gear-price-label">~$0–40</span></div>
+    </div>
+    <div class="gear-item">
+      <div class="gear-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M4 20 14 4l6 16z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/><path d="M9 20h5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="gear-body">
+        <div class="gear-name">Tripod with Phone Mount</div>
+        <p class="gear-desc">Shaky footage signals amateur production — regardless of resolution or lighting. A basic tripod keeps your shot steady, frees your hands, and allows consistent framing across all videos (which builds brand recognition). The UBeesize tripod includes a phone mount and costs under $25 — it does the job of tripods that cost 10 times more.</p>
+        <div class="gear-rec">→ UBeesize 50" Tripod with phone mount (~$22) — lightweight, portable, adjustable</div>
+      </div>
+      <div class="gear-price"><span class="gear-price-num">$22</span><span class="gear-price-label">~$20–30</span></div>
+    </div>
+    <div class="gear-item">
+      <div class="gear-icon">💻</div>
+      <div class="gear-body">
+        <div class="gear-name">Free Editing Software</div>
+        <p class="gear-desc">DaVinci Resolve: professional-grade, free forever, used by Hollywood editors. Handles colour grading, audio mixing, transitions, and advanced effects. CapCut: free, beginner-friendly, available on desktop and mobile — the fastest editing workflow for talking head and vlog content. iMovie (Mac only): intuitive, free, produces clean results for straightforward cuts. There is no reason to pay for editing software as a beginner.</p>
+        <div class="gear-rec">→ DaVinci Resolve (FREE) for serious editing / CapCut (FREE) for quick, mobile-first workflow</div>
+      </div>
+      <div class="gear-price"><span class="gear-price-num">$0</span><span class="gear-price-label">100% Free</span></div>
+    </div>
+    <div class="gear-total">
+      <div class="gear-total-label">Total Investment — Premium-Looking Setup</div>
+      <div class="gear-total-num">$77</div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-head">✅ The Professional Backdrop Secret — Free</div>
+    <p class="tip-text">You don't need a studio. You need a clean background. The most effective free background upgrades: <strong>Declutter everything behind you.</strong> A plain wall with one or two deliberate objects (a plant, a book shelf) reads as intentional design. <strong>Use depth of field.</strong> Film a few feet from the wall with your subject (you) in focus and the background slightly blurred — your phone's portrait mode achieves this. <strong>Add a warm lamp in the background.</strong> A simple desk lamp behind you creates visual depth and warmth that makes any room look premium on camera.</p>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">AUDIO PRO TIP</div>
+      <span class="card-icon">🔇</span>
+      <div class="card-title">The Room Acoustics Fix — Free</div>
+      <p class="card-text">Echo and room reverb are the enemies of professional audio — and they have nothing to do with your microphone. The fix costs nothing: film in a room with soft furnishings (carpet, curtains, sofa) that absorb sound rather than reflect it. A bedroom with a bed, curtains, and clothes in wardrobes is acoustically better than a hard-surfaced living room. If you must film in a reverberant space, hang a blanket on the wall behind you. It sounds ridiculous — it works.</p>
+      <span class="badge bb">Free Upgrade</span>
+    </div>
+    <div class="card">
+      <div class="card-num">UPGRADE PATH</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="m4 16 5-5 4 3 7-8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 6h5v5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">What to Upgrade — And When</div>
+      <p class="card-text"><strong style="color:var(--cream)">First upgrade (50 videos / $200+ monthly):</strong> Better microphone → USB condenser like Blue Yeti ($130) or a desk arm mount for your current lav. The audio quality jump is dramatic.<br/><br/><strong style="color:var(--cream)">Second upgrade (100 videos / $500+ monthly):</strong> Dedicated camera → Sony ZV-E10 (~$500) with kit lens. This is the creator workhorse — excellent autofocus, cinematic image quality, real upgrade from phone.<br/><br/><strong style="color:var(--cream)">Third upgrade (established channel):</strong> Full lighting setup, green screen, or second angle. But only when your content system is already working without them.</p>
+      <span class="badge ba">Smart Sequencing</span>
+    </div>
+    <div class="card">
+      <div class="card-num">FACELESS OPTION</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="9" cy="10" r="6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="14" r="6" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The No-Camera Setup — Also $0</div>
+      <p class="card-text">Camera-shy? Faceless channels are among the fastest-growing creator formats in 2026. Formats that work without appearing on camera: screen recordings (tutorials, explainers, reviews), voiceover with B-roll or stock footage, animated content (CapCut + stock video), and AI-narrated documentary-style content. Equipment needed: a decent microphone (your phone works in a quiet room), a screen recorder (OBS Studio — free), and your existing computer. Some of the highest-earning channels in 2026 have never shown a face.</p>
+      <span class="badge bb">Camera-Free Path</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 04: THE ALGORITHM ─── -->
+<section class="section section-alt" id="algorithm">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 04</div>
+    <div class="s-meta">
+      <div class="s-cat">vidIQ · TubeBuddy · YouToWire · Shopify Research 2026</div>
+      <h2 class="s-title">The Algorithm<br/><span>Decoded</span></h2>
+      <p class="s-desc">YouTube's algorithm is not one system — it is five separate recommendation engines operating simultaneously. Each one uses different primary signals. Mastering them changed channels in 2025 more than any amount of extra video production. Here's exactly what matters and what the 2026 data reveals.</p>
+    </div>
+  </div>
+
+  <div class="algo-metrics">
+    <div class="algo-metric">
+      <div class="algo-metric-name">Click-Through Rate</div>
+      <div class="algo-metric-value">7–10%</div>
+      <div class="algo-metric-label">Target for new channels</div>
+      <div class="algo-metric-bar"><div class="algo-metric-fill" style="width:85%"></div></div>
+      <p class="algo-metric-text">% of impressions that convert to clicks. Below 3% = thumbnail needs immediate fix. 4–6% = average. 7–10% = strong. 10%+ = excellent (often niche channels with loyal audiences). YouTube tests every new video with a small audience first — strong CTR = wider reach.</p>
+      <span class="algo-metric-badge weight-critical">Critical Signal</span>
+    </div>
+    <div class="algo-metric">
+      <div class="algo-metric-name">Average View Duration</div>
+      <div class="algo-metric-value">50–70%</div>
+      <div class="algo-metric-label">Target percentage watched</div>
+      <div class="algo-metric-bar"><div class="algo-metric-fill" style="width:75%"></div></div>
+      <p class="algo-metric-text">How long viewers watch before leaving. Under 30% = penalty zone. 40–60% = good. 60%+ = excellent, earns priority in suggested videos. High CTR but low AVD = clickbait — algorithm suppresses. Both must be high simultaneously. Fix is almost always in the intro.</p>
+      <span class="algo-metric-badge weight-critical">Critical Signal</span>
+    </div>
+    <div class="algo-metric">
+      <div class="algo-metric-name">Session Time</div>
+      <div class="algo-metric-value">Most</div>
+      <div class="algo-metric-label">Underrated metric of 2026</div>
+      <div class="algo-metric-bar"><div class="algo-metric-fill" style="width:90%"></div></div>
+      <p class="algo-metric-text">After watching your video, does the viewer continue watching YouTube — or leave the platform? This is the most underrated metric. YouTube cares about total session length more than any single video's watch time. Your 5-min video → viewer watches 3 more videos = 20-min session → algorithm prioritises you.</p>
+      <span class="algo-metric-badge weight-critical">2026 Game-Changer</span>
+    </div>
+    <div class="algo-metric">
+      <div class="algo-metric-name">Satisfaction Signals</div>
+      <div class="algo-metric-value">New</div>
+      <div class="algo-metric-label">2025–26 Algorithm Shift</div>
+      <div class="algo-metric-bar"><div class="algo-metric-fill" style="width:70%"></div></div>
+      <p class="algo-metric-text">YouTube now collects millions of post-watch surveys asking: "Was this video worth your time?" Combined with: repeat viewing, "Not Interested" clicks, and return viewers. In 2025, YouTube moved to satisfaction-weighted discovery. A short video where viewers watch 100% and like it now beats a long video with 40% retention.</p>
+      <span class="algo-metric-badge weight-high">New Priority</span>
+    </div>
+    <div class="algo-metric">
+      <div class="algo-metric-name">Video Velocity</div>
+      <div class="algo-metric-value">48hrs</div>
+      <div class="algo-metric-label">The golden performance window</div>
+      <div class="algo-metric-bar"><div class="algo-metric-fill" style="width:65%"></div></div>
+      <p class="algo-metric-text">How quickly a new video gains traction in the first 48 hours after publishing determines whether it gets expanded distribution. Pro tip: upload 1–2 hours before your audience's most active time (check Analytics → Audience tab). This timing alone can boost first-48-hour performance by 20–35%.</p>
+      <span class="algo-metric-badge weight-high">Launch Critical</span>
+    </div>
+    <div class="algo-metric">
+      <div class="algo-metric-name">Shorts: Completion Rate</div>
+      <div class="algo-metric-value">80%+</div>
+      <div class="algo-metric-label">Target for Shorts content</div>
+      <div class="algo-metric-bar"><div class="algo-metric-fill" style="width:80%"></div></div>
+      <p class="algo-metric-text">Shorts use a completely separate algorithm. CTR is irrelevant (autoplay). Completion rate is king — top Shorts hit 80–90% average. Hook must work in the first 2 seconds (first frame = your "thumbnail"). Below 50% completion = algorithm stops pushing. Aim for 15–60 seconds max.</p>
+      <span class="algo-metric-badge weight-medium">Shorts Specific</span>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">ALGORITHM INSIGHT 01</div>
+      <span class="card-icon">🔢</span>
+      <div class="card-title">The 5 Algorithm Systems</div>
+      <div class="card-sec">Not One Algorithm — Five</div>
+      <p class="card-text"><strong style="color:var(--cream)">1. Home Feed:</strong> Triggered by CTR + video velocity. What you see when you open YouTube. Personalised, changes by time of day and device.<br/><br/><strong style="color:var(--cream)">2. Search Algorithm:</strong> Metadata-driven. Title, description, tags, captions. Keyword relevance + watch time performance.<br/><br/><strong style="color:var(--cream)">3. Suggested Videos:</strong> Appears next to videos. Driven by topic adjacency + AVD + session time. The biggest growth engine for established channels.<br/><br/><strong style="color:var(--cream)">4. Shorts Feed:</strong> Completely decoupled since late 2025. Completion rate + swipe-through rate + loop rate.<br/><br/><strong style="color:var(--cream)">5. Notifications:</strong> Only reaches your existing subscribers. Consistency and subscriber engagement rate matter here.</p>
+      <span class="badge ba">Framework</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ALGORITHM INSIGHT 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="1.4" fill="#c8943a"/></svg></span>
+      <div class="card-title">New Channels Need 20–30 Videos First</div>
+      <div class="card-sec">The Data Threshold Reality</div>
+      <p class="card-text">YTShark 2026: "New channels need at minimum 20–30 videos before the algorithm has enough performance data to reliably recommend your content." This is not about quality — it's about data volume. YouTube's recommendation engine needs a track record to know who to show your videos to. This is why consistent publishing in the first 3 months matters far more than any single viral attempt. Treat your first 20 videos as the algorithm's training data for your channel. Each one contributes to a clearer picture of your audience.</p>
+      <div class="databox">
+        <div class="card-sec">📊 The Patience Principle</div>
+        <p class="card-text">TubeBuddy 2025 study: channels uploading 1–2× per week have 23% higher AVD than daily uploaders. One great video per week outperforms seven mediocre ones. Quality of data matters more than volume of uploads once you're past video 20.</p>
+      </div>
+      <span class="badge bc">Reality Check</span>
+    </div>
+    <div class="card">
+      <div class="card-num">ALGORITHM INSIGHT 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="m4 16 5-5 4 3 7-8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 6h5v5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Shorts + Long-Form = 40–60% Faster Growth</div>
+      <div class="card-sec">The Two-Channel Strategy</div>
+      <p class="card-text">Channels using both Shorts and long-form grow 40–60% faster than long-form-only channels. But they must be treated as separate strategies: Shorts for discovery (new audiences), long-form for depth and monetisation. The funnel: Short goes viral → new viewer finds channel → watches long-form → subscribes → becomes part of your core audience. The key: use Shorts as top-of-funnel teasers, not complete content. A Short that teaches 80% of what the long-form video covers gives viewers no reason to click through.</p>
+      <span class="badge ba">Growth Multiplier</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 05: CONTENT SYSTEM ─── -->
+<section class="section" id="content">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 05</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · Batch Filming · Content Calendar Science</div>
+      <h2 class="s-title">The <span>Content</span><br/>System</h2>
+      <p class="s-desc">Consistency is the single most important factor in channel growth — and the one most new creators underestimate. A content system eliminates the "I don't know what to film today" paralysis that kills most channels before they reach 20 videos. Here's the exact system.</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="3.5" y="5" width="17" height="15" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 10h17M8 3v4M16 3v4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">The Batch Filming Method</div>
+      <p class="col-text">
+        Instead of filming one video per week (which creates constant creative pressure and leads to "I'll film it tomorrow" spirals), batch film:<br/><br/>
+        <strong>One day per month:</strong> Film 4–6 videos in a single session. This eliminates the friction of setup, lighting, getting "in the zone," and cleanup — which costs time proportionally more when done individually.<br/><br/>
+        <strong>The creative momentum effect:</strong> Your best performances often happen in videos 3–4 of a session, not video 1. You're warmed up, you're in flow, and the ideas are connecting. Batching captures this state repeatedly.<br/><br/>
+        <strong>The buffer strategy:</strong> Always have 2–3 videos filmed and edited before your next scheduled upload. This buffer eliminates the panic upload — the rushed video that dips below your quality standard and hurts retention metrics.
+      </p>
+    </div>
+    <div class="col-card">
+      <span class="col-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 18h6M10 21h4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 3a6.5 6.5 0 0 0-3.5 12c.6.4 1 1.1 1 1.9V17h5v-.1c0-.8.4-1.5 1-1.9A6.5 6.5 0 0 0 12 3z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="col-title">The Infinite Content Framework</div>
+      <p class="col-text">
+        Running out of video ideas is a strategy problem, not a creativity problem. For any niche, video ideas come from 5 infinite sources:<br/><br/>
+        <strong>1. YouTube search autocomplete:</strong> Type your niche keyword into YouTube search and read the autofill suggestions. These are real searches from real people right now.<br/><br/>
+        <strong>2. Comment questions:</strong> Every question in your own comments and in larger channels in your niche is a video idea waiting to be made.<br/><br/>
+        <strong>3. Reddit and Quora:</strong> The most common questions in communities related to your niche are the exact videos your audience wants.<br/><br/>
+        <strong>4. "The video I wish existed":</strong> What would you have needed to watch when you were a beginner? That video often doesn't exist yet.<br/><br/>
+        <strong>5. Your competitor's gaps:</strong> What questions do their comment sections reveal that they never answer? Make that video.
+      </p>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:2px">
+    <div class="card">
+      <div class="card-num">CONTENT SYSTEM 01</div>
+      <span class="card-icon">🌲</span>
+      <div class="card-title">Evergreen vs Trending — The Right Mix</div>
+      <p class="card-text">Evergreen content (tutorials, how-tos, explainers on fundamental topics) continues generating views for years after upload — because the search demand never dies. Trending content (news commentary, reaction videos, timely topics) spikes immediately but decays fast. The ideal content mix for a growing channel: 70% evergreen, 30% trending. Evergreen builds your search traffic base that compounds over time. Trending generates early spikes that can introduce the algorithm to your channel when timing is right.</p>
+      <span class="badge ba">Content Strategy</span>
+    </div>
+    <div class="card">
+      <div class="card-num">CONTENT SYSTEM 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M9 15 15 9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 6.5 13 4.5a3.5 3.5 0 0 1 5 5l-2 2M13 17.5 11 19.5a3.5 3.5 0 0 1-5-5l2-2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Series Strategy — Build Playlists, Build Sessions</div>
+      <p class="card-text">One of the most underused growth tools for new channels: multi-part series organised into playlists. When a viewer watches Part 1 and the next video is Part 2 in the same playlist — YouTube autoplays it. Each video in a series dramatically increases the session time of every viewer who watches the first part. Session time is the most underrated algorithm signal in 2026 — and a well-structured playlist of 5–8 videos can multiply your watch time per viewer by 3–5×.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Practical Formula</div>
+        <p class="card-text">Make your first 10 videos a structured series: "The Complete [Your Niche] Guide for Beginners — Part 1 through 10." Each video references the previous and next. Viewers who find Part 4 will often go back to Part 1. Playlist view time counts toward your overall watch time — critical for monetisation eligibility.</p>
+      </div>
+      <span class="badge ba">Growth Multiplier</span>
+    </div>
+    <div class="card">
+      <div class="card-num">CONTENT SYSTEM 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M5 20V10M12 20V4M19 20v-7" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 20h18" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The 48-Hour Analytics Review</div>
+      <p class="card-text">After every upload, review your analytics at 48 hours and 7 days. The questions to answer: What was the CTR? If below 4% — the thumbnail needs work. What was the AVD%? If below 40% — the hook or intro needs work. Where exactly do people drop off? Go to the Audience Retention graph and identify the exact timestamp. That's where your video has a problem — fix it in your next video. This 48-hour review, applied consistently, produces more channel improvement than any course or YouTube tutorial ever could.</p>
+      <span class="badge ba">Data-Driven Growth</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 06: 0 TO 1,000 SUBS ─── -->
+<section class="section section-alt" id="growth">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 06</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · The Fastest Legitimate Path</div>
+      <h2 class="s-title">0 to <span>1,000</span><br/>Subscribers</h2>
+      <p class="s-desc">The first 1,000 subscribers is the hardest milestone on YouTube — and the one that unlocks everything else (monetisation eligibility, credibility signals, early community). Here is the fastest research-backed path to get there without shortcuts that destroy long-term growth.</p>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-num">GROWTH STRATEGY 01</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="10.5" cy="10.5" r="6.5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m20 20-4.8-4.8" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Optimise for Search First</div>
+      <p class="card-text">New channels have no audience and no algorithmic track record. Search is the only place you can compete immediately. People searching specific questions will find your answer regardless of your subscriber count. Focus your first 20 videos on high-demand, low-competition search queries. Use exact-match phrases in your title ("How to [specific task] for beginners in [specific context]"). Write a full description including the key phrase in the first 2 sentences. Add closed captions — YouTube's AI uses them for topic classification.</p>
+      <div class="psych">
+        <div class="card-sec">🔬 The Long-Tail Advantage</div>
+        <p class="card-text">Long-tail keywords (specific 4–7 word phrases) have lower search volume but dramatically lower competition. A new channel can rank #1 for "best resistance band exercises for office workers" far faster than for "resistance band workout." 100 people finding your video because they searched exactly that = 100 highly relevant viewers who are more likely to subscribe.</p>
+      </div>
+      <span class="badge ba">First Priority</span>
+    </div>
+    <div class="card">
+      <div class="card-num">GROWTH STRATEGY 02</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M4 5h13a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H9l-5 4v-4H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">The Genuine Community Strategy</div>
+      <p class="card-text">Before you have an audience, borrow someone else's. Find the 5 largest channels in your niche. Watch their recent videos fully. Leave genuine, specific, value-adding comments — not "Great video!" but "The point about [X] at 4:30 was exactly what I needed — I'd never thought about it from that angle." Your comment appears in front of thousands of interested viewers in your exact niche. This strategy, applied consistently (10 genuine comments per day), drives early subscriber growth faster than almost any other action a new channel can take.</p>
+      <span class="badge ba">Free Growth</span>
+    </div>
+    <div class="card">
+      <div class="card-num">GROWTH STRATEGY 03</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><path d="M3 12h4l3-3 3 3 3-3 5 3" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 12v5h4v-5M17 12v5h4v-5" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Collaboration at Any Size</div>
+      <p class="card-text">You don't need 10,000 subscribers to collaborate. You need value to offer. Reach out to creators in adjacent niches (different enough that you're not competing, similar enough that your audiences overlap) at roughly your size. Offer to: appear as a guest on their channel answering questions in your expertise area, swap a mention or a video shoutout, or create a joint video that both channels can publish. A collaboration with a 2,000-subscriber channel that sends you 200 engaged subscribers in your niche is worth more than 2,000 random subscribers from a viral moment.</p>
+      <span class="badge bb">Community Growth</span>
+    </div>
+    <div class="card">
+      <div class="card-num">GROWTH STRATEGY 04</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="7" y="3" width="10" height="18" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 18h2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Cross-Platform Seeding</div>
+      <p class="card-text">Repurpose your YouTube content for distribution on platforms where your target audience already exists. A 10-minute tutorial on your niche becomes: a 60-second clip on Instagram Reels or TikTok (the hook only), a carousel post on LinkedIn (if B2B niche), a written thread on Twitter/X sharing the key insights. Each piece drives traffic back to the full video. This doesn't require extra content creation — only extra distribution of what you've already built. Start with one platform beyond YouTube and master it before adding another.</p>
+      <span class="badge bb">Distribution</span>
+    </div>
+    <div class="card">
+      <div class="card-num">GROWTH MYTH</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><circle cx="12" cy="12" r="9" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="m6 6 12 12" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">What Doesn't Work — Saves You Time</div>
+      <p class="card-text"><strong style="color:var(--cream)">Buying subscribers or views:</strong> Zero engagement → tanks CTR and AVD → algorithm suppresses you → worse than having no subscribers at all. Permanent account damage risk.<br/><br/><strong style="color:var(--cream)">Engagement pods (group likes/comments):</strong> Fake engagement signals are now detected by YouTube's AI. They inflate vanity metrics without affecting algorithm distribution.<br/><br/><strong style="color:var(--cream)">Posting daily without strategy:</strong> Quantity without quality produces a channel full of data that says "viewers don't like this content" — which hurts, not helps, future videos.</p>
+      <span class="badge bc">Stop Wasting Time</span>
+    </div>
+    <div class="card">
+      <div class="card-num">GROWTH TIMELINE</div>
+      <span class="card-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="pg-icon"><rect x="3.5" y="5" width="17" height="15" rx="2" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 10h17M8 3v4M16 3v4" stroke="#c8943a" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <div class="card-title">Realistic Milestone Timeline</div>
+      <p class="card-text"><strong style="color:var(--cream)">Month 1–2:</strong> 20–100 subs. Mostly from personal network and your first search-optimised videos. Focus: consistency, hook quality, retention improvement.<br/><br/><strong style="color:var(--cream)">Month 3–4:</strong> 100–300 subs. Algorithm starts building your taste graph. Community commenting driving discovery.<br/><br/><strong style="color:var(--cream)">Month 5–6:</strong> 300–1,000 subs. If niche selection was right and you've posted 20+ videos, the algorithm has enough data to start recommending you to new audiences. This is where growth often accelerates suddenly. The "slow" phase wasn't slow — it was training data collection.</p>
+      <span class="badge bd">Reality Check</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 07: MONETISE ─── -->
+<section class="section" id="monetise">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 07</div>
+    <div class="s-meta">
+      <div class="s-cat">Added Research Chapter · Revenue Before 1,000 Subs</div>
+      <h2 class="s-title">Monetise Before<br/><span>1,000 Subs</span></h2>
+      <p class="s-desc">Most creators wait for the YouTube Partner Programme (1,000 subs + 4,000 watch hours) to earn their first pound or dollar. That is a mistake. Multiple revenue streams are available from video one — and building them early creates the financial motivation that keeps creators consistent through the difficult early months.</p>
+    </div>
+  </div>
+
+  <div class="mono-path">
+    <div class="mono-step">
+      <div class="mono-subs"><div class="mono-subs-num">0 subs</div><div class="mono-subs-label">Day 1</div></div>
+      <div class="mono-body">
+        <div class="mono-title">💰 Affiliate Marketing — Earn From Every Video Immediately</div>
+        <p class="mono-text">Add affiliate links in every video description from Day 1. Amazon Associates, ShareASale, and niche-specific affiliate programmes pay 3–15% commission on any product your viewer buys after clicking your link. A single sale earns more than 1,000 ad impressions. Best approach: only recommend products you genuinely use or have tested. The most trusted recommendations convert best. Even a channel with 50 subscribers can earn its first affiliate commission from Video 2.</p>
+      </div>
+    </div>
+    <div class="mono-step">
+      <div class="mono-subs"><div class="mono-subs-num">0 subs</div><div class="mono-subs-label">Day 1</div></div>
+      <div class="mono-body">
+        <div class="mono-title">🎓 Digital Products — Create Once, Sell Forever</div>
+        <p class="mono-text">A Notion template, PDF guide, Canva template, or mini-course directly related to your channel's topic can be sold for £5–£50 from Video 1. Gumroad (free to start), Payhip, or Shopify allow you to accept payment immediately. The advantage of digital products: 100% profit margin, no inventory, instant delivery. A creator with 200 subscribers selling a £15 template to 10% of their audience earns £300 per video launch — more than most 5,000-subscriber channels earn from ad revenue.</p>
+      </div>
+    </div>
+    <div class="mono-step">
+      <div class="mono-subs"><div class="mono-subs-num">100 subs</div><div class="mono-subs-label">Month 2–3</div></div>
+      <div class="mono-body">
+        <div class="mono-title">📧 Email List — The Most Valuable Asset You Can Build</div>
+        <p class="mono-text">Start building your email list before your subscriber count matters. Offer a free resource (a PDF, checklist, template) in exchange for an email address. ConvertKit (free up to 1,000 subscribers) makes this easy. Why: YouTube can demonetise, shadowban, or delete channels. Your email list is yours forever. A creator with 500 YouTube subscribers and 1,000 email subscribers is in a significantly more powerful position than one with 5,000 YouTube subscribers and zero emails.</p>
+      </div>
+    </div>
+    <div class="mono-step">
+      <div class="mono-subs"><div class="mono-subs-num">500 subs</div><div class="mono-subs-label">Month 4–5</div></div>
+      <div class="mono-body">
+        <div class="mono-title">🤝 Brand Sponsorships — Available Earlier Than You Think</div>
+        <p class="mono-text">Small brands and niche companies actively seek micro-influencers (500–5,000 subscribers) in specific niches — because their audiences are highly targeted and trust their recommendations more than large channels. Reach out proactively to brands you genuinely use in your niche. Platforms like Grapevine, Channel Pages, and AspireIQ connect creators with brands at any size. A 1,000-subscriber niche channel can charge £100–500 per sponsored video if the audience is highly relevant to the brand's product.</p>
+      </div>
+    </div>
+    <div class="mono-step">
+      <div class="mono-subs"><div class="mono-subs-num">1,000 subs<br/>+ 4,000hrs</div><div class="mono-subs-label">YPP Eligible</div></div>
+      <div class="mono-body">
+        <div class="mono-title">📺 YouTube Partner Programme — Ad Revenue (Finally)</div>
+        <p class="mono-text">Once you hit 1,000 subscribers AND 4,000 public watch hours in the last 12 months, you qualify for the YouTube Partner Programme and begin earning ad revenue. Reality check: at 1,000 subscribers, most channels earn £1–10 per month from ads alone. AdSense is the beginning of monetisation — not the end. The creators who thrive financially are those who reach YPP while already earning £100+ per month from affiliate and digital products. YPP ads then become a bonus layer on top of an already-working business.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── 08: MASTER CHEATSHEET ─── -->
+<section class="section" id="cheatsheet">
+<div class="s-inner">
+  <div class="s-head">
+    <div class="s-num">Chapter 08</div>
+    <div class="s-meta">
+      <div class="s-cat">Quick Reference</div>
+      <h2 class="s-title">The Master<br/><span>Cheatsheet</span></h2>
+      <p class="s-desc">Every strategy from this guide — one quick-reference table. This is your operating system from Day 1 to 1,000 subscribers and beyond.</p>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Strategy</th><th>The Action</th><th>Chapter</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td class="num-cell">01</td><td class="name-cell">3-Factor Niche Formula</td><td>Find the intersection of passion (100+ videos), demand (search volume), low competition (poor existing content).</td><td>Niche</td><td><span class="badge ba">Before Video 1</span></td></tr>
+        <tr><td class="num-cell">02</td><td class="name-cell">Niche Validation — 4 Checks</td><td>Search volume + community demand + competition quality + monetisation path. All 4 must pass.</td><td>Niche</td><td><span class="badge ba">Before Video 1</span></td></tr>
+        <tr><td class="num-cell">03</td><td class="name-cell">Go Micro-Niche</td><td>Not "fitness" — "resistance band workouts for office workers over 40." Specific audiences grow 40–60% faster.</td><td>Niche</td><td><span class="badge ba">Strategic</span></td></tr>
+        <tr><td class="num-cell">04</td><td class="name-cell">Never Mix Niches Before 10K</td><td>One niche. One audience. One content identity. Mixing confuses the algorithm and viewers both.</td><td>Niche</td><td><span class="badge bc">Hard Rule</span></td></tr>
+        <tr><td class="num-cell">05</td><td class="name-cell">4-Step Hook Formula</td><td>State payoff → Create curiosity gap → Signal authority → Cut to content. All within 4–7 seconds.</td><td>Hook</td><td><span class="badge ba">Every Video</span></td></tr>
+        <tr><td class="num-cell">06</td><td class="name-cell">Cut Every Intro</td><td>No "hey guys, welcome back." No music montages. Deliver value in the first sentence. Always.</td><td>Hook</td><td><span class="badge ba">Non-Negotiable</span></td></tr>
+        <tr><td class="num-cell">07</td><td class="name-cell">Pattern Interrupt Every 90sec</td><td>Visual cut, B-roll, on-screen text, or new chapter every 90 seconds to reset viewer attention.</td><td>Hook</td><td><span class="badge ba">Retention</span></td></tr>
+        <tr><td class="num-cell">08</td><td class="name-cell">Thumbnail Rules</td><td>One focal point. High contrast. Human face with expression. Under 4 words of text. Test 2–3 variations.</td><td>Hook</td><td><span class="badge ba">CTR First</span></td></tr>
+        <tr><td class="num-cell">09</td><td class="name-cell">CTR Benchmark</td><td>Below 4% = fix thumbnail immediately. 4–6% = average. 7–10% = strong. 10%+ = excellent.</td><td>Hook</td><td><span class="badge ba">Weekly Check</span></td></tr>
+        <tr><td class="num-cell">10</td><td class="name-cell">Smartphone Camera</td><td>Use the phone you already own. iPhone 13+ / Galaxy S21+ shoots cinematic 4K. Never buy gear before proof of concept.</td><td>Gear</td><td><span class="badge ba">Day 1</span></td></tr>
+        <tr><td class="num-cell">11</td><td class="name-cell">Buy a Lavalier Mic First</td><td>BOYA BY-M1 (~$20). Audio quality upgrade has 10× more impact on viewer retention than camera quality.</td><td>Gear</td><td><span class="badge ba">First Purchase</span></td></tr>
+        <tr><td class="num-cell">12</td><td class="name-cell">Window Light = Free Studio</td><td>Film facing a large window. Soft, natural, flattering. Better than ring lights used incorrectly.</td><td>Gear</td><td><span class="badge bb">Free</span></td></tr>
+        <tr><td class="num-cell">13</td><td class="name-cell">Total Gear Budget</td><td>$77 maximum: mic ($20) + ring light ($35) + tripod ($22) + free editing software. That's your studio.</td><td>Gear</td><td><span class="badge ba">Budget</span></td></tr>
+        <tr><td class="num-cell">14</td><td class="name-cell">Free Editing Software</td><td>DaVinci Resolve (professional, free forever) or CapCut (fast, mobile-friendly). Never pay to start.</td><td>Gear</td><td><span class="badge bb">Free</span></td></tr>
+        <tr><td class="num-cell">15</td><td class="name-cell">AVD Target</td><td>40–60% average view duration = good. 60%+ = earns priority in suggested videos. Fix is usually the intro.</td><td>Algorithm</td><td><span class="badge ba">Core KPI</span></td></tr>
+        <tr><td class="num-cell">16</td><td class="name-cell">Session Time Priority</td><td>The most underrated 2026 metric. Keep viewers on YouTube after your video. Playlists and end screens help.</td><td>Algorithm</td><td><span class="badge ba">2026 Priority</span></td></tr>
+        <tr><td class="num-cell">17</td><td class="name-cell">Upload Timing</td><td>Upload 1–2 hours before your audience's peak active time. Check Analytics → Audience tab for your specific timing.</td><td>Algorithm</td><td><span class="badge ba">Every Upload</span></td></tr>
+        <tr><td class="num-cell">18</td><td class="name-cell">20–30 Videos Threshold</td><td>The algorithm needs 20–30 videos of data before reliably recommending your channel. Consistency is the strategy.</td><td>Algorithm</td><td><span class="badge bd">Patience</span></td></tr>
+        <tr><td class="num-cell">19</td><td class="name-cell">Shorts + Long-Form</td><td>Use Shorts for discovery, long-form for depth. Combined = 40–60% faster growth than either alone.</td><td>Algorithm</td><td><span class="badge ba">Growth Multiplier</span></td></tr>
+        <tr><td class="num-cell">20</td><td class="name-name">Shorts Completion Rate</td><td>Target 80%+ completion. Hook within 2 seconds. Keep to 15–60 seconds. Completion > any other metric.</td><td>Algorithm</td><td><span class="badge ba">Shorts Rule</span></td></tr>
+        <tr><td class="num-cell">21</td><td class="name-cell">Batch Film Monthly</td><td>Film 4–6 videos in one day per month. Buffer of 2–3 videos edited ahead prevents panic uploads.</td><td>Content</td><td><span class="badge ba">System</span></td></tr>
+        <tr><td class="num-cell">22</td><td class="name-cell">70/30 Evergreen/Trending</td><td>70% evergreen (compounding search traffic) + 30% trending (discovery spikes). This mix builds sustainable growth.</td><td>Content</td><td><span class="badge ba">Content Mix</span></td></tr>
+        <tr><td class="num-cell">23</td><td class="name-cell">Build Playlists as Series</td><td>First 10 videos = one structured series. Playlist autoplay multiplies session time by 3–5×.</td><td>Content</td><td><span class="badge ba">Growth Tool</span></td></tr>
+        <tr><td class="num-cell">24</td><td class="name-cell">48-Hour Analytics Review</td><td>Check CTR, AVD, retention graph after every video. The exact timestamp where viewers drop = your next improvement.</td><td>Content</td><td><span class="badge ba">Every Upload</span></td></tr>
+        <tr><td class="num-cell">25</td><td class="name-cell">Genuine Community Comments</td><td>10 specific, value-adding comments per day on larger channels in your niche. Best free growth tool available.</td><td>Growth</td><td><span class="badge ba">Daily</span></td></tr>
+        <tr><td class="num-cell">26</td><td class="name-cell">Optimise for Search First</td><td>Exact-match long-tail keyword in title. Full description with keyword in first 2 sentences. Add captions.</td><td>Growth</td><td><span class="badge ba">First 20 Videos</span></td></tr>
+        <tr><td class="num-cell">27</td><td class="name-cell">Affiliate Links from Day 1</td><td>Add affiliate links in every description. Even at 50 subscribers, one sale > 1,000 ad impressions.</td><td>Monetise</td><td><span class="badge ba">Revenue Day 1</span></td></tr>
+        <tr><td class="num-cell">28</td><td class="name-cell">Digital Product</td><td>Create one Notion/PDF/template product on Gumroad by Video 5. £5–50, 100% margin, zero inventory.</td><td>Monetise</td><td><span class="badge ba">Early Revenue</span></td></tr>
+        <tr><td class="num-cell">29</td><td class="name-cell">Build Email List</td><td>Free resource + ConvertKit (free to 1K). Email list is your only YouTube-proof asset. Start before you need it.</td><td>Monetise</td><td><span class="badge ba">Asset Building</span></td></tr>
+        <tr><td class="num-cell">30</td><td class="name-cell">YPP Is the Beginning</td><td>Ad revenue at 1K subs = £1–10/month. Build affiliate + digital products first. YPP adds to an already-working business.</td><td>Monetise</td><td><span class="badge bd">Reality Check</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</section>
+
+<footer>
+  <div class="footer-logo">Start Your YouTube Channel from Zero</div>
+  <p class="footer-sub">Creator · YouTube Strategy · Content Science · 2025–2026 Edition</p>
+  <p class="footer-sub" style="color:var(--muted);font-size:13px;margin-top:8px">8 Complete Chapters · 30 Core Strategies · Research from vidIQ, TubeBuddy, OutlierKit, YTShark, YouToWire, Shopify, Hootsuite, Packapop & 2026 Algorithm Analysis</p>
+  <p class="footer-tiny">Research compiled May 2026 · Inspired by Parallelogram · Built for every creator who thinks they started too late</p>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:rgba(200,148,58,.28);margin-top:36px">"The best time to start your channel was a year ago. The second best time is today."</p>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const st=document.documentElement.scrollTop;
+  const sh=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('prog').style.width=(st/sh*100)+'%';
+});
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}});
+},{threshold:0.07});
+document.querySelectorAll('.card,.col-card,.s-stat,.algo-metric,.gear-item,.mono-step,.hook-step,.venn-circle').forEach(el=>{
+  el.style.opacity='0';el.style.transform='translateY(18px)';
+  el.style.transition='opacity .5s ease, transform .5s ease';
+  obs.observe(el);
+});
+</script>
+</body>
+</html>
