@@ -6,7 +6,7 @@
 // data by itself.
 
 const crypto = require('crypto');
-const { getStore } = require('@netlify/blobs');
+const { getSafeStore } = require('./blobs-helper');
 
 function verifyToken(token, adminPassword) {
   if (!token || typeof token !== 'string') return false;
@@ -66,7 +66,7 @@ exports.handler = async (event) => {
   try {
     let deletedCount = 0;
     for (const storeName of stores) {
-      const store = getStore(storeName);
+      const store = getSafeStore(storeName);
       const { blobs } = await store.list();
       for (const blob of blobs || []) {
         await store.delete(blob.key);

@@ -170,8 +170,8 @@ exports.handler = async (event) => {
     // Best-effort logging for the admin dashboard's "popular searches" view.
     // Never blocks or fails the actual search response.
     try {
-      const { getStore } = require('@netlify/blobs');
-      const store = getStore('searches');
+      const { getSafeStore } = require('./blobs-helper');
+      const store = getSafeStore('searches');
       const key = query.trim().toLowerCase();
       const existing = await store.get(key, { type: 'json' }).catch(() => null);
       const count = (existing && existing.count) || 0;

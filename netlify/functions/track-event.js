@@ -8,7 +8,7 @@
 // Fire-and-forget from the frontend — never blocks the user's action if
 // this fails or is slow.
 
-const { getStore } = require('@netlify/blobs');
+const { getSafeStore } = require('./blobs-helper');
 
 exports.handler = async (event) => {
   const headers = {
@@ -37,7 +37,7 @@ exports.handler = async (event) => {
   }
 
   try {
-    const store = getStore('events-' + type);
+    const store = getSafeStore('events-' + type);
     const key = label.toLowerCase();
     const existing = await store.get(key, { type: 'json' }).catch(() => null);
     const count = (existing && existing.count) || 0;

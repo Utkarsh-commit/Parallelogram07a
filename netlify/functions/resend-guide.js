@@ -41,8 +41,8 @@ exports.handler = async (event) => {
 
   let orders = [];
   try {
-    const { getStore } = require('@netlify/blobs');
-    const store = getStore('orders');
+    const { getSafeStore } = require('./blobs-helper');
+    const store = getSafeStore('orders');
     const raw = await store.get(email, { type: 'json' });
     if (Array.isArray(raw)) orders = raw;
     log('found', orders.length, 'past order(s) for this email');

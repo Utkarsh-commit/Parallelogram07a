@@ -69,8 +69,8 @@ exports.handler = async (event) => {
   // if this fails, the buyer still got their email just now, so we don't
   // fail the request over it.
   try {
-    const { getStore } = require('@netlify/blobs');
-    const store = getStore('orders');
+    const { getSafeStore } = require('./blobs-helper');
+    const store = getSafeStore('orders');
     const key = email.trim().toLowerCase();
     let existing = [];
     try {

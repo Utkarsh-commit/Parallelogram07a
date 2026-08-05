@@ -8,7 +8,7 @@
 // Requires a valid token from admin-login.js — see that file for setup.
 
 const crypto = require('crypto');
-const { getStore } = require('@netlify/blobs');
+const { getSafeStore } = require('./blobs-helper');
 
 function verifyToken(token, adminPassword) {
   if (!token || typeof token !== 'string') return false;
@@ -58,7 +58,7 @@ exports.handler = async (event) => {
     rangeStart.setDate(rangeStart.getDate() - rangeDays);
 
     // ---- Orders ----
-    const ordersStore = getStore('orders');
+    const ordersStore = getSafeStore('orders');
     const orderKeys = await ordersStore.list();
     let allOrders = [];
     for (const blob of orderKeys.blobs || []) {
@@ -104,7 +104,7 @@ exports.handler = async (event) => {
       .map(([title, count]) => ({ title, count }));
 
     // ---- Searches (all-time, see note above) ----
-    const searchStore = getStore('searches');
+    const searchStore = getSafeStore('searches');
     const searchKeys = await searchStore.list();
     let searches = [];
     for (const blob of searchKeys.blobs || []) {
@@ -114,7 +114,7 @@ exports.handler = async (event) => {
     const topSearches = searches.sort((a, b) => (b.count || 0) - (a.count || 0)).slice(0, 15);
 
     // ---- Coupon usage (all-time, see note above) ----
-    const couponStore = getStore('events-coupon');
+    const couponStore = getSafeStore('events-coupon');
     const couponKeys = await couponStore.list();
     let coupons = [];
     for (const blob of couponKeys.blobs || []) {
