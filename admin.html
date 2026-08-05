@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Dashboard — Parallelogram</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg:        #07070A;
+    --bg2:       #0E0E13;
+    --bg3:       #141419;
+    --gold:      #C8963E;
+    --gold-lt:   #E8B95A;
+    --gold-dk:   #8B6520;
+    --gold-glow: rgba(200,150,62,0.18);
+    --white:     #F2EDE4;
+    --muted:     #7A7570;
+    --line:      rgba(200,150,62,0.15);
+    --radius:    10px;
+    --ff-head:   'Cormorant Garamond', serif;
+    --ff-ui:     'Syne', sans-serif;
+    --ff-body:   'DM Sans', sans-serif;
+    --green:     #4ade80;
+    --red:       #ef4444;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--white); font-family: var(--ff-body);
+    min-height: 100vh; padding: 20px 16px 60px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; }
+
+  /* ---- Login gate ---- */
+  #loginGate {
+    min-height: 80vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center; gap: 18px;
+  }
+  #loginGate h1 { font-family: var(--ff-head); font-size: 32px; font-weight: 600; }
+  #loginGate h1 em { color: var(--gold); font-style: italic; }
+  #loginGate input {
+    width: 100%; max-width: 280px; padding: 14px 16px; border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.04);
+    color: var(--white); font-size: 15px; text-align: center; font-family: var(--ff-ui);
+  }
+  #loginGate input:focus { outline: none; border-color: var(--gold); }
+  #loginGate button {
+    padding: 13px 32px; border-radius: 10px; border: none; cursor: pointer;
+    background: var(--gold); color: #000; font-family: var(--ff-ui); font-weight: 800;
+    font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  #loginErr { color: var(--red); font-size: 13px; display: none; }
+
+  /* ---- Dashboard ---- */
+  #dashboard { display: none; }
+  .dash-header {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 28px; padding-bottom: 18px; border-bottom: 1px solid var(--line);
+  }
+  .dash-title { font-family: var(--ff-head); font-size: 28px; }
+  .dash-title em { color: var(--gold); font-style: italic; }
+  .dash-refresh {
+    background: none; border: 1px solid var(--line); color: var(--muted);
+    padding: 6px 14px; border-radius: 20px; font-family: var(--ff-ui); font-size: 11px;
+    letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer;
+  }
+  #rangeSelect {
+    background: var(--bg2); border: 1px solid var(--line); color: var(--white);
+    padding: 6px 10px; border-radius: 20px; font-family: var(--ff-ui); font-size: 11px;
+    cursor: pointer;
+  }
+
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+  .stat-card {
+    background: var(--bg2); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 18px;
+  }
+  .stat-card .label { font-family: var(--ff-ui); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .stat-card .value { font-family: var(--ff-head); font-size: 30px; color: var(--gold); }
+  .stat-card .sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  .panel {
+    background: var(--bg2); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 20px; margin-bottom: 20px;
+  }
+  .panel-title { font-family: var(--ff-ui); font-size: 13px; font-weight: 700; letter-spacing: 0.03em; margin-bottom: 16px; color: var(--white); }
+  .chart-wrap { position: relative; height: 220px; }
+
+  .list-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 13px;
+  }
+  .list-row:last-child { border-bottom: none; }
+  .list-row .name { color: var(--white); flex: 1; padding-right: 12px; }
+  .list-row .count { color: var(--gold); font-family: var(--ff-ui); font-weight: 700; font-size: 12px; background: rgba(200,150,62,0.1); padding: 2px 10px; border-radius: 10px; }
+
+  .empty-note { color: var(--muted); font-size: 13px; text-align: center; padding: 20px 0; }
+
+  .order-row { padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .order-row:last-child { border-bottom: none; }
+  .order-row .top { display: flex; justify-content: space-between; font-size: 13px; }
+  .order-row .email { color: var(--white); }
+  .order-row .amt { color: var(--gold); font-family: var(--ff-ui); font-weight: 700; }
+  .order-row .meta { color: var(--muted); font-size: 11px; margin-top: 3px; }
+  .free-tag { color: var(--green); font-size: 10px; text-transform: uppercase; font-family: var(--ff-ui); letter-spacing: 0.05em; }
+  .danger-btn {
+    background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.3); color: #f87171;
+    padding: 8px 14px; border-radius: 8px; font-family: var(--ff-ui); font-size: 11px;
+    font-weight: 700; letter-spacing: 0.03em; cursor: pointer;
+  }
+  .danger-btn:hover { background: rgba(239,68,68,0.15); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div id="loginGate">
+    <h1>Parallelogram <em>Dashboard</em></h1>
+    <input type="password" id="passwordInput" placeholder="Admin password" autocomplete="current-password" />
+    <button onclick="doLogin()">Enter</button>
+    <p id="loginErr">Wrong password.</p>
+  </div>
+
+  <div id="dashboard">
+    <div class="dash-header">
+      <div class="dash-title">Parallelogram <em>Dashboard</em></div>
+      <div style="display:flex; gap:8px; align-items:center">
+        <select id="rangeSelect" onchange="loadStats()">
+          <option value="7">Last 7 days</option>
+          <option value="30" selected>Last 30 days</option>
+          <option value="90">Last 90 days</option>
+          <option value="all">All time</option>
+        </select>
+        <button class="dash-refresh" onclick="loadStats()">Refresh</button>
+      </div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="label">Total Revenue</div>
+        <div class="value" id="statRevenue">$0</div>
+        <div class="sub" id="statPaidOrders">0 paid orders</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Free Guides Claimed</div>
+        <div class="value" id="statFree">0</div>
+        <div class="sub">no cost, builds your list</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Orders & Revenue — Last 30 Days</div>
+      <div class="chart-wrap"><canvas id="chartTimeline"></canvas></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Most Popular Guides</div>
+      <div class="chart-wrap" style="height:auto; min-height:60px"><canvas id="chartGuides"></canvas></div>
+      <div id="guidesEmpty" class="empty-note" style="display:none">No guide data yet.</div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Top Searches <span style="color:var(--muted); font-weight:400; text-transform:none">— all-time</span></div>
+      <div id="searchList"></div>
+      <div id="searchEmpty" class="empty-note" style="display:none">No searches logged yet.</div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Coupon Usage <span style="color:var(--muted); font-weight:400; text-transform:none">— all-time</span></div>
+      <div id="couponList"></div>
+      <div id="couponEmpty" class="empty-note" style="display:none">No coupon uses logged yet.</div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Recent Orders</div>
+      <div id="recentOrdersList"></div>
+      <div id="ordersEmpty" class="empty-note" style="display:none">No orders yet — this fills in once real orders start coming through.</div>
+    </div>
+    <div class="panel" style="border-color:rgba(239,68,68,0.3)">
+      <div class="panel-title" style="color:#ef4444">Danger Zone</div>
+      <p style="font-size:12px; color:var(--muted); margin-bottom:14px">
+        Permanently deletes data — useful for clearing out test orders/searches before going fully live. This cannot be undone.
+      </p>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px">
+        <button class="danger-btn" onclick="clearData('orders')">Clear Orders</button>
+        <button class="danger-btn" onclick="clearData('searches')">Clear Searches</button>
+        <button class="danger-btn" onclick="clearData('coupons')">Clear Coupon Data</button>
+        <button class="danger-btn" onclick="clearData('all')" style="border-color:#ef4444; color:#ef4444">Clear Everything</button>
+      </div>
+      <p id="clearMsg" style="font-size:12px; display:none"></p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let sessionToken = null;
+  let charts = {};
+
+  // Persist token in-memory only (page reload = re-login) — deliberately
+  // not using localStorage/sessionStorage per platform restrictions, and
+  // it's fine since this is a low-friction admin-only tool.
+
+  async function doLogin() {
+    const pw = document.getElementById('passwordInput').value;
+    const errEl = document.getElementById('loginErr');
+    errEl.style.display = 'none';
+    try {
+      const res = await fetch('/.netlify/functions/admin-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pw })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.token) {
+        errEl.textContent = data.error === 'ADMIN_PASSWORD is not set in Netlify environment variables'
+          ? 'Dashboard not set up yet — add ADMIN_PASSWORD in Netlify env vars.'
+          : 'Wrong password.';
+        errEl.style.display = 'block';
+        return;
+      }
+      sessionToken = data.token;
+      document.getElementById('loginGate').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      loadStats();
+    } catch (e) {
+      errEl.textContent = 'Network error — try again.';
+      errEl.style.display = 'block';
+    }
+  }
+
+  document.getElementById('passwordInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doLogin();
+  });
+
+  async function loadStats() {
+    if (!sessionToken) return;
+    const range = document.getElementById('rangeSelect').value;
+    try {
+      const res = await fetch('/.netlify/functions/admin-stats', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: sessionToken, range })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert('Session expired or error loading stats — please refresh and log in again.');
+        return;
+      }
+      renderStats(data);
+    } catch (e) {
+      alert('Network error loading dashboard data.');
+    }
+  }
+
+  async function clearData(target) {
+    const labels = { orders: 'Orders', searches: 'Searches', coupons: 'Coupon Data', all: 'EVERYTHING' };
+    const typed = prompt(
+      `This permanently deletes ${labels[target]} — this cannot be undone.\n\nType DELETE to confirm:`
+    );
+    if (typed !== 'DELETE') return;
+
+    const msgEl = document.getElementById('clearMsg');
+    msgEl.style.display = 'block';
+    msgEl.style.color = 'var(--muted)';
+    msgEl.textContent = 'Deleting…';
+
+    try {
+      const res = await fetch('/.netlify/functions/admin-clear-data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: sessionToken, target, confirm: true })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        msgEl.style.color = '#ef4444';
+        msgEl.textContent = 'Failed: ' + (data.error || 'unknown error');
+        return;
+      }
+      msgEl.style.color = '#4ade80';
+      msgEl.textContent = `✓ Cleared ${labels[target]} (${data.deletedCount} record(s) deleted).`;
+      loadStats();
+    } catch (e) {
+      msgEl.style.color = '#ef4444';
+      msgEl.textContent = 'Network error — please try again.';
+    }
+  }
+
+  function renderStats(data) {
+    document.getElementById('statRevenue').textContent = '$' + (data.totalRevenue || 0).toFixed(2);
+    document.getElementById('statPaidOrders').textContent = (data.totalPaidOrders || 0) + ' paid orders';
+    document.getElementById('statFree').textContent = data.totalFreeOrders || 0;
+
+    // Timeline chart
+    const days = Object.keys(data.dayBuckets || {});
+    const orderCounts = days.map(d => data.dayBuckets[d].orders);
+    const revenueCounts = days.map(d => data.dayBuckets[d].revenue);
+    const labels = days.map(d => d.slice(5)); // MM-DD
+
+    renderChart('chartTimeline', 'line', {
+      labels,
+      datasets: [
+        { label: 'Orders', data: orderCounts, borderColor: '#C8963E', backgroundColor: 'rgba(200,150,62,0.1)', tension: 0.3, yAxisID: 'y' },
+        { label: 'Revenue ($)', data: revenueCounts, borderColor: '#4ade80', backgroundColor: 'rgba(74,222,128,0.08)', tension: 0.3, yAxisID: 'y1' }
+      ]
+    }, {
+      scales: {
+        y:  { position: 'left',  ticks: { color: '#7A7570', stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+        y1: { position: 'right', ticks: { color: '#7A7570' }, grid: { display: false } },
+        x:  { ticks: { color: '#7A7570', maxRotation: 0 }, grid: { display: false } }
+      }
+    });
+
+    // Guides chart
+    const guidesEmpty = document.getElementById('guidesEmpty');
+    if (!data.topGuides || data.topGuides.length === 0) {
+      guidesEmpty.style.display = 'block';
+      if (charts.chartGuides) { charts.chartGuides.destroy(); delete charts.chartGuides; }
+    } else {
+      guidesEmpty.style.display = 'none';
+      const gLabels = data.topGuides.map(g => g.title.length > 28 ? g.title.slice(0, 26) + '…' : g.title);
+      const gCounts = data.topGuides.map(g => g.count);
+      document.querySelector('#chartGuides').parentElement.style.height = Math.max(60, gLabels.length * 34) + 'px';
+      renderChart('chartGuides', 'bar', {
+        labels: gLabels,
+        datasets: [{ label: 'Times delivered', data: gCounts, backgroundColor: '#C8963E', borderRadius: 4 }]
+      }, {
+        indexAxis: 'y',
+        scales: {
+          x: { ticks: { color: '#7A7570', stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+          y: { ticks: { color: '#F2EDE4', font: { size: 11 } }, grid: { display: false } }
+        }
+      });
+    }
+
+    // Top searches
+    renderList('searchList', 'searchEmpty', data.topSearches, s => ({ name: s.query, count: s.count }));
+
+    // Coupons
+    renderList('couponList', 'couponEmpty', data.coupons, c => ({ name: c.label, count: c.count }));
+
+    // Recent orders
+    const ordersList = document.getElementById('recentOrdersList');
+    const ordersEmpty = document.getElementById('ordersEmpty');
+    ordersList.innerHTML = '';
+    if (!data.recentOrders || data.recentOrders.length === 0) {
+      ordersEmpty.style.display = 'block';
+    } else {
+      ordersEmpty.style.display = 'none';
+      data.recentOrders.forEach(o => {
+        const row = document.createElement('div');
+        row.className = 'order-row';
+        const date = new Date(o.date);
+        row.innerHTML = `
+          <div class="top">
+            <span class="email">${o.email || 'unknown'}</span>
+            <span class="amt">${o.isFree ? '<span class="free-tag">FREE</span>' : '$' + (Number(o.total) || 0).toFixed(2)}</span>
+          </div>
+          <div class="meta">${(o.titles || []).join(', ')} — ${date.toLocaleDateString()} ${date.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</div>
+        `;
+        ordersList.appendChild(row);
+      });
+    }
+  }
+
+  function renderList(listId, emptyId, items, mapFn) {
+    const el = document.getElementById(listId);
+    const emptyEl = document.getElementById(emptyId);
+    el.innerHTML = '';
+    if (!items || items.length === 0) {
+      emptyEl.style.display = 'block';
+      return;
+    }
+    emptyEl.style.display = 'none';
+    items.forEach(item => {
+      const { name, count } = mapFn(item);
+      const row = document.createElement('div');
+      row.className = 'list-row';
+      row.innerHTML = `<span class="name">${name}</span><span class="count">${count}</span>`;
+      el.appendChild(row);
+    });
+  }
+
+  function renderChart(canvasId, type, data, extraOptions) {
+    if (charts[canvasId]) charts[canvasId].destroy();
+    const ctx = document.getElementById(canvasId).getContext('2d');
+    charts[canvasId] = new Chart(ctx, {
+      type,
+      data,
+      options: Object.assign({
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { labels: { color: '#F2EDE4', font: { family: 'DM Sans', size: 11 } } } }
+      }, extraOptions)
+    });
+  }
+</script>
+
+</body>
+</html>
