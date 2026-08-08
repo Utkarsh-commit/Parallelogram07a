@@ -89,6 +89,21 @@ exports.handler = async (event) => {
     return { statusCode: 200, headers, body: JSON.stringify({ matches: [] }) };
   }
 
+  // Rate limit: 40 AI searches per IP per hour. Protects Gemini's shared
+  // daily free-tier quota from being exhausted by one source, which would
+  // silently break search for every other real visitor that day. Falls
+  // back to local keyword search on the frontend if this blocks a request.
+  const { checkRateLimit, getClientIp } = require('./rate-limiter');
+  const clientIp = getClientIp(event);
+  const rateCheck = await checkRateLimit('ai-search:' + clientIp, 40, 3600);
+  if (!rateCheck.allowed) {
+    console.log('[ai-search] RATE LIMITED, ip:', clientIp, '- retry after', rateCheck.retryAfterSeconds, 's');
+    return {
+      statusCode: 429, headers,
+      body: JSON.stringify({ error: 'Too many searches, please slow down', retryAfterSeconds: rateCheck.retryAfterSeconds })
+    };
+  }
+
   const apiKey = process.env.GEMINI_API_KEY;
   console.log('[ai-search] GEMINI_API_KEY present:', !!apiKey, apiKey ? '(len ' + apiKey.length + ')' : '');
   if (!apiKey) {

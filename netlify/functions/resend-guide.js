@@ -39,6 +39,20 @@ exports.handler = async (event) => {
     return { statusCode: 400, headers, body: JSON.stringify({ error: 'Missing email' }) };
   }
 
+  // Rate limit: 5 resend requests per IP per hour. Prevents someone
+  // scripting repeated calls to probe which emails have order history,
+  // and protects Brevo quota from being burned by automated resend spam.
+  const { checkRateLimit, getClientIp } = require('./rate-limiter');
+  const clientIp = getClientIp(event);
+  const rateCheck = await checkRateLimit('resend-guide:' + clientIp, 5, 3600);
+  if (!rateCheck.allowed) {
+    log('RATE LIMITED, ip:', clientIp, '- retry after', rateCheck.retryAfterSeconds, 's');
+    return {
+      statusCode: 429, headers,
+      body: JSON.stringify({ error: 'Too many requests, please try again later', retryAfterSeconds: rateCheck.retryAfterSeconds })
+    };
+  }
+
   let orders = [];
   try {
     const { getSafeStore } = require('./blobs-helper');

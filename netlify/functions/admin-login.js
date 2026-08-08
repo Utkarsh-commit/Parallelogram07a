@@ -5,6 +5,9 @@
 // password is enough. Issues a signed, time-limited token so the dashboard
 // doesn't need to resend the raw password on every stats request.
 //
+// Includes a lockout after repeated failed attempts from the same IP, so
+// the password can't just be brute-forced with unlimited guesses.
+//
 // SETUP REQUIRED:
 // In Netlify: Site settings → Environment variables → Add variable
 //   Key:   ADMIN_PASSWORD
@@ -12,6 +15,7 @@
 // Redeploy after adding it.
 
 const crypto = require('crypto');
+const { checkRateLimit, getClientIp } = require('./rate-limiter');
 
 exports.handler = async (event) => {
   const headers = {
@@ -29,6 +33,20 @@ exports.handler = async (event) => {
   const adminPassword = process.env.ADMIN_PASSWORD;
   if (!adminPassword) {
     return { statusCode: 500, headers, body: JSON.stringify({ error: 'ADMIN_PASSWORD is not set in Netlify environment variables' }) };
+  }
+
+  // Lockout: max 5 attempts per IP per 15 minutes. Checked BEFORE looking
+  // at the password, so even a correct password submitted after too many
+  // wrong guesses still gets locked out — this is what actually stops
+  // brute-forcing, not just slowing down failed guesses.
+  const clientIp = getClientIp(event);
+  const lockoutCheck = await checkRateLimit('admin-login:' + clientIp, 5, 900);
+  if (!lockoutCheck.allowed) {
+    console.log('[admin-login] LOCKED OUT, ip:', clientIp, '- retry after', lockoutCheck.retryAfterSeconds, 's');
+    return {
+      statusCode: 429, headers,
+      body: JSON.stringify({ error: 'Too many failed attempts. Try again later.', retryAfterSeconds: lockoutCheck.retryAfterSeconds })
+    };
   }
 
   let body;

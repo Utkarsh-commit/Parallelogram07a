@@ -4,7 +4,7 @@
 // send-guide-email.js (checkout / free claim) and resend-guide.js
 // (buyer re-requesting a lost guide by email, no login needed).
 
-const SEND_FROM_EMAIL = 'parallelogram12107@gmail.com'; // must be verified in Brevo
+const SEND_FROM_EMAIL = 'parallelogramguides@gmail.com'; // must be verified in Brevo
 const SEND_FROM_NAME  = 'Parallelogram';
 
 // Title (must match the site's product-title text exactly) -> HTML filename

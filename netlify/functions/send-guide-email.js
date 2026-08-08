@@ -45,6 +45,23 @@ exports.handler = async (event) => {
     return { statusCode: 400, headers, body: JSON.stringify({ error: 'Missing email or titles' }) };
   }
 
+  // Rate limit: 10 requests per IP per hour. This endpoint is called from
+  // the browser for free guide claims and PayPal/UPI honor-system orders
+  // (both cost real Brevo email quota per call), so it's protected from
+  // being scripted/spammed. The Lemon Squeezy webhook path never hits
+  // this rate limit — it comes from Lemon Squeezy's servers, not a
+  // buyer's IP, and is already independently price-verified.
+  const { checkRateLimit, getClientIp } = require('./rate-limiter');
+  const clientIp = getClientIp(event);
+  const rateCheck = await checkRateLimit('send-guide-email:' + clientIp, 10, 3600);
+  if (!rateCheck.allowed) {
+    log('RATE LIMITED, ip:', clientIp, '- retry after', rateCheck.retryAfterSeconds, 's');
+    return {
+      statusCode: 429, headers,
+      body: JSON.stringify({ error: 'Too many requests, please slow down', retryAfterSeconds: rateCheck.retryAfterSeconds })
+    };
+  }
+
   const apiKey = process.env.BREVO_API_KEY;
   log('BREVO_API_KEY present:', !!apiKey, apiKey ? '(len ' + apiKey.length + ')' : '');
   if (!apiKey) {
