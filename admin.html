@@ -181,6 +181,18 @@
       <div id="ordersEmpty" class="empty-note" style="display:none">No orders yet — this fills in once real orders start coming through.</div>
     </div>
     <div class="panel" style="border-color:rgba(239,68,68,0.3)">
+      <div class="panel-title" style="color:#ef4444">Privacy Requests — Delete a Buyer's Data</div>
+      <p style="font-size:12px; color:var(--muted); margin-bottom:14px">
+        Use this when someone emails asking to have their data deleted (per the Privacy Policy). Verify it's genuinely them first, then delete their order record by email here.
+      </p>
+      <div style="display:flex; gap:8px; margin-bottom:12px">
+        <input type="email" id="deleteBuyerEmail" placeholder="buyer@email.com"
+          style="flex:1; min-width:0; padding:10px 12px; border-radius:8px; border:1px solid rgba(239,68,68,0.25); background:rgba(255,255,255,0.04); color:var(--white); font-size:13px; font-family:var(--ff-body)">
+        <button class="danger-btn" onclick="deleteBuyerData()">Delete</button>
+      </div>
+      <p id="deleteBuyerMsg" style="font-size:12px; display:none"></p>
+    </div>
+    <div class="panel" style="border-color:rgba(239,68,68,0.3)">
       <div class="panel-title" style="color:#ef4444">Danger Zone</div>
       <p style="font-size:12px; color:var(--muted); margin-bottom:14px">
         Permanently deletes data — useful for clearing out test orders/searches before going fully live. This cannot be undone.
@@ -217,9 +229,14 @@
       });
       const data = await res.json();
       if (!res.ok || !data.token) {
-        errEl.textContent = data.error === 'ADMIN_PASSWORD is not set in Netlify environment variables'
-          ? 'Dashboard not set up yet — add ADMIN_PASSWORD in Netlify env vars.'
-          : 'Wrong password.';
+        if (res.status === 429) {
+          const mins = Math.ceil((data.retryAfterSeconds || 900) / 60);
+          errEl.textContent = `Too many attempts. Try again in ~${mins} min.`;
+        } else {
+          errEl.textContent = data.error === 'ADMIN_PASSWORD is not set in Netlify environment variables'
+            ? 'Dashboard not set up yet — add ADMIN_PASSWORD in Netlify env vars.'
+            : 'Wrong password.';
+        }
         errEl.style.display = 'block';
         return;
       }
@@ -254,6 +271,49 @@
       renderStats(data);
     } catch (e) {
       alert('Network error loading dashboard data.');
+    }
+  }
+
+  async function deleteBuyerData() {
+    const emailInput = document.getElementById('deleteBuyerEmail');
+    const msgEl = document.getElementById('deleteBuyerMsg');
+    const email = (emailInput.value || '').trim();
+
+    if (!email || !email.includes('@')) {
+      msgEl.style.display = 'block';
+      msgEl.style.color = '#ef4444';
+      msgEl.textContent = 'Enter a valid email first.';
+      return;
+    }
+
+    const typed = prompt(
+      `This permanently deletes all order data for ${email} — this cannot be undone.\n\nOnly do this after verifying the request genuinely came from them.\n\nType DELETE to confirm:`
+    );
+    if (typed !== 'DELETE') return;
+
+    msgEl.style.display = 'block';
+    msgEl.style.color = 'var(--muted)';
+    msgEl.textContent = 'Deleting…';
+
+    try {
+      const res = await fetch('/.netlify/functions/admin-clear-data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: sessionToken, target: 'single-buyer', email, confirm: true })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        msgEl.style.color = '#ef4444';
+        msgEl.textContent = 'Failed: ' + (data.error || 'unknown error');
+        return;
+      }
+      msgEl.style.color = '#4ade80';
+      msgEl.textContent = `✓ Deleted all data for ${email}.`;
+      emailInput.value = '';
+      loadStats();
+    } catch (e) {
+      msgEl.style.color = '#ef4444';
+      msgEl.textContent = 'Network error — please try again.';
     }
   }
 
