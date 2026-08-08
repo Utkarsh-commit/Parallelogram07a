@@ -4,6 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PARALLELOGRAM — Premium Knowledge Guides</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#07070A">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16.png">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
   <meta name="description" content="Ready-made knowledge guides on networking, business, social skills, mindset & more. Built by practitioners. Just $4 each — 60% off for a limited time." />
   <link rel="canonical" href="https://parallelogram.co" />
   <meta name="robots" content="index, follow" />
@@ -3529,23 +3534,24 @@
   const LEMONSQUEEZY_URL = 'https://parallelogram-official.lemonsqueezy.com/checkout/buy/338ec3ca-4b70-40c0-a6ac-2d6003278eb3';
   const PAYPAL_LINK     = 'https://paypal.me/YOURUSERNAME';
 
-  // Builds a Lemon Squeezy checkout URL with the exact cart total as a
-  // dynamic "pay what you want" price, plus buyer info and the list of
-  // guides as custom data. That same custom data comes back in the
-  // order_created webhook (see netlify/functions/lemonsqueezy-webhook.js),
-  // which is what actually triggers automatic guide delivery — real,
-  // verified payment confirmation instead of an honor-system click.
-  function buildLemonSqueezyUrl(name, email, total, titles) {
-    const params = new URLSearchParams({
-      'checkout[custom_price]': Math.round(total * 100), // cents
-      'checkout[email]': email,
-      'checkout[name]': name,
-      'checkout[custom][email]': email,
-      'checkout[custom][name]': name,
-      'checkout[custom][guides]': titles.join('|'),
-      'checkout[custom][coupon]': appliedCoupon ? appliedCoupon.code : ''
+  // Lemon Squeezy's custom_price (dynamic pricing) only works through their
+  // server-side Checkout API, not as URL query params — passing it directly
+  // in a URL gets rejected with a 422. This calls our own function, which
+  // calls Lemon Squeezy's real API and returns a working checkout URL.
+  async function createLemonSqueezyCheckoutUrl(name, email, total, titles) {
+    const res = await fetch('/.netlify/functions/create-lemonsqueezy-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name, email, total, titles,
+        coupon: appliedCoupon ? appliedCoupon.code : ''
+      })
     });
-    return LEMONSQUEEZY_URL + '?' + params.toString();
+    const data = await res.json();
+    if (!res.ok || !data.url) {
+      throw new Error(data.error || 'Could not create checkout');
+    }
+    return data.url;
   }
 
   // ===== FORMSPREE — all forms submit here =====
@@ -4030,7 +4036,7 @@
     btn.classList.remove('loading');
   }
 
-  function drawerNext() {
+  async function drawerNext() {
     const btn = document.getElementById('drawerMainBtn');
     if (currentStep === 1) {
       if (cart.length === 0) { closeDrawer(); return; }
@@ -4075,15 +4081,25 @@
       // Snapshot the order now — cart gets cleared once payment is confirmed
       pendingOrder = { name, email, total, titles: cart.map(i => i.title), method: selectedPayMethod };
 
-      let payUrl = buildLemonSqueezyUrl(name, email, total, cart.map(i => i.title));
-      if (selectedPayMethod === 'paypal') payUrl = PAYPAL_LINK;
-      if (selectedPayMethod === 'upi') payUrl = 'mailto:parallelogramguides@gmail.com?subject=' + encodeURIComponent('Order via Google/Apple Pay') + '&body=' + encodeURIComponent('Hi! I\'d like to pay via Google Pay or Apple Pay for: ' + filesList + '. Total: $' + total + '. Please send payment instructions to: ' + email);
-
-      // Use location.href for mailto (works on Android), window.open for real URLs
-      if (payUrl.startsWith('mailto:')) {
-        window.location.href = payUrl;
-      } else {
-        window.open(payUrl, '_blank');
+      if (selectedPayMethod === 'stripe') {
+        // Open a blank tab synchronously (within this click event) so
+        // browsers don't block it as a popup — we fill in the real URL
+        // once the async API call below finishes.
+        const checkoutTab = window.open('', '_blank');
+        try {
+          const realUrl = await createLemonSqueezyCheckoutUrl(name, email, total, cart.map(i => i.title));
+          if (checkoutTab) checkoutTab.location.href = realUrl;
+          else window.open(realUrl, '_blank'); // fallback if the blank tab got blocked anyway
+        } catch (err) {
+          if (checkoutTab) checkoutTab.close();
+          showToast('Could not start checkout — please try again or use PayPal/UPI.');
+          return;
+        }
+      } else if (selectedPayMethod === 'paypal') {
+        window.open(PAYPAL_LINK, '_blank');
+      } else if (selectedPayMethod === 'upi') {
+        const mailUrl = 'mailto:parallelogramguides@gmail.com?subject=' + encodeURIComponent('Order via Google/Apple Pay') + '&body=' + encodeURIComponent('Hi! I\'d like to pay via Google Pay or Apple Pay for: ' + filesList + '. Total: $' + total + '. Please send payment instructions to: ' + email);
+        window.location.href = mailUrl;
       }
 
       // Store WhatsApp link for success screen
