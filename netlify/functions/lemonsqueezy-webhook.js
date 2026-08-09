@@ -161,14 +161,15 @@ exports.handler = async (event) => {
     };
   }
 
-  const apiKey = process.env.BREVO_API_KEY;
-  if (!apiKey) {
-    log('ABORT: no BREVO_API_KEY set');
-    return { statusCode: 500, headers, body: JSON.stringify({ error: 'BREVO_API_KEY is not set' }) };
+  const gmailUser = process.env.GMAIL_USER;
+  const gmailPass = process.env.GMAIL_APP_PASSWORD;
+  if (!gmailUser || !gmailPass) {
+    log('ABORT: GMAIL_USER or GMAIL_APP_PASSWORD not set');
+    return { statusCode: 500, headers, body: JSON.stringify({ error: 'GMAIL_USER/GMAIL_APP_PASSWORD is not set' }) };
   }
 
   const siteOrigin = 'https://' + (event.headers['x-forwarded-host'] || event.headers.host);
-  const result = await sendGuideEmail({ name, email, titles: validTitles, total, isFree: false, siteOrigin, apiKey, log: (...a) => log(...a) });
+  const result = await sendGuideEmail({ name, email, titles: validTitles, total, isFree: false, siteOrigin, log: (...a) => log(...a) });
 
   if (!result.ok) {
     log('DELIVERY FAILED:', JSON.stringify(result));

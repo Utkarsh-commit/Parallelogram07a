@@ -62,22 +62,24 @@ exports.handler = async (event) => {
     };
   }
 
-  const apiKey = process.env.BREVO_API_KEY;
-  log('BREVO_API_KEY present:', !!apiKey, apiKey ? '(len ' + apiKey.length + ')' : '');
-  if (!apiKey) {
-    log('ABORT: no BREVO_API_KEY in environment');
-    return { statusCode: 500, headers, body: JSON.stringify({ error: 'BREVO_API_KEY is not set' }) };
+  const gmailUser = process.env.GMAIL_USER;
+  const gmailPass = process.env.GMAIL_APP_PASSWORD;
+  log('GMAIL_USER present:', !!gmailUser, 'GMAIL_APP_PASSWORD present:', !!gmailPass);
+  if (!gmailUser || !gmailPass) {
+    log('ABORT: GMAIL_USER or GMAIL_APP_PASSWORD not set in environment');
+    return { statusCode: 500, headers, body: JSON.stringify({ error: 'GMAIL_USER/GMAIL_APP_PASSWORD is not set' }) };
   }
 
   const siteOrigin = 'https://' + (event.headers['x-forwarded-host'] || event.headers.host);
   log('siteOrigin:', siteOrigin);
 
-  const result = await sendGuideEmail({ name, email, titles, total, isFree, siteOrigin, apiKey, log: (...a) => log(...a) });
+  const result = await sendGuideEmail({ name, email, titles, total, isFree, siteOrigin, log: (...a) => log(...a) });
 
   if (!result.ok) {
     const status = result.error === 'no_files_available' ? 200
       : result.error === 'attachment_fetch_failed' ? 502
-      : result.error === 'brevo_failed' ? 502
+      : result.error === 'gmail_send_failed' ? 502
+      : result.error === 'gmail_not_configured' ? 500
       : 500;
     return { statusCode: status, headers, body: JSON.stringify({ sent: false, ...result }) };
   }

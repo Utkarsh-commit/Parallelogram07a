@@ -1,11 +1,36 @@
 // netlify/functions/_lib/guide-mailer.js
 //
-// Shared logic for emailing guide HTML files via Brevo. Used by both
-// send-guide-email.js (checkout / free claim) and resend-guide.js
-// (buyer re-requesting a lost guide by email, no login needed).
+// Shared logic for emailing guide HTML files via Gmail SMTP (nodemailer).
+// Used by both send-guide-email.js (checkout / free claim) and
+// resend-guide.js (buyer re-requesting a lost guide by email, no login
+// needed).
+//
+// Switched from Brevo -> Gmail SMTP because Gmail/Yahoo/Microsoft now
+// require DKIM+DMARC alignment for bulk senders, and a @gmail.com address
+// can never be authenticated that way when sent *through* a third party
+// like Brevo (Google owns gmail.com's DMARC policy, not us). Sending
+// directly through Gmail's own SMTP servers with an App Password sidesteps
+// that entirely, since Gmail is then sending its own authenticated mail.
+//
+// Requires two Netlify environment variables:
+//   GMAIL_USER          - parallelogramguides@gmail.com
+//   GMAIL_APP_PASSWORD  - 16-character App Password from
+//                          myaccount.google.com/apppasswords
+//                          (requires 2-Step Verification enabled first)
 
-const SEND_FROM_EMAIL = 'parallelogramguides@gmail.com'; // must be verified in Brevo
-const SEND_FROM_NAME  = 'Parallelogram';
+const nodemailer = require('nodemailer');
+
+const SEND_FROM_NAME = 'Parallelogram';
+
+function getTransporter() {
+  return nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.GMAIL_USER,
+      pass: process.env.GMAIL_APP_PASSWORD
+    }
+  });
+}
 
 // Title (must match the site's product-title text exactly) -> HTML filename
 // living at /<file> on this same deployed site (repo root).
@@ -36,9 +61,13 @@ const GUIDE_FILES = {
   'Grow on Social Media Without Going Viral': 'grow-social-without-viral.html'
 };
 
-// Sends the given titles' guide files to `email` via Brevo. Returns
+// Sends the given titles' guide files to `email` via Gmail SMTP. Returns
 // { ok, delivered, skipped, error?, detail? } — never throws; callers just
 // check `ok` and log/return `error`/`detail` as needed.
+//
+// `apiKey` is kept as an accepted (but unused) param so existing callers
+// don't need to change their call sites — Gmail auth is read directly
+// from env vars inside this module instead.
 async function sendGuideEmail({ name, email, titles, total, isFree, siteOrigin, apiKey, resend, log = () => {} }) {
   const available = titles.filter(t => GUIDE_FILES[t]);
   const unavailable = titles.filter(t => !GUIDE_FILES[t]);
@@ -89,38 +118,35 @@ async function sendGuideEmail({ name, email, titles, total, isFree, siteOrigin, 
       <p style="color:#999;font-size:13px">Questions? Just reply to this email.</p>
     </div>`;
 
+  const gmailUser = process.env.GMAIL_USER;
+  const gmailPass = process.env.GMAIL_APP_PASSWORD;
+  if (!gmailUser || !gmailPass) {
+    log('ABORT: GMAIL_USER or GMAIL_APP_PASSWORD not set in environment');
+    return { ok: false, error: 'gmail_not_configured' };
+  }
+
   try {
-    log('calling Brevo API, to:', email);
-    const emailRes = await fetch('https://api.brevo.com/v3/smtp/email', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'api-key': apiKey
-      },
-      body: JSON.stringify({
-        sender: { name: SEND_FROM_NAME, email: SEND_FROM_EMAIL },
-        to: [{ email, name: name || undefined }],
-        subject: (resend ? 'Your Parallelogram guide (resent) ' : 'Your Parallelogram guide') +
-                 (available.length > 1 ? 's are' : ' is') + ' here 🎉',
-        htmlContent: html,
-        attachment: attachments
-      })
+    log('sending via Gmail SMTP, to:', email);
+    const transporter = getTransporter();
+
+    await transporter.sendMail({
+      from: `"${SEND_FROM_NAME}" <${gmailUser}>`,
+      to: name ? `"${name}" <${email}>` : email,
+      subject: (resend ? 'Your Parallelogram guide (resent) ' : 'Your Parallelogram guide') +
+               (available.length > 1 ? 's are' : ' is') + ' here 🎉',
+      html,
+      attachments: attachments.map(a => ({
+        filename: a.name,
+        content: a.content,
+        encoding: 'base64'
+      }))
     });
-
-    log('Brevo response status:', emailRes.status);
-
-    if (!emailRes.ok) {
-      const detail = await emailRes.text();
-      log('Brevo ERROR body:', detail);
-      return { ok: false, error: 'brevo_failed', detail };
-    }
 
     log('SUCCESS');
     return { ok: true, delivered: available, skipped: unavailable };
   } catch (err) {
-    log('ABORT: internal error calling Brevo:', String(err));
-    return { ok: false, error: 'internal_error', detail: String(err) };
+    log('ABORT: Gmail SMTP send failed:', String(err));
+    return { ok: false, error: 'gmail_send_failed', detail: String(err) };
   }
 }
 

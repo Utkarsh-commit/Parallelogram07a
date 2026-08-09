@@ -74,16 +74,17 @@ exports.handler = async (event) => {
   const name = orders[orders.length - 1].name || '';
   log('resending titles:', JSON.stringify(allTitles));
 
-  const apiKey = process.env.BREVO_API_KEY;
-  if (!apiKey) {
-    log('ABORT: no BREVO_API_KEY in environment');
-    return { statusCode: 500, headers, body: JSON.stringify({ error: 'BREVO_API_KEY is not set' }) };
+  const gmailUser = process.env.GMAIL_USER;
+  const gmailPass = process.env.GMAIL_APP_PASSWORD;
+  if (!gmailUser || !gmailPass) {
+    log('ABORT: GMAIL_USER or GMAIL_APP_PASSWORD not set in environment');
+    return { statusCode: 500, headers, body: JSON.stringify({ error: 'GMAIL_USER/GMAIL_APP_PASSWORD is not set' }) };
   }
 
   const siteOrigin = 'https://' + (event.headers['x-forwarded-host'] || event.headers.host);
 
   const result = await sendGuideEmail({
-    name, email, titles: allTitles, siteOrigin, apiKey, resend: true,
+    name, email, titles: allTitles, siteOrigin, resend: true,
     log: (...a) => log(...a)
   });
 
