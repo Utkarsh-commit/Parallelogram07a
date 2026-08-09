@@ -147,15 +147,55 @@
       display: block; width: 22px; height: 1.5px; background: var(--white);
       margin: 5px 0; transition: all 0.3s;
     }
+    .nav-divider { display: none; }
+    .nav-group-label { display: none; }
     @media(max-width:768px){
-      .nav-links { display: none; flex-direction: column; gap: 20px; }
+      .nav-links {
+        display: none; flex-direction: column; gap: 4px; max-height: 0;
+      }
       .nav-links.open {
         display: flex; position: absolute; top: 100%; left: 0; right: 0;
-        background: rgba(7,7,10,0.97); padding: 28px 24px;
+        background: rgba(9,9,13,0.99); backdrop-filter: blur(16px);
+        padding: 20px 24px calc(24px + env(safe-area-inset-bottom));
         border-bottom: 1px solid var(--line);
+        max-height: calc(100vh - 60px); overflow-y: auto;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        animation: navDropIn 0.28s cubic-bezier(0.22,1,0.36,1);
       }
-      .nav-toggle { display: block; }
+      @keyframes navDropIn {
+        from { opacity: 0; transform: translateY(-8px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      .nav-links li { width: 100%; }
+      .nav-links a {
+        display: block; padding: 12px 4px; font-size: 13px;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+      }
+      .nav-links a.nav-link-highlight { color: var(--gold); }
+      .nav-links a.nav-link-muted {
+        opacity: 0.55; font-size: 11px !important; letter-spacing: 0.03em !important;
+        text-transform: none !important; border-bottom: none;
+      }
+      .nav-group-label {
+        display: block; font-family: var(--ff-ui); font-size: 10px; font-weight: 800;
+        letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold);
+        opacity: 0.75; margin: 14px 0 6px; padding: 0 4px;
+      }
+      .nav-divider {
+        display: block; height: 1px; background: rgba(200,150,62,0.15);
+        margin: 10px 0; border: none;
+      }
+      .nav-toggle { display: block; z-index: 101; position: relative; }
+      .nav-toggle span { transform-origin: center; }
+      .nav-toggle.active span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+      .nav-toggle.active span:nth-child(2) { opacity: 0; }
+      .nav-toggle.active span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
       .nav-cta { display: none; }
+      .nav-overlay {
+        display: none; position: fixed; inset: 0; top: 0; z-index: 99;
+        background: rgba(0,0,0,0.55); backdrop-filter: blur(2px);
+      }
+      .nav-overlay.open { display: block; animation: overlayIn 0.25s ease; }
     }
 
     /* ── HERO ─────────────────────────────────────── */
@@ -1867,9 +1907,9 @@
     }
     @media(max-width:768px) { .sticky-bar { display: flex; } }
     .sticky-bar-btn {
-      flex: 1; padding: 14px 8px; border-radius: 10px; border: none; cursor: pointer;
-      font-family: var(--ff-ui); font-size: 12px; font-weight: 800;
-      letter-spacing: 0.04em; text-transform: uppercase; text-align: center;
+      flex: 1; padding: 14px 6px; border-radius: 10px; border: none; cursor: pointer;
+      font-family: var(--ff-ui); font-size: clamp(10px, 3.2vw, 12px); font-weight: 800;
+      letter-spacing: 0.02em; text-transform: uppercase; text-align: center;
       transition: all 0.2s; white-space: nowrap; overflow: hidden;
       text-overflow: ellipsis;
     }
@@ -1969,6 +2009,10 @@
     .sticky-bar {
       padding-bottom: calc(12px + env(safe-area-inset-bottom));
     }
+    /* Keep footer content (incl. legal links) clear of the fixed sticky bar */
+    @media(max-width:768px) {
+      footer { padding-bottom: calc(88px + env(safe-area-inset-bottom)); }
+    }
     .drawer-foot {
       padding-bottom: calc(16px + env(safe-area-inset-bottom));
     }
@@ -2026,11 +2070,19 @@
   <div class="container nav-inner">
     <a href="#hero" class="nav-logo"><span class="nav-logo-text">PARALLEL<span>○</span>GRAM</span></a>
     <ul class="nav-links" id="navLinks">
-      <li><a href="#free" class="nav-link-highlight">Free Guide</a></li>
+      <li><a href="#free" class="nav-link-highlight">🎁 Free Guide</a></li>
       <li><a href="#subscribe">Subscribe</a></li>
       <li><a href="#products">Guides</a></li>
       <li><a href="#team">Team</a></li>
       <li><a href="#faq">FAQ</a></li>
+      <li class="nav-divider" aria-hidden="true"></li>
+      <li class="nav-group-label">Legal</li>
+      <li><a href="terms.html">Terms of Service</a></li>
+      <li><a href="privacy.html">Privacy Policy</a></li>
+      <li><a href="terms.html#refunds">Refund Policy</a></li>
+      <li><a href="copyright.html">Copyright</a></li>
+      <li class="nav-divider" aria-hidden="true"></li>
+      <li><a href="mailto:parallelogramguides@gmail.com" class="nav-link-muted">✉️ parallelogramguides@gmail.com</a></li>
     </ul>
     <button class="nav-cta" onclick="openDrawer()" style="cursor:pointer;">🛒 Cart</button>
     <button class="nav-toggle" id="navToggle" aria-label="Open navigation menu">
@@ -2038,6 +2090,7 @@
     </button>
   </div>
 </nav>
+<div class="nav-overlay" id="navOverlay"></div>
 
 <!-- ══════════════ HERO ══════════════ -->
 <section class="hero" id="hero" aria-label="Hero">
@@ -3491,9 +3544,17 @@
 <!-- ══════════════ JS ══════════════ -->
 <script defer>
   // --- NAV TOGGLE ---------------------------
+  function setNavOpen(open) {
+    document.getElementById('navLinks').classList.toggle('open', open);
+    document.getElementById('navToggle').classList.toggle('active', open);
+    document.getElementById('navOverlay').classList.toggle('open', open);
+    document.getElementById('navToggle').setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
   document.getElementById('navToggle').addEventListener('click', () => {
-    document.getElementById('navLinks').classList.toggle('open');
+    setNavOpen(!document.getElementById('navLinks').classList.contains('open'));
   });
+  document.getElementById('navOverlay').addEventListener('click', () => setNavOpen(false));
 
   // --- SCROLL REVEAL ------------------------
   const revealEls = document.querySelectorAll('.reveal');
@@ -5183,12 +5244,12 @@
     renderBundles();
     setSubToggle(false);
     document.querySelectorAll('.nav-links a').forEach(link => {
-      link.addEventListener('click', () => {
-        document.getElementById('navLinks').classList.remove('open');
-      });
+      link.addEventListener('click', () => setNavOpen(false));
     });
   });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawer(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { closeDrawer(); setNavOpen(false); }
+  });
 
   // --- FAQ ACCORDION ------------------------
   function toggleFaq(el) {
@@ -5275,7 +5336,7 @@
 <!-- ══════════════ STICKY BOTTOM BAR ══════════════ -->
 <div class="sticky-bar" id="stickyBar">
   <button class="sticky-bar-btn free" onclick="document.getElementById('free').scrollIntoView({behavior:'smooth'})">&#x1F381; Free Guide</button>
-  <button class="sticky-bar-btn browse" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Browse Guides →</button>
+  <button class="sticky-bar-btn browse" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Browse →</button>
 </div>
 
 <!-- ══════════════ FAQ FLOATING BUTTON + MODAL ══════════════ -->
