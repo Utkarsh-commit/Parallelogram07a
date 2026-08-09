@@ -5,3 +5,6 @@
 [functions]
   node_bundler = "esbuild"
   external_node_modules = ["@netlify/blobs", "nodemailer"]
+
+[[plugins]]
+  package = "@netlify/plugin-functions-install-core"
