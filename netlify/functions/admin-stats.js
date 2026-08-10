@@ -83,12 +83,16 @@ exports.handler = async (event) => {
     for (let i = bucketDays - 1; i >= 0; i--) {
       const d = new Date(now);
       d.setDate(d.getDate() - i);
-      dayBuckets[d.toISOString().slice(0, 10)] = { orders: 0, revenue: 0 };
+      dayBuckets[d.toISOString().slice(0, 10)] = { orders: 0, freeOrders: 0, revenue: 0 };
     }
     ordersInRange.forEach(o => {
       const day = (o.date || '').slice(0, 10);
       if (dayBuckets[day]) {
-        dayBuckets[day].orders += 1;
+        if (o.isFree) {
+          dayBuckets[day].freeOrders += 1;
+        } else {
+          dayBuckets[day].orders += 1;
+        }
         dayBuckets[day].revenue += Number(o.total) || 0;
       }
     });

@@ -58,6 +58,27 @@ exports.handler = async (event) => {
   }
 
   const target = body.target;
+
+  // Single-buyer deletion (GDPR/privacy request) — deletes just that one
+  // buyer's order record, keyed by their email, from the orders store.
+  // This is separate from the bulk STORE_NAMES wipe below since it needs
+  // an email and only ever touches one key, not an entire store.
+  if (target === 'single-buyer') {
+    const email = (body.email || '').trim().toLowerCase();
+    if (!email || !email.includes('@')) {
+      return { statusCode: 400, headers, body: JSON.stringify({ error: 'Missing or invalid email for single-buyer delete' }) };
+    }
+    try {
+      const store = getSafeStore('orders');
+      await store.delete(email);
+      console.log('[admin-clear-data] deleted single buyer:', email);
+      return { statusCode: 200, headers, body: JSON.stringify({ ok: true, target, email, deletedCount: 1 }) };
+    } catch (err) {
+      console.log('[admin-clear-data] single-buyer error:', String(err));
+      return { statusCode: 500, headers, body: JSON.stringify({ error: 'Internal error', detail: String(err) }) };
+    }
+  }
+
   const stores = STORE_NAMES[target];
   if (!stores) {
     return { statusCode: 400, headers, body: JSON.stringify({ error: 'Invalid target. Use: orders, searches, coupons, or all' }) };
