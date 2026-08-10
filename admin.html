@@ -358,19 +358,41 @@
     // Timeline chart
     const days = Object.keys(data.dayBuckets || {});
     const orderCounts = days.map(d => data.dayBuckets[d].orders);
+    const freeCounts = days.map(d => data.dayBuckets[d].freeOrders || 0);
     const revenueCounts = days.map(d => data.dayBuckets[d].revenue);
     const labels = days.map(d => d.slice(5)); // MM-DD
 
     renderChart('chartTimeline', 'line', {
       labels,
       datasets: [
-        { label: 'Orders', data: orderCounts, borderColor: '#C8963E', backgroundColor: 'rgba(200,150,62,0.1)', tension: 0.3, yAxisID: 'y' },
-        { label: 'Revenue ($)', data: revenueCounts, borderColor: '#4ade80', backgroundColor: 'rgba(74,222,128,0.08)', tension: 0.3, yAxisID: 'y1' }
+        { label: 'Paid Orders', data: orderCounts, borderColor: '#C8963E', backgroundColor: 'rgba(200,150,62,0.1)', tension: 0.3, yAxisID: 'y', pointRadius: 2, pointHoverRadius: 5 },
+        { label: 'Free Claims', data: freeCounts, borderColor: '#7aa2f7', backgroundColor: 'rgba(122,162,247,0.08)', tension: 0.3, yAxisID: 'y', pointRadius: 2, pointHoverRadius: 5 },
+        { label: 'Revenue ($)', data: revenueCounts, borderColor: '#4ade80', backgroundColor: 'rgba(74,222,128,0.08)', tension: 0.3, yAxisID: 'y1', pointRadius: 2, pointHoverRadius: 5 }
       ]
     }, {
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: (ctx) => ctx.dataset.label === 'Revenue ($)'
+              ? `Revenue: $${ctx.parsed.y.toFixed(2)}`
+              : `${ctx.dataset.label}: ${ctx.parsed.y}`
+          }
+        }
+      },
       scales: {
-        y:  { position: 'left',  ticks: { color: '#7A7570', stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.05)' } },
-        y1: { position: 'right', ticks: { color: '#7A7570' }, grid: { display: false } },
+        y:  {
+          position: 'left', beginAtZero: true,
+          ticks: { color: '#C8963E', stepSize: 1, precision: 0 },
+          grid: { color: 'rgba(255,255,255,0.05)' },
+          title: { display: true, text: 'Orders', color: '#C8963E', font: { size: 11 } }
+        },
+        y1: {
+          position: 'right', beginAtZero: true,
+          ticks: { color: '#4ade80', callback: (v) => '$' + v },
+          grid: { display: false },
+          title: { display: true, text: 'Revenue ($)', color: '#4ade80', font: { size: 11 } }
+        },
         x:  { ticks: { color: '#7A7570', maxRotation: 0 }, grid: { display: false } }
       }
     });
