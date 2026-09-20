@@ -149,6 +149,10 @@
     }
     .nav-divider { display: none; }
     .nav-group-label { display: none; }
+    .nav-link-mobile-only { display: none; }
+    /* Nav overflows on narrower laptops once more items are added — shrink the gap before the hamburger kicks in */
+    @media(max-width:1080px){ .nav-links { gap: 20px; } }
+    @media(max-width:920px){ .nav-links a { font-size: 10px; } }
     @media(max-width:768px){
       .nav-links {
         display: none; flex-direction: column; gap: 4px; max-height: 0;
@@ -181,6 +185,7 @@
         letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold);
         opacity: 0.75; margin: 14px 0 6px; padding: 0 4px;
       }
+      .nav-link-mobile-only { display: block; }
       .nav-divider {
         display: block; height: 1px; background: rgba(200,150,62,0.15);
         margin: 10px 0; border: none;
@@ -486,6 +491,7 @@
       scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
     }
     .bundles-scroll::-webkit-scrollbar { display: none; }
+    .bundles-scroll { overscroll-behavior-x: contain; scroll-padding-left: 4px; }
     .bundle-card {
       scroll-snap-align: start; flex: 0 0 auto; width: 240px;
       background: var(--bg2); border: 1px solid var(--gold-dk); border-radius: 14px;
@@ -493,6 +499,45 @@
       transition: border-color 0.25s, transform 0.2s;
     }
     .bundle-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+
+    /* ── BUNDLE SLIDER CONTROLS ── */
+    .bundles-slider { position: relative; }
+    .bundle-arrow {
+      position: absolute; top: calc(50% - 22px); z-index: 5;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: rgba(7,7,10,0.85); border: 1.5px solid var(--gold); color: var(--gold-lt);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; padding: 0;
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+      transition: background 0.2s, color 0.2s, transform 0.2s, opacity 0.2s;
+    }
+    .bundle-arrow svg { width: 18px; height: 18px; }
+    .bundle-arrow.prev { left: -10px; }
+    .bundle-arrow.next { right: -10px; }
+    .bundle-arrow:hover:not(:disabled) { background: var(--gold); color: #000; transform: scale(1.08); }
+    .bundle-arrow:active:not(:disabled) { transform: scale(0.96); }
+    .bundle-arrow:disabled { opacity: 0; pointer-events: none; }
+    .bundle-arrow:focus-visible { outline: 2px solid var(--gold-lt); outline-offset: 3px; }
+    .bundle-progress {
+      position: relative; height: 10px; border-radius: 10px; margin: 6px 4px 0;
+      background: rgba(255,255,255,0.10); border: 1px solid rgba(200,150,62,0.25);
+      cursor: pointer; touch-action: none;
+    }
+    .bundle-progress::before { content: ''; position: absolute; inset: -12px 0; }
+    .bundle-progress-thumb {
+      position: absolute; top: 0; left: 0; height: 100%; width: 30%;
+      background: linear-gradient(90deg, var(--gold-dk), var(--gold), var(--gold-lt));
+      border-radius: 10px; will-change: transform; cursor: grab;
+      box-shadow: 0 0 10px var(--gold-glow);
+      transition: filter 0.2s;
+    }
+    .bundle-progress:hover .bundle-progress-thumb { filter: brightness(1.15); }
+    .bundle-progress:active .bundle-progress-thumb { cursor: grabbing; }
+    @media(max-width:640px){
+      .bundle-arrow { width: 38px; height: 38px; }
+      .bundle-arrow.prev { left: 2px; } .bundle-arrow.next { right: 2px; }
+    }
     .bundle-card-badge {
       position: absolute; top: 14px; right: 14px;
       background: var(--gold); color: #000; font-family: var(--ff-ui);
@@ -1970,6 +2015,15 @@
     .faq-modal.open { transform: translateY(0); }
     .faq-modal::-webkit-scrollbar { width: 3px; }
     .faq-modal::-webkit-scrollbar-thumb { background: rgba(200,150,62,0.3); border-radius: 2px; }
+    @media(min-width:768px) {
+      .faq-modal {
+        left: 50%; right: auto; bottom: 28px;
+        width: min(640px, 88vw); border-radius: 20px; max-height: 76vh;
+        transform: translate(-50%, 40px); opacity: 0;
+        transition: transform 0.32s cubic-bezier(0.22,1,0.36,1), opacity 0.25s ease;
+      }
+      .faq-modal.open { transform: translate(-50%, 0); opacity: 1; }
+    }
     .faq-modal-head {
       display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;
     }
@@ -2048,6 +2102,91 @@
     .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
+    /* ── SUBSCRIPTION GUIDE PICKER ───────────────── */
+    #subPickerDrawer { width: min(460px, 100vw); }
+    @media(min-width:640px)  { #subPickerDrawer { width: min(600px, 94vw); } }
+    @media(min-width:1024px) { #subPickerDrawer { width: min(820px, 90vw); } }
+
+    #subPickerDrawer .drawer-head { padding: 14px 20px 10px; }
+
+    .picker-summary-row {
+      display: flex; align-items: center; gap: 7px; padding: 4px 20px 0;
+      font-size: 12px; color: rgba(255,255,255,0.72); line-height: 1.4;
+    }
+    .picker-summary-row strong { color: var(--gold-lt); font-weight: 700; }
+
+    .picker-progress-wrap { padding: 8px 20px 0; }
+    .picker-progress-track {
+      height: 5px; border-radius: 5px; background: rgba(255,255,255,0.08); overflow: hidden;
+    }
+    .picker-progress-fill {
+      height: 100%; border-radius: 5px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-lt));
+      transition: width 0.3s ease;
+    }
+    .picker-progress-row {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 5px; font-size: 12px; color: rgba(255,255,255,0.55);
+    }
+    #pickerCounter { color: var(--gold-lt); font-weight: 700; }
+
+    .picker-search-row {
+      display: flex; gap: 8px; padding: 8px 20px 6px;
+    }
+    .picker-search-input {
+      flex: 1; min-width: 0; padding: 9px 14px; border-radius: 9px;
+      border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04);
+      color: var(--white); font-size: 13px; font-family: var(--ff-body);
+    }
+    .picker-search-input:focus { outline: none; border-color: rgba(200,150,62,0.5); }
+
+    #pickerList {
+      display: grid; grid-template-columns: 1fr; gap: 12px;
+      padding: 8px 20px 6px;
+    }
+    @media(min-width:640px) { #pickerList { grid-template-columns: 1fr 1fr; } }
+    @media(min-width:1024px) { #pickerList { grid-template-columns: 1fr 1fr 1fr; } }
+
+    .picker-card {
+      position: relative; display: flex; align-items: center; gap: 14px;
+      min-height: 64px; padding: 16px 16px; border-radius: 14px;
+      border: 1.5px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.02);
+      cursor: pointer; transition: border-color 0.18s ease, background 0.18s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .picker-card:hover { border-color: rgba(200,150,62,0.4); background: rgba(255,255,255,0.045); }
+    .picker-card.selected {
+      border-color: var(--gold); background: rgba(200,150,62,0.11);
+      box-shadow: 0 6px 20px rgba(200,150,62,0.16);
+    }
+    .picker-card.picker-disabled { opacity: 0.38; cursor: not-allowed; }
+    .picker-card.picker-disabled:hover { border-color: rgba(255,255,255,0.08); background: rgba(255,255,255,0.02); }
+    .picker-card-body { flex: 1; min-width: 0; }
+    .picker-card-top {
+      display: flex; align-items: center; margin-bottom: 8px;
+    }
+    .picker-cat-pill {
+      font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;
+      color: var(--gold-lt); background: rgba(200,150,62,0.14); padding: 4px 10px; border-radius: 20px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;
+    }
+    .picker-check-icon {
+      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+      border: 2px solid rgba(255,255,255,0.28);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700; color: transparent; transition: all 0.18s ease;
+    }
+    .picker-card.selected .picker-check-icon { background: var(--gold); border-color: var(--gold); color: #000; }
+    .picker-card-title { font-size: 14.5px; line-height: 1.45; color: var(--white); }
+    .picker-empty { padding: 30px 6px; text-align: center; font-size: 13px; color: rgba(255,255,255,0.45); }
+
+    .picker-footer {
+      padding: 14px 20px 18px; border-top: 1px solid rgba(255,255,255,0.08); flex-shrink: 0;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .picker-footer-hint { font-size: 12px; text-align: center; color: rgba(255,255,255,0.5); }
+    .picker-footer-hint strong { color: var(--gold-lt); }
+
     /* ── RESPONSIVE ──────────────────────────────── */
     @media(max-width:600px){
       .hero-actions { flex-direction: column; align-items: flex-start; }
@@ -2071,18 +2210,19 @@
     <a href="#hero" class="nav-logo"><span class="nav-logo-text">PARALLEL<span>○</span>GRAM</span></a>
     <ul class="nav-links" id="navLinks">
       <li><a href="#free" class="nav-link-highlight">🎁 Free Guide</a></li>
+      <li><a href="javascript:void(0)" onclick="openResendHelp()" class="nav-link-highlight">🔄 Resend Guide</a></li>
       <li><a href="#subscribe">Subscribe</a></li>
       <li><a href="#products">Guides</a></li>
       <li><a href="#team">Team</a></li>
       <li><a href="#faq">FAQ</a></li>
       <li class="nav-divider" aria-hidden="true"></li>
       <li class="nav-group-label">Legal</li>
-      <li><a href="terms.html">Terms of Service</a></li>
-      <li><a href="privacy.html">Privacy Policy</a></li>
-      <li><a href="terms.html#refunds">Refund Policy</a></li>
-      <li><a href="copyright.html">Copyright</a></li>
+      <li class="nav-link-mobile-only"><a href="terms.html">Terms of Service</a></li>
+      <li class="nav-link-mobile-only"><a href="privacy.html">Privacy Policy</a></li>
+      <li class="nav-link-mobile-only"><a href="terms.html#refunds">Refund Policy</a></li>
+      <li class="nav-link-mobile-only"><a href="copyright.html">Copyright</a></li>
       <li class="nav-divider" aria-hidden="true"></li>
-      <li><a href="mailto:parallelogramguides@gmail.com" class="nav-link-muted">✉️ parallelogramguides@gmail.com</a></li>
+      <li class="nav-link-mobile-only"><a href="mailto:parallelogramguides@gmail.com" class="nav-link-muted">✉️ parallelogramguides@gmail.com</a></li>
     </ul>
     <button class="nav-cta" onclick="openDrawer()" style="cursor:pointer;">🛒 Cart</button>
     <button class="nav-toggle" id="navToggle" aria-label="Open navigation menu">
@@ -2403,9 +2543,18 @@
       Grab a <em style="font-style:italic;color:var(--gold)">bundle</em>
     </h2>
     <p class="reveal" style="transition-delay:0.12s; color:rgba(255,255,255,0.4); font-size:13px; margin-bottom:20px;">
-      Every guide in a category, for just $3 each. Swipe to see them all.
+      Every guide in a category, for just $3 each. Swipe or use the arrows to see them all.
     </p>
-    <div class="bundles-scroll reveal" id="bundlesScroll" style="transition-delay:0.15s"></div>
+    <div class="bundles-slider reveal" style="transition-delay:0.15s">
+      <button class="bundle-arrow prev" id="bundlePrev" type="button" aria-label="Previous bundles" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="bundles-scroll" id="bundlesScroll"></div>
+      <button class="bundle-arrow next" id="bundleNext" type="button" aria-label="Next bundles">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+      <div class="bundle-progress" id="bundleProgress" aria-hidden="true"><div class="bundle-progress-thumb" id="bundleThumb"></div></div>
+    </div>
   </div>
 </section>
 
@@ -3198,7 +3347,7 @@
           Lost your guide email? Get it resent
           <span class="faq-icon">+</span>
         </div>
-        <div class="faq-a">
+        <div class="faq-a resend-widget">
           <p style="margin-bottom:10px">No account needed — just type the email you paid with and we'll resend everything you've bought.</p>
           <div style="display:flex; gap:8px; margin-top:10px">
             <input type="email" class="resend-email-input" placeholder="you@email.com" autocomplete="email"
@@ -3296,6 +3445,11 @@
       <span class="drawer-title" id="drawerTitle">Your Cart</span>
     </div>
     <button class="drawer-close" onclick="closeDrawer()" aria-label="Close cart">✕</button>
+  </div>
+
+  <!-- RESEND BANNER -->
+  <div onclick="closeDrawer(); openResendHelp();" style="padding:10px 20px; font-size:12px; color:var(--gold-lt); text-align:center; cursor:pointer; border-bottom:1px solid rgba(255,255,255,0.08); background:rgba(200,150,62,0.06)">
+    🔄 Already paid? <span style="text-decoration:underline">Resend your guide</span>
   </div>
 
   <!-- PROGRESS STEPPER -->
@@ -3616,6 +3770,9 @@
 
   // ===== FORMSPREE — all forms submit here =====
   const FORMSPREE = 'https://formspree.io/f/mykoyoqz';
+  // Placeholder until a real Stripe (or other) subscription checkout link is set up.
+  // Until you replace this, subscription requests fall back to the interest-email flow below.
+  const STRIPE_LINK = 'https://buy.stripe.com/YOUR_STRIPE_LINK';
   async function submitToFormspree(data) {
     try {
       const res = await fetch(FORMSPREE, {
@@ -3769,6 +3926,110 @@
         </div>`;
     }).join('');
     wrap.innerHTML = html;
+  }
+
+  // ─── BUNDLE SLIDER ─────────────────────────
+  function initBundleSlider() {
+    const track = document.getElementById('bundlesScroll');
+    const prev  = document.getElementById('bundlePrev');
+    const next  = document.getElementById('bundleNext');
+    const bar   = document.getElementById('bundleProgress');
+    const thumb = document.getElementById('bundleThumb');
+    if (!track || !prev || !next || !bar || !thumb) return;
+
+    const step = () => {
+      const card = track.querySelector('.bundle-card');
+      const gap = parseFloat(getComputedStyle(track).columnGap) || 14;
+      return card ? card.offsetWidth + gap : 254;
+    };
+    const perPage = () => Math.max(1, Math.floor(track.clientWidth / step()));
+
+    function update() {
+      const max = track.scrollWidth - track.clientWidth;
+      const pos = track.scrollLeft;
+      prev.disabled = pos <= 2;
+      next.disabled = pos >= max - 2;
+      const hasOverflow = max > 2;
+      prev.style.display = next.style.display = bar.style.display = hasOverflow ? '' : 'none';
+      const ratio = track.clientWidth / (track.scrollWidth || 1);
+      const w = Math.min(1, Math.max(0.1, ratio));
+      thumb.style.width = (w * 100) + '%';
+      const travel = bar.clientWidth * (1 - w);
+      thumb.style.transform = 'translateX(' + (max > 0 ? (pos / max) * travel : 0) + 'px)';
+    }
+
+    // Custom eased scrolling (native smooth-scroll fights with scroll-snap in many browsers)
+    let raf = null;
+    const maxScroll = () => track.scrollWidth - track.clientWidth;
+    const easeInOut = t => t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+    function stopAnim() {
+      if (raf) { cancelAnimationFrame(raf); raf = null; }
+      track.style.scrollSnapType = '';
+    }
+    function animateTo(target, duration) {
+      target = Math.max(0, Math.min(maxScroll(), target));
+      const start = track.scrollLeft, dist = target - start;
+      if (Math.abs(dist) < 1) return;
+      stopAnim();
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce) { track.scrollLeft = target; return; }
+      track.style.scrollSnapType = 'none';
+      const dur = duration || Math.min(900, Math.max(450, Math.abs(dist) * 0.9));
+      const t0 = performance.now();
+      const tick = now => {
+        const t = Math.min(1, (now - t0) / dur);
+        track.scrollLeft = start + dist * easeInOut(t);
+        if (t < 1) { raf = requestAnimationFrame(tick); }
+        else { raf = null; track.style.scrollSnapType = ''; }
+      };
+      raf = requestAnimationFrame(tick);
+    }
+    const go = dir => {
+      const cur = track.scrollLeft;
+      const base = raf ? animTarget : cur;
+      animTarget = Math.max(0, Math.min(maxScroll(), base + dir * step() * perPage()));
+      animateTo(animTarget);
+    };
+    let animTarget = 0;
+    // let the user take over instantly
+    ['wheel', 'touchstart', 'pointerdown'].forEach(ev =>
+      track.addEventListener(ev, stopAnim, { passive: true }));
+    prev.addEventListener('click', () => go(-1));
+    next.addEventListener('click', () => go(1));
+
+    // click / drag on the progress bar to jump
+    let dragging = false;
+    const seek = e => {
+      const r = bar.getBoundingClientRect();
+      const pct = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+      const target = pct * maxScroll();
+      if (dragging) { track.scrollLeft = target; } else { animTarget = target; animateTo(target, 650); }
+    };
+    bar.addEventListener('pointerdown', e => {
+      dragging = false; seek(e);
+      dragging = true; bar.setPointerCapture(e.pointerId);
+    });
+    bar.addEventListener('pointermove', e => {
+      if (!dragging) return;
+      if (raf) stopAnim();
+      track.style.scrollSnapType = 'none';
+      seek(e);
+    });
+    const endDrag = () => { if (dragging) { dragging = false; if (!raf) track.style.scrollSnapType = ''; } };
+    bar.addEventListener('pointerup', endDrag);
+    bar.addEventListener('pointercancel', endDrag);
+
+    // arrow keys when the track is focused
+    track.setAttribute('tabindex', '0');
+    track.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+      if (e.key === 'ArrowLeft')  { e.preventDefault(); go(-1); }
+    });
+
+    track.addEventListener('scroll', () => requestAnimationFrame(update), { passive: true });
+    window.addEventListener('resize', update);
+    new MutationObserver(update).observe(track, { childList: true });
+    update();
   }
 
   function addBundleToCart(catKey, btnEl) {
@@ -4327,12 +4588,125 @@
     document.getElementById('proPrice').textContent   = isAnnual ? '23' : '29';
   }
 
+  // --- SUBSCRIPTION GUIDE PICKER ---------------
+  let subPicker = { plan: null, max: 0, selected: [] };
+  const GUIDE_LIST_PRICE = 10; // original per-guide price used for the "value" callout
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function getAllGuideTitles() {
+    const seen = new Set();
+    const guides = [];
+    document.querySelectorAll('.buy-now-btn[data-title]').forEach(btn => {
+      const title = btn.dataset.title;
+      if (!title || seen.has(title)) return;
+      seen.add(title);
+      guides.push({ title, cat: btn.dataset.cat || '' });
+    });
+    return guides;
+  }
+
   function openSubCheckout(plan) {
-    const price = plan === 'pro'
-      ? (isAnnual ? '$23/mo' : '$29/mo')
-      : (isAnnual ? '$15/mo' : '$19/mo');
-    const count = plan === 'pro' ? '10' : '6';
+    const max = plan === 'pro' ? 10 : 6;
+    subPicker = { plan, max, selected: [] };
+
+    const planPrice = plan === 'pro' ? (isAnnual ? 23 : 29) : (isAnnual ? 15 : 19);
+    const exclusives = plan === 'pro' ? 4 : 2;
+
+    document.getElementById('pickerTitle').textContent = (plan === 'pro' ? 'Pro' : 'Basic') + ' — Pick Your Guides';
+    document.getElementById('pickerVaultValue').textContent = max * GUIDE_LIST_PRICE;
+    document.getElementById('pickerPlanPrice').textContent = planPrice;
+    document.getElementById('pickerExclusiveCount').textContent = exclusives;
+    document.getElementById('pickerFooterHint').textContent = 'Select exactly ' + max + ' guides to unlock your plan.';
+    document.getElementById('pickerSearch').value = '';
+
+    renderPickerList();
+    updatePickerCounter();
+    document.getElementById('pickerOverlay').classList.add('open');
+    document.getElementById('subPickerDrawer').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeSubPicker() {
+    document.getElementById('pickerOverlay').classList.remove('open');
+    document.getElementById('subPickerDrawer').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function renderPickerList() {
+    const list = document.getElementById('pickerList');
+    const query = (document.getElementById('pickerSearch').value || '').trim().toLowerCase();
+    const allGuides = getAllGuideTitles();
+    const guides = query
+      ? allGuides.filter(g => g.title.toLowerCase().includes(query) || g.cat.toLowerCase().includes(query))
+      : allGuides;
+    const atMax = subPicker.selected.length >= subPicker.max;
+
+    if (guides.length === 0) {
+      list.innerHTML = '<div class="picker-empty">No guides match "' + escapeHtml(query) + '". Try a different keyword.</div>';
+      return;
+    }
+
+    list.innerHTML = guides.map((g, i) => {
+      const selected = subPicker.selected.includes(g.title);
+      const disabled = atMax && !selected;
+      return '<label class="picker-card' + (selected ? ' selected' : '') + (disabled ? ' picker-disabled' : '') + '">'
+        + '<input type="checkbox" class="picker-check" data-idx="' + i + '" hidden ' + (selected ? 'checked' : '') + (disabled ? ' disabled' : '') + '>'
+        + '<div class="picker-card-body">'
+        + '<div class="picker-card-top"><span class="picker-cat-pill">' + escapeHtml(g.cat) + '</span></div>'
+        + '<div class="picker-card-title">' + escapeHtml(g.title) + '</div>'
+        + '</div>'
+        + '<span class="picker-check-icon">✓</span>'
+        + '</label>';
+    }).join('');
+
+    list.querySelectorAll('.picker-check').forEach(cb => {
+      cb.addEventListener('change', () => togglePickerGuide(guides[parseInt(cb.dataset.idx, 10)].title, cb));
+    });
+  }
+
+  function togglePickerGuide(title, cb) {
+    const idx = subPicker.selected.indexOf(title);
+    if (cb.checked) {
+      if (subPicker.selected.length >= subPicker.max) {
+        cb.checked = false;
+        return;
+      }
+      if (idx === -1) subPicker.selected.push(title);
+    } else if (idx !== -1) {
+      subPicker.selected.splice(idx, 1);
+    }
+    updatePickerCounter();
+    renderPickerList();
+  }
+
+  function updatePickerCounter() {
+    const count = subPicker.selected.length;
+    const max = subPicker.max;
+    document.getElementById('pickerCounter').textContent = count + ' / ' + max;
+    document.getElementById('pickerProgressFill').style.width = Math.min(100, (count / max) * 100) + '%';
+
+    const hint = document.getElementById('pickerRemainingHint');
+    if (count < max) {
+      hint.textContent = 'Pick ' + (max - count) + ' more';
+    } else {
+      hint.textContent = "You're all set ✓";
+    }
+
+    // Exactly `max` guides required — not less, not more.
+    document.getElementById('pickerContinueBtn').disabled = count !== max;
+  }
+
+  function continueSubCheckout() {
+    const plan  = subPicker.plan;
+    const price = plan === 'pro' ? (isAnnual ? '$23/mo' : '$29/mo') : (isAnnual ? '$15/mo' : '$19/mo');
     const label = plan === 'pro' ? 'Pro' : 'Basic';
+    const chosenTitles = subPicker.selected.slice();
+    const chosen = chosenTitles.join(', ');
+
+    closeSubPicker();
 
     // If Stripe is set up, open it directly
     if (STRIPE_LINK !== 'https://buy.stripe.com/YOUR_STRIPE_LINK') {
@@ -4340,17 +4714,17 @@
       return;
     }
 
-    // Submit interest via Formspree, then show confirmation
+    // Submit interest + picked guides via Formspree, then show confirmation
     submitToFormspree({
       _subject: 'Subscription Interest - ' + label + ' Plan (' + price + ')',
       plan: label,
       price: price,
-      guides_requested: count + ' guides (user to specify)',
+      guides_requested: chosen,
       type: 'subscription_interest'
     }).then(ok => {
       alert(ok
-        ? 'Got it! We\'ll email you the payment link within a few hours. Check ' + (label === 'Pro' ? 'your inbox' : 'your inbox') + ' for parallelogramguides@gmail.com.'
-        : 'Something went wrong. Please email us at parallelogramguides@gmail.com to subscribe.'
+        ? 'Got it! We\'ll email you the payment link within a few hours, then send your ' + chosenTitles.length + ' picked guides once it clears. Check your inbox for parallelogramguides@gmail.com.'
+        : ('Something went wrong. Please email us at parallelogramguides@gmail.com with your picks: ' + chosen)
       );
     });
   }
@@ -4859,7 +5233,7 @@
 
   // --- RESEND MY GUIDE (no login needed — lookup by email) ------
   async function requestResend(btn) {
-    const wrap  = btn.closest('.faq-a');
+    const wrap  = btn.closest('.resend-widget');
     const input = wrap.querySelector('.resend-email-input');
     const msg   = wrap.querySelector('.resend-msg');
     const email = (input.value || '').trim();
@@ -4929,6 +5303,24 @@
     document.body.style.overflow = '';
   }
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFaqModal(); });
+
+  // --- JUMP STRAIGHT TO "RESEND MY GUIDE" -----
+  function openResendHelp() {
+    openFaqModal();
+    setTimeout(() => {
+      const items = document.querySelectorAll('#faqModalList .faq-q');
+      for (const q of items) {
+        if (q.textContent.includes('Lost your guide')) {
+          const answer = q.nextElementSibling;
+          if (!answer.classList.contains('open')) toggleFaq(q);
+          q.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          const input = answer.querySelector('.resend-email-input');
+          if (input) setTimeout(() => input.focus(), 350);
+          break;
+        }
+      }
+    }, 60);
+  }
 
   // --- FREE GUIDE DRAWER ---------------------
   // ─── SNEAK PEEK GALLERY ───────────────────
@@ -5242,6 +5634,7 @@
     restoreCartButtonStates();
     updateCartUI();
     renderBundles();
+    initBundleSlider();
     setSubToggle(false);
     document.querySelectorAll('.nav-links a').forEach(link => {
       link.addEventListener('click', () => setNavOpen(false));
@@ -5348,6 +5741,46 @@
     <button class="faq-modal-close" onclick="closeFaqModal()" aria-label="Close FAQ">&#x2715;</button>
   </div>
   <div class="faq-list" id="faqModalList"></div>
+</div>
+
+<!-- ══════════════ SUBSCRIPTION GUIDE PICKER ══════════════ -->
+<div class="drawer-overlay" id="pickerOverlay" onclick="closeSubPicker()"></div>
+<div class="drawer" id="subPickerDrawer">
+  <div class="drawer-head">
+    <div class="drawer-head-left">
+      <div class="drawer-brand-chip">
+        <div class="drawer-brand-dot"></div>
+        <span class="drawer-brand-name">Parallelogram</span>
+      </div>
+      <span class="drawer-title" id="pickerTitle">Pick Your Guides</span>
+    </div>
+    <button class="drawer-close" onclick="closeSubPicker()" aria-label="Close guide picker">✕</button>
+  </div>
+
+  <div class="picker-summary-row">
+    💎 <span>$<strong id="pickerVaultValue">60</strong> worth of guides for $<strong id="pickerPlanPrice">19</strong>/mo — plus <strong id="pickerExclusiveCount">2</strong> exclusive guides/mo you can't buy separately</span>
+  </div>
+
+  <div class="picker-progress-wrap">
+    <div class="picker-progress-track"><div class="picker-progress-fill" id="pickerProgressFill" style="width:0%"></div></div>
+    <div class="picker-progress-row">
+      <span><span id="pickerCounter">0 / 6</span> selected</span>
+      <span id="pickerRemainingHint">Pick 6 to continue</span>
+    </div>
+  </div>
+
+  <div class="picker-search-row">
+    <input type="text" class="picker-search-input" id="pickerSearch" placeholder="🔍 Search guides — confidence, habits, money…" oninput="renderPickerList()">
+  </div>
+
+  <div style="flex:1; overflow-y:auto">
+    <div id="pickerList"></div>
+  </div>
+
+  <div class="picker-footer">
+    <div class="picker-footer-hint" id="pickerFooterHint">Select exactly 6 guides to unlock your plan.</div>
+    <button class="plan-btn pro-btn" style="width:100%" id="pickerContinueBtn" onclick="continueSubCheckout()" disabled>Continue →</button>
+  </div>
 </div>
 
 </body>
