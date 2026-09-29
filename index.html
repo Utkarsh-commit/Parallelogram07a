@@ -2221,6 +2221,194 @@
       .drawer, .guide-drawer, .feedback-drawer, .freeDrawer { display: none !important; }
       body { background: white; color: black; }
     }
+
+    /* ═══════════ DRAWER REDESIGN — one gold-on-dark skin for all drawers ═══════════ */
+    .drawer-overlay { background: rgba(3,3,6,0.72); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+    .guide-drawer, .faq-modal, .feedback-drawer, .drawer {
+      background:
+        radial-gradient(120% 55% at 50% 0%, rgba(200,150,62,0.11), transparent 62%),
+        linear-gradient(180deg, #111118 0%, #08080c 100%);
+      box-shadow: 0 30px 90px rgba(0,0,0,0.75), 0 0 60px rgba(200,150,62,0.07), inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+    .guide-drawer, .faq-modal { border: 1px solid rgba(200,150,62,0.24); }
+
+    /* — Guide preview drawer — */
+    .guide-drawer::before {
+      width: 52px; height: 4px; margin: 12px auto 0; opacity: 0.6;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .guide-drawer-body { padding: 14px 18px 28px; }
+    .guide-drawer-cat-tag { box-shadow: 0 0 18px rgba(200,150,62,0.18); }
+    .guide-drawer-name {
+      font-size: clamp(26px, 3.2vw, 38px); line-height: 1.1; font-weight: 600;
+      color: var(--white);
+      background: linear-gradient(180deg, #ffffff 30%, #d8c7a3 100%);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .guide-drawer-name::after {
+      content: ''; display: block; width: 56px; height: 2px; margin-top: 14px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+    }
+    .guide-drawer-close-btn { width: 38px; height: 38px; border-color: rgba(200,150,62,0.25); color: var(--gold); }
+    .guide-drawer-close-btn:hover { background: var(--gold); color: #000; border-color: var(--gold); }
+
+    .guide-drawer-meta + div {
+      display: flex; align-items: center; gap: 12px;
+      color: var(--gold) !important; font-size: 10px !important; letter-spacing: 0.2em !important; opacity: 0.9;
+    }
+    .guide-drawer-meta + div::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(200,150,62,0.35), transparent); }
+
+    .guide-all-bullets { counter-reset: gb; border: none; gap: 8px; overflow: visible; }
+    .guide-all-bullets li {
+      counter-increment: gb; color: rgba(255,255,255,0.8); font-size: 13.5px;
+      border: 1px solid rgba(200,150,62,0.13); border-radius: 12px; background: rgba(255,255,255,0.03);
+      transition: transform .2s, border-color .2s, background .2s;
+    }
+    .guide-all-bullets li:hover { transform: translateY(-2px); border-color: rgba(200,150,62,0.45); background: rgba(200,150,62,0.07); }
+    .guide-all-bullets li::before {
+      content: counter(gb, decimal-leading-zero); font-family: var(--ff-ui); font-size: 11px; font-weight: 800;
+      color: var(--gold); opacity: 1; margin-top: 2px; min-width: 20px;
+    }
+
+    .sneak-peek-label { color: var(--gold); opacity: 0.9; }
+    .sneak-peek-track-wrap {
+      border-radius: 16px; overflow: hidden; border: 1px solid rgba(200,150,62,0.22);
+      box-shadow: 0 18px 50px rgba(0,0,0,0.55), 0 0 40px rgba(200,150,62,0.08);
+    }
+    .sneak-arrow {
+      background: rgba(10,10,14,0.72); border: 1px solid rgba(200,150,62,0.4); color: var(--gold);
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    }
+    .sneak-arrow:hover { background: var(--gold); color: #000; }
+
+    .guide-drawer-price-bar {
+      padding: 16px 20px; border-radius: 16px; border-color: rgba(200,150,62,0.3);
+      background: linear-gradient(135deg, rgba(200,150,62,0.17), rgba(200,150,62,0.04));
+    }
+    .guide-drawer-price-bar .price-current { font-size: 32px; }
+    .guide-drawer-btns { gap: 12px; }
+    .guide-drawer-btns button {
+      padding: 15px 18px; border-radius: 12px; cursor: pointer;
+      font-family: var(--ff-ui); font-size: 12px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;
+      transition: transform .18s, box-shadow .18s, background .18s;
+    }
+    .guide-drawer-btns .add-cart-btn { background: transparent; color: var(--gold); border: 1.5px solid rgba(200,150,62,0.5); flex: 1; }
+    .guide-drawer-btns .add-cart-btn:hover { background: rgba(200,150,62,0.12); transform: translateY(-2px); }
+    .guide-drawer-btns .buy-now-btn {
+      flex: 1.6; color: #000; border: none;
+      background: linear-gradient(135deg, #F0C56E, #C8963E); box-shadow: 0 8px 26px rgba(200,150,62,0.35);
+    }
+    .guide-drawer-btns .buy-now-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgba(200,150,62,0.5); }
+
+    @keyframes gdIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: no-preference) {
+      .guide-drawer.open .guide-all-bullets li { animation: gdIn .5s cubic-bezier(.22,1,.36,1) both; }
+      .guide-drawer.open .guide-all-bullets li:nth-child(2) { animation-delay: .06s; }
+      .guide-drawer.open .guide-all-bullets li:nth-child(3) { animation-delay: .12s; }
+      .guide-drawer.open .guide-all-bullets li:nth-child(4) { animation-delay: .18s; }
+      .guide-drawer.open .guide-all-bullets li:nth-child(n+5) { animation-delay: .24s; }
+    }
+
+    /* Desktop: a centred floating sheet instead of a screen-wide slab */
+    @media (min-width: 769px) {
+      .guide-drawer {
+        left: 50%; right: auto; bottom: 24px; width: min(900px, calc(100vw - 48px));
+        max-height: calc(100vh - 48px); border-radius: 28px;
+        transform: translate(-50%, calc(100% + 40px));
+      }
+      .guide-drawer.open { transform: translate(-50%, 0); }
+      .guide-drawer-body { padding: 18px 34px 32px; }
+      .guide-all-bullets { display: grid; grid-template-columns: 1fr 1fr; }
+      .guide-all-bullets li:last-child:nth-child(odd) { grid-column: 1 / -1; }
+    }
+
+    /* ═══════════ DRAWER REDESIGN v2 — checkout, picker, feedback, coupon, FAQ ═══════════ */
+    :root { --gold-grad: linear-gradient(135deg, #F0C56E, #C8963E); }
+
+    /* — Checkout drawer — */
+    .drawer { width: min(480px, 100vw); border-left: 1px solid rgba(200,150,62,0.28); }
+    .drawer::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; pointer-events: none; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+    .drawer-head, .drawer-foot, .picker-footer { background: rgba(9,9,13,0.72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+    .drawer-head { border-bottom: 1px solid rgba(200,150,62,0.16); }
+    .drawer-foot, .picker-footer { border-top: 1px solid rgba(200,150,62,0.16); }
+    .drawer-close { border: 1px solid rgba(200,150,62,0.3); color: var(--gold); transition: all .2s; }
+    .drawer-close:hover { background: var(--gold); color: #000; transform: rotate(90deg); }
+    .progress-circle.active { box-shadow: 0 0 0 4px rgba(200,150,62,0.15), 0 0 20px rgba(200,150,62,0.45); }
+
+    .cart-item { border-radius: 14px; background: linear-gradient(135deg, rgba(255,255,255,0.055), rgba(255,255,255,0.02)); }
+    .cart-item:hover { transform: translateY(-2px); border-color: rgba(200,150,62,0.45); box-shadow: 0 10px 28px rgba(0,0,0,0.35); }
+    .cart-item-price-now { color: var(--gold-lt); }
+
+    .coupon-field-input, .float-input { border-radius: 12px; background: rgba(255,255,255,0.045); }
+    .float-input:focus, .coupon-field-input:focus { border-color: var(--gold); box-shadow: 0 0 0 4px rgba(200,150,62,0.14); }
+    .coupon-field-btn { border-radius: 12px; }
+
+    .order-recap-bar {
+      border-radius: 16px; border-color: rgba(200,150,62,0.32);
+      background: linear-gradient(135deg, rgba(200,150,62,0.17), rgba(200,150,62,0.04));
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .recap-total-num { text-shadow: 0 0 24px rgba(200,150,62,0.5); }
+
+    .pay-section-label { display: flex; align-items: center; gap: 12px; color: var(--gold); opacity: .9; }
+    .pay-section-label::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(200,150,62,0.35), transparent); }
+    .pay-card { border-radius: 16px; background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.015)); }
+    .pay-card:hover { border-color: rgba(200,150,62,0.5); transform: translateY(-2px); }
+    .pay-card.selected {
+      background: linear-gradient(135deg, rgba(200,150,62,0.16), rgba(200,150,62,0.04));
+      box-shadow: 0 0 0 1px rgba(200,150,62,0.35), 0 12px 34px rgba(200,150,62,0.18);
+    }
+
+    .drawer-btn.primary { background: var(--gold-grad); position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(200,150,62,0.35); }
+    .drawer-btn.primary::after {
+      content: ''; position: absolute; top: 0; left: -60%; width: 40%; height: 100%; pointer-events: none;
+      background: linear-gradient(100deg, transparent, rgba(255,255,255,0.35), transparent); transform: skewX(-20deg);
+    }
+    .drawer-btn.primary:not(:disabled):hover::after { left: 130%; transition: left .7s ease; }
+    .drawer-btn-back { color: rgba(255,255,255,0.55); }
+    .drawer-btn-back:hover { color: var(--gold); }
+    .success-title em { color: var(--gold-lt); }
+    .success-step { border-radius: 14px; background: linear-gradient(135deg, rgba(200,150,62,0.09), rgba(255,255,255,0.02)); border: 1px solid rgba(200,150,62,0.18); }
+
+    /* — Subscription picker — */
+    .picker-progress-track { background: rgba(255,255,255,0.08); border-radius: 6px; }
+    .picker-progress-fill { background: var(--gold-grad); box-shadow: 0 0 14px rgba(200,150,62,0.6); }
+    .picker-search-input { border-radius: 12px; background: rgba(255,255,255,0.045); border: 1.5px solid rgba(255,255,255,0.1); }
+    .picker-search-input:focus { border-color: var(--gold); box-shadow: 0 0 0 4px rgba(200,150,62,0.14); outline: none; }
+    .picker-card { border-radius: 16px; background: linear-gradient(135deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015)); }
+    .picker-card:hover:not(.picker-disabled) { transform: translateY(-2px); border-color: rgba(200,150,62,0.55); }
+    .picker-card.selected { background: linear-gradient(135deg, rgba(200,150,62,0.2), rgba(200,150,62,0.05)); box-shadow: 0 0 0 1px rgba(200,150,62,0.4), 0 12px 30px rgba(200,150,62,0.2); }
+    .picker-cat-pill { color: var(--gold); background: rgba(200,150,62,0.1); border: 1px solid rgba(200,150,62,0.25); border-radius: 20px; }
+    .picker-card.selected .picker-check-icon { background: var(--gold-grad); color: #000; border-color: transparent; }
+
+    /* — Feedback / free-guide drawers — */
+    .feedback-drawer { width: min(460px, 92vw); border-radius: 24px; border: 1px solid rgba(200,150,62,0.3); overflow: hidden; }
+    .feedback-drawer::before { content: ''; display: block; height: 2px; flex-shrink: 0; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+
+    /* — Coupon popup — */
+    .coupon-popup {
+      width: min(360px, calc(100vw - 48px)); padding: 28px 24px; border-radius: 24px; border: 1px solid rgba(200,150,62,0.4);
+      background: radial-gradient(120% 60% at 50% 0%, rgba(200,150,62,0.18), transparent 65%), linear-gradient(180deg, #14141b, #09090d);
+      box-shadow: 0 30px 90px rgba(0,0,0,0.75), 0 0 70px rgba(200,150,62,0.14);
+    }
+    .coupon-popup-title { font-size: 26px; line-height: 1.15; }
+    .coupon-popup-title em { color: var(--gold-lt); }
+    .coupon-code-row { border: 1.5px dashed rgba(200,150,62,0.55); background: rgba(200,150,62,0.07); border-radius: 14px; }
+    .coupon-code-text { letter-spacing: 0.22em; color: var(--gold-lt); }
+    .coupon-popup-cta { background: var(--gold-grad); color: #000; border-radius: 14px; box-shadow: 0 10px 30px rgba(200,150,62,0.35); }
+    .coupon-popup-cta:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(200,150,62,0.5); }
+
+    /* — FAQ popup — */
+    .faq-modal { border-radius: 24px; }
+    .faq-modal-title { background: var(--gold-grad); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .faq-modal-close { border: 1px solid rgba(200,150,62,0.3); color: var(--gold); }
+    .faq-modal-close:hover { background: var(--gold); color: #000; }
+    .faq-modal .faq-item { margin-bottom: 8px; border: 1px solid rgba(200,150,62,0.13); border-radius: 14px; background: rgba(255,255,255,0.03); overflow: hidden; transition: border-color .2s, background .2s; }
+    .faq-modal .faq-item:hover { border-color: rgba(200,150,62,0.4); background: rgba(200,150,62,0.05); }
+    .faq-modal .faq-q { padding-left: 16px; padding-right: 16px; }
+
+    /* Gold scrollbars on every drawer */
+    .drawer *, .guide-drawer *, .faq-modal, .feedback-drawer * { scrollbar-width: thin; scrollbar-color: rgba(200,150,62,0.4) transparent; }
   </style>
 </head>
 <body style="">
@@ -5037,6 +5225,20 @@
     const chosenTitles = subPicker.selected.slice();
     const chosen = chosenTitles.join(', ');
 
+    // We need the buyer's email — otherwise there is nowhere to send the payment link
+    const emailEl = document.getElementById('pickerEmail');
+    const nameEl  = document.getElementById('pickerName');
+    const buyerEmail = (emailEl.value || '').trim();
+    const buyerName  = (nameEl.value || '').trim();
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(buyerEmail);
+    const errEl = document.getElementById('pickerEmailErr');
+    if (!emailOk) {
+      errEl.style.display = 'block';
+      emailEl.focus();
+      return;
+    }
+    errEl.style.display = 'none';
+
     closeSubPicker();
 
     // If Stripe is set up, open it directly
@@ -5047,15 +5249,17 @@
 
     // Submit interest + picked guides via Formspree, then show confirmation
     submitToFormspree({
-      _subject: 'Subscription Interest - ' + label + ' Plan (' + price + ')',
+      _subject: 'Subscription Interest - ' + label + ' Plan (' + price + ') - ' + buyerEmail,
+      name: buyerName,
+      email: buyerEmail,
       plan: label,
       price: price,
       guides_requested: chosen,
       type: 'subscription_interest'
     }).then(ok => {
       alert(ok
-        ? 'Got it! We\'ll email you the payment link within a few hours, then send your ' + chosenTitles.length + ' picked guides once it clears. Check your inbox for parallelogramguides@gmail.com.'
-        : ('Something went wrong. Please email us at parallelogramguides@gmail.com with your picks: ' + chosen)
+        ? 'Got it! We\'ll email the payment link to ' + buyerEmail + ' within a few hours, then send your ' + chosenTitles.length + ' picked guides once it clears. Emails come from parallelogramguides@gmail.com — check your spam folder too.'
+        : ('Something went wrong sending your request. Please email us at parallelogramguides@gmail.com with your picks: ' + chosen)
       );
     });
   }
@@ -5117,21 +5321,53 @@
     }
   }
 
-  // Auto-show on first scroll — once per browser session, and only if the
-  // person hasn't already opened it by tapping the sale badge.
-  (function initCouponScrollTrigger() {
-    let alreadyShown = false;
-    try { alreadyShown = sessionStorage.getItem(COUPON_SESSION_KEY) === '1'; } catch (e) {}
-    if (alreadyShown) return;
+  // Auto-show the coupon popup — once per browser session — but NEVER while the
+  // visitor is mid-action. (It used to open on the very first scroll, so a click
+  // right after scrolling landed on the dark overlay instead of the button.)
+  //  • Desktop: when the mouse leaves through the top of the window (exit intent).
+  //  • Everyone: after 25s on the page, and only once they've scrolled AND gone
+  //    idle for 2.5s (no scroll / mouse move / click / key press).
+  (function initCouponTrigger() {
+    try { if (sessionStorage.getItem(COUPON_SESSION_KEY) === '1') return; } catch (e) {}
 
-    function onFirstScroll() {
-      window.removeEventListener('scroll', onFirstScroll);
-      let shown = false;
-      try { shown = sessionStorage.getItem(COUPON_SESSION_KEY) === '1'; } catch (e) {}
-      if (shown) return; // e.g. they tapped the badge between page load and this scroll
+    const MIN_DWELL_MS = 25000, IDLE_MS = 2500, EXIT_MIN_MS = 8000;
+    const t0 = Date.now();
+    let lastAct = Date.now(), scrolled = false, pressed = false, timer = null, done = false;
+
+    function busy() {
+      if (pressed) return true;
+      if (document.body.style.overflow === 'hidden') return true; // a drawer/modal is already open
+      const open = sel => { const el = document.querySelector(sel); return !!(el && el.classList.contains('open')); };
+      return open('#checkoutDrawer') || open('#subPickerDrawer') || open('#faqModal') || open('.feedback-drawer') || open('#couponPopup');
+    }
+    function cleanup() {
+      done = true; clearInterval(timer);
+      ['scroll','pointermove','keydown','touchstart','wheel'].forEach(ev => window.removeEventListener(ev, bump));
+      window.removeEventListener('pointerdown', down); window.removeEventListener('pointerup', up);
+      window.removeEventListener('pointercancel', up); document.removeEventListener('mouseout', onExit);
+    }
+    function tryOpen() {
+      if (done) return;
+      try { if (sessionStorage.getItem(COUPON_SESSION_KEY) === '1') { cleanup(); return; } } catch (e) {}
+      if (busy()) return;
+      cleanup();
       openCouponPopup();
     }
-    window.addEventListener('scroll', onFirstScroll, { passive: true });
+    function bump(e) { lastAct = Date.now(); if (e && (e.type === 'scroll' || e.type === 'wheel')) scrolled = true; }
+    function down() { pressed = true; lastAct = Date.now(); }
+    function up()   { pressed = false; lastAct = Date.now(); }
+    function onExit(e) {
+      if (!e.relatedTarget && e.clientY <= 0 && Date.now() - t0 >= EXIT_MIN_MS) tryOpen();
+    }
+
+    ['scroll','pointermove','keydown','touchstart','wheel'].forEach(ev => window.addEventListener(ev, bump, { passive: true }));
+    window.addEventListener('pointerdown', down, { passive: true });
+    window.addEventListener('pointerup', up, { passive: true });
+    window.addEventListener('pointercancel', up, { passive: true });
+    document.addEventListener('mouseout', onExit);
+    timer = setInterval(() => {
+      if (scrolled && Date.now() - t0 >= MIN_DWELL_MS && Date.now() - lastAct >= IDLE_MS) tryOpen();
+    }, 1000);
   })();
 
   // ─── SEARCH ───────────────────────────────
@@ -6141,7 +6377,10 @@
 
   <div class="picker-footer">
     <div class="picker-footer-hint" id="pickerFooterHint">Select exactly 10 guides to unlock your plan.</div>
-    <button class="plan-btn pro-btn" style="width:100%" id="pickerContinueBtn" onclick="continueSubCheckout()">Continue →</button>
+    <input type="text" class="picker-search-input" id="pickerName" placeholder="Your name" autocomplete="name" style="width:100%;margin-top:10px">
+    <input type="email" class="picker-search-input" id="pickerEmail" placeholder="Your email — we'll send the payment link here" autocomplete="email" style="width:100%;margin-top:8px">
+    <p id="pickerEmailErr" style="display:none;color:#E8B95A;font-size:12px;margin:6px 0 0;text-align:center">Please enter a valid email so we can send your payment link.</p>
+    <button class="plan-btn pro-btn" style="width:100%;margin-top:10px" id="pickerContinueBtn" onclick="continueSubCheckout()">Continue →</button>
   </div>
 </div>
 
