@@ -2409,6 +2409,58 @@
 
     /* Gold scrollbars on every drawer */
     .drawer *, .guide-drawer *, .faq-modal, .feedback-drawer * { scrollbar-width: thin; scrollbar-color: rgba(200,150,62,0.4) transparent; }
+
+    /* ═══════════ SUBSCRIPTION SEARCH + IN-PAGE COMPLETION NOTIFICATION ═══════════ */
+    .picker-search-input::-webkit-search-cancel-button { display: none; }
+    .picker-search-clear {
+      position: absolute; right: 28px; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; border-radius: 50%;
+      align-items: center; justify-content: center; border: none; cursor: pointer; font-size: 16px; line-height: 1;
+      background: rgba(200,150,62,0.18); color: var(--gold);
+    }
+    .picker-search-clear:hover { background: var(--gold); color: #000; }
+    .picker-result-count { padding: 0 20px 8px; font-size: 11px; letter-spacing: .04em; color: rgba(255,255,255,0.5); min-height: 0; }
+    .picker-result-count:empty { display: none; }
+    .picker-result-count span { color: var(--gold-lt); font-weight: 700; }
+    #pickerSuggestions.hidden { display: none; }
+    .picker-card-title mark { background: rgba(200,150,62,0.3); color: var(--gold-lt); border-radius: 3px; padding: 0 2px; }
+    .picker-empty a { text-decoration: underline; }
+
+    .subdone-overlay {
+      position: fixed; inset: 0; z-index: 3000; display: flex; align-items: center; justify-content: center; padding: 20px;
+      background: rgba(3,3,6,0.78); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      opacity: 0; pointer-events: none; transition: opacity .25s;
+    }
+    .subdone-overlay.open { opacity: 1; pointer-events: auto; }
+    .subdone-card {
+      width: min(440px, 100%); max-height: calc(100vh - 40px); overflow-y: auto; text-align: center; padding: 30px 26px 24px; border-radius: 24px;
+      border: 1px solid rgba(200,150,62,0.4);
+      background: radial-gradient(120% 55% at 50% 0%, rgba(200,150,62,0.18), transparent 65%), linear-gradient(180deg, #14141b, #09090d);
+      box-shadow: 0 30px 90px rgba(0,0,0,0.75), 0 0 70px rgba(200,150,62,0.14);
+      transform: translateY(16px) scale(.97); transition: transform .3s cubic-bezier(.22,1,.36,1);
+    }
+    .subdone-overlay.open .subdone-card { transform: none; }
+    .subdone-icon { width: 64px; height: 64px; margin: 0 auto 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: 800; }
+    .subdone-icon.ok { background: linear-gradient(135deg, #F0C56E, #C8963E); color: #000; box-shadow: 0 0 0 8px rgba(200,150,62,0.15), 0 0 36px rgba(200,150,62,0.5); }
+    .subdone-icon.err { background: rgba(239,68,68,0.15); color: #f87171; border: 2px solid rgba(239,68,68,0.5); }
+    .subdone-icon.sending { background: rgba(200,150,62,0.1); border: 2px solid rgba(200,150,62,0.3); }
+    .subdone-spinner { width: 26px; height: 26px; border-radius: 50%; border: 3px solid rgba(200,150,62,0.25); border-top-color: var(--gold); animation: subdoneSpin .8s linear infinite; }
+    @keyframes subdoneSpin { to { transform: rotate(360deg); } }
+    .subdone-title { font-family: var(--ff-head); font-size: 28px; font-weight: 600; color: var(--white); margin: 0 0 8px; }
+    .subdone-sub { font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.7); margin: 0 0 18px; }
+    .subdone-sub b { color: var(--gold-lt); word-break: break-all; }
+    .subdone-summary:empty, .subdone-steps:empty { display: none; }
+    .subdone-summary { text-align: left; border: 1px solid rgba(200,150,62,0.25); border-radius: 14px; background: rgba(200,150,62,0.06); padding: 14px 16px; margin-bottom: 16px; }
+    .subdone-plan { display: flex; justify-content: space-between; font-family: var(--ff-ui); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+    .subdone-plan b { color: var(--white); }
+    .subdone-guides { margin: 0; padding-left: 18px; font-size: 13px; color: rgba(255,255,255,0.78); line-height: 1.6; max-height: 150px; overflow-y: auto; }
+    .subdone-steps { list-style: none; counter-reset: sd; padding: 0; margin: 0 0 20px; text-align: left; }
+    .subdone-steps li { counter-increment: sd; display: flex; gap: 12px; align-items: flex-start; font-size: 13px; color: rgba(255,255,255,0.7); padding: 6px 0; }
+    .subdone-steps li::before { content: counter(sd); flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; border: 1px solid rgba(200,150,62,0.4); color: var(--gold); }
+    .subdone-steps li.done { color: var(--white); }
+    .subdone-steps li.done::before { content: '✓'; background: var(--gold); color: #000; border-color: var(--gold); }
+    .subdone-actions { display: flex; gap: 10px; }
+    .subdone-btn { flex: 1; padding: 14px 16px; border-radius: 12px; cursor: pointer; text-align: center; text-decoration: none; font-family: var(--ff-ui); font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); background: transparent; border: 1.5px solid rgba(200,150,62,0.5); }
+    .subdone-btn.primary { color: #000; border: none; background: linear-gradient(135deg, #F0C56E, #C8963E); box-shadow: 0 8px 26px rgba(200,150,62,0.35); }
   </style>
 </head>
 <body style="">
@@ -2690,7 +2742,7 @@
         <div class="plan-divider"></div>
         <ul class="plan-features">
           <li class="plan-feature included"><div class="plan-feature-icon">✓</div>Pick any <strong>6 guides</strong> from the vault</li>
-          <li class="plan-feature included"><div class="plan-feature-icon">✓</div>You choose which 6 — delivered instantly</li>
+          <li class="plan-feature included"><div class="plan-feature-icon">✓</div>You choose which 6 — sent once payment is confirmed</li>
           <li class="plan-feature included"><div class="plan-feature-icon">✓</div><span>2 exclusive guides/month <span class="plan-highlight-chip">NEW</span></span></li>
           <li class="plan-feature included"><div class="plan-feature-icon">✓</div>20× deeper than classic guides</li>
           <li class="plan-feature excluded"><div class="plan-feature-icon">✕</div>Early access before Basic</li>
@@ -2711,7 +2763,7 @@
         <div class="plan-divider"></div>
         <ul class="plan-features">
           <li class="plan-feature included"><div class="plan-feature-icon">✓</div>Pick any <strong>10 guides</strong> from the vault</li>
-          <li class="plan-feature included"><div class="plan-feature-icon">✓</div>You choose which 10 — delivered instantly</li>
+          <li class="plan-feature included"><div class="plan-feature-icon">✓</div>You choose which 10 — sent once payment is confirmed</li>
           <li class="plan-feature included"><div class="plan-feature-icon">✓</div><span>4 exclusive guides/month <span class="plan-highlight-chip">NEW</span></span></li>
           <li class="plan-feature included"><div class="plan-feature-icon">✓</div>20× deeper than classic guides</li>
           <li class="plan-feature included"><div class="plan-feature-icon">✓</div>First access — before Basic members</li>
@@ -2725,8 +2777,8 @@
     <!-- Bottom trust notes -->
     <div class="sub-note reveal visible" style="transition-delay:0.3s">
       <span>🔒 Secure payment</span>
-      <span>↩️ Cancel anytime</span>
-      <span>⚡ Guides delivered in under 60 seconds</span>
+      <span>✉️ Confirmation sent to your email</span>
+      <span>⚡ Guides sent as soon as payment is confirmed</span>
       <span>🚫 No hidden fees</span>
     </div>
 
@@ -4001,7 +4053,7 @@
     <div class="step-panel" id="step2">
       <div class="step2-header">
         <h3>Almost there.</h3>
-        <p>Just two fields. Your guides arrive in this inbox in under 60 seconds of payment.</p>
+        <p>Just two fields. Your guides arrive in this inbox right after your payment is confirmed.</p>
       </div>
       <div class="float-group">
         <input class="float-input" type="text" id="buyerName" placeholder=" " aria-label="Your name" autocomplete="given-name">
@@ -4238,6 +4290,11 @@
   const WHATSAPP_NUMBER = '918882624952';
   const LEMONSQUEEZY_URL = 'https://parallelogram-official.lemonsqueezy.com/checkout/buy/338ec3ca-4b70-40c0-a6ac-2d6003278eb3';
   const PAYPAL_LINK     = 'https://paypal.me/YOURUSERNAME';
+  // Don't offer PayPal while the link is still the placeholder (it would open a broken page)
+  (function hidePlaceholderPayPal() {
+    const hide = () => { const el = document.getElementById('pc-paypal'); if (el && /YOURUSERNAME/.test(PAYPAL_LINK)) el.style.display = 'none'; };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', hide); else hide();
+  })();
 
   // Lemon Squeezy's custom_price (dynamic pricing) only works through their
   // server-side Checkout API, not as URL query params — passing it directly
@@ -5006,12 +5063,29 @@
     // webhook — triggering delivery again here would double-send.
     // PayPal/UPI still use an honor-system "I've paid" click since those
     // don't have webhook verification wired up, so we still send here.
-    if (pendingOrder) {
-      if (pendingOrder.method !== 'stripe') {
-        sendGuideDeliveryEmail(pendingOrder);
-      }
-      pendingOrder = null;
+    // Manual methods (PayPal / Google-Apple Pay) can't be verified automatically, so we do NOT
+    // send guides here. We alert the seller to verify the payment and send the guides by hand.
+    const sub = document.querySelector('#stepSuccess .success-sub');
+    const step3 = document.querySelectorAll('#stepSuccess .success-step')[2];
+    if (sub && !sub.dataset.orig) { sub.dataset.orig = sub.innerHTML; if (step3) step3.dataset.orig = step3.innerHTML; }
+    if (pendingOrder && pendingOrder.method !== 'stripe') {
+      // Primary: your Gmail via Netlify function. Backup: Formspree.
+      fetch('/.netlify/functions/payment-claim', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: pendingOrder.name, email: pendingOrder.email, method: pendingOrder.method, total: pendingOrder.total, guides: pendingOrder.titles })
+      }).catch(() => {});
+      submitToFormspree({
+        _subject: 'PAYMENT CLAIM - verify before sending guides - ' + (pendingOrder.email || ''),
+        type: 'payment_claim', method: pendingOrder.method, name: pendingOrder.name, email: pendingOrder.email,
+        total: pendingOrder.total, guides: (pendingOrder.titles || []).join(', ')
+      });
+      if (sub) sub.innerHTML = 'Thanks! We\'ll verify your payment and email your guide(s) to <strong style="color:var(--gold)">' + (pendingOrder.email || 'your inbox') + '</strong> shortly — usually within a few hours.<br>Check spam if you don\'t see it.';
+      if (step3) step3.innerHTML = '<span class="success-step-num">3</span> We verify it and email your guides ✉️';
+    } else {
+      if (sub && sub.dataset.orig) sub.innerHTML = sub.dataset.orig;
+      if (step3 && step3.dataset.orig) step3.innerHTML = step3.dataset.orig;
     }
+    pendingOrder = null;
 
     cart = [];
     saveCart();
@@ -5122,7 +5196,10 @@
       const title = btn.dataset.title;
       if (!title || seen.has(title)) return;
       seen.add(title);
-      guides.push({ title, cat: btn.dataset.cat || '' });
+      const card = btn.closest('.product-card');
+      const bullets = card ? [...card.querySelectorAll('.product-preview li')].map(li => li.textContent).join(' ') : '';
+      const cat = btn.dataset.cat || '';
+      guides.push({ title, cat, tl: title.toLowerCase(), cl: cat.toLowerCase(), bl: bullets.toLowerCase() });
     });
     return guides;
   }
@@ -5154,17 +5231,88 @@
     document.body.style.overflow = '';
   }
 
+  // ── Picker search: SAME engine as the main "Browse Guides" search ──
+  // synonym expansion (expandQuery) + whole-word matching (termMatches) + AI refinement (ai-search)
+  let pickerAi = { query: '', matches: null, timer: null, controller: null };
+
+  function handlePickerSearch(value) {
+    clearTimeout(pickerAi.timer);
+    if (pickerAi.controller) pickerAi.controller.abort();
+    pickerAi.matches = null;
+    renderPickerList();
+    if (value.trim().length >= 2) pickerAi.timer = setTimeout(() => runPickerAiSearch(value.trim()), 550);
+  }
+
+  async function runPickerAiSearch(query) {
+    pickerAi.controller = new AbortController();
+    let res;
+    try {
+      res = await fetch('/.netlify/functions/ai-search', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query }), signal: pickerAi.controller.signal
+      });
+    } catch (e) { return; }               // offline / not deployed — keep keyword results
+    if (!res.ok) return;
+    let data; try { data = await res.json(); } catch (e) { return; }
+    if (!data || !Array.isArray(data.matches)) return;
+    // AI found nothing (or its answer was cut off): keep the keyword results instead of wiping the list
+    if (data.matches.length === 0) return;
+    const input = document.getElementById('pickerSearch');
+    if (!input || input.value.trim() !== query) return;   // user kept typing — discard
+    pickerAi.query = query; pickerAi.matches = data.matches;
+    renderPickerList();
+  }
+
+  function setPickerSearch(term) {
+    const el = document.getElementById('pickerSearch');
+    el.value = term; handlePickerSearch(term); el.focus();
+  }
+
+  function clearPickerSearch() { setPickerSearch(''); }
+
   function renderPickerList() {
     const list = document.getElementById('pickerList');
-    const query = (document.getElementById('pickerSearch').value || '').trim().toLowerCase();
-    const allGuides = getAllGuideTitles();
-    const guides = query
-      ? allGuides.filter(g => g.title.toLowerCase().includes(query) || g.cat.toLowerCase().includes(query))
-      : allGuides;
+    const raw = (document.getElementById('pickerSearch').value || '').trim();
+    const q = raw.toLowerCase();
+    const all = getAllGuideTitles();
+    let guides = all;
+
+    if (q) {
+      if (pickerAi.matches && pickerAi.query === raw) {
+        guides = pickerAi.matches.map(t => all.find(g => g.title === t)).filter(Boolean);   // AI-ranked
+      } else {
+        const terms = expandQuery(q);
+        guides = all.map((g, idx) => {
+          let score = 0;
+          terms.forEach(t => { if (termMatches(g.tl, t)) score += 3; if (termMatches(g.cl, t)) score += 2; if (termMatches(g.bl, t)) score += 1; });
+          return { g, score, idx };
+        }).filter(x => x.score > 0).sort((a, b) => b.score - a.score || a.idx - b.idx).map(x => x.g);
+      }
+    } else { pickerAi.matches = null; }
+
     const atMax = subPicker.selected.length >= subPicker.max;
+    const qWords = q.split(/\s+/).filter(Boolean);
+    const hl = t => {
+      if (!qWords.length) return escapeHtml(t);
+      const re = new RegExp('(' + qWords.map(x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') + ')', 'gi');
+      return t.split(re).map((part, i) => i % 2 ? '<mark>' + escapeHtml(part) + '</mark>' : escapeHtml(part)).join('');
+    };
+
+    const countEl = document.getElementById('pickerResultCount');
+    const clearBtn = document.getElementById('pickerSearchClear');
+    const sugg = document.getElementById('pickerSuggestions');
+    if (clearBtn) clearBtn.style.display = q ? 'flex' : 'none';
+    if (sugg) sugg.classList.toggle('hidden', !!q);
+    if (countEl) {
+      const hiddenSel = subPicker.selected.filter(t => !guides.some(g => g.title === t)).length;
+      countEl.innerHTML = (q && guides.length)
+        ? '<span>' + guides.length + '</span> guide' + (guides.length !== 1 ? 's' : '') + ' found'
+          + (hiddenSel ? ' · ' + hiddenSel + ' selected guide' + (hiddenSel > 1 ? 's' : '') + ' hidden by search' : '')
+        : '';
+    }
 
     if (guides.length === 0) {
-      list.innerHTML = '<div class="picker-empty">No guides match "' + escapeHtml(query) + '". Try a different keyword.</div>';
+      list.innerHTML = '<div class="picker-empty">No guides found for "' + escapeHtml(raw) + '". Try a different keyword or <a href="#" onclick="clearPickerSearch(); return false;" style="color:var(--gold)">clear the search</a>.</div>';
       return;
     }
 
@@ -5175,7 +5323,7 @@
         + '<input type="checkbox" class="picker-check" data-idx="' + i + '" hidden ' + (selected ? 'checked' : '') + (disabled ? ' disabled' : '') + '>'
         + '<div class="picker-card-body">'
         + '<div class="picker-card-top"><span class="picker-cat-pill">' + escapeHtml(g.cat) + '</span></div>'
-        + '<div class="picker-card-title">' + escapeHtml(g.title) + '</div>'
+        + '<div class="picker-card-title">' + hl(g.title) + '</div>'
         + '</div>'
         + '<span class="picker-check-icon">✓</span>'
         + '</label>';
@@ -5259,15 +5407,72 @@
     }).then(r => r.json().then(j => ({ ok: r.ok && j.ok, buyerSent: !!j.buyerSent, ownerSent: !!j.ownerSent }))).catch(() => ({ ok: false, buyerSent: false, ownerSent: false }));
     const viaFormspree = submitToFormspree(payload);
 
+    const done = { email: buyerEmail, plan: label, price: price, guides: chosenTitles };
+    showSubDone('sending', done);
     Promise.all([viaFunction, viaFormspree]).then(([fn, fsOk]) => {
-      if (fn.ok && fn.buyerSent) {
-        alert('Request received! We just emailed a confirmation to ' + buyerEmail + ' (check spam if you don\'t see it). We\'ll send the payment link within a few hours, then your ' + chosenTitles.length + ' picked guides once it clears.');
-      } else if (fn.ok || fsOk) {
-        alert('Request received! We\'ll email the payment link to ' + buyerEmail + ' within a few hours. If you don\'t hear from us, message us on WhatsApp or email parallelogramguides@gmail.com.');
+      if (fn.ok || fsOk) {
+        done.emailed = !!(fn.ok && fn.buyerSent);
+        showSubDone('success', done);
+        try { launchConfetti(); } catch (e) {}
       } else {
-        alert('Something went wrong sending your request. Please email us at parallelogramguides@gmail.com with your picks: ' + chosen);
+        showSubDone('error', done);
       }
     });
+  }
+
+  // ─── IN-PAGE SUBSCRIPTION NOTIFICATION (replaces browser alert) ───
+  function ensureSubDone() {
+    let el = document.getElementById('subDone');
+    if (el) return el;
+    el = document.createElement('div');
+    el.id = 'subDone'; el.className = 'subdone-overlay';
+    el.innerHTML = '<div class="subdone-card" role="dialog" aria-modal="true" aria-labelledby="subDoneTitle">'
+      + '<div class="subdone-icon" id="subDoneIcon"></div>'
+      + '<h3 class="subdone-title" id="subDoneTitle"></h3>'
+      + '<p class="subdone-sub" id="subDoneSub"></p>'
+      + '<div class="subdone-summary" id="subDoneSummary"></div>'
+      + '<ol class="subdone-steps" id="subDoneSteps"></ol>'
+      + '<div class="subdone-actions" id="subDoneActions"></div></div>';
+    el.addEventListener('click', e => { if (e.target === el && el.dataset.state !== 'sending') closeSubDone(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && el.classList.contains('open') && el.dataset.state !== 'sending') closeSubDone(); });
+    document.body.appendChild(el);
+    return el;
+  }
+  function closeSubDone() {
+    const el = document.getElementById('subDone');
+    if (el) el.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function showSubDone(state, d) {
+    const el = ensureSubDone();
+    el.dataset.state = state;
+    const $ = id => document.getElementById(id);
+    const mail = 'mailto:parallelogramguides@gmail.com?subject=' + encodeURIComponent(d.plan + ' plan request') +
+                 '&body=' + encodeURIComponent('Hi! I\'d like the ' + d.plan + ' plan (' + d.price + ').\nMy email: ' + d.email + '\nMy picks:\n- ' + d.guides.join('\n- '));
+    if (state === 'sending') {
+      $('subDoneIcon').className = 'subdone-icon sending'; $('subDoneIcon').innerHTML = '<span class="subdone-spinner"></span>';
+      $('subDoneTitle').textContent = 'Sending your request…';
+      $('subDoneSub').textContent = 'One moment — please don\'t close this window.';
+      $('subDoneSummary').innerHTML = ''; $('subDoneSteps').innerHTML = ''; $('subDoneActions').innerHTML = '';
+    } else {
+      const ok = state === 'success';
+      $('subDoneIcon').className = 'subdone-icon ' + (ok ? 'ok' : 'err'); $('subDoneIcon').textContent = ok ? '✓' : '!';
+      $('subDoneTitle').textContent = ok ? 'Request received' : 'We couldn\'t send your request';
+      $('subDoneSub').innerHTML = ok
+        ? (d.emailed ? 'We\'ve just emailed a confirmation to <b>' + escapeHtml(d.email) + '</b> (check spam if you don\'t see it).'
+                     : 'We\'ll email the payment link to <b>' + escapeHtml(d.email) + '</b> within a few hours.')
+        : 'Something went wrong on our side. Your picks are below — please email them to us and we\'ll sort it out.';
+      $('subDoneSummary').innerHTML = '<div class="subdone-plan"><span>' + escapeHtml(d.plan) + ' plan</span><b>' + escapeHtml(d.price) + '</b></div>'
+        + '<ol class="subdone-guides">' + d.guides.map(g => '<li>' + escapeHtml(g) + '</li>').join('') + '</ol>';
+      $('subDoneSteps').innerHTML = ok
+        ? '<li class="done">Request received</li><li>Payment link arrives by email — usually within a few hours</li><li>Your ' + d.guides.length + ' guides are sent once payment clears</li>'
+        : '';
+      $('subDoneActions').innerHTML = ok
+        ? '<button type="button" class="subdone-btn primary" onclick="closeSubDone()">Done</button>'
+        : '<a class="subdone-btn primary" href="' + mail + '">Email us my picks</a><button type="button" class="subdone-btn" onclick="closeSubDone()">Close</button>';
+    }
+    el.classList.add('open');
+    document.body.style.overflow = 'hidden';
   }
 
   // ─── COUPON POPUP ───────────────────────────────
@@ -5568,12 +5773,11 @@
   };
 
   function expandQuery(q) {
-    const words = q.toLowerCase().split(' ');
+    const lower = q.toLowerCase().trim();
+    const words = lower.split(/\s+/).filter(Boolean);   // no empty terms (an empty term matched every guide)
     const expanded = new Set(words);
-    words.forEach(word => {
-      if (SEARCH_SYNONYMS[word]) {
-        SEARCH_SYNONYMS[word].forEach(syn => expanded.add(syn));
-      }
+    [lower].concat(words).forEach(key => {               // also try the whole phrase, e.g. "self esteem", "social skills"
+      if (SEARCH_SYNONYMS[key]) SEARCH_SYNONYMS[key].forEach(syn => expanded.add(syn));
     });
     return Array.from(expanded);
   }
@@ -5677,6 +5881,8 @@
     let data;
     try { data = await res.json(); } catch (e) { return; }
     if (!data || !Array.isArray(data.matches)) return;
+    // AI found nothing (or its answer was cut off): keep the keyword results instead of wiping the list
+    if (data.matches.length === 0) return;
 
     // If the box has changed since this request was fired, discard the response
     const liveInput = document.getElementById('guideSearch');
@@ -6373,9 +6579,20 @@
     </div>
   </div>
 
-  <div class="picker-search-row">
-    <input type="text" class="picker-search-input" id="pickerSearch" placeholder="🔍 Search guides — confidence, habits, money…" oninput="renderPickerList()">
+  <div class="picker-search-row" style="position:relative">
+    <input type="search" class="picker-search-input" id="pickerSearch" placeholder="🔍 Search guides — e.g. confidence, habits, money…" oninput="handlePickerSearch(this.value)" autocomplete="off" style="padding-right:40px">
+    <button type="button" id="pickerSearchClear" class="picker-search-clear" onclick="clearPickerSearch()" aria-label="Clear search" style="display:none">×</button>
   </div>
+  <div class="search-suggestions" id="pickerSuggestions" style="padding:0 20px 8px;justify-content:flex-start">
+    <span class="search-sugg-label">Try:</span>
+    <button type="button" class="sugg-chip" onclick="setPickerSearch('confidence')">confidence</button>
+    <button type="button" class="sugg-chip" onclick="setPickerSearch('habits')">habits</button>
+    <button type="button" class="sugg-chip" onclick="setPickerSearch('money')">money</button>
+    <button type="button" class="sugg-chip" onclick="setPickerSearch('speaking')">speaking</button>
+    <button type="button" class="sugg-chip" onclick="setPickerSearch('study')">study</button>
+    <button type="button" class="sugg-chip" onclick="setPickerSearch('focus')">focus</button>
+  </div>
+  <div id="pickerResultCount" class="picker-result-count" aria-live="polite"></div>
 
   <div style="flex:1; overflow-y:auto">
     <div id="pickerList"><label class="picker-card picker-disabled"><input type="checkbox" class="picker-check" data-idx="0" hidden="" disabled=""><div class="picker-card-body"><div class="picker-card-top"><span class="picker-cat-pill">Networking</span></div><div class="picker-card-title">The 35 Networking Hacks That Actually Work</div></div><span class="picker-check-icon">✓</span></label><label class="picker-card selected"><input type="checkbox" class="picker-check" data-idx="1" hidden="" checked=""><div class="picker-card-body"><div class="picker-card-top"><span class="picker-cat-pill">Business Building</span></div><div class="picker-card-title">Zero to Business: Founder's Starter Guide</div></div><span class="picker-check-icon">✓</span></label><label class="picker-card selected"><input type="checkbox" class="picker-check" data-idx="2" hidden="" checked=""><div class="picker-card-body"><div class="picker-card-top"><span class="picker-cat-pill">Social Skills</span></div><div class="picker-card-title">The Social Mastery Blueprint</div></div><span class="picker-check-icon">✓</span></label><label class="picker-card picker-disabled"><input type="checkbox" class="picker-check" data-idx="3" hidden="" disabled=""><div class="picker-card-body"><div class="picker-card-top"><span class="picker-cat-pill">Team Management</span></div><div class="picker-card-title">Lead Without Losing People</div></div><span class="picker-check-icon">✓</span></label><label class="picker-card selected"><input type="checkbox" class="picker-check" data-idx="4" hidden="" checked=""><div class="picker-card-body"><div class="picker-card-top"><span class="picker-cat-pill">Mindset</span></div><div class="picker-card-title">The Daily High-Performance System</div></div><span class="picker-check-icon">✓</span></label><label class="picker-card selected"><input type="checkbox" class="picker-check" data-idx="5" hidden="" checked=""><div class="picker-card-body"><div class="picker-card-top"><span class="picker-cat-pill">Networking</span></div><div class="picker-card-title">LinkedIn Growth: The 21-Day Playbook</div></div><span class="picker-check-icon">✓</span></label><label class="picker-card picker-disabled"><input type="checkbox" class="picker-check" data-idx="6" hidden="" disabled=""><div class="picker-card-body"><div class="picker-card-top"><span class="picker-cat-pill">Academics</span></div><div class="picker-card-title">Learn Anything 3× Faster</div></div><span class="picker-check-icon">✓</span></label><label class="picker-card selected"><input type="checkbox" class="picker-check" data-idx="7" hidden="" checked=""><div class="picker-card-body"><div class="picker-card-top"><span class="picker-cat-pill">Lifestyle</span></div><div class="picker-card-title">Lookmaxxing: The No-BS Appearance Guide</div></div><span class="picker-check-icon">✓</span></label><label class="picker-card selected"><input type="checkbox" class="picker-check" data-idx="8" hidden="" checked=""><div class="picker-card-body"><div class="picker-card-top"><span class="picker-cat-pill">Social Skills</span></div><div class="picker-card-title">Build Relationships That Actually Last</div></div><span class="picker-check-icon">✓</span></label><label class="picker-card picker-disabled"><input type="checkbox" class="picker-check" data-idx="9" hidden="" disabled=""><div class="picker-card-body"><div class="picker-card-top"><span class="picker-cat-pill">Psychology</span></div><div class="picker-card-title">Decode Human Behaviour</div></div><span class="picker-check-icon">✓</span></label><label class="picker-card selected"><input type="checkbox" class="picker-check" data-idx="10" hidden="" checked=""><div class="picker-card-body"><div class="picker-card-top"><span class="picker-cat-pill">Academics</span></div><div class="picker-card-title">Score Higher Without Studying More</div></div><span class="picker-check-icon">✓</span></label><label class="picker-card selected"><input type="checkbox" class="picker-check" data-idx="11" hidden="" checked=""><div class="picker-card-body"><div class="picker-card-top"><span class="picker-cat-pill">Creator</span></div><div class="picker-card-title">Start Your YouTube Channel from Zero</div></div><span class="picker-check-icon">✓</span></label><label class="picker-card picker-disabled"><input type="checkbox" class="picker-check" data-idx="12" hidden="" disabled=""><div class="picker-card-body"><div class="picker-card-top"><span class="picker-cat-pill">Creator</span></div><div class="picker-card-title">AI Skills That Actually Matter in 2026</div></div><span class="picker-check-icon">✓</span></label><label class="picker-card picker-disabled"><input type="checkbox" class="picker-check" data-idx="13" hidden="" disabled=""><div class="picker-card-body"><div class="picker-card-top"><span class="picker-cat-pill">Social Skills</span></div><div class="picker-card-title">The Art of Communicating Clearly</div></div><span class="picker-check-icon">✓</span></label><label class="picker-card picker-disabled"><input type="checkbox" class="picker-check" data-idx="14" hidden="" disabled=""><div class="picker-card-body"><div class="picker-card-top"><span class="picker-cat-pill">Mindset</span></div><div class="picker-card-title">Stay Positive When Life Gets Hard</div></div><span class="picker-check-icon">✓</span></label><label class="picker-card picker-disabled"><input type="checkbox" class="picker-check" data-idx="15" hidden="" disabled=""><div class="picker-card-body"><div class="picker-card-top"><span class="picker-cat-pill">Lifestyle</span></div><div class="picker-card-title">Break Free: Quit Any Habit for Good</div></div><span class="picker-check-icon">✓</span></label><label class="picker-card selected"><input type="checkbox" class="picker-check" data-idx="16" hidden="" checked=""><div class="picker-card-body"><div class="picker-card-top"><span class="picker-cat-pill">Lifestyle</span></div><div class="picker-card-title">Smarter Parenting in the Modern World</div></div><span class="picker-check-icon">✓</span></label><label class="picker-card picker-disabled"><input type="checkbox" class="picker-check" data-idx="17" hidden="" disabled=""><div class="picker-card-body"><div class="picker-card-top"><span class="picker-cat-pill">Psychology</span></div><div class="picker-card-title">Think Smarter: Mental Models That Win</div></div><span class="picker-check-icon">✓</span></label><label class="picker-card picker-disabled"><input type="checkbox" class="picker-check" data-idx="18" hidden="" disabled=""><div class="picker-card-body"><div class="picker-card-top"><span class="picker-cat-pill">Lifestyle</span></div><div class="picker-card-title">Eat Smart: Nutrition &amp; Diet Simplified</div></div><span class="picker-check-icon">✓</span></label><label class="picker-card picker-disabled"><input type="checkbox" class="picker-check" data-idx="19" hidden="" disabled=""><div class="picker-card-body"><div class="picker-card-top"><span class="picker-cat-pill">Business</span></div><div class="picker-card-title">Money Basics: Manage It Before It Manages You</div></div><span class="picker-check-icon">✓</span></label><label class="picker-card selected"><input type="checkbox" class="picker-check" data-idx="20" hidden="" checked=""><div class="picker-card-body"><div class="picker-card-top"><span class="picker-cat-pill">Social Skills</span></div><div class="picker-card-title">Speak in Public Without Freezing</div></div><span class="picker-check-icon">✓</span></label><label class="picker-card picker-disabled"><input type="checkbox" class="picker-check" data-idx="21" hidden="" disabled=""><div class="picker-card-body"><div class="picker-card-top"><span class="picker-cat-pill">Mindset</span></div><div class="picker-card-title">Own Your Time: The Anti-Busy System</div></div><span class="picker-check-icon">✓</span></label><label class="picker-card picker-disabled"><input type="checkbox" class="picker-check" data-idx="22" hidden="" disabled=""><div class="picker-card-body"><div class="picker-card-top"><span class="picker-cat-pill">Mindset</span></div><div class="picker-card-title">Unshakeable Confidence from the Inside Out</div></div><span class="picker-check-icon">✓</span></label><label class="picker-card picker-disabled"><input type="checkbox" class="picker-check" data-idx="23" hidden="" disabled=""><div class="picker-card-body"><div class="picker-card-top"><span class="picker-cat-pill">Creator</span></div><div class="picker-card-title">Grow on Social Media Without Going Viral</div></div><span class="picker-check-icon">✓</span></label></div>
