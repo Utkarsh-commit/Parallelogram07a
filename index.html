@@ -5247,20 +5247,26 @@
       return;
     }
 
-    // Submit interest + picked guides via Formspree, then show confirmation
-    submitToFormspree({
+    // 1) Netlify function → emails YOU and the BUYER via Brevo.  2) Formspree as a backup copy.
+    const payload = {
       _subject: 'Subscription Interest - ' + label + ' Plan (' + price + ') - ' + buyerEmail,
-      name: buyerName,
-      email: buyerEmail,
-      plan: label,
-      price: price,
-      guides_requested: chosen,
-      type: 'subscription_interest'
-    }).then(ok => {
-      alert(ok
-        ? 'Got it! We\'ll email the payment link to ' + buyerEmail + ' within a few hours, then send your ' + chosenTitles.length + ' picked guides once it clears. Emails come from parallelogramguides@gmail.com — check your spam folder too.'
-        : ('Something went wrong sending your request. Please email us at parallelogramguides@gmail.com with your picks: ' + chosen)
-      );
+      name: buyerName, email: buyerEmail, plan: label, price: price,
+      guides_requested: chosen, type: 'subscription_interest'
+    };
+    const viaFunction = fetch('/.netlify/functions/subscription-request', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: buyerName, email: buyerEmail, plan: label, price: price, guides: chosenTitles })
+    }).then(r => r.json().then(j => ({ ok: r.ok && j.ok, buyerSent: !!j.buyerSent, ownerSent: !!j.ownerSent }))).catch(() => ({ ok: false, buyerSent: false, ownerSent: false }));
+    const viaFormspree = submitToFormspree(payload);
+
+    Promise.all([viaFunction, viaFormspree]).then(([fn, fsOk]) => {
+      if (fn.ok && fn.buyerSent) {
+        alert('Request received! We just emailed a confirmation to ' + buyerEmail + ' (check spam if you don\'t see it). We\'ll send the payment link within a few hours, then your ' + chosenTitles.length + ' picked guides once it clears.');
+      } else if (fn.ok || fsOk) {
+        alert('Request received! We\'ll email the payment link to ' + buyerEmail + ' within a few hours. If you don\'t hear from us, message us on WhatsApp or email parallelogramguides@gmail.com.');
+      } else {
+        alert('Something went wrong sending your request. Please email us at parallelogramguides@gmail.com with your picks: ' + chosen);
+      }
     });
   }
 
