@@ -142,7 +142,7 @@
     <div class="stat-grid">
       <div class="stat-card">
         <div class="label">Total Revenue</div>
-        <div class="value" id="statRevenue">$0</div>
+        <div class="value" id="statRevenue">₹0</div>
         <div class="sub" id="statPaidOrders">0 paid orders</div>
       </div>
       <div class="stat-card">
@@ -351,7 +351,7 @@
   }
 
   function renderStats(data) {
-    document.getElementById('statRevenue').textContent = '$' + (data.totalRevenue || 0).toFixed(2);
+    document.getElementById('statRevenue').textContent = '₹' + Math.round(data.totalRevenue || 0).toLocaleString('en-IN');
     document.getElementById('statPaidOrders').textContent = (data.totalPaidOrders || 0) + ' paid orders';
     document.getElementById('statFree').textContent = data.totalFreeOrders || 0;
 
@@ -367,15 +367,15 @@
       datasets: [
         { label: 'Paid Orders', data: orderCounts, borderColor: '#C8963E', backgroundColor: 'rgba(200,150,62,0.1)', tension: 0.3, yAxisID: 'y', pointRadius: 2, pointHoverRadius: 5 },
         { label: 'Free Claims', data: freeCounts, borderColor: '#7aa2f7', backgroundColor: 'rgba(122,162,247,0.08)', tension: 0.3, yAxisID: 'y', pointRadius: 2, pointHoverRadius: 5 },
-        { label: 'Revenue ($)', data: revenueCounts, borderColor: '#4ade80', backgroundColor: 'rgba(74,222,128,0.08)', tension: 0.3, yAxisID: 'y1', pointRadius: 2, pointHoverRadius: 5 }
+        { label: 'Revenue (₹)', data: revenueCounts, borderColor: '#4ade80', backgroundColor: 'rgba(74,222,128,0.08)', tension: 0.3, yAxisID: 'y1', pointRadius: 2, pointHoverRadius: 5 }
       ]
     }, {
       interaction: { mode: 'index', intersect: false },
       plugins: {
         tooltip: {
           callbacks: {
-            label: (ctx) => ctx.dataset.label === 'Revenue ($)'
-              ? `Revenue: $${ctx.parsed.y.toFixed(2)}`
+            label: (ctx) => ctx.dataset.label === 'Revenue (₹)'
+              ? `Revenue: ₹${Math.round(ctx.parsed.y).toLocaleString('en-IN')}`
               : `${ctx.dataset.label}: ${ctx.parsed.y}`
           }
         }
@@ -389,9 +389,9 @@
         },
         y1: {
           position: 'right', beginAtZero: true,
-          ticks: { color: '#4ade80', callback: (v) => '$' + v },
+          ticks: { color: '#4ade80', callback: (v) => '₹' + v },
           grid: { display: false },
-          title: { display: true, text: 'Revenue ($)', color: '#4ade80', font: { size: 11 } }
+          title: { display: true, text: 'Revenue (₹)', color: '#4ade80', font: { size: 11 } }
         },
         x:  { ticks: { color: '#7A7570', maxRotation: 0 }, grid: { display: false } }
       }
@@ -440,7 +440,7 @@
         row.innerHTML = `
           <div class="top">
             <span class="email">${o.email || 'unknown'}</span>
-            <span class="amt">${o.isFree ? '<span class="free-tag">FREE</span>' : '$' + (Number(o.total) || 0).toFixed(2)}</span>
+            <span class="amt">${o.isFree ? '<span class="free-tag">FREE</span>' : '₹' + Math.round(Number(o.total) || 0).toLocaleString('en-IN')}</span>
           </div>
           <div class="meta">${(o.titles || []).join(', ')} — ${date.toLocaleDateString()} ${date.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</div>
         `;
