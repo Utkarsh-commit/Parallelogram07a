@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex"><title>Email test</title>
+<style>
+body{background:#0b0b0e;color:#eee;font-family:Arial,sans-serif;padding:20px;max-width:520px;margin:0 auto}
+h1{font-size:20px;color:#C8963E}
+input,button{width:100%;box-sizing:border-box;font-size:16px;padding:14px;border-radius:10px;border:1px solid #444;margin-top:10px}
+input{background:#16161b;color:#fff}
+button{background:#C8963E;color:#000;font-weight:700;border:0}
+pre{background:#16161b;border:1px solid #333;border-radius:10px;padding:14px;white-space:pre-wrap;word-break:break-word;font-size:13px;min-height:80px}
+p{color:#999;font-size:13px}
+</style></head><body>
+<h1>Free guide email test</h1>
+<p>Type your email and tap the button. The result below shows exactly what the server answered. Delete this file from GitHub after testing.</p>
+<input id="em" type="email" placeholder="your email" autocomplete="email">
+<button id="go">Send test email</button>
+<pre id="out">Waiting...</pre>
+<script>
+document.getElementById('go').onclick = async function () {
+  var out = document.getElementById('out');
+  var email = document.getElementById('em').value.trim();
+  out.textContent = 'Sending...';
+  try {
+    var r = await fetch('/.netlify/functions/send-guide-email', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: 'Test', email: email, titles: ['Think Smarter: Mental Models That Win'], isFree: true })
+    });
+    var t = await r.text();
+    out.textContent = 'HTTP status: ' + r.status + '\n\n' + t;
+  } catch (e) { out.textContent = 'Could not reach the server: ' + e; }
+};
+</script></body></html>
