@@ -28,7 +28,7 @@ exports.handler = async (event) => {
 
   const secret = process.env.APPROVE_SECRET;
   const gmailUser = process.env.GMAIL_USER;
-  const gmailPass = process.env.GMAIL_APP_PASSWORD;
+  const gmailPass = String(process.env.GMAIL_APP_PASSWORD || '').replace(/\s+/g, '');
   if (!secret || secret.length < 16) { log('APPROVE_SECRET not set (or too short)'); return json(503, { error: 'Not configured' }); }
   if (!gmailUser || !gmailPass) { log('Gmail env vars missing'); return json(503, { error: 'Email not configured' }); }
 
@@ -62,7 +62,7 @@ exports.handler = async (event) => {
 
   const owner = process.env.OWNER_EMAIL || gmailUser;
   const list = titles.map((t) => '<li>' + esc(t) + '</li>').join('');
-  const transporter = nodemailer.createTransport({ service: 'gmail', auth: { user: gmailUser, pass: gmailPass } });
+  const transporter = nodemailer.createTransport({ host: 'smtp.gmail.com', port: 465, secure: true, auth: { user: gmailUser, pass: gmailPass } });
   const from = '"Parallelogram Orders" <' + gmailUser + '>';
 
   try {
@@ -82,7 +82,7 @@ exports.handler = async (event) => {
     });
   } catch (err) {
     log('owner email failed:', String(err));
-    return json(502, { error: 'Could not send alert' });
+    return json(502, { error: 'Could not send alert', reason: String((err && (err.response || err.message)) || err).slice(0, 220) });
   }
 
   // Customer receipt (best effort)
